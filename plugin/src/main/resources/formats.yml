@@ -1,0 +1,58 @@
+default-format: 'default'
+formats:
+  default:
+    priority: 2 # if we have multiple formats which takes priority
+    format: # list of all the segments of the format, supports unlimited amount of segments
+      segment1:
+        text: '%channel_prefix%'
+        tooltip:
+          - 'I am chatting in the %channel% channel!'
+          - 'Some new line'
+      prefix:
+        text: ' [%vault_group%]'
+        tooltip:
+          - 'Hey look, i am in the %vault_group% permission group.'
+          - 'Some new line'
+      name:
+        text: ' %player_displayname%'
+        tooltip:
+          - 'Hey look, i am in the %vault_group% permission group.'
+          - 'Some new line'
+      divider:
+        text: ' >'
+        tooltip:
+          - 'Cool diver tooltip here'
+      message:
+        text: ' %message%'
+        tooltip:
+          - ''
+      suffix:
+        text: '!'
+        tooltip:
+          - 'This forces everyone to have a ! on the end. Haha'
+  staff: # user needs chatchat.format.staff
+    priority: 1 # if we have multiple formats which takes priority
+    format: # list of all the segments of the format, supports unlimited amount of segments
+      segment1:
+        text: '%channel_prefix%'
+        tooltip:
+          - 'I am chatting in the %channel% channel!'
+          - 'Some new line'
+      prefix:
+        text: ' [STAFF]'
+        tooltip:
+          - 'Hey look, i am staff.'
+          - 'Some new line'
+      name:
+        text: ' %player_displayname%'
+        tooltip:
+          - 'Hey look, i am in the %vault_group% permission group.'
+          - 'Some new line'
+      divider:
+        text: ' >'
+        tooltip:
+          - 'Cool diver tooltip here'
+      message:
+        text: ' %message%'
+        tooltip:
+          - ''

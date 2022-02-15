@@ -1,0 +1,16 @@
+default-channel: 'default'
+channels:
+  default:
+    #command to switch channel
+    toggle-command: 'global'
+    # prefix the message with this to automatically type the message in channel
+    message-prefix: ''
+    # pretty much a variable for the channel prefix
+    channel-prefix: '[global]'
+  staff: # perm node: chatchat.channel.staff to access this channel
+    # command to switch channel
+    toggle-command: 'staffchat'
+    # prefix the message with this to automatically type the message in channel
+    message-prefix: '#'
+    # pretty much a variable for the channel prefix
+    channel-prefix: '[STAFF]'
