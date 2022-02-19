@@ -1,0 +1,25 @@
+[versions]
+# Minecraft
+spigot = "1.18.1-R0.1-SNAPSHOT"
+
+# Adventure
+minimessage = "4.1.0-SNAPSHOT"
+adventure-platform = "4.0.1"
+
+# Other
+configurate = "4.1.2"
+cmds = "1.4.6"
+papi = "2.10.10"
+
+[libraries]
+# Minecraft
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+
+# Adventure
+adventure-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "minimessage" }
+
+# Other
+configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
+triumph-cmds = { module = "me.mattstudios.utils:matt-framework", version.ref = "cmds" }
+papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
