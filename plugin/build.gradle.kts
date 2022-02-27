@@ -36,7 +36,7 @@ bukkit {
 tasks {
     withType<ShadowJar> {
         minimize()
-        relocate("net.kyori", "me.kaliber.libs.adventure")
+        relocate("net.kyori", "at.helpch.chatchat.libs.adventure")
         archiveFileName.set("ChatChat-${project.version}.jar")
     }
 }
