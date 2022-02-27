@@ -3,6 +3,10 @@ plugins {
     id("maven-publish")
 }
 
+dependencies {
+    compileOnly(libs.adventure.bukkit)
+}
+
 publishing {
 
 }

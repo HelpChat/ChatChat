@@ -8,6 +8,7 @@ plugins {
 }
 
 repositories {
+    sonatype()
     paper()
     papi()
 }
@@ -36,8 +37,6 @@ tasks {
     withType<ShadowJar> {
         minimize()
         relocate("net.kyori", "at.helpch.chatchat.libs.adventure")
-        relocate("me.mattstudios", "at.helpch.chatchat.libs.cmds")
-        relocate("org.spongepowered", "at.helpch.chatchat.libs.configurate")
         archiveFileName.set("ChatChat-${project.version}.jar")
     }
 }
