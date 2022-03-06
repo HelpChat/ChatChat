@@ -8,14 +8,8 @@ import java.util.List;
 
 public class ChatFormat implements Format {
 
-    private String id = "";
     private int priority = Integer.MAX_VALUE;
-    private List<Segment> segments = Collections.emptyList();
-
-    @Override
-    public @NotNull String getId() {
-        return id;
-    }
+    private List<String> parts = Collections.emptyList();
 
     @Override
     public int getPriority() {
@@ -23,8 +17,8 @@ public class ChatFormat implements Format {
     }
 
     @Override
-    public @NotNull List<Segment> getSegments() {
-        return segments;
+    public @NotNull List<String> GetParts() {
+        return parts;
     }
 
 }

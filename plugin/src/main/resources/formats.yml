@@ -3,56 +3,18 @@ formats:
   default:
     priority: 2 # if we have multiple formats which takes priority
     format: # list of all the segments of the format, supports unlimited amount of segments
-      segment1:
-        text: '%channel_prefix%'
-        tooltip:
-          - 'I am chatting in the %channel% channel!'
-          - 'Some new line'
-      prefix:
-        text: ' [%vault_group%]'
-        tooltip:
-          - 'Hey look, i am in the %vault_group% permission group.'
-          - 'Some new line'
-      name:
-        text: ' %player_displayname%'
-        tooltip:
-          - 'Hey look, i am in the %vault_group% permission group.'
-          - 'Some new line'
-      divider:
-        text: ' >'
-        tooltip:
-          - 'Cool diver tooltip here'
-      message:
-        text: ' %message%'
-        tooltip:
-          - ''
-      suffix:
-        text: '!'
-        tooltip:
-          - 'This forces everyone to have a ! on the end. Haha'
+      - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%channel_prefix%</hover></click>'
+      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> [%vault_group%]</hover>'
+      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
+      - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
+      - '%message%'
+      - '<hover:show_text:"This forces everyone to have a ! on the end. Haha">!</hover>'
+
   staff: # user needs chatchat.format.staff
     priority: 1 # if we have multiple formats which takes priority
     format: # list of all the segments of the format, supports unlimited amount of segments
-      segment1:
-        text: '%channel_prefix%'
-        tooltip:
-          - 'I am chatting in the %channel% channel!'
-          - 'Some new line'
-      prefix:
-        text: ' [STAFF]'
-        tooltip:
-          - 'Hey look, i am staff.'
-          - 'Some new line'
-      name:
-        text: ' %player_displayname%'
-        tooltip:
-          - 'Hey look, i am in the %vault_group% permission group.'
-          - 'Some new line'
-      divider:
-        text: ' >'
-        tooltip:
-          - 'Cool diver tooltip here'
-      message:
-        text: ' %message%'
-        tooltip:
-          - ''
+      - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%channel_prefix%</hover></click>'
+      - '<hover:show_text:"Hey look, i am staff<newline>Some new line">  [STAFF]</hover>'
+      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
+      - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
+      - '%message%'
