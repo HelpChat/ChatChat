@@ -9,6 +9,6 @@ public interface Format {
     int getPriority();
 
     @NotNull
-    List<String> GetParts();
+    List<String> getParts();
 
 }

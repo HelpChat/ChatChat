@@ -17,7 +17,7 @@ public class ChatFormat implements Format {
     }
 
     @Override
-    public @NotNull List<String> GetParts() {
+    public @NotNull List<String> getParts() {
         return parts;
     }
 
