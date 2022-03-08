@@ -7,16 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ChatUser implements User {
 
-    public ChatUser(final @NotNull UUID uuid) {
+    public ChatUser(@NotNull final UUID uuid) {
         this.uuid = uuid;
     }
 
-    private final @NotNull UUID uuid;
+    private @NotNull final UUID uuid;
     private Channel channel;
 
     @Override
-    @NotNull
-    public Channel channel() {
+    public @NotNull Channel channel() {
         return channel;
     }
 
@@ -25,8 +24,7 @@ public final class ChatUser implements User {
         this.channel = channel;
     }
 
-    @NotNull
-    public UUID uuid() {
+    public @NotNull UUID uuid() {
         return uuid;
     }
 }

@@ -8,7 +8,7 @@ import java.nio.file.Path;
 public final class ConfigManager
 {
 
-    private final Path dataFolder;
+    private @NotNull final Path dataFolder;
     private ChannelsHolder channels;
     private FormatsHolder formats;
     private SettingsHolder settings;
@@ -17,24 +17,24 @@ public final class ConfigManager
         this.dataFolder = dataFolder;
     }
 
-    @Nullable // probably shouldn't be null? IDK
-    public ChannelsHolder channels() {
+    // probably shouldn't be null? IDK
+    public @Nullable ChannelsHolder channels() {
         if (channels == null) {
             this.channels = new ConfigFactory(dataFolder).channels();
         }
         return this.channels;
     }
 
-    @Nullable // probably shouldn't be null? IDK
-    public SettingsHolder settings() {
+    // probably shouldn't be null? IDK
+    public @Nullable SettingsHolder settings() {
         if (settings == null) {
             this.settings = new ConfigFactory(dataFolder).settings();
         }
         return this.settings;
     }
 
-    @Nullable // probably shouldn't be null? IDK
-    public FormatsHolder formats() {
+    // probably shouldn't be null? IDK
+    public @Nullable FormatsHolder formats() {
         if (formats == null) {
             this.formats = new ConfigFactory(dataFolder).formats();
         }

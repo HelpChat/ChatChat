@@ -10,29 +10,25 @@ import java.nio.file.Path;
 
 public final class ConfigFactory {
 
-    private final Path dataFolder;
+    private @NotNull final Path dataFolder;
 
     public ConfigFactory(@NotNull final Path dataFolder) {
         this.dataFolder = dataFolder;
     }
 
-    @Nullable
-    public ChannelsHolder channels() {
+    public @Nullable ChannelsHolder channels() {
         return create(ChannelsHolder.class, "channels.yml");
     }
 
-    @Nullable
-    public FormatsHolder formats() {
+    public @Nullable FormatsHolder formats() {
         return create(FormatsHolder.class, "formats.yml");
     }
 
-    @Nullable
-    public SettingsHolder settings() {
+    public @Nullable SettingsHolder settings() {
         return create(SettingsHolder.class, "settings.yml");
     }
 
-    @Nullable
-    private <T> T create(@NotNull Class<T> clazz, @NotNull String fileName) {
+    private @Nullable <T> T create(@NotNull final Class<T> clazz, @NotNull final String fileName) {
         try {
             if (!Files.exists(dataFolder)) {
                 Files.createDirectories(dataFolder);
@@ -57,8 +53,7 @@ public final class ConfigFactory {
         return null;
     }
 
-    @NotNull
-    private YamlConfigurationLoader loader(final Path path) {
+    private @NotNull YamlConfigurationLoader loader(@NotNull final Path path) {
         return YamlConfigurationLoader.builder()
                 .path(path)
                 .defaultOptions(options -> options.shouldCopyDefaults(true))
