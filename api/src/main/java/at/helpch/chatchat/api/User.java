@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface User {
 
-    @NotNull
-    Channel channel();
+    @NotNull Channel channel();
 
     void channel(@NotNull Channel channel);
 }

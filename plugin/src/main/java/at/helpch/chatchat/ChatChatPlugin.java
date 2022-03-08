@@ -8,14 +8,13 @@ import org.jetbrains.annotations.NotNull;
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
 
-    private final ConfigManager configManager = new ConfigManager(this.getDataFolder().toPath());
+    private @NotNull final ConfigManager configManager = new ConfigManager(this.getDataFolder().toPath());
 
     @Override
     public void onEnable() {
     }
 
-    @NotNull
-    public ConfigManager configManager() {
+    public @NotNull ConfigManager configManager() {
         return configManager;
     }
 }
