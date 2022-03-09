@@ -3,12 +3,12 @@
 spigot = "1.18.1-R0.1-SNAPSHOT"
 
 # Adventure
-minimessage = "4.1.0-SNAPSHOT"
+minimessage = "4.10.1"
 adventure-platform = "4.0.1"
 
 # Other
 configurate = "4.1.2"
-cmds = "1.4.6"
+cmds = "2.0.0-SNAPSHOT"
 papi = "2.10.10"
 
 [libraries]
@@ -21,5 +21,5 @@ adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", versi
 
 # Other
 configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
-triumph-cmds = { module = "me.mattstudios.utils:matt-framework", version.ref = "cmds" }
+triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "cmds" }
 papi = { module = "me.clip:placeholderapi", version.ref = "papi" }

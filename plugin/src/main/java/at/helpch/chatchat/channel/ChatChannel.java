@@ -2,10 +2,12 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.User;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
 import java.util.List;
 
+@ConfigSerializable
 public final class ChatChannel implements Channel {
 
     private String name = "";

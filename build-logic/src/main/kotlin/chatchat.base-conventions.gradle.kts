@@ -21,6 +21,6 @@ dependencies {
 tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-        options.compilerArgs.add("-parameter")
+        options.compilerArgs.add("-parameters")
     }
 }
