@@ -3,14 +3,14 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("chatchat.base-conventions")
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     id("me.mattstudios.triumph") version "0.2.8"
 }
 
 repositories {
-    sonatype()
     paper()
     papi()
+    triumphSnapshots()
 }
 
 dependencies {
