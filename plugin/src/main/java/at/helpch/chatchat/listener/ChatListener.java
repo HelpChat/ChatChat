@@ -20,7 +20,7 @@ public final class ChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
