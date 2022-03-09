@@ -17,6 +17,9 @@ public final class ConfigManager {
     }
 
     public void reload() {
+        channels = null;
+        formats = null;
+        settings = null;
         channels();
         settings();
         formats();

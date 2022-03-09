@@ -1,10 +1,13 @@
 package at.helpch.chatchat;
 
+import at.helpch.chatchat.command.MainCommand;
+import at.helpch.chatchat.command.ReloadCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
+import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +25,15 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onEnable() {
         configManager.reload();
         audiences = BukkitAudiences.create(this);
+
+        // command registration
+        var commandManager = BukkitCommandManager.create(this);
+        List.of(
+                new MainCommand(this),
+                new ReloadCommand(this)
+        ).forEach(commandManager::registerCommand);
+
+        // event listener registration
         List.of(
                 new PlayerListener(usersHolder),
                 new ChatListener(this)
