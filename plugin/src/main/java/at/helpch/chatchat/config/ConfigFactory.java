@@ -2,6 +2,7 @@ package at.helpch.chatchat.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.IOException;
@@ -57,6 +58,8 @@ public final class ConfigFactory {
         return YamlConfigurationLoader.builder()
                 .path(path)
                 .defaultOptions(options -> options.shouldCopyDefaults(true))
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
                 .build();
     }
 }
