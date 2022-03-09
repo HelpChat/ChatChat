@@ -5,8 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
-public final class ConfigManager
-{
+public final class ConfigManager {
 
     private @NotNull final Path dataFolder;
     private ChannelsHolder channels;
@@ -15,6 +14,12 @@ public final class ConfigManager
 
     public ConfigManager(@NotNull final Path dataFolder) {
         this.dataFolder = dataFolder;
+    }
+
+    public void reload() {
+        channels();
+        settings();
+        formats();
     }
 
     // probably shouldn't be null? IDK
