@@ -58,7 +58,7 @@ public final class FormatUtils {
                 .min(Comparator.comparingInt(ChatFormat::getPriority)); // lower number = higher priority
     }
 
-    public static Component parseFormat(
+    public static @NotNull Component parseFormat(
             @NotNull final Format format,
             @NotNull final Player player,
             @NotNull final String message) {
