@@ -1,15 +1,16 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.format.PMFormat;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Default;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@Command("chatchat")
-public class WhisperCommand extends BaseCommand {
+@Command(value = "whisper", alias = {"tell", "w", "msg", "message"})
+public final class WhisperCommand extends BaseCommand {
 
     private final ChatChatPlugin plugin;
 
@@ -17,13 +18,21 @@ public class WhisperCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @SubCommand(value = "whisper", alias = {"tell", "w", "msg"})
+    @Default
     public void whisperCommand(final Player sender, final Player target, final String message) {
         var settingsConfig = plugin.configManager().settings();
-        var senderFormat = settingsConfig.getSenderFormat();
-        var recieverFormat = settingsConfig.getRecieverFormat();
+
+        final PMFormat senderFormat;
+        final PMFormat receiverFormat;
+        if (settingsConfig == null) {
+            senderFormat = FormatUtils.createDefaultPrivateMessageSenderFormat();
+            receiverFormat = FormatUtils.createDefaultPrivateMessageReceiverFormat();
+        } else {
+            senderFormat = settingsConfig.getSenderFormat();
+            receiverFormat = settingsConfig.getRecieverFormat();
+        }
 
         plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, message));
-        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(recieverFormat, target, message));
+        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, target, message));
     }
 }
