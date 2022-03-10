@@ -2,12 +2,14 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.event.ChatChatEvent;
+import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.util.FormatUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,7 @@ public final class ChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
@@ -28,29 +30,38 @@ public final class ChatListener implements Listener {
         var user = plugin.usersHolder().getUser(player);
 
         var formatsConfig = plugin.configManager().formats();
-        if (formatsConfig == null) { // config is null, so we use the internal default format
-            sendDefaultFormat(user, event.getMessage());
+
+        ChatFormat format;
+        if (formatsConfig == null) { // config is null, so we use the internal format
+            format = FormatUtils.createDefaultFormat();
+        } else {
+            var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
+            var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
+
+            // if player doesn't have any perms, find default-format and if no default-format is found use the internal format
+            format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : FormatUtils.createDefaultFormat());
+        }
+
+        // this will probably be changed when channels will be added
+        var audience = plugin.audiences().players();
+        var chatEvent = new ChatChatEvent(
+            event.isAsynchronous(),
+            event.getPlayer(),
+            audience,
+            format,
+            event.getMessage()
+        );
+
+        plugin.getServer().getPluginManager().callEvent(chatEvent);
+
+        if (chatEvent.isCancelled()) {
             return;
         }
 
-        var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
-        if (formatOptional.isPresent()) {
-            var format = formatOptional.get();
-            user.format(format); // set the format of the player
-
-            sendToAudience(parseFormat(format, player, event.getMessage()));
-            return;
-        }
-
-        // player doesn't have any perms, so find default-format
-        var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
-        if (defaultFormat == null) { // config doesn't have a default format set correctly... user error
-            sendDefaultFormat(user, event.getMessage());
-            return;
-        }
-
-        user.format(defaultFormat);
-        sendToAudience(parseFormat(defaultFormat, player, event.getMessage()));
+        user.format(chatEvent.format());
+        chatEvent.recipients().sendMessage(
+            parseFormat(chatEvent.format(), chatEvent.player(), chatEvent.message())
+        );
     }
 
     // parse format with placeholders
@@ -63,15 +74,5 @@ public final class ChatListener implements Listener {
                 .map(part -> part.replace("%message%", message))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
-    }
-
-    private void sendDefaultFormat(@NotNull final User user, @NotNull final String message) {
-        var format = FormatUtils.createDefaultFormat();
-        user.format(format);
-        sendToAudience(parseFormat(format, user.player(), message));
-    }
-
-    private void sendToAudience(@NotNull final Component format) {
-        plugin.audiences().players().sendMessage(format);
     }
 }
