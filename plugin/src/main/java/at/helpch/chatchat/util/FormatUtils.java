@@ -1,6 +1,9 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.format.PMFormat;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -30,6 +33,22 @@ public final class FormatUtils {
         return format;
     }
 
+    public static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
+        var format = new PMFormat();
+        format.setParts(List.of(
+                "<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"
+        ));
+        return format;
+    }
+
+    public static @NotNull PMFormat createDefaultPrivateMessageReceiverFormat() {
+        var format = new PMFormat();
+        format.setParts(List.of(
+                "<gray>%player_name% <yellow> » <gray>you <gray>:"
+        ));
+        return format;
+    }
+
     public static @NotNull Optional<ChatFormat> findFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
@@ -37,6 +56,18 @@ public final class FormatUtils {
                 .filter(entry -> player.hasPermission(FORMAT_PERMISSION + entry.getKey()))
                 .map(Map.Entry::getValue)
                 .min(Comparator.comparingInt(ChatFormat::getPriority)); // lower number = higher priority
+    }
+
+    public static Component parseFormat(
+            @NotNull final Format format,
+            @NotNull final Player player,
+            @NotNull final String message) {
+        return format.getParts().stream()
+                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+                .map(part -> part.replace("%message%", message))
+                .map(part -> part.replace("%recipient%", player.getName()))
+                .map(FormatUtils::parseToMiniMessage)
+                .collect(Component.toComponent());
     }
 
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {

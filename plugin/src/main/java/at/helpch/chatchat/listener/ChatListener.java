@@ -1,13 +1,9 @@
 package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.util.FormatUtils;
-import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -60,19 +56,7 @@ public final class ChatListener implements Listener {
 
         user.format(chatEvent.format());
         chatEvent.recipients().sendMessage(
-            parseFormat(chatEvent.format(), chatEvent.player(), chatEvent.message())
+            FormatUtils.parseFormat(chatEvent.format(), chatEvent.player(), chatEvent.message())
         );
-    }
-
-    // parse format with placeholders
-    private Component parseFormat(
-            @NotNull final Format format,
-            @NotNull final Player player,
-            @NotNull final String message) {
-        return format.getParts().stream()
-                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-                .map(part -> part.replace("%message%", message))
-                .map(FormatUtils::parseToMiniMessage)
-                .collect(Component.toComponent());
     }
 }
