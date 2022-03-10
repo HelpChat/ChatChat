@@ -10,13 +10,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChatChatEvent extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
     private boolean cancelled = false;
 
     private @NotNull final Player player;
     private @NotNull Audience recipients;
     private @NotNull ChatFormat format;
     private @NotNull String message;
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     public ChatChatEvent(final boolean async, @NotNull final Player player, @NotNull final Audience recipients, @NotNull final ChatFormat format, @NotNull final String message) {
         super(async);
@@ -28,7 +32,7 @@ public class ChatChatEvent extends Event implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
+        return HANDLERS;
     }
 
     @Override
