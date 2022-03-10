@@ -25,13 +25,8 @@ public final class FormatUtils {
         var format = new ChatFormat();
         format.setPriority(1);
         format.setParts(List.of(
-                "<click:open_url:\"https://google.com\"><hover:show_text:\"I am chatting in the %channel% channel<newline>Some new line\">%channel_prefix%</hover></click>",
-                "<hover:show_text:\"Hey look, i am in the %vault_group% permission group.<newline>Some new line\"> [%vault_group%]</hover>",
-                "<hover:show_text:\"Hey look, i am in the %vault_group% permission group.<newline>Some new line\"> %player_name%</hover>",
-                "<hover:show_text:\"Cool diver tooltip here\"> ></hover>",
-                "%message%",
-                "<hover:show_text:\"This forces everyone to have a ! on the end. Haha\">!</hover>")
-        );
+                "<gray>[</gray><color:#3dbbe4>Chat</color><color:#f3af4b>Chat</color><gray>]</gray> %player_name% » %message%"
+        ));
         return format;
     }
 

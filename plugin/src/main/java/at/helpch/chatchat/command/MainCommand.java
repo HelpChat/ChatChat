@@ -7,6 +7,7 @@ import dev.triumphteam.cmd.core.annotation.Default;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,8 +26,8 @@ public final class MainCommand extends BaseCommand {
     public void defaultCommand(final CommandSender sender) {
         var text = text("A Chat Plugin ", NamedTextColor.AQUA)
                 .append(text("by ", NamedTextColor.GRAY)
-                .append(text("Help", NamedTextColor.AQUA)
-                .append(text("Chat", NamedTextColor.YELLOW))))
+                .append(text("Help", TextColor.fromCSSHexString("#3dbbe4"))
+                .append(text("Chat", TextColor.fromCSSHexString("#f3af4b")))))
                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://helpch.at"))
                 .append(Component.newline())
                 .append(text("Version: ", NamedTextColor.GRAY))
