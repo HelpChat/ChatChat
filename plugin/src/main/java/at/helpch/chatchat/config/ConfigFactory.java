@@ -8,6 +8,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public final class ConfigFactory {
 
@@ -17,16 +18,19 @@ public final class ConfigFactory {
         this.dataFolder = dataFolder;
     }
 
-    public @Nullable ChannelsHolder channels() {
-        return create(ChannelsHolder.class, "channels.yml");
+    public @NotNull ChannelsHolder channels() {
+        final var config = create(ChannelsHolder.class, "channels.yml");
+        return Objects.requireNonNullElseGet(config, ChannelsHolder::new);
     }
 
-    public @Nullable FormatsHolder formats() {
-        return create(FormatsHolder.class, "formats.yml");
+    public @NotNull FormatsHolder formats() {
+        final var config = create(FormatsHolder.class, "formats.yml");
+        return Objects.requireNonNullElseGet(config, FormatsHolder::new);
     }
 
-    public @Nullable SettingsHolder settings() {
-        return create(SettingsHolder.class, "settings.yml");
+    public @NotNull SettingsHolder settings() {
+        final var config = create(SettingsHolder.class, "settings.yml");
+        return Objects.requireNonNullElseGet(config, SettingsHolder::new);
     }
 
     private @Nullable <T> T create(@NotNull final Class<T> clazz, @NotNull final String fileName) {

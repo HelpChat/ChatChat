@@ -23,11 +23,6 @@ public final class ReloadCommand extends BaseCommand {
         plugin.configManager().reload();
 
         var formatsConfig = plugin.configManager().formats();
-        if (formatsConfig == null) {
-            plugin.audiences().sender(sender)
-                    .sendMessage(Component.text("There was an error reading the formats config!", NamedTextColor.RED));
-            return;
-        }
 
         int formats = formatsConfig.formats().size();
         plugin.audiences().sender(sender)
