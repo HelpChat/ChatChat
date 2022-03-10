@@ -2,6 +2,7 @@ package at.helpch.chatchat;
 
 import at.helpch.chatchat.command.MainCommand;
 import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -30,7 +31,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         var commandManager = BukkitCommandManager.create(this);
         List.of(
                 new MainCommand(this),
-                new ReloadCommand(this)
+                new ReloadCommand(this),
+                new WhisperCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // event listener registration

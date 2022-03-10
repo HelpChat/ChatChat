@@ -1,6 +1,9 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.format.PMFormat;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -14,6 +17,7 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
+    private static final int RECIPIENT_SUBSTRING = 11; // %recipient_
     private static final String FORMAT_PERMISSION = "chatchat.format.";
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -30,6 +34,22 @@ public final class FormatUtils {
         return format;
     }
 
+    public static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
+        var format = new PMFormat();
+        format.setParts(List.of(
+                "<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"
+        ));
+        return format;
+    }
+
+    public static @NotNull PMFormat createDefaultPrivateMessageReceiverFormat() {
+        var format = new PMFormat();
+        format.setParts(List.of(
+                "<gray>%player_name% <yellow> » <gray>you <gray>:"
+        ));
+        return format;
+    }
+
     public static @NotNull Optional<ChatFormat> findFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
@@ -39,7 +59,32 @@ public final class FormatUtils {
                 .min(Comparator.comparingInt(ChatFormat::getPriority)); // lower number = higher priority
     }
 
+    public static @NotNull Component parseFormat(
+            @NotNull final Format format,
+            @NotNull final Player player,
+            @NotNull final String message) {
+        return format.getParts().stream()
+                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+                .map(part -> part.replace("%message%", message))
+                .map(part -> replaceRecipientPlaceholder(player, part))
+                .map(FormatUtils::parseToMiniMessage)
+                .collect(Component.toComponent());
+    }
+
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
         return miniMessage.deserialize(formatPart, TagResolver.standard());
+    }
+
+    private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+        if (toReplace.equalsIgnoreCase("%recipient%")) {
+            return player.getName();
+        }
+
+        if (toReplace.length() <= RECIPIENT_SUBSTRING) {
+            return toReplace; // prevents IndexOutOfBoundsException from String#substring
+        }
+
+        //set any PAPI placeholders after %recipient_
+        return PlaceholderAPI.setPlaceholders(player, "%" + toReplace.substring(RECIPIENT_SUBSTRING));
     }
 }
