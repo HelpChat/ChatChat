@@ -17,6 +17,7 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
+    private static final int RECIPIENT_SUBSTRING = 11; // %recipient_
     private static final String FORMAT_PERMISSION = "chatchat.format.";
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -65,12 +66,25 @@ public final class FormatUtils {
         return format.getParts().stream()
                 .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
-                .map(part -> part.replace("%recipient%", player.getName()))
+                .map(part -> replaceRecipientPlaceholder(player, part))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
     }
 
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
         return miniMessage.deserialize(formatPart, TagResolver.standard());
+    }
+
+    private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+        if (toReplace.equalsIgnoreCase("%recipient%")) {
+            return player.getName();
+        }
+
+        if (toReplace.length() <= RECIPIENT_SUBSTRING) {
+            return toReplace; // prevents IndexOutOfBoundsException from String#substring
+        }
+
+        //set any PAPI placeholders after %recipient_
+        return PlaceholderAPI.setPlaceholders(player, "%" + toReplace.substring(RECIPIENT_SUBSTRING));
     }
 }
