@@ -1,6 +1,7 @@
 package at.helpch.chatchat.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
@@ -33,5 +34,9 @@ public final class UsersHolder {
 
     public @NotNull ChatUser addUser(@NotNull final Player player) {
         return addUser(player.getUniqueId());
+    }
+
+    public @NotNull List<ChatUser> users() {
+        return List.copyOf(users.values());
     }
 }
