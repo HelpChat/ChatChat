@@ -3,6 +3,7 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.format.PMFormat;
 import at.helpch.chatchat.util.FormatUtils;
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
@@ -22,12 +23,8 @@ public final class WhisperCommand extends BaseCommand {
     }
 
     @Default
+    @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(final Player sender, final Player target, final String message) {
-        if (!sender.hasPermission(MESSAGE_PERMISSION)) {
-            plugin.audiences().player(sender).sendMessage(Component.text("No permission.", NamedTextColor.RED)); // make this not hardcoded
-            return;
-        }
-
         final var settingsConfig = plugin.configManager().settings();
 
         final var senderFormat = settingsConfig.getSenderFormat();
