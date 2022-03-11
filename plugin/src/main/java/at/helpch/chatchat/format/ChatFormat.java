@@ -27,6 +27,7 @@ public final class ChatFormat implements Format {
         return priority;
     }
 
+    @Override
     public @NotNull ChatFormat priority(final int priority) {
         return of(priority, parts);
     }
@@ -36,6 +37,7 @@ public final class ChatFormat implements Format {
         return parts;
     }
 
+    @Override
     public @NotNull ChatFormat parts(@NotNull final List<String> parts) {
         return of(priority, parts);
     }
