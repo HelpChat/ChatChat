@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.kyori.adventure.text.Component.text;
 
-@Command("chatchat")
-public final class MainCommand extends BaseCommand {
+public final class MainCommand extends ChatChatCommand {
 
     private final ChatChatPlugin plugin;
 
