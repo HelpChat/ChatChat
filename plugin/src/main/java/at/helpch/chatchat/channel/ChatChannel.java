@@ -2,6 +2,7 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.User;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
@@ -24,27 +25,27 @@ public final class ChatChannel implements Channel {
     }
 
     @Override
-    public String messagePrefix() {
+    public @NotNull String messagePrefix() {
         return messagePrefix;
     }
 
     @Override
-    public String channelPrefix() {
+    public @NotNull String channelPrefix() {
         return channelPrefix;
     }
 
     @Override
-    public List<User> usersInChannel() {
+    public @NotNull List<User> usersInChannel() {
         return Collections.emptyList();
     }
 
     @Override
-    public String name() {
-        return null;
+    public @NotNull String name() {
+        return name;
     }
 
     @Override
-    public String commandName() {
-        return null;
+    public @NotNull String commandName() {
+        return toggleCommand;
     }
 }
