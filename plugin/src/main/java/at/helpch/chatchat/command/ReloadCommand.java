@@ -9,8 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-@Command("chatchat")
-public final class ReloadCommand extends BaseCommand {
+public final class ReloadCommand extends ChatChatCommand {
 
     private final ChatChatPlugin plugin;
 
