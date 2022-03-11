@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,19 +22,6 @@ public final class FormatUtils {
 
     private FormatUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
-    }
-
-    public static @NotNull ChatFormat createDefaultFormat() {
-        return ChatFormat.of(1,
-                List.of("<gray>[</gray><color:#3dbbe4>Chat</color><color:#f3af4b>Chat</color><gray>]</gray> %player_name% » %message%"));
-    }
-
-    public static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
-        return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"));
-    }
-
-    public static @NotNull PMFormat createDefaultPrivateMessageReceiverFormat() {
-        return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>:"));
     }
 
     public static @NotNull Optional<ChatFormat> findFormat(
