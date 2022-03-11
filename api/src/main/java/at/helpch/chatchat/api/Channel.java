@@ -14,7 +14,5 @@ public interface Channel {
 
     @NotNull List<User> usersInChannel();
 
-    @NotNull String name();
-
     @NotNull String commandName();
 }
