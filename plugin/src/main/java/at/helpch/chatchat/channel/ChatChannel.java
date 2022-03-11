@@ -11,13 +11,12 @@ import java.util.List;
 @ConfigSerializable
 public final class ChatChannel implements Channel {
 
-    private String name = "";
 
     private String messagePrefix = "";
 
-    private String toggleCommand = "";
+    private String toggleCommand = "global";
 
-    private String channelPrefix = "";
+    private String channelPrefix = "[global]";
 
     @Override
     public boolean isDefault() {
@@ -37,11 +36,6 @@ public final class ChatChannel implements Channel {
     @Override
     public @NotNull List<User> usersInChannel() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public @NotNull String name() {
-        return name;
     }
 
     @Override
