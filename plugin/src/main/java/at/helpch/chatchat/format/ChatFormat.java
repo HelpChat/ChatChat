@@ -34,7 +34,7 @@ public final class ChatFormat implements Format {
 
     @Override
     public @NotNull List<String> parts() {
-        return parts;
+        return List.copyOf(parts);
     }
 
     @Override
