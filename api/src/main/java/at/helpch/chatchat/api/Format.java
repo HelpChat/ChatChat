@@ -6,8 +6,11 @@ import java.util.List;
 
 public interface Format {
 
-    int getPriority();
+    int priority();
 
-    @NotNull List<String> getParts();
+    @NotNull Format priority(final int priority);
 
+    @NotNull List<String> parts();
+
+    @NotNull Format parts(@NotNull final List<String> parts);
 }

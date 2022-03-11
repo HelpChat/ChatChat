@@ -1,7 +1,6 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.util.FormatUtils;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -11,7 +10,7 @@ import java.util.Map;
 public final class FormatsHolder {
 
     private String defaultFormat = "default";
-    private Map<String, ChatFormat> formats = Map.of(defaultFormat, FormatUtils.createDefaultFormat());
+    private Map<String, ChatFormat> formats = Map.of(defaultFormat, ChatFormat.DEFAULT_FORMAT);
 
     public @NotNull String defaultFormat() {
         return defaultFormat;

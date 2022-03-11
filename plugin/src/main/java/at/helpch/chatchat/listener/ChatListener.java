@@ -30,7 +30,7 @@ public final class ChatListener implements Listener {
         var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
 
         // if player doesn't have any perms, find default-format and if no default-format is found use the internal format
-        var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : FormatUtils.createDefaultFormat());
+        var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : ChatFormat.DEFAULT_FORMAT);
 
         // this will probably be changed when channels will be added
         var audience = plugin.audiences().players();

@@ -26,28 +26,16 @@ public final class FormatUtils {
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {
-        var format = new ChatFormat();
-        format.setPriority(1);
-        format.setParts(List.of(
-                "<gray>[</gray><color:#3dbbe4>Chat</color><color:#f3af4b>Chat</color><gray>]</gray> %player_name% » %message%"
-        ));
-        return format;
+        return ChatFormat.of(1,
+                List.of("<gray>[</gray><color:#3dbbe4>Chat</color><color:#f3af4b>Chat</color><gray>]</gray> %player_name% » %message%"));
     }
 
     public static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
-        var format = new PMFormat();
-        format.setParts(List.of(
-                "<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"
-        ));
-        return format;
+        return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"));
     }
 
     public static @NotNull PMFormat createDefaultPrivateMessageReceiverFormat() {
-        var format = new PMFormat();
-        format.setParts(List.of(
-                "<gray>%player_name% <yellow> » <gray>you <gray>:"
-        ));
-        return format;
+        return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>:"));
     }
 
     public static @NotNull Optional<ChatFormat> findFormat(
@@ -56,14 +44,14 @@ public final class FormatUtils {
         return formats.entrySet().stream()
                 .filter(entry -> player.hasPermission(FORMAT_PERMISSION + entry.getKey()))
                 .map(Map.Entry::getValue)
-                .min(Comparator.comparingInt(ChatFormat::getPriority)); // lower number = higher priority
+                .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
     }
 
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
             @NotNull final Player player,
             @NotNull final String message) {
-        return format.getParts().stream()
+        return format.parts().stream()
                 .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
                 .map(part -> replaceRecipientPlaceholder(player, part))
