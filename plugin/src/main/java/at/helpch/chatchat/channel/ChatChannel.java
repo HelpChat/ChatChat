@@ -17,9 +17,7 @@ public final class ChatChannel implements Channel {
 
     private String channelPrefix = "[global]";
 
-    private transient boolean isDefault = false;
-
-    private transient List<User> usersInChannel;
+    private transient List<User> audience;
 
     // Configurate constructor
     public ChatChannel() {}
@@ -28,27 +26,19 @@ public final class ChatChannel implements Channel {
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
             @NotNull final String channelPrefix,
-            final boolean isDefault,
-            @NotNull final List<User> usersInChannel) {
+            @NotNull final List<User> audience) {
         this.messagePrefix = messagePrefix;
         this.toggleCommand = toggleCommand;
         this.channelPrefix = channelPrefix;
-        this.isDefault = isDefault;
-        this.usersInChannel = usersInChannel;
+        this.audience = audience;
     }
 
     public static @NotNull ChatChannel of(
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
             @NotNull final String channelPrefix,
-            final boolean isDefault,
-            @NotNull final List<User> usersInChannel) {
-        return new ChatChannel(messagePrefix, toggleCommand, channelPrefix, isDefault, usersInChannel);
-    }
-
-    @Override
-    public boolean isDefault() {
-        return isDefault;
+            @NotNull final List<User> audience) {
+        return new ChatChannel(messagePrefix, toggleCommand, channelPrefix, audience);
     }
 
     @Override
@@ -62,7 +52,7 @@ public final class ChatChannel implements Channel {
     }
 
     @Override
-    public @NotNull List<User> usersInChannel() {
+    public @NotNull List<User> audience() {
         return Collections.emptyList();
     }
 
