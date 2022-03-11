@@ -14,6 +14,13 @@ public final class PMFormat implements Format {
     public static transient final PMFormat DEFAULT_RECEIVER_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageReceiverFormat();
     private List<String> parts = Collections.emptyList();
 
+    // constructor for Configurate
+    public PMFormat() {}
+
+    private PMFormat(@NotNull final List<String> parts) {
+        this.parts = parts;
+    }
+
     @Override
     public int priority() {
         return 1;
@@ -35,7 +42,7 @@ public final class PMFormat implements Format {
     }
 
     public static @NotNull PMFormat of(@NotNull final List<String> parts) {
-        return new PMFormat().parts(parts);
+        return new PMFormat(parts);
     }
 
     @Override

@@ -14,6 +14,14 @@ public final class ChatFormat implements Format {
     private int priority = Integer.MAX_VALUE;
     private List<String> parts = Collections.emptyList();
 
+    // constructor for Configurate
+    public ChatFormat() {}
+
+    private ChatFormat(final int priority, @NotNull final List<String> parts) {
+        this.priority = priority;
+        this.parts = parts;
+    }
+
     @Override
     public int priority() {
         return priority;
@@ -33,9 +41,7 @@ public final class ChatFormat implements Format {
     }
 
     public static @NotNull ChatFormat of(final int priority, @NotNull final List<String> parts) {
-        return new ChatFormat()
-                .priority(priority)
-                .parts(parts);
+        return new ChatFormat(priority, parts);
     }
 
     @Override
