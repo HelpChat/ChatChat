@@ -28,17 +28,10 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        var settingsConfig = plugin.configManager().settings();
+        final var settingsConfig = plugin.configManager().settings();
 
-        final PMFormat senderFormat;
-        final PMFormat receiverFormat;
-        if (settingsConfig == null) {
-            senderFormat = FormatUtils.createDefaultPrivateMessageSenderFormat();
-            receiverFormat = FormatUtils.createDefaultPrivateMessageReceiverFormat();
-        } else {
-            senderFormat = settingsConfig.getSenderFormat();
-            receiverFormat = settingsConfig.getRecieverFormat();
-        }
+        final var senderFormat = settingsConfig.getSenderFormat();
+        final var receiverFormat = settingsConfig.getRecieverFormat();
 
         plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, message));
         plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, target, message));
