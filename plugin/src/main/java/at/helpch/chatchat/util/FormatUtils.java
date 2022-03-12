@@ -68,6 +68,9 @@ public final class FormatUtils {
             player,
             toReplace
                 .replace("%recipient%", player.getName())
+                // This is to support PAPI placeholders for the recipient. Ex: %recipient_player_name%.
+                // I know it can be better and probably needs a complex parser but that requires, time, skills and patience,
+                // none of which I actually have.
                 .replace("%recipient_", "%")
             );
     }
