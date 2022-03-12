@@ -65,6 +65,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // register channel commands
         configManager.channels().channels().values().stream()
+                .filter(command -> !command.commandName().isEmpty()) // don't register empty command names
                 .map(Channel::commandName)
                 .map(command -> new SwitchChannelCommand(this, command))
                 .forEach(commandManager::registerCommand);
