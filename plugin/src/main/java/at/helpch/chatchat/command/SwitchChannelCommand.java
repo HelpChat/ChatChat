@@ -25,11 +25,10 @@ public final class SwitchChannelCommand extends BaseCommand {
     @Default
     public void switchChannel(final Player player) {
         final var channels = plugin.configManager().channels().channels();
-        final var channel = channels.entrySet()
+        final var channel = channels.values()
                 .stream()
-                .filter(entry -> entry.getValue().commandName().equals(command))
+                .filter(value -> value.commandName().equals(command))
                 .findAny()
-                .map(Map.Entry::getValue)
                 .get(); // this should probably only ever throw if the person has changed command names without restarting
 
         final var audiencePlayer = plugin.audiences().player(player);
