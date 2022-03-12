@@ -30,7 +30,9 @@ public final class WhisperCommand extends BaseCommand {
         final var senderFormat = settingsConfig.getSenderFormat();
         final var receiverFormat = settingsConfig.getRecieverFormat();
 
-        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, message));
-        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, target, message));
+        final var usersHolder = plugin.usersHolder();
+
+        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, usersHolder.getUser(sender), message));
+        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, usersHolder.getUser(target), message));
     }
 }

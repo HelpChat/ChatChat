@@ -48,4 +48,13 @@ public final class ChatUser implements User {
     public @NotNull Player player() {
         return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
     }
+
+    @Override
+    public String toString() {
+        return "ChatUser{" +
+                "uuid=" + uuid +
+                ", channel=" + channel +
+                ", format=" + format +
+                '}';
+    }
 }
