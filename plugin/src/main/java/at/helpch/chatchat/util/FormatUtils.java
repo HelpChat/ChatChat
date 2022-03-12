@@ -2,6 +2,7 @@ package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.config.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -24,13 +25,22 @@ public final class FormatUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull Optional<ChatFormat> findFormat(
+    public static @NotNull Optional<ChatFormat> findPermissionFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
         return formats.entrySet().stream()
                 .filter(entry -> player.hasPermission(FORMAT_PERMISSION + entry.getKey()))
                 .map(Map.Entry::getValue)
                 .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
+    }
+
+    public static @NotNull ChatFormat findFormat(
+            @NotNull final Player player,
+            @NotNull final FormatsHolder formats) {
+        final var formatOptional = findPermissionFormat(player, formats.formats());
+        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), ChatFormat.DEFAULT_FORMAT);
+
+        return formatOptional.orElse(defaultFormat);
     }
 
     public static @NotNull Component parseFormat(

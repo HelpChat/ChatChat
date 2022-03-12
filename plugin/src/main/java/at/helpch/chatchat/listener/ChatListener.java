@@ -31,12 +31,7 @@ public final class ChatListener implements Listener {
         final var player = event.getPlayer();
         final var user = plugin.usersHolder().getUser(player);
 
-        final var formatsConfig = plugin.configManager().formats();
-        final var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
-        final var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
-
-        // if player doesn't have any perms, find default-format and if no default-format is found use the internal format
-        final var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : ChatFormat.DEFAULT_FORMAT);
+        final var format = FormatUtils.findFormat(player, plugin.configManager().formats());
 
         var message = event.getMessage();
         final var channelByPrefix =
