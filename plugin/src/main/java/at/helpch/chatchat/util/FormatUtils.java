@@ -2,7 +2,6 @@ package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.format.PMFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -16,7 +15,6 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
-    private static final int RECIPIENT_SUBSTRING = 11; // %recipient_
     private static final String FORMAT_PERMISSION = "chatchat.format.";
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -40,9 +38,21 @@ public final class FormatUtils {
         return format.parts().stream()
                 .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
-                .map(part -> replaceRecipientPlaceholder(player, part))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final Player receiver,
+        @NotNull final String message) {
+        return format.parts().stream()
+            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+            .map(part -> part.replace("%message%", message))
+            .map(part -> replaceRecipientPlaceholder(receiver, part))
+            .map(FormatUtils::parseToMiniMessage)
+            .collect(Component.toComponent());
     }
 
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
@@ -50,15 +60,15 @@ public final class FormatUtils {
     }
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
-        if (toReplace.equalsIgnoreCase("%recipient%")) {
-            return player.getName();
+        if (!toReplace.contains("%recipient")) {
+            return toReplace;
         }
 
-        if (toReplace.length() <= RECIPIENT_SUBSTRING) {
-            return toReplace; // prevents IndexOutOfBoundsException from String#substring
-        }
-
-        //set any PAPI placeholders after %recipient_
-        return PlaceholderAPI.setPlaceholders(player, "%" + toReplace.substring(RECIPIENT_SUBSTRING));
+        return PlaceholderAPI.setPlaceholders(
+            player,
+            toReplace
+                .replace("%recipient%", player.getName())
+                .replace("%recipient_", "%")
+            );
     }
 }
