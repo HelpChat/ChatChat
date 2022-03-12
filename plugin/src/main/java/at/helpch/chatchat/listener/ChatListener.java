@@ -1,18 +1,23 @@
 package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 public final class ChatListener implements Listener {
 
-    private final @NotNull ChatChatPlugin plugin;
+    private final ChatChatPlugin plugin;
 
     public ChatListener(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
@@ -22,24 +27,34 @@ public final class ChatListener implements Listener {
     public void onChat(final AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
-        var player = event.getPlayer();
-        var user = plugin.usersHolder().getUser(player);
+        final var player = event.getPlayer();
+        final var user = plugin.usersHolder().getUser(player);
 
-        var formatsConfig = plugin.configManager().formats();
-        var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
-        var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
+        final var format = FormatUtils.findFormat(player, plugin.configManager().formats());
 
-        // if player doesn't have any perms, find default-format and if no default-format is found use the internal format
-        var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : ChatFormat.DEFAULT_FORMAT);
+        final var channelByPrefix =
+                ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
 
-        // this will probably be changed when channels will be added
-        var audience = plugin.audiences().players();
-        var chatEvent = new ChatChatEvent(
-            event.isAsynchronous(),
-            event.getPlayer(),
-            audience,
-            format,
-            event.getMessage()
+        final var message = channelByPrefix.isEmpty()
+                ? event.getMessage()
+                : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
+
+        final var channel = channelByPrefix.isEmpty() ? user.channel() : channelByPrefix.get();
+
+        final var audience = plugin.usersHolder().users()
+                .stream()
+                .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
+                .map(User::player)
+                .map(plugin.audiences()::player)
+                .collect(Audience.toAudience());
+
+        final var chatEvent = new ChatChatEvent(
+                event.isAsynchronous(),
+                event.getPlayer(),
+                audience,
+                format,
+                message,
+                channel
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -50,7 +65,6 @@ public final class ChatListener implements Listener {
 
         user.format(chatEvent.format());
         chatEvent.recipients().sendMessage(
-            FormatUtils.parseFormat(chatEvent.format(), chatEvent.player(), chatEvent.message())
-        );
+            FormatUtils.parseFormat(chatEvent.format(), player, channel, chatEvent.message()));
     }
 }

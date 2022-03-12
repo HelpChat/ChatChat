@@ -1,7 +1,9 @@
 package at.helpch.chatchat;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.command.MainCommand;
 import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
@@ -27,17 +29,11 @@ public final class ChatChatPlugin extends JavaPlugin {
         configManager.reload();
         audiences = BukkitAudiences.create(this);
 
-        // command registration
-        var commandManager = BukkitCommandManager.create(this);
-        List.of(
-                new MainCommand(this),
-                new ReloadCommand(this),
-                new WhisperCommand(this)
-        ).forEach(commandManager::registerCommand);
+        registerCommands();
 
         // event listener registration
         List.of(
-                new PlayerListener(usersHolder),
+                new PlayerListener(this),
                 new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
@@ -57,5 +53,21 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull BukkitAudiences audiences() {
         return audiences;
+    }
+
+    private void registerCommands() {
+        final var commandManager = BukkitCommandManager.create(this);
+        List.of(
+                new MainCommand(this),
+                new ReloadCommand(this),
+                new WhisperCommand(this)
+        ).forEach(commandManager::registerCommand);
+
+        // register channel commands
+        configManager.channels().channels().values().stream()
+                .filter(command -> !command.commandName().isEmpty()) // don't register empty command names
+                .map(Channel::commandName)
+                .map(command -> new SwitchChannelCommand(this, command))
+                .forEach(commandManager::registerCommand);
     }
 }

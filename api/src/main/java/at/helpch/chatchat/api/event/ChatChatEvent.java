@@ -1,5 +1,6 @@
 package at.helpch.chatchat.api.event;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
@@ -22,7 +23,13 @@ public class ChatChatEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public ChatChatEvent(final boolean async, @NotNull final Player player, @NotNull final Audience recipients, @NotNull final Format format, @NotNull final String message) {
+    public ChatChatEvent(
+            final boolean async,
+            @NotNull final Player player,
+            @NotNull final Audience recipients,
+            @NotNull final Format format,
+            @NotNull final String message,
+            @NotNull final Channel channel) {
         super(async);
         this.player = player;
         this.recipients = recipients;

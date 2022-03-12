@@ -1,18 +1,16 @@
 package at.helpch.chatchat.api;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public interface Channel {
 
-    boolean isDefault();
+    @NotNull String messagePrefix();
 
-    String messagePrefix();
+    @NotNull String channelPrefix();
 
-    String channelPrefix();
+    @NotNull List<User> audience();
 
-    List<User> usersInChannel();
-
-    String name();
-
-    String commandName();
+    @NotNull String commandName();
 }

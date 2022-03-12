@@ -7,15 +7,14 @@ import at.helpch.chatchat.api.User;
 import java.util.Objects;
 import java.util.UUID;
 
+import at.helpch.chatchat.util.ChannelUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChatUser implements User {
 
-    public ChatUser(
-            @NotNull final UUID uuid
-    ) {
+    public ChatUser(@NotNull final UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -45,7 +44,24 @@ public final class ChatUser implements User {
         return uuid;
     }
 
+    public boolean canSee(@NotNull final Channel channel) {
+        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.commandName());
+    }
+
+    public boolean canUse(@NotNull final Channel channel) {
+        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.commandName());
+    }
+
     public @NotNull Player player() {
         return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
+    }
+
+    @Override
+    public String toString() {
+        return "ChatUser{" +
+                "uuid=" + uuid +
+                ", channel=" + channel +
+                ", format=" + format +
+                '}';
     }
 }

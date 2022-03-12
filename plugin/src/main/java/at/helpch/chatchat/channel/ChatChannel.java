@@ -2,49 +2,84 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.User;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @ConfigSerializable
 public final class ChatChannel implements Channel {
 
-    private String name = "";
-
     private String messagePrefix = "";
 
-    private String toggleCommand = "";
+    private String toggleCommand = "global";
 
-    private String channelPrefix = "";
+    private String channelPrefix = "[global]";
 
-    @Override
-    public boolean isDefault() {
-        return false;
+    private transient List<User> audience = Collections.emptyList();
+
+    // Configurate constructor
+    public ChatChannel() {}
+
+    private ChatChannel(
+            @NotNull final String messagePrefix,
+            @NotNull final String toggleCommand,
+            @NotNull final String channelPrefix,
+            @NotNull final List<User> audience) {
+        this.messagePrefix = messagePrefix;
+        this.toggleCommand = toggleCommand;
+        this.channelPrefix = channelPrefix;
+        this.audience = audience;
+    }
+
+    public static @NotNull ChatChannel of(
+            @NotNull final String messagePrefix,
+            @NotNull final String toggleCommand,
+            @NotNull final String channelPrefix,
+            @NotNull final List<User> audience) {
+        return new ChatChannel(messagePrefix, toggleCommand, channelPrefix, audience);
     }
 
     @Override
-    public String messagePrefix() {
+    public @NotNull String messagePrefix() {
         return messagePrefix;
     }
 
     @Override
-    public String channelPrefix() {
+    public @NotNull String channelPrefix() {
         return channelPrefix;
     }
 
     @Override
-    public List<User> usersInChannel() {
-        return Collections.emptyList();
+    public @NotNull List<User> audience() {
+        return audience;
     }
 
     @Override
-    public String name() {
-        return null;
+    public @NotNull String commandName() {
+        return toggleCommand;
     }
 
     @Override
-    public String commandName() {
-        return null;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChatChannel that = (ChatChannel) o;
+        return messagePrefix.equals(that.messagePrefix) &&
+                toggleCommand.equals(that.toggleCommand) &&
+                channelPrefix.equals(that.channelPrefix) &&
+                audience.equals(that.audience);
+    }
+
+    @Override
+    public String toString() {
+        return "ChatChannel{" +
+                "messagePrefix='" + messagePrefix + '\'' +
+                ", toggleCommand='" + toggleCommand + '\'' +
+                ", channelPrefix='" + channelPrefix + '\'' +
+                ", audience=" + audience +
+                '}';
     }
 }

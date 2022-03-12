@@ -1,6 +1,8 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.config.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -22,7 +24,7 @@ public final class FormatUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull Optional<ChatFormat> findFormat(
+    public static @NotNull Optional<ChatFormat> findPermissionFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
         return formats.entrySet().stream()
@@ -31,13 +33,24 @@ public final class FormatUtils {
                 .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
     }
 
+    public static @NotNull ChatFormat findFormat(
+            @NotNull final Player player,
+            @NotNull final FormatsHolder formats) {
+        final var formatOptional = findPermissionFormat(player, formats.formats());
+        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), ChatFormat.DEFAULT_FORMAT);
+
+        return formatOptional.orElse(defaultFormat);
+    }
+
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
             @NotNull final Player player,
+            @NotNull final Channel channel,
             @NotNull final String message) {
         return format.parts().stream()
                 .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
+                .map(part -> part.replace("%channel_prefix%", channel.channelPrefix()))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
     }
@@ -60,6 +73,7 @@ public final class FormatUtils {
     }
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+
         if (!toReplace.contains("%recipient")) {
             return toReplace;
         }
