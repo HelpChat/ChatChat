@@ -34,15 +34,13 @@ public final class ChatListener implements Listener {
         final var format = FormatUtils.findFormat(player, plugin.configManager().formats());
         final var oldChannel = user.channel(); // save their old channel in case they use a message prefix
 
-        var message = event.getMessage();
         final var channelByPrefix =
                 ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
-        if (channelByPrefix.isPresent()) {
-            var channel = channelByPrefix.get();
-            user.channel(channel); // set the channel if their message starts with a channel prefix
-            message = event.getMessage().replaceFirst(
-                    Pattern.quote(channel.messagePrefix()), ""); // remove the message prefix
-        }
+        channelByPrefix.ifPresent(user::channel); // set the channel if their message starts with a channel prefix
+
+        final var message = channelByPrefix.isEmpty()
+                ? event.getMessage()
+                : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
         final var newChannel = user.channel();
 
@@ -53,7 +51,7 @@ public final class ChatListener implements Listener {
                 .map(plugin.audiences()::player)
                 .collect(Audience.toAudience());
 
-        var chatEvent = new ChatChatEvent(
+        final var chatEvent = new ChatChatEvent(
             event.isAsynchronous(),
             event.getPlayer(),
             audience,
