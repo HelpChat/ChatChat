@@ -1,8 +1,8 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.format.PMFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -35,12 +35,13 @@ public final class FormatUtils {
 
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
-            @NotNull final Player player,
+            @NotNull final User user,
             @NotNull final String message) {
         return format.parts().stream()
-                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+                .map(part -> PlaceholderAPI.setPlaceholders(user.player(), part))
                 .map(part -> part.replace("%message%", message))
-                .map(part -> replaceRecipientPlaceholder(player, part))
+                .map(part -> part.replace("%channel_prefix%", user.channel().channelPrefix()))
+                .map(part -> replaceRecipientPlaceholder(user.player(), part))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
     }
@@ -50,6 +51,12 @@ public final class FormatUtils {
     }
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+
+        // only replace if it actually contains a recipient placeholder
+        if (!toReplace.contains("%recipient")) {
+            return toReplace;
+        }
+
         if (toReplace.equalsIgnoreCase("%recipient%")) {
             return player.getName();
         }

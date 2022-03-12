@@ -1,18 +1,24 @@
 package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 public final class ChatListener implements Listener {
 
-    private final @NotNull ChatChatPlugin plugin;
+    private final ChatChatPlugin plugin;
 
     public ChatListener(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
@@ -22,24 +28,41 @@ public final class ChatListener implements Listener {
     public void onChat(final AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
-        var player = event.getPlayer();
-        var user = plugin.usersHolder().getUser(player);
+        final var player = event.getPlayer();
+        final var user = plugin.usersHolder().getUser(player);
 
-        var formatsConfig = plugin.configManager().formats();
-        var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
-        var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
+        final var formatsConfig = plugin.configManager().formats();
+        final var formatOptional = FormatUtils.findFormat(player, formatsConfig.formats());
+        final var defaultFormat = formatsConfig.formats().get(formatsConfig.defaultFormat());
 
         // if player doesn't have any perms, find default-format and if no default-format is found use the internal format
-        var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : ChatFormat.DEFAULT_FORMAT);
+        final var format = formatOptional.orElseGet(() -> defaultFormat != null ? defaultFormat : ChatFormat.DEFAULT_FORMAT);
 
-        // this will probably be changed when channels will be added
-        var audience = plugin.audiences().players();
+        var message = event.getMessage();
+        final var channelByPrefix =
+                ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
+        if (channelByPrefix.isPresent()) {
+            var channel = channelByPrefix.get();
+            user.channel(channel); // set the channel if their message starts with a channel prefix
+            message = event.getMessage().replaceFirst(
+                    Pattern.quote(channel.messagePrefix()), ""); // remove the message prefix
+        }
+
+        final var channel = user.channel();
+
+        final var audience = plugin.usersHolder().users()
+                .stream()
+                .filter(otherUser -> otherUser.channel().equals(channel)) // get everyone in the same channel
+                .map(User::player)
+                .map(plugin.audiences()::player)
+                .collect(Audience.toAudience());
+
         var chatEvent = new ChatChatEvent(
             event.isAsynchronous(),
             event.getPlayer(),
             audience,
             format,
-            event.getMessage()
+            message
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -50,7 +73,6 @@ public final class ChatListener implements Listener {
 
         user.format(chatEvent.format());
         chatEvent.recipients().sendMessage(
-            FormatUtils.parseFormat(chatEvent.format(), chatEvent.player(), chatEvent.message())
-        );
+            FormatUtils.parseFormat(chatEvent.format(), user, chatEvent.message()));
     }
 }

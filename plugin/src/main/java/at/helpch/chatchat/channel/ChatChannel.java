@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @ConfigSerializable
 public final class ChatChannel implements Channel {
@@ -17,7 +18,7 @@ public final class ChatChannel implements Channel {
 
     private String channelPrefix = "[global]";
 
-    private transient List<User> audience;
+    private transient List<User> audience = Collections.emptyList();
 
     // Configurate constructor
     public ChatChannel() {}
@@ -53,11 +54,32 @@ public final class ChatChannel implements Channel {
 
     @Override
     public @NotNull List<User> audience() {
-        return Collections.emptyList();
+        return audience;
     }
 
     @Override
     public @NotNull String commandName() {
         return toggleCommand;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChatChannel that = (ChatChannel) o;
+        return messagePrefix.equals(that.messagePrefix) &&
+                toggleCommand.equals(that.toggleCommand) &&
+                channelPrefix.equals(that.channelPrefix) &&
+                audience.equals(that.audience);
+    }
+
+    @Override
+    public String toString() {
+        return "ChatChannel{" +
+                "messagePrefix='" + messagePrefix + '\'' +
+                ", toggleCommand='" + toggleCommand + '\'' +
+                ", channelPrefix='" + channelPrefix + '\'' +
+                ", audience=" + audience +
+                '}';
     }
 }
