@@ -36,11 +36,15 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new PlayerListener(this),
                 new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
+
+        getLogger().info("Plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         audiences.close();
+
+        getLogger().info("Plugin disabled successfully!");
     }
 
     public @NotNull ConfigManager configManager() {
