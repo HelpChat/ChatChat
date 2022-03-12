@@ -1,7 +1,7 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.config.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -44,12 +44,13 @@ public final class FormatUtils {
 
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
-            @NotNull final User user,
+            @NotNull final Player player,
+            @NotNull final Channel channel,
             @NotNull final String message) {
         return format.parts().stream()
-                .map(part -> PlaceholderAPI.setPlaceholders(user.player(), part))
+                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
-                .map(part -> part.replace("%channel_prefix%", user.channel().channelPrefix()))
+                .map(part -> part.replace("%channel_prefix%", channel.channelPrefix()))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
     }

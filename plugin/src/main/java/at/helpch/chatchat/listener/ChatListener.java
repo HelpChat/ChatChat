@@ -39,7 +39,7 @@ public final class ChatListener implements Listener {
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var channel = user.channel();
+        final var channel = channelByPrefix.isEmpty() ? user.channel() : channelByPrefix.get();
 
         final var audience = plugin.usersHolder().users()
                 .stream()
@@ -54,7 +54,7 @@ public final class ChatListener implements Listener {
                 audience,
                 format,
                 message,
-                channelByPrefix.isEmpty() ? channel : channelByPrefix.get()
+                channel
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -65,6 +65,6 @@ public final class ChatListener implements Listener {
 
         user.format(chatEvent.format());
         chatEvent.recipients().sendMessage(
-            FormatUtils.parseFormat(chatEvent.format(), user, chatEvent.message()));
+            FormatUtils.parseFormat(chatEvent.format(), player, channel, chatEvent.message()));
     }
 }
