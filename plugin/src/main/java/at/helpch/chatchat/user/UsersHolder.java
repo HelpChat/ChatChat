@@ -11,7 +11,7 @@ public final class UsersHolder {
     private @NotNull final Map<UUID, ChatUser> users = new HashMap<>();
 
     public @NotNull ChatUser getUser(@NotNull final UUID uuid) {
-        return users.getOrDefault(uuid, addUser(uuid));
+        return users.computeIfAbsent(uuid, ChatUser::new);
     }
 
     public @NotNull ChatUser getUser(@NotNull final Player player) {
