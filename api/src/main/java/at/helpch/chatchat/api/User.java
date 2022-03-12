@@ -17,5 +17,9 @@ public interface User {
 
     @NotNull UUID uuid();
 
+    boolean canSee(@NotNull final Channel channel);
+
+    boolean canUse(@NotNull final Channel channel);
+
     @NotNull Player player();
 }

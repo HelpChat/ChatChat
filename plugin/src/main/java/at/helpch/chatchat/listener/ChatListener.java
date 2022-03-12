@@ -3,7 +3,6 @@ package at.helpch.chatchat.listener;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import net.kyori.adventure.audience.Audience;
@@ -36,7 +35,9 @@ public final class ChatListener implements Listener {
 
         final var channelByPrefix =
                 ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
-        channelByPrefix.ifPresent(user::channel); // set the channel if their message starts with a channel prefix
+        channelByPrefix.ifPresent(channel -> {
+            if (user.canUse(channel)) user.channel(channel);  // set the channel if their message starts with a channel prefix & has perms
+        });
 
         final var message = channelByPrefix.isEmpty()
                 ? event.getMessage()
@@ -46,7 +47,7 @@ public final class ChatListener implements Listener {
 
         final var audience = plugin.usersHolder().users()
                 .stream()
-                .filter(otherUser -> otherUser.channel().equals(newChannel)) // get everyone in the same channel
+                .filter(otherUser -> otherUser.canSee(newChannel)) // get everyone who can see this channel
                 .map(User::player)
                 .map(plugin.audiences()::player)
                 .collect(Audience.toAudience());

@@ -1,15 +1,12 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.util.ChannelUtils;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Default;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public final class SwitchChannelCommand extends BaseCommand {
 
@@ -24,6 +21,8 @@ public final class SwitchChannelCommand extends BaseCommand {
 
     @Default
     public void switchChannel(final Player player) {
+        final var user = plugin.usersHolder().getUser(player.getUniqueId());
+
         final var channels = plugin.configManager().channels().channels();
         final var channel = channels.values()
                 .stream()
@@ -33,12 +32,11 @@ public final class SwitchChannelCommand extends BaseCommand {
 
         final var audiencePlayer = plugin.audiences().player(player);
 
-        if (!player.hasPermission(ChannelUtils.BASE_CHANNEL_PERMISSION + command)) {
-            audiencePlayer.sendMessage(Component.text("You don't have permission to talk in this channel!", NamedTextColor.RED));
+        if (!user.canUse(channel)) {
+            audiencePlayer.sendMessage(Component.text("You don't have permission to use this channel!", NamedTextColor.RED));
             return;
         }
 
-        final var user = plugin.usersHolder().getUser(player.getUniqueId());
         user.channel(channel);
         audiencePlayer.sendMessage(Component.text("You have switched to the " + command + " channel!", NamedTextColor.GREEN));
     }
