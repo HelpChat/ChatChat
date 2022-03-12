@@ -31,33 +31,30 @@ public final class ChatListener implements Listener {
         final var user = plugin.usersHolder().getUser(player);
 
         final var format = FormatUtils.findFormat(player, plugin.configManager().formats());
-        final var oldChannel = user.channel(); // save their old channel in case they use a message prefix
 
         final var channelByPrefix =
                 ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
-        channelByPrefix.ifPresent(channel -> {
-            if (user.canUse(channel)) user.channel(channel);  // set the channel if their message starts with a channel prefix & has perms
-        });
 
         final var message = channelByPrefix.isEmpty()
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var newChannel = user.channel();
+        final var channel = user.channel();
 
         final var audience = plugin.usersHolder().users()
                 .stream()
-                .filter(otherUser -> otherUser.canSee(newChannel)) // get everyone who can see this channel
+                .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
                 .map(User::player)
                 .map(plugin.audiences()::player)
                 .collect(Audience.toAudience());
 
         final var chatEvent = new ChatChatEvent(
-            event.isAsynchronous(),
-            event.getPlayer(),
-            audience,
-            format,
-            message
+                event.isAsynchronous(),
+                event.getPlayer(),
+                audience,
+                format,
+                message,
+                channelByPrefix.isEmpty() ? channel : channelByPrefix.get()
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -67,7 +64,6 @@ public final class ChatListener implements Listener {
         }
 
         user.format(chatEvent.format());
-        channelByPrefix.ifPresent(unused -> user.channel(oldChannel)); // set them back to their old channel if they used a prefix
         chatEvent.recipients().sendMessage(
             FormatUtils.parseFormat(chatEvent.format(), user, chatEvent.message()));
     }
