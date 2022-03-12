@@ -17,7 +17,6 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
-    private static final int RECIPIENT_SUBSTRING = 11; // %recipient_
     private static final String FORMAT_PERMISSION = "chatchat.format.";
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -51,9 +50,21 @@ public final class FormatUtils {
                 .map(part -> PlaceholderAPI.setPlaceholders(user.player(), part))
                 .map(part -> part.replace("%message%", message))
                 .map(part -> part.replace("%channel_prefix%", user.channel().channelPrefix()))
-                .map(part -> replaceRecipientPlaceholder(user.player(), part))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final Player receiver,
+        @NotNull final String message) {
+        return format.parts().stream()
+            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+            .map(part -> part.replace("%message%", message))
+            .map(part -> replaceRecipientPlaceholder(receiver, part))
+            .map(FormatUtils::parseToMiniMessage)
+            .collect(Component.toComponent());
     }
 
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
@@ -62,20 +73,18 @@ public final class FormatUtils {
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
 
-        // only replace if it actually contains a recipient placeholder
         if (!toReplace.contains("%recipient")) {
             return toReplace;
         }
 
-        if (toReplace.equalsIgnoreCase("%recipient%")) {
-            return player.getName();
-        }
-
-        if (toReplace.length() <= RECIPIENT_SUBSTRING) {
-            return toReplace; // prevents IndexOutOfBoundsException from String#substring
-        }
-
-        //set any PAPI placeholders after %recipient_
-        return PlaceholderAPI.setPlaceholders(player, "%" + toReplace.substring(RECIPIENT_SUBSTRING));
+        return PlaceholderAPI.setPlaceholders(
+            player,
+            toReplace
+                .replace("%recipient%", player.getName())
+                // This is to support PAPI placeholders for the recipient. Ex: %recipient_player_name%.
+                // I know it can be better and probably needs a complex parser but that requires, time, skills and patience,
+                // none of which I actually have.
+                .replace("%recipient_", "%")
+            );
     }
 }
