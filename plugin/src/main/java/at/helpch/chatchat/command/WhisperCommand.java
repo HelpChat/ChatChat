@@ -7,6 +7,7 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
+import dev.triumphteam.cmd.core.annotation.Join;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, final Player target, final String message) {
+    public void whisperCommand(final Player sender, final Player target, @Join final String message) {
         final var settingsConfig = plugin.configManager().settings();
 
         final var senderFormat = settingsConfig.getSenderFormat();
