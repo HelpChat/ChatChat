@@ -7,7 +7,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @ConfigSerializable
 public final class ChatChannel implements Channel {

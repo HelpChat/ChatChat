@@ -1,8 +1,6 @@
 package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.user.UsersHolder;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

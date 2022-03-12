@@ -1,15 +1,12 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.format.PMFormat;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,9 +27,6 @@ public final class WhisperCommand extends BaseCommand {
 
         final var senderFormat = settingsConfig.getSenderFormat();
         final var receiverFormat = settingsConfig.getRecieverFormat();
-
-
-        final var usersHolder = plugin.usersHolder();
 
         plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, target, message));
         plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, sender, target, message));
