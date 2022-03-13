@@ -8,13 +8,13 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public final class SettingsHolder {
     private PMFormat senderFormat = PMFormat.DEFAULT_SENDER_FORMAT;
-    private PMFormat receiverFormat = PMFormat.DEFAULT_RECEIVER_FORMAT;
+    private PMFormat recipientFormat = PMFormat.DEFAULT_RECIPIENT_FORMAT;
 
     public @NonNull PMFormat getSenderFormat() {
         return senderFormat;
     }
 
-    public @NotNull PMFormat getRecieverFormat() {
-        return receiverFormat;
+    public @NotNull PMFormat getRecipientFormat() {
+        return recipientFormat;
     }
 }

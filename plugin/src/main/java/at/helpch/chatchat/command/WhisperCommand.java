@@ -22,13 +22,13 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, final Player target, @Join final String message) {
+    public void whisperCommand(final Player sender, final Player recipient, @Join final String message) {
         final var settingsConfig = plugin.configManager().settings();
 
         final var senderFormat = settingsConfig.getSenderFormat();
-        final var receiverFormat = settingsConfig.getRecieverFormat();
+        final var recipientFormat = settingsConfig.getRecipientFormat();
 
-        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, target, message));
-        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, sender, target, message));
+        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, recipient, message));
+        plugin.audiences().player(recipient).sendMessage(FormatUtils.parseFormat(recipientFormat, sender, recipient, message));
     }
 }

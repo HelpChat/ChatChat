@@ -58,12 +58,12 @@ public final class FormatUtils {
     public static @NotNull Component parseFormat(
         @NotNull final Format format,
         @NotNull final Player player,
-        @NotNull final Player receiver,
+        @NotNull final Player recipient,
         @NotNull final String message) {
         return format.parts().stream()
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
             .map(part -> part.replace("%message%", message))
-            .map(part -> replaceRecipientPlaceholder(receiver, part))
+            .map(part -> replaceRecipientPlaceholder(recipient, part))
             .map(FormatUtils::parseToMiniMessage)
             .collect(Component.toComponent());
     }

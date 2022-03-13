@@ -15,7 +15,7 @@ final class DefaultFormatFactory {
         return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"));
     }
 
-    static @NotNull PMFormat createDefaultPrivateMessageReceiverFormat() {
+    static @NotNull PMFormat createDefaultPrivateMessageRecipientFormat() {
         return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>:"));
     }
 }
