@@ -1,6 +1,7 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ReloadCommand extends ChatChatCommand {
 
+    private static final String ADMIN_PERMISSION = "chatchat.admin";
     private final ChatChatPlugin plugin;
 
     public ReloadCommand(@NotNull final ChatChatPlugin plugin) {
@@ -16,6 +18,7 @@ public final class ReloadCommand extends ChatChatCommand {
     }
 
     @SubCommand("reload")
+    @Permission(ADMIN_PERMISSION)
     public void reloadCommand(final CommandSender sender) {
         plugin.configManager().reload();
 
