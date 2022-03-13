@@ -33,4 +33,19 @@ public final class ChannelUtils {
                 .filter(channel -> input.startsWith(channel.messagePrefix()))
                 .findFirst();
     }
+
+    public static @NotNull Optional<String> findChannelName(
+        @NotNull final Map<String, ChatChannel> channels,
+        @NotNull final ChatChannel channel
+    ) {
+        for (Map.Entry<String, ChatChannel> entry : channels.entrySet()){
+            if (!entry.getValue().equals(channel)) {
+                continue;
+            }
+
+            return Optional.of(entry.getKey());
+        }
+
+        return Optional.empty();
+    }
 }
