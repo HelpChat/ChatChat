@@ -6,6 +6,7 @@ import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -63,7 +64,11 @@ public final class ChatListener implements Listener {
             return;
         }
 
-        chatEvent.recipients().sendMessage(
-            FormatUtils.parseFormat(chatEvent.format(), player, channel, chatEvent.message()));
+        chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
+            chatEvent.format(),
+            player,
+            channel,
+            Component.text(chatEvent.message())
+        ));
     }
 }

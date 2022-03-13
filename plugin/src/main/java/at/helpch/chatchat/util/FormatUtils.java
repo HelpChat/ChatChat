@@ -6,6 +6,8 @@ import at.helpch.chatchat.config.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
@@ -46,24 +48,36 @@ public final class FormatUtils {
             @NotNull final Format format,
             @NotNull final Player player,
             @NotNull final Channel channel,
-            @NotNull final String message) {
+            @NotNull final ComponentLike message) {
         return format.parts().stream()
-                .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-                .map(part -> part.replace("%message%", message))
-                .map(FormatUtils::parseToMiniMessage)
-                .collect(Component.toComponent());
+            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+            .map(FormatUtils::parseToMiniMessage)
+            .map(component -> component.replaceText(
+                TextReplacementConfig
+                    .builder()
+                    .matchLiteral("%message%")
+                    .replacement(message)
+                    .build()
+            ))
+            .collect(Component.toComponent());
     }
 
     public static @NotNull Component parseFormat(
         @NotNull final Format format,
         @NotNull final Player player,
         @NotNull final Player recipient,
-        @NotNull final String message) {
+        @NotNull final ComponentLike message) {
         return format.parts().stream()
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
             .map(part -> replaceRecipientPlaceholder(recipient, part))
-            .map(part -> part.replace("%message%", message))
             .map(FormatUtils::parseToMiniMessage)
+            .map(component -> component.replaceText(
+                TextReplacementConfig
+                    .builder()
+                    .matchLiteral("%message%")
+                    .replacement(message)
+                    .build()
+            ))
             .collect(Component.toComponent());
     }
 
