@@ -8,6 +8,8 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +26,13 @@ public final class WhisperCommand extends BaseCommand {
     @Default
     @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(final Player sender, @Suggestion("players") final Player recipient, @Join final String message) {
+
+        if (sender.equals(recipient)) {
+            plugin.audiences().player(sender).sendMessage(
+                    Component.text("You can't message yourself!", NamedTextColor.RED));
+            return;
+        }
+
         final var settingsConfig = plugin.configManager().settings();
 
         final var senderFormat = settingsConfig.getSenderFormat();
