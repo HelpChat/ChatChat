@@ -50,7 +50,6 @@ public final class FormatUtils {
         return format.parts().stream()
                 .map(part -> PlaceholderAPI.setPlaceholders(player, part))
                 .map(part -> part.replace("%message%", message))
-                .map(part -> part.replace("%channel_prefix%", channel.channelPrefix()))
                 .map(FormatUtils::parseToMiniMessage)
                 .collect(Component.toComponent());
     }
@@ -62,8 +61,8 @@ public final class FormatUtils {
         @NotNull final String message) {
         return format.parts().stream()
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> part.replace("%message%", message))
             .map(part -> replaceRecipientPlaceholder(recipient, part))
+            .map(part -> part.replace("%message%", message))
             .map(FormatUtils::parseToMiniMessage)
             .collect(Component.toComponent());
     }
