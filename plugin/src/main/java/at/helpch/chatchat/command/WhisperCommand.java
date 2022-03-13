@@ -10,7 +10,7 @@ import dev.triumphteam.cmd.core.annotation.Join;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@Command(value = "whisper", alias = {"tell", "w", "msg", "message"})
+@Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
 public final class WhisperCommand extends BaseCommand {
 
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
