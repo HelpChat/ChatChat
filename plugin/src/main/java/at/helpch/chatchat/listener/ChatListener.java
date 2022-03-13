@@ -63,7 +63,6 @@ public final class ChatListener implements Listener {
             return;
         }
 
-        user.format(chatEvent.format());
         chatEvent.recipients().sendMessage(
             FormatUtils.parseFormat(chatEvent.format(), player, channel, chatEvent.message()));
     }
