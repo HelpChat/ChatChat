@@ -3,6 +3,7 @@ package at.helpch.chatchat;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.command.MainCommand;
 import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.ReplyCommand;
 import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.config.ConfigManager;
@@ -67,7 +68,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         List.of(
                 new MainCommand(this),
                 new ReloadCommand(this),
-                new WhisperCommand(this)
+                new WhisperCommand(this),
+                new ReplyCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands
