@@ -8,6 +8,7 @@ import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
+import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -36,11 +37,17 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new PlayerListener(this),
                 new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
+
+        new ChatPlaceholders(this).register();
+
+        getLogger().info("Plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         audiences.close();
+
+        getLogger().info("Plugin disabled successfully!");
     }
 
     public @NotNull ConfigManager configManager() {

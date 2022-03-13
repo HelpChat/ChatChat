@@ -1,8 +1,6 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import dev.triumphteam.cmd.core.BaseCommand;
-import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;

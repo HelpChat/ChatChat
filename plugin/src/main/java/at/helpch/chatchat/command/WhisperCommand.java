@@ -1,14 +1,12 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.format.PMFormat;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import dev.triumphteam.cmd.core.annotation.Join;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,16 +22,13 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, final Player target, final String message) {
+    public void whisperCommand(final Player sender, final Player recipient, @Join final String message) {
         final var settingsConfig = plugin.configManager().settings();
 
         final var senderFormat = settingsConfig.getSenderFormat();
-        final var receiverFormat = settingsConfig.getRecieverFormat();
+        final var recipientFormat = settingsConfig.getRecipientFormat();
 
-
-        final var usersHolder = plugin.usersHolder();
-
-        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, target, message));
-        plugin.audiences().player(target).sendMessage(FormatUtils.parseFormat(receiverFormat, sender, target, message));
+        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, recipient, message));
+        plugin.audiences().player(recipient).sendMessage(FormatUtils.parseFormat(recipientFormat, sender, recipient, message));
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public final class PMFormat implements Format {
 
     public static transient final PMFormat DEFAULT_SENDER_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageSenderFormat();
-    public static transient final PMFormat DEFAULT_RECEIVER_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageReceiverFormat();
+    public static transient final PMFormat DEFAULT_RECIPIENT_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageRecipientFormat();
     private List<String> parts = Collections.emptyList();
 
     // constructor for Configurate
