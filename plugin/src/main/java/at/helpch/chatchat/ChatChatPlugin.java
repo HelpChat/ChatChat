@@ -13,11 +13,15 @@ import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
@@ -65,6 +69,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerCommands() {
         final var commandManager = BukkitCommandManager.create(this);
+        commandManager.registerSuggestion(SuggestionKey.of("players"), ((sender, context) ->
+                Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList())));
+
         List.of(
                 new MainCommand(this),
                 new ReloadCommand(this),
