@@ -12,10 +12,10 @@ final class DefaultFormatFactory {
     }
 
     static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
-        return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>:"));
+        return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>: %message%"));
     }
 
     static @NotNull PMFormat createDefaultPrivateMessageRecipientFormat() {
-        return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>:"));
+        return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>: %message%"));
     }
 }
