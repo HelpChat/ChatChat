@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import at.helpch.chatchat.util.ChannelUtils;
@@ -19,6 +20,7 @@ public final class ChatUser implements User {
     }
 
     private @NotNull final UUID uuid;
+    private User lastMessaged;
     private Channel channel;
     private Format format;
 
@@ -50,6 +52,14 @@ public final class ChatUser implements User {
 
     public boolean canUse(@NotNull final Channel channel) {
         return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.commandName());
+    }
+
+    public @NotNull Optional<User> lastMessagedUser() {
+        return Optional.ofNullable(lastMessaged);
+    }
+
+    public void lastMessagedUser(@NotNull final User user) {
+        this.lastMessaged = user;
     }
 
     public @NotNull Player player() {

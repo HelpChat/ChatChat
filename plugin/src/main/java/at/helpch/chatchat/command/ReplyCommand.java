@@ -7,29 +7,38 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
-import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
-public final class WhisperCommand extends BaseCommand {
+@Command(value = "reply", alias = "r")
+public final class ReplyCommand extends BaseCommand {
 
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
     private final ChatChatPlugin plugin;
 
-    public WhisperCommand(@NotNull final ChatChatPlugin plugin) {
+    public ReplyCommand(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, @Suggestion("players") final Player recipient, @Join final String message) {
+    public void reply(final Player sender, @Join final String message) {
+        final var user = plugin.usersHolder().getUser(sender);
+        final var lastMessaged = user.lastMessagedUser();
 
-        if (sender.equals(recipient)) {
+        if (lastMessaged.isEmpty()) {
             plugin.audiences().player(sender).sendMessage(
-                    Component.text("You can't message yourself!", NamedTextColor.RED));
+                    Component.text("You have no one to reply to!", NamedTextColor.RED));
+            return;
+        }
+
+        final var recipientUser = lastMessaged.get();
+        final var recipient = recipientUser.player();
+        if (!recipient.isOnline()) {
+            plugin.audiences().player(sender).sendMessage(
+                    Component.text("This player is no longer online", NamedTextColor.RED));
             return;
         }
 
@@ -40,10 +49,6 @@ public final class WhisperCommand extends BaseCommand {
 
         plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(senderFormat, sender, recipient, message));
         plugin.audiences().player(recipient).sendMessage(FormatUtils.parseFormat(recipientFormat, sender, recipient, message));
-
-        final var usersHolder = plugin.usersHolder();
-        final var user = usersHolder.getUser(sender);
-        final var recipientUser = usersHolder.getUser(recipient);
 
         user.lastMessagedUser(recipientUser);
         recipientUser.lastMessagedUser(user);
