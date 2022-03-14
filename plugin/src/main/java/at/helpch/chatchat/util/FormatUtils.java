@@ -22,13 +22,21 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
-    private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?");
-    private static final String URL_PERMISSION = "chatchat.url";
-    private static final TextReplacementConfig URL_REPLACER = TextReplacementConfig.builder()
-        .match(FormatUtils.DEFAULT_URL_PATTERN)
-        .replacement(builder -> builder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, builder.content())))
+    static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
+    static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
+
+    private static final TextReplacementConfig URL_REPLACER_CONFIG = TextReplacementConfig.builder()
+        .match(DEFAULT_URL_PATTERN)
+        .replacement(builder -> {
+            String clickUrl = builder.content();
+            if (!URL_SCHEME_PATTERN.matcher(clickUrl).find()) {
+                clickUrl = "https://" + clickUrl;
+            }
+            return builder.clickEvent(ClickEvent.openUrl(clickUrl));
+        })
         .build();
 
+    private static final String URL_PERMISSION = "chatchat.url";
     private static final String FORMAT_PERMISSION = "chatchat.format.";
 
 
@@ -65,7 +73,7 @@ public final class FormatUtils {
             .map(part -> FormatUtils.parseToMiniMessage(part,
                 Placeholder.component("message", !player.hasPermission(URL_PERMISSION)
                     ? message
-                    : message.asComponent().replaceText(URL_REPLACER))))
+                    : message.asComponent().replaceText(URL_REPLACER_CONFIG))))
             .collect(Component.toComponent());
     }
 
@@ -80,7 +88,7 @@ public final class FormatUtils {
             .map(part -> FormatUtils.parseToMiniMessage(part,
                 Placeholder.component("message", !player.hasPermission(URL_PERMISSION)
                     ? message
-                    : message.asComponent().replaceText(URL_REPLACER))))
+                    : message.asComponent().replaceText(URL_REPLACER_CONFIG))))
             .collect(Component.toComponent());
     }
 
