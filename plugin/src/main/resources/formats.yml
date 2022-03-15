@@ -1,3 +1,4 @@
+# Set the default format. This will be used when players do not have any other format permissions
 default-format: 'default'
 formats:
   default:

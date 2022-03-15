@@ -1,4 +1,7 @@
+# Set the default channel to talk in.
 default-channel: 'default'
+
+# Channels configuration
 channels:
   default:
     #command to switch channel
@@ -7,7 +10,7 @@ channels:
     message-prefix: ''
     # pretty much a variable for the channel prefix
     channel-prefix: '[global]'
-  staff: # perm node: chatchat.channel.staff to access this channel
+  staff: # perm node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
     # command to switch channel
     toggle-command: 'staffchat'
     # prefix the message with this to automatically type the message in channel
