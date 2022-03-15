@@ -10,7 +10,10 @@ import java.util.Map;
 public final class FormatsHolder {
 
     private String defaultFormat = "default";
-    private Map<String, ChatFormat> formats = Map.of(defaultFormat, ChatFormat.DEFAULT_FORMAT);
+
+    private Map<String, ChatFormat> formats = Map.of(
+            "other", DefaultConfigObjects.createOtherFormat(),
+            defaultFormat, DefaultConfigObjects.createDefaultFormat());
 
     public @NotNull String defaultFormat() {
         return defaultFormat;

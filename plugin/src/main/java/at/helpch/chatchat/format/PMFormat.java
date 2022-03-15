@@ -10,8 +10,6 @@ import java.util.List;
 @ConfigSerializable
 public final class PMFormat implements Format {
 
-    public static transient final PMFormat DEFAULT_SENDER_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageSenderFormat();
-    public static transient final PMFormat DEFAULT_RECIPIENT_FORMAT = DefaultFormatFactory.createDefaultPrivateMessageRecipientFormat();
     private List<String> parts = Collections.emptyList();
 
     // constructor for Configurate

@@ -6,16 +6,14 @@ import java.util.List;
 
 final class DefaultFormatFactory {
 
+    /*
+    This is only used as an internal format to send when a user:
+    A - doesn't have any format permissions
+    B - The default-format config option isn't set correctly
+     */
     static @NotNull ChatFormat createDefaultFormat() {
         return ChatFormat.of(1,
-                List.of("<gray>[</gray><color:#3dbbe4>Chat</color><color:#f3af4b>Chat</color><gray>]</gray> %player_name% » %message%"));
+                List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] %player_name% » %message%"));
     }
 
-    static @NotNull PMFormat createDefaultPrivateMessageSenderFormat() {
-        return PMFormat.of(List.of("<gray>you <yellow> » <gray>%recipient_player_name% <gray>: %message%"));
-    }
-
-    static @NotNull PMFormat createDefaultPrivateMessageRecipientFormat() {
-        return PMFormat.of(List.of("<gray>%player_name% <yellow> » <gray>you <gray>: %message%"));
-    }
 }
