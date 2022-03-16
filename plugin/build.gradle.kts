@@ -8,7 +8,6 @@ plugins {
 }
 
 repositories {
-    paper()
     papi()
     triumphSnapshots()
 }
