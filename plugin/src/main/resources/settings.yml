@@ -1,1 +1,9 @@
-settings:
+# The format to send to the sender of a private message
+sender-format:
+  parts:
+    - '<gray>you <color:#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
+    -
+# The format to send to the recipient of a private message
+recipient-format:
+  parts:
+    - '<gray>%player_name% <#40c9ff>-> <gray>you <#e81cff>» <white><message>'

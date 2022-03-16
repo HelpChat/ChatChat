@@ -61,7 +61,7 @@ public final class ConfigFactory {
     private @NotNull YamlConfigurationLoader loader(@NotNull final Path path) {
         return YamlConfigurationLoader.builder()
                 .path(path)
-                .defaultOptions(options -> options.shouldCopyDefaults(true))
+                .defaultOptions(options -> options.shouldCopyDefaults(true).header("https://wiki.helpch.at"))
                 .nodeStyle(NodeStyle.BLOCK)
                 .indent(2)
                 .build();

@@ -10,7 +10,10 @@ import java.util.Map;
 public final class ChannelsHolder {
 
     private String defaultChannel = "default";
-    private Map<String, ChatChannel> channels = Map.of("default", new ChatChannel());
+
+    private Map<String, ChatChannel> channels = Map.of(
+            "staff", DefaultConfigObjects.createStaffChannel(),
+            defaultChannel, DefaultConfigObjects.createDefaultChannel());
 
     public @NotNull String defaultChannel() {
         return defaultChannel;

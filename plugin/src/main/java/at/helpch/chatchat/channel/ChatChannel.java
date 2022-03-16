@@ -13,9 +13,9 @@ public final class ChatChannel implements Channel {
 
     private String messagePrefix = "";
 
-    private String toggleCommand = "global";
+    private String toggleCommand = "";
 
-    private String channelPrefix = "[global]";
+    private String channelPrefix = "";
 
     private transient List<User> audience = Collections.emptyList();
 
