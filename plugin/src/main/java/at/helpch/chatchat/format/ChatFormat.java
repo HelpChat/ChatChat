@@ -9,7 +9,7 @@ import java.util.List;
 @ConfigSerializable
 public final class ChatFormat implements Format {
 
-    public static transient final ChatFormat DEFAULT_FORMAT = DefaultFormatFactory.createDefaultFormat();
+    private static ChatFormat defaultFormat = DefaultFormatFactory.createDefaultFormat();
     private final String name;
     private final int priority;
     private final List<String> parts;
@@ -46,6 +46,14 @@ public final class ChatFormat implements Format {
 
     public @NotNull ChatFormat name(@NotNull final String name) {
         return new ChatFormat(name, priority, parts);
+    }
+
+    public static @NotNull ChatFormat defaultFormat() {
+        return defaultFormat;
+    }
+
+    public static void defaultFormat(@NotNull final ChatFormat format) {
+        defaultFormat = format;
     }
 
     @Override

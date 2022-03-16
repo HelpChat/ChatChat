@@ -23,7 +23,7 @@ public final class ChannelUtils {
             @NotNull final Map<String, ChatChannel> channels,
             @NotNull final String defaultChannel) {
         final var channel = channels.get(defaultChannel);
-        return Objects.requireNonNullElseGet(channel, DefaultConfigObjects::createDefaultChannel);
+        return Objects.requireNonNullElseGet(channel, ChatChannel::defaultChannel);
     }
 
     public static @NotNull Optional<ChatChannel> findChannelByPrefix(

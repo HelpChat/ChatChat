@@ -2,6 +2,7 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -9,6 +10,8 @@ import java.util.List;
 
 @ConfigSerializable
 public final class ChatChannel implements Channel {
+
+    private static ChatChannel defaultChannel = DefaultConfigObjects.createDefaultChannel();
 
     private final String name;
 
@@ -56,6 +59,14 @@ public final class ChatChannel implements Channel {
     @Override
     public @NotNull String commandName() {
         return toggleCommand;
+    }
+
+    public static @NotNull ChatChannel defaultChannel() {
+        return defaultChannel;
+    }
+
+    public static void defaultChannel(@NotNull final ChatChannel toSet) {
+        defaultChannel = toSet;
     }
 
     @Override

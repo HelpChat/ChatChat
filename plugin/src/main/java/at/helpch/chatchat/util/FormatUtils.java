@@ -58,9 +58,8 @@ public final class FormatUtils {
             @NotNull final Player player,
             @NotNull final FormatsHolder formats) {
         final var formatOptional = findPermissionFormat(player, formats.formats());
-        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), ChatFormat.DEFAULT_FORMAT);
 
-        return formatOptional.orElse(defaultFormat);
+        return formatOptional.orElse(ChatFormat.defaultFormat());
     }
 
     public static @NotNull Component parseFormat(
