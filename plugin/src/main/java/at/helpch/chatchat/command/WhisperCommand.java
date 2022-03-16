@@ -25,7 +25,7 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, @Suggestion("players") final Player recipient, @Join final String message) {
+    public void whisperCommand(final Player sender, final Player recipient, @Join final String message) {
 
         if (sender.equals(recipient)) {
             plugin.audiences().player(sender).sendMessage(
