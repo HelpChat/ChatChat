@@ -70,8 +70,7 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
         if (params[0].equals("channel")) {
             switch (params[1]) {
                 case "name":
-                    // I know unchecked cast etc, but this will al be fixed or at least Kaliber said he'll make finding channel names easier.
-                    return ChannelUtils.findChannelName(plugin.configManager().channels().channels(), (ChatChannel) user.channel()).orElse("");
+                    return user.channel().name();
                 case "prefix":
                     return user.channel().channelPrefix();
             }

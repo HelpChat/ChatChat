@@ -49,9 +49,8 @@ public final class FormatUtils {
     public static @NotNull Optional<ChatFormat> findPermissionFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
-        return formats.entrySet().stream()
-                .filter(entry -> player.hasPermission(FORMAT_PERMISSION + entry.getKey()))
-                .map(Map.Entry::getValue)
+        return formats.values().stream()
+                .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
                 .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
     }
 
