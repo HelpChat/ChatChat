@@ -4,7 +4,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven("https://papermc.io/repo/repository/maven-public/")
 }
 
 java {
