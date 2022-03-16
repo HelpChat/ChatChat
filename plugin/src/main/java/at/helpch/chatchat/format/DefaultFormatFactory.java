@@ -12,7 +12,7 @@ final class DefaultFormatFactory {
     B - The default-format config option isn't set correctly
      */
     static @NotNull ChatFormat createDefaultFormat() {
-        return ChatFormat.of(1,
+        return new ChatFormat("default", 1,
                 List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] %player_name% » %message%"));
     }
 

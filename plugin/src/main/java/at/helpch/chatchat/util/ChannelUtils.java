@@ -1,6 +1,7 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public final class ChannelUtils {
             @NotNull final Map<String, ChatChannel> channels,
             @NotNull final String defaultChannel) {
         final var channel = channels.get(defaultChannel);
-        return Objects.requireNonNullElseGet(channel, ChatChannel::new);
+        return Objects.requireNonNullElseGet(channel, DefaultConfigObjects::createDefaultChannel);
     }
 
     public static @NotNull Optional<ChatChannel> findChannelByPrefix(

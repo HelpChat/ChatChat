@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface Channel {
 
+    @NotNull String name();
+
     @NotNull String messagePrefix();
 
     @NotNull String channelPrefix();

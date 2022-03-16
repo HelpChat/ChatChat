@@ -1,7 +1,7 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.config.FormatsHolder;
+import at.helpch.chatchat.config.holders.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import java.util.List;
 import java.util.regex.Pattern;

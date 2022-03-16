@@ -1,5 +1,6 @@
-package at.helpch.chatchat.config;
+package at.helpch.chatchat.config.holders;
 
+import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.format.PMFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;

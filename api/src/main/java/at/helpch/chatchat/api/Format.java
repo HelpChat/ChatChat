@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface Format {
 
+    @NotNull String name();
+
+    @NotNull Format name(@NotNull final String name);
+
     int priority();
 
     @NotNull Format priority(final int priority);

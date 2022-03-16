@@ -1,6 +1,7 @@
-package at.helpch.chatchat.config;
+package at.helpch.chatchat.config.holders;
 
 import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 

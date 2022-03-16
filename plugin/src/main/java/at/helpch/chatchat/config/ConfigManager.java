@@ -1,5 +1,8 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.config.holders.ChannelsHolder;
+import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holders.SettingsHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -24,7 +27,6 @@ public final class ConfigManager {
         formats();
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull ChannelsHolder channels() {
         if (channels == null) {
             this.channels = new ConfigFactory(dataFolder).channels();
@@ -32,7 +34,6 @@ public final class ConfigManager {
         return this.channels;
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull SettingsHolder settings() {
         if (settings == null) {
             this.settings = new ConfigFactory(dataFolder).settings();
@@ -40,7 +41,6 @@ public final class ConfigManager {
         return this.settings;
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull FormatsHolder formats() {
         if (formats == null) {
             this.formats = new ConfigFactory(dataFolder).formats();
