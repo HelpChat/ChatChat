@@ -47,11 +47,11 @@ public final class ChatUser implements User {
     }
 
     public boolean canSee(@NotNull final Channel channel) {
-        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.commandName());
+        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.name());
     }
 
     public boolean canUse(@NotNull final Channel channel) {
-        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.commandName());
+        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.name());
     }
 
     public @NotNull Optional<User> lastMessagedUser() {
