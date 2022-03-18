@@ -82,6 +82,7 @@ public final class FormatUtils {
         @NotNull final ComponentLike message) {
         return format.parts().stream()
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
+            .map(part -> PlaceholderAPI.setRelationalPlaceholders(player, recipient, part))
             .map(part -> replaceRecipientPlaceholder(recipient, part))
             .map(part -> FormatUtils.parseToMiniMessage(part,
                 Placeholder.component("message", !player.hasPermission(URL_PERMISSION)
