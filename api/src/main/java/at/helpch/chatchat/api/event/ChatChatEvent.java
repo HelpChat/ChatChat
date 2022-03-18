@@ -19,6 +19,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     private @NotNull Audience recipients;
     private @NotNull Format format;
     private @NotNull Component message;
+    private @NotNull final Channel channel;
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
@@ -37,6 +38,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         this.recipients = recipients;
         this.format = format;
         this.message = message;
+        this.channel = channel;
     }
 
     @Override
@@ -80,5 +82,9 @@ public class ChatChatEvent extends Event implements Cancellable {
 
     public void message(@NotNull final Component message) {
         this.message = message;
+    }
+
+    public Channel channel() {
+        return channel;
     }
 }
