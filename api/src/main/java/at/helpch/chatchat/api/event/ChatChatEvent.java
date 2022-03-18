@@ -24,12 +24,13 @@ public class ChatChatEvent extends Event implements Cancellable {
     }
 
     public ChatChatEvent(
-            final boolean async,
-            @NotNull final Player player,
-            @NotNull final Audience recipients,
-            @NotNull final Format format,
-            @NotNull final String message,
-            @NotNull final Channel channel) {
+        final boolean async,
+        @NotNull final Player player,
+        @NotNull final Audience recipients,
+        @NotNull final Format format,
+        @NotNull final String message,
+        @NotNull final Channel channel
+    ) {
         super(async);
         this.player = player;
         this.recipients = recipients;
@@ -48,7 +49,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 
@@ -60,7 +61,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         return recipients;
     }
 
-    public void recipients(Audience recipients) {
+    public void recipients(@NotNull final Audience recipients) {
         this.recipients = recipients;
     }
 
@@ -68,7 +69,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         return format;
     }
 
-    public void format(Format format) {
+    public void format(@NotNull final Format format) {
         this.format = format;
     }
 
@@ -76,7 +77,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         return message;
     }
 
-    public void message(String message) {
+    public void message(@NotNull final String message) {
         this.message = message;
     }
 }
