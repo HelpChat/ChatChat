@@ -1,6 +1,7 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
@@ -47,17 +48,35 @@ public final class ReplyCommand extends BaseCommand {
         final var senderFormat = settingsConfig.getSenderFormat();
         final var recipientFormat = settingsConfig.getRecipientFormat();
 
-        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(
-            senderFormat,
+        final var pmSendEvent = new PMSendEvent(
             sender,
             recipient,
-            Component.text(message)
+            senderFormat,
+            recipientFormat,
+            Component.text(message),
+            true
+        );
+
+        plugin.getServer().getPluginManager().callEvent(pmSendEvent);
+
+        if (pmSendEvent.isCancelled()) {
+            if (pmSendEvent.cancelReason().isPresent()) {
+                plugin.audiences().player(sender).sendMessage(pmSendEvent.cancelReason().get());
+            }
+            return;
+        }
+
+        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(
+            pmSendEvent.senderFormat(),
+            sender,
+            recipient,
+            pmSendEvent.message()
         ));
         plugin.audiences().player(recipient).sendMessage(FormatUtils.parseFormat(
-            recipientFormat,
+            pmSendEvent.recipientFormat(),
             sender,
             recipient,
-            Component.text(message)
+            pmSendEvent.message()
         ));
 
         user.lastMessagedUser(recipientUser);
