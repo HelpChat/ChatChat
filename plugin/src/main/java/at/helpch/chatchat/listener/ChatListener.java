@@ -54,7 +54,7 @@ public final class ChatListener implements Listener {
                 event.getPlayer(),
                 audience,
                 format,
-                message,
+                Component.text(message),
                 channel
         );
 
@@ -67,7 +67,7 @@ public final class ChatListener implements Listener {
         chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
             chatEvent.format(),
             player,
-            Component.text(chatEvent.message())
+            chatEvent.message()
         ));
     }
 }

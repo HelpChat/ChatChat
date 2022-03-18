@@ -3,6 +3,7 @@ package at.helpch.chatchat.api.event;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -17,7 +18,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     private @NotNull final Player player;
     private @NotNull Audience recipients;
     private @NotNull Format format;
-    private @NotNull String message;
+    private @NotNull Component message;
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
@@ -28,7 +29,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         @NotNull final Player player,
         @NotNull final Audience recipients,
         @NotNull final Format format,
-        @NotNull final String message,
+        @NotNull final Component message,
         @NotNull final Channel channel
     ) {
         super(async);
@@ -73,11 +74,11 @@ public class ChatChatEvent extends Event implements Cancellable {
         this.format = format;
     }
 
-    public String message() {
+    public Component message() {
         return message;
     }
 
-    public void message(@NotNull final String message) {
+    public void message(@NotNull final Component message) {
         this.message = message;
     }
 }
