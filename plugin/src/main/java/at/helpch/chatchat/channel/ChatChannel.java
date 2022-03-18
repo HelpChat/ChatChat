@@ -2,43 +2,43 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-import java.util.Collections;
 import java.util.List;
 
 @ConfigSerializable
 public final class ChatChannel implements Channel {
 
-    private String messagePrefix = "";
+    private static ChatChannel defaultChannel = DefaultConfigObjects.createDefaultChannel();
 
-    private String toggleCommand = "";
+    private final String name;
 
-    private String channelPrefix = "";
+    private final String messagePrefix;
 
-    private transient List<User> audience = Collections.emptyList();
+    private final String toggleCommand;
 
-    // Configurate constructor
-    public ChatChannel() {}
+    private final String channelPrefix;
 
-    private ChatChannel(
+    private final List<User> audience;
+
+    public ChatChannel(
+            @NotNull final String name,
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
             @NotNull final String channelPrefix,
             @NotNull final List<User> audience) {
+        this.name = name;
         this.messagePrefix = messagePrefix;
         this.toggleCommand = toggleCommand;
         this.channelPrefix = channelPrefix;
         this.audience = audience;
     }
 
-    public static @NotNull ChatChannel of(
-            @NotNull final String messagePrefix,
-            @NotNull final String toggleCommand,
-            @NotNull final String channelPrefix,
-            @NotNull final List<User> audience) {
-        return new ChatChannel(messagePrefix, toggleCommand, channelPrefix, audience);
+    @Override
+    public @NotNull String name() {
+        return name;
     }
 
     @Override
@@ -61,6 +61,14 @@ public final class ChatChannel implements Channel {
         return toggleCommand;
     }
 
+    public static @NotNull ChatChannel defaultChannel() {
+        return defaultChannel;
+    }
+
+    public static void defaultChannel(@NotNull final ChatChannel toSet) {
+        defaultChannel = toSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +83,8 @@ public final class ChatChannel implements Channel {
     @Override
     public String toString() {
         return "ChatChannel{" +
-                "messagePrefix='" + messagePrefix + '\'' +
+                "name=" + name +
+                ", messagePrefix='" + messagePrefix + '\'' +
                 ", toggleCommand='" + toggleCommand + '\'' +
                 ", channelPrefix='" + channelPrefix + '\'' +
                 ", audience=" + audience +

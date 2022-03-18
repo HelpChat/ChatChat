@@ -11,19 +11,19 @@ import java.util.List;
 /**
  * Used to create default objects in the config
  */
-final class DefaultConfigObjects {
+public final class DefaultConfigObjects {
 
-    static @NotNull ChatChannel createDefaultChannel() {
-        return ChatChannel.of(
+    public static @NotNull ChatChannel createDefaultChannel() {
+        return new ChatChannel("default",
                 "", "global", "<gray>[<blue>Global<gray>]", Collections.emptyList());
     }
 
-    static @NotNull ChatChannel createStaffChannel() {
-        return ChatChannel.of("@", "staffchat", "<gray>[<green>Staff<gray>]", Collections.emptyList());
+    public static @NotNull ChatChannel createStaffChannel() {
+        return new ChatChannel("staff", "@", "staffchat", "<gray>[<green>Staff<gray>]", Collections.emptyList());
     }
 
-    static @NotNull ChatFormat createDefaultFormat() {
-        return ChatFormat.of(2,
+    public static @NotNull ChatFormat createDefaultFormat() {
+        return new ChatFormat("default", 2,
                 List.of(
                         "%chatchat_channel_prefix% ",
                         "<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] ",
@@ -32,8 +32,8 @@ final class DefaultConfigObjects {
                         "<white><message>"));
     }
 
-    static @NotNull ChatFormat createOtherFormat() {
-        return ChatFormat.of(1,
+    public static @NotNull ChatFormat createOtherFormat() {
+        return new ChatFormat("other", 1,
                 List.of(
                         "%chatchat_channel_prefix% ",
                         "<hover:show_text:\"Prefix: %vault_group%\"><gray>[<gradient:#40c9ff:#e81cff>ChatChat<gray>] ",
@@ -42,11 +42,11 @@ final class DefaultConfigObjects {
                         "<white><message>"));
     }
 
-    static @NotNull PMFormat createPrivateMessageSenderFormat() {
-        return PMFormat.of(List.of("<gray>you <color:#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>"));
+    public static @NotNull PMFormat createPrivateMessageSenderFormat() {
+        return new PMFormat("sender", List.of("<gray>you <color:#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>"));
     }
 
-    static @NotNull PMFormat createPrivateMessageRecipientFormat() {
-        return PMFormat.of(List.of("<gray>%player_name% <#40c9ff>-> <gray>you <#e81cff>» <white><message>"));
+    public static @NotNull PMFormat createPrivateMessageRecipientFormat() {
+        return new PMFormat("recipient", List.of("<gray>%player_name% <#40c9ff>-> <gray>you <#e81cff>» <white><message>"));
     }
 }

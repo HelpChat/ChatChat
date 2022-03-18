@@ -1,5 +1,11 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.config.holders.ChannelsHolder;
+import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holders.SettingsHolder;
+import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.format.DefaultFormatFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -19,12 +25,18 @@ public final class ConfigManager {
         channels = null;
         formats = null;
         settings = null;
+
         channels();
+        final var defaultChannel = channels.channels().getOrDefault(channels.defaultChannel(), DefaultConfigObjects.createDefaultChannel());
+        ChatChannel.defaultChannel(defaultChannel);
+
         settings();
+
         formats();
+        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), DefaultFormatFactory.createDefaultFormat());
+        ChatFormat.defaultFormat(defaultFormat);
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull ChannelsHolder channels() {
         if (channels == null) {
             this.channels = new ConfigFactory(dataFolder).channels();
@@ -32,7 +44,6 @@ public final class ConfigManager {
         return this.channels;
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull SettingsHolder settings() {
         if (settings == null) {
             this.settings = new ConfigFactory(dataFolder).settings();
@@ -40,7 +51,6 @@ public final class ConfigManager {
         return this.settings;
     }
 
-    // probably shouldn't be null? IDK
     public @NotNull FormatsHolder formats() {
         if (formats == null) {
             this.formats = new ConfigFactory(dataFolder).formats();

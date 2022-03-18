@@ -69,8 +69,6 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerCommands() {
         final var commandManager = BukkitCommandManager.create(this);
-        commandManager.registerSuggestion(SuggestionKey.of("players"), ((sender, context) ->
-                Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList())));
 
         List.of(
                 new MainCommand(this),

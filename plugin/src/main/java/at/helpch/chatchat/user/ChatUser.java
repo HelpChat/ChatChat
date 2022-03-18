@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,11 +48,19 @@ public final class ChatUser implements User {
     }
 
     public boolean canSee(@NotNull final Channel channel) {
-        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.commandName());
+        if (channel.equals(ChatChannel.defaultChannel())) {
+            return true;
+        }
+
+        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.name());
     }
 
     public boolean canUse(@NotNull final Channel channel) {
-        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.commandName());
+        if (channel.equals(ChatChannel.defaultChannel())) {
+            return true;
+        }
+
+        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.name());
     }
 
     public @NotNull Optional<User> lastMessagedUser() {

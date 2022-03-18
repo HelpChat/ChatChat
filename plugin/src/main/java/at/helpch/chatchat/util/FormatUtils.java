@@ -1,7 +1,7 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.config.FormatsHolder;
+import at.helpch.chatchat.config.holders.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -49,9 +49,8 @@ public final class FormatUtils {
     public static @NotNull Optional<ChatFormat> findPermissionFormat(
             @NotNull final Player player,
             @NotNull final Map<String, ChatFormat> formats) {
-        return formats.entrySet().stream()
-                .filter(entry -> player.hasPermission(FORMAT_PERMISSION + entry.getKey()))
-                .map(Map.Entry::getValue)
+        return formats.values().stream()
+                .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
                 .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
     }
 
@@ -59,9 +58,8 @@ public final class FormatUtils {
             @NotNull final Player player,
             @NotNull final FormatsHolder formats) {
         final var formatOptional = findPermissionFormat(player, formats.formats());
-        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), ChatFormat.DEFAULT_FORMAT);
 
-        return formatOptional.orElse(defaultFormat);
+        return formatOptional.orElse(ChatFormat.defaultFormat());
     }
 
     public static @NotNull Component parseFormat(
