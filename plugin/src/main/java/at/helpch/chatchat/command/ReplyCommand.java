@@ -60,9 +60,6 @@ public final class ReplyCommand extends BaseCommand {
         plugin.getServer().getPluginManager().callEvent(pmSendEvent);
 
         if (pmSendEvent.isCancelled()) {
-            if (pmSendEvent.cancelReason().isPresent()) {
-                plugin.audiences().player(sender).sendMessage(pmSendEvent.cancelReason().get());
-            }
             return;
         }
 

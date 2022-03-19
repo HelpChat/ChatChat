@@ -15,10 +15,6 @@ public class PMSendEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private boolean cancelled = false;
 
-    private @NotNull Optional<Component> cancelReason = Optional.of(
-        Component.text("Could not send your message.", NamedTextColor.RED)
-    );
-
     private @NotNull final Player sender;
     private @NotNull final Player recipient;
     private @NotNull Format senderFormat;
@@ -92,13 +88,5 @@ public class PMSendEvent extends Event implements Cancellable {
 
     public boolean reply() {
         return reply;
-    }
-
-    public Optional<Component> cancelReason() {
-        return cancelReason;
-    }
-
-    public void cancelReason(@NotNull final Optional<Component> reason) {
-        this.cancelReason = reason;
     }
 }
