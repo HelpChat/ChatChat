@@ -35,7 +35,14 @@ bukkit {
 tasks {
     withType<ShadowJar> {
         minimize()
-        relocate("net.kyori", "at.helpch.chatchat.libs.adventure")
+
+        listOf("net.kyori",
+            "dev.triumphteam",
+            "org.spongepowered",
+            "io.leangen",
+            "org.yaml"
+        ).forEach { relocate(it, "at.helpch.chatchat.libs.$it") }
+
         archiveFileName.set("ChatChat-${project.version}.jar")
     }
 }
