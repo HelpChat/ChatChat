@@ -45,8 +45,6 @@ public final class ChatListener implements Listener {
         final var audience = plugin.usersHolder().users()
                 .stream()
                 .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
-                .map(User::player)
-                .map(plugin.audiences()::player)
                 .collect(Audience.toAudience());
 
         final var chatEvent = new ChatChatEvent(

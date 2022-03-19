@@ -1,12 +1,12 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.User;
 import dev.triumphteam.cmd.core.annotation.Default;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import static net.kyori.adventure.text.Component.text;
@@ -20,7 +20,7 @@ public final class MainCommand extends ChatChatCommand {
     }
 
     @Default
-    public void defaultCommand(final CommandSender sender) {
+    public void defaultCommand(final User sender) {
         var text = text("A Chat Plugin ", NamedTextColor.AQUA)
                 .append(text("by ", NamedTextColor.GRAY)
                 .append(text("Help", TextColor.fromCSSHexString("#3dbbe4"))
@@ -30,6 +30,6 @@ public final class MainCommand extends ChatChatCommand {
                 .append(text("Version: ", NamedTextColor.GRAY))
                 .append(text(plugin.getDescription().getVersion(), NamedTextColor.AQUA));
 
-        plugin.audiences().sender(sender).sendMessage(text);
+        sender.sendMessage(text);
     }
 }

@@ -1,5 +1,6 @@
 package at.helpch.chatchat.user;
 
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
@@ -10,6 +11,8 @@ import java.util.UUID;
 
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.util.ChannelUtils;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +76,16 @@ public final class ChatUser implements User {
 
     public @NotNull Player player() {
         return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
+    }
+
+    @Override
+    public @NotNull Audience audience() {
+        return ChatChatPlugin.audiences().player(uuid);
+    }
+
+    @Override
+    public @NotNull Identity identity() {
+        return Identity.identity(uuid);
     }
 
     @Override

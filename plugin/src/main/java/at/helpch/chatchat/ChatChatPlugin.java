@@ -10,21 +10,26 @@ import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.user.ChatUser;
+import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
 
     private @NotNull final ConfigManager configManager = new ConfigManager(this.getDataFolder().toPath());
     private @NotNull final UsersHolder usersHolder = new UsersHolder();
-    private BukkitAudiences audiences;
+    private static BukkitAudiences audiences;
 
     @Override
     public void onEnable() {
@@ -59,15 +64,28 @@ public final class ChatChatPlugin extends JavaPlugin {
         return usersHolder;
     }
 
-    public @NotNull BukkitAudiences audiences() {
+    public static @NotNull BukkitAudiences audiences() {
         return audiences;
     }
 
     private void registerCommands() {
-        final var commandManager = BukkitCommandManager.create(this);
+        final var commandManager = BukkitCommandManager.create(this,
+                usersHolder::getUser,
+                new UserSenderValidator());
+
+        commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
+            final var player = Bukkit.getPlayer(arg);
+            if (player == null) {
+                return null;
+            }
+            return usersHolder.getUser(player);
+        });
+        commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.toList())));
 
         List.of(
-                new MainCommand(this),
+                new MainCommand(this), // this causes tab complete errors? (default command)
                 new ReloadCommand(this),
                 new WhisperCommand(this),
                 new ReplyCommand(this)
