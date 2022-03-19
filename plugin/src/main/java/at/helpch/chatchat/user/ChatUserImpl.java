@@ -2,6 +2,7 @@ package at.helpch.chatchat.user;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
 
@@ -16,15 +17,16 @@ import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class ChatUser implements User {
+public final class ChatUserImpl implements ChatUser {
 
-    public ChatUser(@NotNull final UUID uuid) {
+    public ChatUserImpl(@NotNull final UUID uuid) {
         this.uuid = uuid;
     }
 
     private @NotNull final UUID uuid;
-    private User lastMessaged;
+    private ChatUser lastMessaged;
     private Channel channel;
     private Format format;
 
@@ -38,18 +40,22 @@ public final class ChatUser implements User {
         this.channel = channel;
     }
 
+    @Override
     public @NotNull Format format() {
         return format;
     }
 
+    @Override
     public void format(@NotNull final Format format) {
         this.format = format;
     }
 
+    @Override
     public @NotNull UUID uuid() {
         return uuid;
     }
 
+    @Override
     public boolean canSee(@NotNull final Channel channel) {
         if (channel.equals(ChatChannel.defaultChannel())) {
             return true;
@@ -58,6 +64,7 @@ public final class ChatUser implements User {
         return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.name());
     }
 
+    @Override
     public boolean canUse(@NotNull final Channel channel) {
         if (channel.equals(ChatChannel.defaultChannel())) {
             return true;
@@ -66,14 +73,17 @@ public final class ChatUser implements User {
         return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.name());
     }
 
-    public @NotNull Optional<User> lastMessagedUser() {
+    @Override
+    public @NotNull Optional<ChatUser> lastMessagedUser() {
         return Optional.ofNullable(lastMessaged);
     }
 
-    public void lastMessagedUser(@NotNull final User user) {
+    @Override
+    public void lastMessagedUser(@Nullable final ChatUser user) {
         this.lastMessaged = user;
     }
 
+    @Override
     public @NotNull Player player() {
         return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
     }
@@ -90,8 +100,9 @@ public final class ChatUser implements User {
 
     @Override
     public String toString() {
-        return "ChatUser{" +
+        return "ChatUserImpl{" +
                 "uuid=" + uuid +
+                ", lastMessaged=" + lastMessagedUser().map(ChatUser::uuid) +
                 ", channel=" + channel +
                 ", format=" + format +
                 '}';

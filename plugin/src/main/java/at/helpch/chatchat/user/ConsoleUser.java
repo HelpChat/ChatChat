@@ -8,10 +8,8 @@ import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public final class ConsoleUser implements User {
@@ -45,19 +43,6 @@ public final class ConsoleUser implements User {
     @Override
     public boolean canUse(@NotNull final Channel channel) {
         return true;
-    }
-
-    @Override
-    public @NotNull Optional<User> lastMessagedUser() {
-        return Optional.empty();
-    }
-
-    @Override
-    public void lastMessagedUser(@NotNull final User user) {}
-
-    @Override
-    public @NotNull Player player() {
-        return null;
     }
 
     @Override

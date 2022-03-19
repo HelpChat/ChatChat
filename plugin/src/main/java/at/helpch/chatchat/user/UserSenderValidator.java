@@ -1,5 +1,6 @@
 package at.helpch.chatchat.user;
 
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import dev.triumphteam.cmd.core.SubCommand;
 import dev.triumphteam.cmd.core.message.MessageRegistry;

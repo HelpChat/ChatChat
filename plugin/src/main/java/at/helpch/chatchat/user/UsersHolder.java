@@ -1,7 +1,7 @@
 package at.helpch.chatchat.user;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public final class UsersHolder {
     }
 
     public @NotNull User getUser(@NotNull final UUID uuid) {
-        return users.computeIfAbsent(uuid, ChatUser::new);
+        return users.computeIfAbsent(uuid, ChatUserImpl::new);
     }
 
     public @NotNull User getUser(@NotNull final CommandSender user) {
@@ -42,7 +42,7 @@ public final class UsersHolder {
     }
 
     public @NotNull User addUser(@NotNull final UUID uuid) {
-        ChatUser user = new ChatUser(uuid);
+        final var user = new ChatUserImpl(uuid);
         users.put(uuid, user);
         return user;
     }
@@ -51,7 +51,7 @@ public final class UsersHolder {
         return addUser(player.getUniqueId());
     }
 
-    public @NotNull List<User> users() {
-        return List.copyOf(users.values());
+    public @NotNull Collection<User> users() {
+        return users.values();
     }
 }
