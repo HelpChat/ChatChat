@@ -58,15 +58,15 @@ public class PMSendEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
-    public Player sender() {
+    public @NotNull Player sender() {
         return sender;
     }
 
-    public Player recipient() {
+    public @NotNull Player recipient() {
         return recipient;
     }
 
-    public Format senderFormat() {
+    public @NotNull Format senderFormat() {
         return senderFormat;
     }
 
@@ -74,7 +74,7 @@ public class PMSendEvent extends Event implements Cancellable {
         this.senderFormat = format;
     }
 
-    public Format recipientFormat() {
+    public @NotNull Format recipientFormat() {
         return recipientFormat;
     }
 
@@ -82,7 +82,7 @@ public class PMSendEvent extends Event implements Cancellable {
         this.recipientFormat = format;
     }
 
-    public Component message() {
+    public @NotNull Component message() {
         return message;
     }
 

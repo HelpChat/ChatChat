@@ -60,7 +60,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         return player;
     }
 
-    public Audience recipients() {
+    public @NotNull Audience recipients() {
         return recipients;
     }
 
@@ -68,7 +68,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         this.recipients = recipients;
     }
 
-    public Format format() {
+    public @NotNull Format format() {
         return format;
     }
 
@@ -76,7 +76,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         this.format = format;
     }
 
-    public Component message() {
+    public @NotNull Component message() {
         return message;
     }
 
@@ -84,7 +84,7 @@ public class ChatChatEvent extends Event implements Cancellable {
         this.message = message;
     }
 
-    public Channel channel() {
+    public @NotNull Channel channel() {
         return channel;
     }
 }
