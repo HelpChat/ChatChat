@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class UsersHolder {
 
-    public static final User CONSOLE = new ConsoleUser();
+    public static final User CONSOLE = ConsoleUser.INSTANCE;
 
     private @NotNull final Map<UUID, User> users = new HashMap<>();
 

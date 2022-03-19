@@ -14,6 +14,10 @@ import java.util.UUID;
 
 public final class ConsoleUser implements User {
 
+    public static final ConsoleUser INSTANCE = new ConsoleUser();
+
+    private ConsoleUser() {}
+
     @Override
     public @NotNull Channel channel() {
         return ChatChannel.defaultChannel();
