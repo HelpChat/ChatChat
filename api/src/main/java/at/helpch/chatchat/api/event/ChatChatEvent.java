@@ -3,6 +3,7 @@ package at.helpch.chatchat.api.event;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.Format;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -17,24 +18,27 @@ public class ChatChatEvent extends Event implements Cancellable {
     private @NotNull final Player player;
     private @NotNull Audience recipients;
     private @NotNull Format format;
-    private @NotNull String message;
+    private @NotNull Component message;
+    private @NotNull final Channel channel;
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
     public ChatChatEvent(
-            final boolean async,
-            @NotNull final Player player,
-            @NotNull final Audience recipients,
-            @NotNull final Format format,
-            @NotNull final String message,
-            @NotNull final Channel channel) {
+        final boolean async,
+        @NotNull final Player player,
+        @NotNull final Audience recipients,
+        @NotNull final Format format,
+        @NotNull final Component message,
+        @NotNull final Channel channel
+    ) {
         super(async);
         this.player = player;
         this.recipients = recipients;
         this.format = format;
         this.message = message;
+        this.channel = channel;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 
@@ -56,27 +60,31 @@ public class ChatChatEvent extends Event implements Cancellable {
         return player;
     }
 
-    public Audience recipients() {
+    public @NotNull Audience recipients() {
         return recipients;
     }
 
-    public void recipients(Audience recipients) {
+    public void recipients(@NotNull final Audience recipients) {
         this.recipients = recipients;
     }
 
-    public Format format() {
+    public @NotNull Format format() {
         return format;
     }
 
-    public void format(Format format) {
+    public void format(@NotNull final Format format) {
         this.format = format;
     }
 
-    public String message() {
+    public @NotNull Component message() {
         return message;
     }
 
-    public void message(String message) {
+    public void message(@NotNull final Component message) {
         this.message = message;
+    }
+
+    public @NotNull Channel channel() {
+        return channel;
     }
 }
