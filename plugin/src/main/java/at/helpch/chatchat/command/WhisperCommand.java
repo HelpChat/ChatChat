@@ -1,7 +1,9 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.PMSendEvent;
+import at.helpch.chatchat.user.ChatUserImpl;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
@@ -10,7 +12,6 @@ import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
@@ -25,11 +26,10 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final Player sender, final Player recipient, @Join final String message) {
+    public void whisperCommand(final ChatUser user, final ChatUser recipient, @Join final String message) {
 
-        if (sender.equals(recipient)) {
-            plugin.audiences().player(sender).sendMessage(
-                    Component.text("You can't message yourself!", NamedTextColor.RED));
+        if (user.equals(recipient)) {
+            user.sendMessage(Component.text("You can't message yourself!", NamedTextColor.RED));
             return;
         }
 
@@ -39,7 +39,7 @@ public final class WhisperCommand extends BaseCommand {
         final var recipientFormat = settingsConfig.getRecipientFormat();
 
         final var pmSendEvent = new PMSendEvent(
-            sender,
+            user,
             recipient,
             senderFormat,
             recipientFormat,
@@ -53,24 +53,20 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        plugin.audiences().player(sender).sendMessage(FormatUtils.parseFormat(
+        user.sendMessage(FormatUtils.parseFormat(
             pmSendEvent.senderFormat(),
-            sender,
-            recipient,
+            user.player(),
+            recipient.player(),
             pmSendEvent.message()
         ));
-        plugin.audiences().player(recipient).sendMessage(FormatUtils.parseFormat(
+        recipient.sendMessage(FormatUtils.parseFormat(
             pmSendEvent.recipientFormat(),
-            sender,
-            recipient,
+            user.player(),
+            recipient.player(),
             pmSendEvent.message()
         ));
 
-        final var usersHolder = plugin.usersHolder();
-        final var user = usersHolder.getUser(sender);
-        final var recipientUser = usersHolder.getUser(recipient);
-
-        user.lastMessagedUser(recipientUser);
-        recipientUser.lastMessagedUser(user);
+        user.lastMessagedUser(recipient);
+        recipient.lastMessagedUser(user);
     }
 }

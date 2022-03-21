@@ -1,21 +1,37 @@
 package at.helpch.chatchat.user;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public final class UsersHolder {
-    private @NotNull final Map<UUID, ChatUser> users = new HashMap<>();
 
-    public @NotNull ChatUser getUser(@NotNull final UUID uuid) {
-        return users.computeIfAbsent(uuid, ChatUser::new);
+    public static final User CONSOLE = ConsoleUser.INSTANCE;
+
+    private @NotNull final Map<UUID, User> users = new HashMap<>();
+
+    public UsersHolder() {
+        users.put(CONSOLE.uuid(), CONSOLE);
     }
 
-    public @NotNull ChatUser getUser(@NotNull final Player player) {
-        return getUser(player.getUniqueId());
+    public @NotNull User getUser(@NotNull final UUID uuid) {
+        return users.computeIfAbsent(uuid, ChatUserImpl::new);
+    }
+
+    public @NotNull User getUser(@NotNull final CommandSender user) {
+        if (user instanceof ConsoleCommandSender) {
+            return CONSOLE;
+        }
+
+        return getUser(((Player) user).getUniqueId());
     }
 
     public void removeUser(@NotNull final UUID uuid) {
@@ -27,7 +43,7 @@ public final class UsersHolder {
     }
 
     public @NotNull ChatUser addUser(@NotNull final UUID uuid) {
-        ChatUser user = new ChatUser(uuid);
+        final var user = new ChatUserImpl(uuid);
         users.put(uuid, user);
         return user;
     }
@@ -36,7 +52,7 @@ public final class UsersHolder {
         return addUser(player.getUniqueId());
     }
 
-    public @NotNull List<ChatUser> users() {
-        return List.copyOf(users.values());
+    public @NotNull Collection<User> users() {
+        return users.values();
     }
 }

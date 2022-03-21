@@ -52,13 +52,13 @@ public final class ChatChannel implements Channel {
     }
 
     @Override
-    public @NotNull List<User> audience() {
-        return audience;
+    public @NotNull String commandName() {
+        return toggleCommand;
     }
 
     @Override
-    public @NotNull String commandName() {
-        return toggleCommand;
+    public @NotNull Iterable<User> audiences() {
+        return audience;
     }
 
     public static @NotNull ChatChannel defaultChannel() {

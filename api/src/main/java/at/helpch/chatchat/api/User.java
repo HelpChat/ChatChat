@@ -1,12 +1,12 @@
 package at.helpch.chatchat.api;
 
-import org.bukkit.entity.Player;
+import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.identity.Identified;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.UUID;
 
-public interface User {
+public interface User extends ForwardingAudience.Single, Identified {
 
     @NotNull Channel channel();
 
@@ -22,9 +22,4 @@ public interface User {
 
     boolean canUse(@NotNull final Channel channel);
 
-    @NotNull Optional<User> lastMessagedUser();
-
-    void lastMessagedUser(@NotNull final User user);
-
-    @NotNull Player player();
 }
