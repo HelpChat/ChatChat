@@ -34,11 +34,6 @@ public final class ReplyCommand extends BaseCommand {
         }
 
         final var recipientUser = lastMessaged.get();
-        final var recipient = recipientUser.player();
-        if (!recipient.isOnline()) {
-            user.sendMessage(Component.text("This player is no longer online", NamedTextColor.RED));
-            return;
-        }
 
         final var settingsConfig = plugin.configManager().settings();
 
@@ -46,8 +41,8 @@ public final class ReplyCommand extends BaseCommand {
         final var recipientFormat = settingsConfig.getRecipientFormat();
 
         final var pmSendEvent = new PMSendEvent(
-            user.player(),
-            recipient,
+            user,
+            recipientUser,
             senderFormat,
             recipientFormat,
             Component.text(message),
@@ -59,6 +54,8 @@ public final class ReplyCommand extends BaseCommand {
         if (pmSendEvent.isCancelled()) {
             return;
         }
+
+        final var recipient = recipientUser.player();
 
         user.sendMessage(FormatUtils.parseFormat(
             pmSendEvent.senderFormat(),

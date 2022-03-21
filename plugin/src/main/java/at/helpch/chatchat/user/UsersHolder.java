@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -41,13 +42,13 @@ public final class UsersHolder {
         removeUser(player.getUniqueId());
     }
 
-    public @NotNull User addUser(@NotNull final UUID uuid) {
+    public @NotNull ChatUser addUser(@NotNull final UUID uuid) {
         final var user = new ChatUserImpl(uuid);
         users.put(uuid, user);
         return user;
     }
 
-    public @NotNull User addUser(@NotNull final Player player) {
+    public @NotNull ChatUser addUser(@NotNull final Player player) {
         return addUser(player.getUniqueId());
     }
 

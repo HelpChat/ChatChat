@@ -1,5 +1,6 @@
 package at.helpch.chatchat.api.event;
 
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
@@ -15,16 +16,16 @@ public class PMSendEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private boolean cancelled = false;
 
-    private @NotNull final Player sender;
-    private @NotNull final Player recipient;
+    private @NotNull final ChatUser sender;
+    private @NotNull final ChatUser recipient;
     private @NotNull Format senderFormat;
     private @NotNull Format recipientFormat;
     private @NotNull Component message;
     private final boolean reply;
 
     public PMSendEvent(
-        @NotNull final Player sender,
-        @NotNull final Player recipient,
+        @NotNull final ChatUser sender,
+        @NotNull final ChatUser recipient,
         @NotNull final Format senderFormat,
         @NotNull final Format recipientFormat,
         @NotNull final Component message,
@@ -37,7 +38,6 @@ public class PMSendEvent extends Event implements Cancellable {
         this.message = message;
         this.reply = reply;
     }
-
 
     @Override
     public @NotNull HandlerList getHandlers() {
@@ -54,11 +54,11 @@ public class PMSendEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
-    public @NotNull Player sender() {
+    public @NotNull ChatUser sender() {
         return sender;
     }
 
-    public @NotNull Player recipient() {
+    public @NotNull ChatUser recipient() {
         return recipient;
     }
 
