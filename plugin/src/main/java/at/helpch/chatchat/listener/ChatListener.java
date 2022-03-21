@@ -40,7 +40,7 @@ public final class ChatListener implements Listener {
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var channel = channelByPrefix.isEmpty() ? user.channel() : channelByPrefix.get();
+        final var channel = channelByPrefix.isEmpty() || !user.canUse(channelByPrefix.get()) ? user.channel() : channelByPrefix.get();
 
         final var audience = plugin.usersHolder().users()
                 .stream()
