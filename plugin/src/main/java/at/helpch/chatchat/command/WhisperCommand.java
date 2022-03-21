@@ -39,8 +39,8 @@ public final class WhisperCommand extends BaseCommand {
         final var recipientFormat = settingsConfig.getRecipientFormat();
 
         final var pmSendEvent = new PMSendEvent(
-            user.player(),
-            recipient.player(),
+            user,
+            recipient,
             senderFormat,
             recipientFormat,
             Component.text(message),
