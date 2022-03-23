@@ -2,10 +2,7 @@ package at.helpch.chatchat.api.event;
 
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
-import java.util.Optional;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
