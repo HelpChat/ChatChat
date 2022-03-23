@@ -49,4 +49,8 @@ public final class DefaultConfigObjects {
     public static @NotNull PMFormat createPrivateMessageRecipientFormat() {
         return new PMFormat("recipient", List.of("<gray>%player_name% <#40c9ff>-> <gray>you <#e81cff>» <white><message>"));
     }
+
+    public static @NotNull PMFormat createPrivateMessageSocialSpyFormat() {
+        return new PMFormat("socialspy", List.of("<green>(spy) <gray>%player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>"));
+    }
 }

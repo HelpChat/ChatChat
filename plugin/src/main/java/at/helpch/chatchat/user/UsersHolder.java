@@ -2,8 +2,11 @@ package at.helpch.chatchat.user;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
@@ -17,6 +20,8 @@ public final class UsersHolder {
     public static final User CONSOLE = ConsoleUser.INSTANCE;
 
     private @NotNull final Map<UUID, User> users = new HashMap<>();
+
+    private @NotNull final Set<UUID> socialSpyUsers = new HashSet<>();
 
     public UsersHolder() {
         users.put(CONSOLE.uuid(), CONSOLE);
@@ -36,6 +41,7 @@ public final class UsersHolder {
 
     public void removeUser(@NotNull final UUID uuid) {
         users.remove(uuid);
+        socialSpyUsers.remove(uuid);
     }
 
     public void removeUser(@NotNull final Player player) {
@@ -54,5 +60,21 @@ public final class UsersHolder {
 
     public @NotNull Collection<User> users() {
         return users.values();
+    }
+
+    public @NotNull Collection<User> socialSpies() {
+        return socialSpyUsers.stream().map(this::getUser).collect(Collectors.toUnmodifiableSet());
+    }
+
+    public void setSocialSpy(UUID uuid, boolean enabled) {
+        if (enabled) {
+            socialSpyUsers.add(uuid);
+        } else {
+            socialSpyUsers.remove(uuid);
+        }
+    }
+
+    public boolean isSocialSpy(UUID uuid) {
+        return socialSpyUsers.contains(uuid);
     }
 }

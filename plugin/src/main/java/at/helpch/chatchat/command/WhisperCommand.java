@@ -2,17 +2,19 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.event.PMSendEvent;
-import at.helpch.chatchat.user.ChatUserImpl;
 import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
+import java.util.Map;
 
 @Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
 public final class WhisperCommand extends BaseCommand {
@@ -37,6 +39,7 @@ public final class WhisperCommand extends BaseCommand {
 
         final var senderFormat = settingsConfig.getSenderFormat();
         final var recipientFormat = settingsConfig.getRecipientFormat();
+        final var socialSpyFormat = settingsConfig.getSocialSpyFormat();
 
         final var pmSendEvent = new PMSendEvent(
             user,
@@ -53,18 +56,18 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        user.sendMessage(FormatUtils.parseFormat(
-            pmSendEvent.senderFormat(),
-            user.player(),
-            recipient.player(),
-            pmSendEvent.message()
-        ));
-        recipient.sendMessage(FormatUtils.parseFormat(
-            pmSendEvent.recipientFormat(),
-            user.player(),
-            recipient.player(),
-            pmSendEvent.message()
-        ));
+        Map.of(
+                user, pmSendEvent.senderFormat(),
+                recipient, pmSendEvent.recipientFormat(),
+                Audience.audience(plugin.usersHolder().socialSpies()), socialSpyFormat
+        ).forEach((Audience audience, Format format) ->
+            audience.sendMessage(FormatUtils.parseFormat(
+                    format,
+                    user.player(),
+                    recipient.player(),
+                    pmSendEvent.message()
+            ))
+        );
 
         user.lastMessagedUser(recipient);
         recipient.lastMessagedUser(user);

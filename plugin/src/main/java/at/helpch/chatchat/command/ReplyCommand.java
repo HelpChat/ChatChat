@@ -2,8 +2,6 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.event.PMSendEvent;
-import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -17,10 +15,10 @@ import org.jetbrains.annotations.NotNull;
 public final class ReplyCommand extends BaseCommand {
 
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
-    private final ChatChatPlugin plugin;
+    private final WhisperCommand whisperCommand;
 
-    public ReplyCommand(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
+    public ReplyCommand(@NotNull final WhisperCommand whisperCommand) {
+        this.whisperCommand = whisperCommand;
     }
 
     @Default
@@ -33,44 +31,6 @@ public final class ReplyCommand extends BaseCommand {
             return;
         }
 
-        final var recipientUser = lastMessaged.get();
-
-        final var settingsConfig = plugin.configManager().settings();
-
-        final var senderFormat = settingsConfig.getSenderFormat();
-        final var recipientFormat = settingsConfig.getRecipientFormat();
-
-        final var pmSendEvent = new PMSendEvent(
-            user,
-            recipientUser,
-            senderFormat,
-            recipientFormat,
-            Component.text(message),
-            true
-        );
-
-        plugin.getServer().getPluginManager().callEvent(pmSendEvent);
-
-        if (pmSendEvent.isCancelled()) {
-            return;
-        }
-
-        final var recipient = recipientUser.player();
-
-        user.sendMessage(FormatUtils.parseFormat(
-            pmSendEvent.senderFormat(),
-            user.player(),
-            recipient,
-            pmSendEvent.message()
-        ));
-        recipientUser.sendMessage(FormatUtils.parseFormat(
-            pmSendEvent.recipientFormat(),
-            user.player(),
-            recipient,
-            pmSendEvent.message()
-        ));
-
-        user.lastMessagedUser(recipientUser);
-        recipientUser.lastMessagedUser(user);
+        whisperCommand.whisperCommand(user, lastMessaged.get(), message);
     }
 }

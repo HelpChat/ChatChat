@@ -7,3 +7,8 @@ sender-format:
 recipient-format:
   parts:
     - '<gray>%player_name% <#40c9ff>-> <gray>you <#e81cff>» <white><message>'
+
+# The format to send to any players with socialspy enabled
+social-spy-format:
+  parts:
+    - '<green>(spy) <gray>%player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
