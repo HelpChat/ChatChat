@@ -3,8 +3,8 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.PMSendEvent;
-import at.helpch.chatchat.user.ChatUserImpl;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.util.StringUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public final class WhisperCommand extends BaseCommand {
 
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
+    private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
 
     public WhisperCommand(@NotNull final ChatChatPlugin plugin) {
@@ -30,6 +31,11 @@ public final class WhisperCommand extends BaseCommand {
 
         if (user.equals(recipient)) {
             user.sendMessage(Component.text("You can't message yourself!", NamedTextColor.RED));
+            return;
+        }
+
+        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
             return;
         }
 

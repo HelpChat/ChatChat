@@ -5,8 +5,10 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.util.StringUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 
 public final class ChatListener implements Listener {
 
+    private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
 
     public ChatListener(@NotNull final ChatChatPlugin plugin) {
@@ -39,6 +42,11 @@ public final class ChatListener implements Listener {
         final var message = channelByPrefix.isEmpty()
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
+
+        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
+            return;
+        }
 
         final var channel = channelByPrefix.isEmpty() || !user.canUse(channelByPrefix.get()) ? user.channel() : channelByPrefix.get();
 
