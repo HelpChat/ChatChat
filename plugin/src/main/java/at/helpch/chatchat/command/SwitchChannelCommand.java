@@ -2,21 +2,17 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.event.ChatChatEvent;
-import at.helpch.chatchat.util.FormatUtils;
-import at.helpch.chatchat.util.StringUtils;
+import at.helpch.chatchat.util.MessageProcessor;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Optional;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 public final class SwitchChannelCommand extends BaseCommand {
 
-    private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
     private final String command;
 
@@ -46,40 +42,6 @@ public final class SwitchChannelCommand extends BaseCommand {
             return;
         }
 
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
-            return;
-        }
-
-        final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
-
-        final var audience = plugin.usersHolder().users()
-            .stream()
-            .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
-            .collect(Audience.toAudience());
-
-        final var chatEvent = new ChatChatEvent(
-            false,
-            user,
-            audience,
-            format,
-            Component.text(message),
-            channel
-        );
-
-        plugin.getServer().getPluginManager().callEvent(chatEvent);
-
-        if (chatEvent.isCancelled()) {
-            return;
-        }
-
-        final var oldChannel = user.channel();
-        user.channel(channel);
-        chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
-            chatEvent.format(),
-            user.player(),
-            chatEvent.message()
-        ));
-        user.channel(oldChannel);
+        MessageProcessor.process(plugin, user, channel, message, false);
     }
 }
