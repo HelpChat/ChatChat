@@ -74,10 +74,13 @@ public final class SwitchChannelCommand extends BaseCommand {
             return;
         }
 
+        final var oldChannel = user.channel();
+        user.channel(channel);
         chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
             chatEvent.format(),
             user.player(),
             chatEvent.message()
         ));
+        user.channel(oldChannel);
     }
 }

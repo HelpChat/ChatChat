@@ -70,10 +70,13 @@ public final class ChatListener implements Listener {
             return;
         }
 
+        final var oldChannel = user.channel();
+        user.channel(channel);
         chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
             chatEvent.format(),
             player,
             chatEvent.message()
         ));
+        user.channel(oldChannel);
     }
 }
