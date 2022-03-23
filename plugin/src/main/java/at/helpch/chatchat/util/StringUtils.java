@@ -6,9 +6,9 @@ public class StringUtils {
             if (ch <= 128 || ch == 167) {
                 continue;
             }
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
