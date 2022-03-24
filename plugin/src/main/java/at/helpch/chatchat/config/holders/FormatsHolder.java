@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Map;
 
+@SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable
 public final class FormatsHolder {
 

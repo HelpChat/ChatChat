@@ -5,6 +5,7 @@ import at.helpch.chatchat.format.PMFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable
 public final class SettingsHolder {
 

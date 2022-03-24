@@ -23,7 +23,7 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
                                    @NotNull final String channelPrefix) {
         super(name, messagePrefix, toggleCommand, channelPrefix);
         if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
-            throw new RuntimeException("Attempting to use a Towny channel but Towny is not installed");
+            throw new RuntimeException("Attempting to use a Towny channel but Towny is not installed.");
         }}
 
     private Optional<ResidentList> residentList(@NotNull final UUID uuid) {

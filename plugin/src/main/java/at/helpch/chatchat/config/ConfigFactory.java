@@ -1,15 +1,15 @@
 package at.helpch.chatchat.config;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.config.holders.ChannelsHolder;
 import at.helpch.chatchat.config.holders.FormatsHolder;
 import at.helpch.chatchat.config.holders.SettingsHolder;
-import at.helpch.chatchat.config.mapper.ChannelMapper;
+import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
 import at.helpch.chatchat.config.mapper.PMFormatMapper;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.PMFormat;
+import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -18,14 +18,17 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Objects;
 
 public final class ConfigFactory {
 
     private @NotNull final Path dataFolder;
+    private @NotNull final ChatChatPlugin plugin;
 
-    public ConfigFactory(@NotNull final Path dataFolder) {
+    public ConfigFactory(@NotNull final Path dataFolder, @NotNull final ChatChatPlugin plugin) {
         this.dataFolder = dataFolder;
+        this.plugin = plugin;
     }
 
     public @NotNull ChannelsHolder channels() {
@@ -75,7 +78,7 @@ public final class ConfigFactory {
                         .header("https://wiki.helpch.at")
                         .serializers(build -> build
                                 .register(ChatFormat.class, new ChatFormatMapper())
-                                .register(Channel.class, new ChannelMapper())
+                                .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                                 .register(PMFormat.class, new PMFormatMapper())))
                 .nodeStyle(NodeStyle.BLOCK)
                 .indent(2)

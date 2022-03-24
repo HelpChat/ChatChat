@@ -1,5 +1,6 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holders.ChannelsHolder;
 import at.helpch.chatchat.config.holders.FormatsHolder;
@@ -12,12 +13,14 @@ import java.nio.file.Path;
 
 public final class ConfigManager {
 
+    private @NotNull final ChatChatPlugin plugin;
     private @NotNull final Path dataFolder;
     private ChannelsHolder channels;
     private FormatsHolder formats;
     private SettingsHolder settings;
 
-    public ConfigManager(@NotNull final Path dataFolder) {
+    public ConfigManager(final @NotNull ChatChatPlugin plugin, @NotNull final Path dataFolder) {
+        this.plugin = plugin;
         this.dataFolder = dataFolder;
     }
 
@@ -27,8 +30,8 @@ public final class ConfigManager {
         settings = null;
 
         channels();
-        final var defaultChannel = channels.channels().getOrDefault(channels.defaultChannel(), DefaultConfigObjects.createDefaultChannel());
-        // fixme - make this safe
+        var defaultChannel = channels.channels().get(channels.defaultChannel());
+        if (!(defaultChannel instanceof ChatChannel)) defaultChannel = DefaultConfigObjects.createDefaultChannel();
         ChatChannel.defaultChannel((ChatChannel) defaultChannel);
 
         settings();
@@ -40,21 +43,21 @@ public final class ConfigManager {
 
     public @NotNull ChannelsHolder channels() {
         if (channels == null) {
-            this.channels = new ConfigFactory(dataFolder).channels();
+            this.channels = new ConfigFactory(dataFolder, plugin).channels();
         }
         return this.channels;
     }
 
     public @NotNull SettingsHolder settings() {
         if (settings == null) {
-            this.settings = new ConfigFactory(dataFolder).settings();
+            this.settings = new ConfigFactory(dataFolder, plugin).settings();
         }
         return this.settings;
     }
 
     public @NotNull FormatsHolder formats() {
         if (formats == null) {
-            this.formats = new ConfigFactory(dataFolder).formats();
+            this.formats = new ConfigFactory(dataFolder, plugin).formats();
         }
         return this.formats;
     }
