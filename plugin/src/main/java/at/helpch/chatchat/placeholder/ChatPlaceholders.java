@@ -1,8 +1,6 @@
 package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.util.ChannelUtils;
 import java.util.List;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;

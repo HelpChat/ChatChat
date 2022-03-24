@@ -2,11 +2,8 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.util.ChannelUtils;
-import at.helpch.chatchat.util.FormatUtils;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
+import at.helpch.chatchat.util.MessageProcessor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,8 +28,6 @@ public final class ChatListener implements Listener {
         final var player = event.getPlayer();
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
-        final var format = FormatUtils.findFormat(player, plugin.configManager().formats());
-
         final var channelByPrefix =
                 ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
 
@@ -42,30 +37,6 @@ public final class ChatListener implements Listener {
 
         final var channel = channelByPrefix.isEmpty() || !user.canUse(channelByPrefix.get()) ? user.channel() : channelByPrefix.get();
 
-        final var audience = plugin.usersHolder().users()
-                .stream()
-                .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
-                .collect(Audience.toAudience());
-
-        final var chatEvent = new ChatChatEvent(
-                event.isAsynchronous(),
-                user,
-                audience,
-                format,
-                Component.text(message),
-                channel
-        );
-
-        plugin.getServer().getPluginManager().callEvent(chatEvent);
-
-        if (chatEvent.isCancelled()) {
-            return;
-        }
-
-        chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
-            chatEvent.format(),
-            player,
-            chatEvent.message()
-        ));
+        MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous());
     }
 }
