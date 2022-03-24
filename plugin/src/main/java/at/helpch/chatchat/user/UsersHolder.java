@@ -66,7 +66,7 @@ public final class UsersHolder {
         return socialSpyUsers.stream().map(this::getUser).collect(Collectors.toUnmodifiableSet());
     }
 
-    public void setSocialSpy(UUID uuid, boolean enabled) {
+    public void setSocialSpy(@NotNull final UUID uuid, final boolean enabled) {
         if (enabled) {
             socialSpyUsers.add(uuid);
         } else {
@@ -74,7 +74,7 @@ public final class UsersHolder {
         }
     }
 
-    public boolean isSocialSpy(UUID uuid) {
+    public boolean isSocialSpy(@NotNull final UUID uuid) {
         return socialSpyUsers.contains(uuid);
     }
 }

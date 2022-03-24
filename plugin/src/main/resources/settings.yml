@@ -11,4 +11,4 @@ recipient-format:
 # The format to send to any players with socialspy enabled
 social-spy-format:
   parts:
-    - '<green>(spy) <gray>%player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
+    - '<gray>(spy) %player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
