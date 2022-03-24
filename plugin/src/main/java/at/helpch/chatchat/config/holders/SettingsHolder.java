@@ -11,6 +11,7 @@ public final class SettingsHolder {
     private PMFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
 
     private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
+    private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
     public @NotNull PMFormat getSenderFormat() {
         return senderFormat;
@@ -18,5 +19,9 @@ public final class SettingsHolder {
 
     public @NotNull PMFormat getRecipientFormat() {
         return recipientFormat;
+    }
+
+    public @NotNull PMFormat getSocialSpyFormat() {
+        return socialSpyFormat;
     }
 }

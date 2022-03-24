@@ -2,11 +2,7 @@ package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.command.MainCommand;
-import at.helpch.chatchat.command.ReloadCommand;
-import at.helpch.chatchat.command.ReplyCommand;
-import at.helpch.chatchat.command.SwitchChannelCommand;
-import at.helpch.chatchat.command.WhisperCommand;
+import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -84,11 +80,14 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .map(Player::getName)
                 .collect(Collectors.toList())));
 
+        final var whisperCommand = new WhisperCommand(this);
+
         List.of(
                 new MainCommand(this), // this causes tab complete errors? (default command)
                 new ReloadCommand(this),
-                new WhisperCommand(this),
-                new ReplyCommand(this)
+                whisperCommand,
+                new ReplyCommand(whisperCommand),
+                new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands
