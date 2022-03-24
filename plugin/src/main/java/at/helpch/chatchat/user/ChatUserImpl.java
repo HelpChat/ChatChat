@@ -4,7 +4,6 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
 
 import java.util.Objects;
 import java.util.Optional;

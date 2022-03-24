@@ -1,7 +1,6 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
