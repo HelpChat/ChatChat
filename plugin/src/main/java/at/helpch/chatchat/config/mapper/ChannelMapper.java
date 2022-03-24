@@ -39,7 +39,7 @@ public final class ChannelMapper implements TypeSerializer<ChatChannel> {
         final var messagePrefix = nonVirtualNode(node, MESSAGE_PREFIX).getString("");
         final var channelPrefix = nonVirtualNode(node, CHANNEL_PREFIX).getString("");
 
-        return new ChatChannel(key, messagePrefix, commandName, channelPrefix, Collections.emptyList());
+        return new ChatChannel(key, messagePrefix, commandName, channelPrefix);
     }
 
     @Override

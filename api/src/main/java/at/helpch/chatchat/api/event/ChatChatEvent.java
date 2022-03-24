@@ -16,7 +16,6 @@ public class ChatChatEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
     private @NotNull final ChatUser user;
-    private @NotNull Audience recipients;
     private @NotNull Format format;
     private @NotNull Component message;
     private @NotNull final Channel channel;
@@ -28,14 +27,12 @@ public class ChatChatEvent extends Event implements Cancellable {
     public ChatChatEvent(
         final boolean async,
         @NotNull final ChatUser user,
-        @NotNull final Audience recipients,
         @NotNull final Format format,
         @NotNull final Component message,
         @NotNull final Channel channel
     ) {
         super(async);
         this.user = user;
-        this.recipients = recipients;
         this.format = format;
         this.message = message;
         this.channel = channel;
@@ -58,14 +55,6 @@ public class ChatChatEvent extends Event implements Cancellable {
 
     public @NotNull ChatUser user() {
         return user;
-    }
-
-    public @NotNull Audience recipients() {
-        return recipients;
-    }
-
-    public void recipients(@NotNull final Audience recipients) {
-        this.recipients = recipients;
     }
 
     public @NotNull Format format() {

@@ -15,11 +15,11 @@ public final class DefaultConfigObjects {
 
     public static @NotNull ChatChannel createDefaultChannel() {
         return new ChatChannel("default",
-                "", "global", "<gray>[<blue>Global<gray>]", Collections.emptyList());
+                "", "global", "<gray>[<blue>Global<gray>]");
     }
 
     public static @NotNull ChatChannel createStaffChannel() {
-        return new ChatChannel("staff", "@", "staffchat", "<gray>[<green>Staff<gray>]", Collections.emptyList());
+        return new ChatChannel("staff", "@", "staffchat", "<gray>[<green>Staff<gray>]");
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {

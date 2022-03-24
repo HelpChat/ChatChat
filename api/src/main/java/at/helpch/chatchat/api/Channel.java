@@ -1,9 +1,9 @@
 package at.helpch.chatchat.api;
 
-import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 
-public interface Channel extends ForwardingAudience {
+public interface Channel extends Audience {
 
     @NotNull String name();
 
@@ -13,6 +13,5 @@ public interface Channel extends ForwardingAudience {
 
     @NotNull String commandName();
 
-    @Override
-    @NotNull Iterable<User> audiences();
+    boolean isUseableBy(@NotNull final ChatUser user);
 }

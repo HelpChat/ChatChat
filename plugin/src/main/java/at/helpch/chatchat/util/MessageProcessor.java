@@ -26,15 +26,9 @@ public class MessageProcessor {
 
         final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
 
-        final var audience = plugin.usersHolder().users()
-            .stream()
-            .filter(otherUser -> otherUser.canSee(channel)) // get everyone who can see this channel
-            .collect(Audience.toAudience());
-
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            audience,
             format,
             Component.text(message),
             channel
@@ -48,7 +42,7 @@ public class MessageProcessor {
 
         final var oldChannel = user.channel();
         user.channel(channel);
-        chatEvent.recipients().sendMessage(FormatUtils.parseFormat(
+        chatEvent.channel().sendMessage(chatEvent.user(), FormatUtils.parseFormat(
             chatEvent.format(),
             user.player(),
             chatEvent.message()
