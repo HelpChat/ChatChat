@@ -1,5 +1,6 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holders.ChannelsHolder;
 import at.helpch.chatchat.config.holders.FormatsHolder;
@@ -74,7 +75,7 @@ public final class ConfigFactory {
                         .header("https://wiki.helpch.at")
                         .serializers(build -> build
                                 .register(ChatFormat.class, new ChatFormatMapper())
-                                .register(ChatChannel.class, new ChannelMapper())
+                                .register(Channel.class, new ChannelMapper())
                                 .register(PMFormat.class, new PMFormatMapper())))
                 .nodeStyle(NodeStyle.BLOCK)
                 .indent(2)

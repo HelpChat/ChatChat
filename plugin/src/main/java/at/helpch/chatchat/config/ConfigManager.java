@@ -28,7 +28,8 @@ public final class ConfigManager {
 
         channels();
         final var defaultChannel = channels.channels().getOrDefault(channels.defaultChannel(), DefaultConfigObjects.createDefaultChannel());
-        ChatChannel.defaultChannel(defaultChannel);
+        // fixme - make this safe
+        ChatChannel.defaultChannel((ChatChannel) defaultChannel);
 
         settings();
 

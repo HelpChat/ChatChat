@@ -10,6 +10,7 @@ plugins {
 repositories {
     papi()
     triumphSnapshots()
+    maven("https://repo.glaremasters.me/repository/towny/")
 }
 
 dependencies {
@@ -22,6 +23,7 @@ dependencies {
 
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
+    compileOnly(libs.towny)
 }
 
 bukkit {
@@ -29,6 +31,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
+    softdepend = listOf("Towny")
     apiVersion = "1.13"
     permissions {
         permission("chatchat.format.default") {

@@ -29,8 +29,8 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        configManager.reload();
         audiences = BukkitAudiences.create(this);
+        configManager.reload();
 
         registerCommands();
 

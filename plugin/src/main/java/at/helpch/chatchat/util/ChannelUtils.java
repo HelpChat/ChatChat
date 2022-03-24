@@ -1,5 +1,6 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.channel.ChatChannel;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,15 +19,15 @@ public final class ChannelUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull ChatChannel findDefaultChannel(
-            @NotNull final Map<String, ChatChannel> channels,
+    public static @NotNull Channel findDefaultChannel(
+            @NotNull final Map<String, Channel> channels,
             @NotNull final String defaultChannel) {
         final var channel = channels.get(defaultChannel);
         return Objects.requireNonNullElseGet(channel, ChatChannel::defaultChannel);
     }
 
-    public static @NotNull Optional<ChatChannel> findChannelByPrefix(
-            @NotNull final List<ChatChannel> channels,
+    public static @NotNull Optional<Channel> findChannelByPrefix(
+            @NotNull final List<Channel> channels,
             @NotNull final String input) {
         return channels.stream()
                 .filter(channel -> !channel.messagePrefix().isEmpty()) // ignore empty prefixes
