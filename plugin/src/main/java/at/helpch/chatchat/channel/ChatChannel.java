@@ -60,7 +60,7 @@ public final class ChatChannel implements Channel, ForwardingAudience.Single {
     }
 
     @Override
-    public boolean isUseableBy(ChatUser user) {
+    public boolean isUseableBy(@NotNull final ChatUser user) {
         return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 

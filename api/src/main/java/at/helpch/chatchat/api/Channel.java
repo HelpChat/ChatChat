@@ -13,5 +13,5 @@ public interface Channel extends Audience {
 
     @NotNull String commandName();
 
-    boolean isUseableBy(ChatUser user);
+    boolean isUseableBy(@NotNull final ChatUser user);
 }
