@@ -31,7 +31,7 @@ public final class SwitchChannelCommand extends BaseCommand {
             .findAny()
             .get(); // this should probably only ever throw if the person has changed command names without restarting
 
-        if (!user.canUse(channel)) {
+        if (!channel.isUseableBy(user)) {
             user.sendMessage(Component.text("You don't have permission to use this channel!", NamedTextColor.RED));
             return;
         }

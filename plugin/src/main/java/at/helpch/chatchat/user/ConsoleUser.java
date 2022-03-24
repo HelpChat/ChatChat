@@ -40,16 +40,6 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public boolean canSee(@NotNull final Channel channel) {
-        return true;
-    }
-
-    @Override
-    public boolean canUse(@NotNull final Channel channel) {
-        return true;
-    }
-
-    @Override
     public @NotNull Audience audience() {
         return ChatChatPlugin.audiences().console();
     }

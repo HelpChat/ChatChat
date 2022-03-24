@@ -55,24 +55,6 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public boolean canSee(@NotNull final Channel channel) {
-        if (channel.equals(ChatChannel.defaultChannel())) {
-            return true;
-        }
-
-        return player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + channel.name());
-    }
-
-    @Override
-    public boolean canUse(@NotNull final Channel channel) {
-        if (channel.equals(ChatChannel.defaultChannel())) {
-            return true;
-        }
-
-        return player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + channel.name());
-    }
-
-    @Override
     public @NotNull Optional<ChatUser> lastMessagedUser() {
         return Optional.ofNullable(lastMessaged);
     }

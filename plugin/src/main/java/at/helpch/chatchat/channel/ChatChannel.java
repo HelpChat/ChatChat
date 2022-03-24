@@ -1,15 +1,17 @@
 package at.helpch.chatchat.channel;
 
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.config.DefaultConfigObjects;
+import at.helpch.chatchat.util.ChannelUtils;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-import java.util.List;
-
 @ConfigSerializable
-public final class ChatChannel implements Channel {
+public final class ChatChannel implements Channel, ForwardingAudience.Single {
 
     private static ChatChannel defaultChannel = DefaultConfigObjects.createDefaultChannel();
 
@@ -21,19 +23,15 @@ public final class ChatChannel implements Channel {
 
     private final String channelPrefix;
 
-    private final List<User> audience;
-
     public ChatChannel(
             @NotNull final String name,
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
-            @NotNull final String channelPrefix,
-            @NotNull final List<User> audience) {
+            @NotNull final String channelPrefix) {
         this.name = name;
         this.messagePrefix = messagePrefix;
         this.toggleCommand = toggleCommand;
         this.channelPrefix = channelPrefix;
-        this.audience = audience;
     }
 
     @Override
@@ -57,8 +55,13 @@ public final class ChatChannel implements Channel {
     }
 
     @Override
-    public @NotNull Iterable<User> audiences() {
-        return audience;
+    public @NotNull Audience audience() {
+        return ChatChatPlugin.audiences().permission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
+    }
+
+    @Override
+    public boolean isUseableBy(ChatUser user) {
+        return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 
     public static @NotNull ChatChannel defaultChannel() {
@@ -76,8 +79,7 @@ public final class ChatChannel implements Channel {
         ChatChannel that = (ChatChannel) o;
         return messagePrefix.equals(that.messagePrefix) &&
                 toggleCommand.equals(that.toggleCommand) &&
-                channelPrefix.equals(that.channelPrefix) &&
-                audience.equals(that.audience);
+                channelPrefix.equals(that.channelPrefix);
     }
 
     @Override
@@ -86,8 +88,7 @@ public final class ChatChannel implements Channel {
                 "name=" + name +
                 ", messagePrefix='" + messagePrefix + '\'' +
                 ", toggleCommand='" + toggleCommand + '\'' +
-                ", channelPrefix='" + channelPrefix + '\'' +
-                ", audience=" + audience +
+                ", channelPrefix='" + channelPrefix +
                 '}';
     }
 }

@@ -30,6 +30,32 @@ bukkit {
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
     apiVersion = "1.13"
+    permissions {
+        permission("chatchat.format.default") {
+            description = "Default chat format"
+            default = "true"
+        }
+        permission("chatchat.format.staff") {
+            description = "Staff chat format"
+            default = "op"
+        }
+        permission("chatchat.channel.see.default") {
+            description = "See default channel"
+            default = "true"
+        }
+        permission("chatchat.channel.use.default") {
+            description = "Use default channel"
+            default = "true"
+        }
+        permission("chatchat.channel.see.staff") {
+            description = "See staff channel"
+            default = "op"
+        }
+        permission("chatchat.channel.use.staff") {
+            description = "Use staff channel"
+            default = "op"
+        }
+    }
 }
 
 tasks {
