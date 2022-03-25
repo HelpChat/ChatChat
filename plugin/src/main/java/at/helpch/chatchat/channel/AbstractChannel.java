@@ -1,6 +1,8 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractChannel implements Channel {
@@ -42,6 +44,12 @@ public abstract class AbstractChannel implements Channel {
     @Override
     public @NotNull String commandName() {
         return toggleCommand;
+    }
+
+
+    @Override
+    public boolean isUseableBy(@NotNull final ChatUser user) {
+        return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 
     @Override

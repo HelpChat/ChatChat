@@ -28,11 +28,6 @@ public final class ChatChannel extends AbstractChannel implements ForwardingAudi
         return ChatChatPlugin.audiences().permission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
     }
 
-    @Override
-    public boolean isUseableBy(@NotNull final ChatUser user) {
-        return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
-    }
-
     public static @NotNull ChatChannel defaultChannel() {
         return defaultChannel;
     }

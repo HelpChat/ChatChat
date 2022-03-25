@@ -34,7 +34,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         audiences = BukkitAudiences.create(this);
-        // fixme - move this somewhere else
+        // fixme - there's probably a better place for this
         if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
             channelTypeRegistry.add("TOWNY_TOWN", TownyTownChannel::new);
             channelTypeRegistry.add("TOWNY_NATION", TownyNationChannel::new);
