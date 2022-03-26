@@ -2,11 +2,14 @@ package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.towny.TownyNationChannel;
+import at.helpch.chatchat.towny.TownyTownChannel;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
@@ -23,14 +26,20 @@ import java.util.stream.Collectors;
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
 
-    private @NotNull final ConfigManager configManager = new ConfigManager(this.getDataFolder().toPath());
+    private @NotNull final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
     private @NotNull final UsersHolder usersHolder = new UsersHolder();
+    private @NotNull final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private static BukkitAudiences audiences;
 
     @Override
     public void onEnable() {
-        configManager.reload();
         audiences = BukkitAudiences.create(this);
+        // fixme - there's probably a better place for this
+        if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
+            channelTypeRegistry.add("TOWNY_TOWN", TownyTownChannel::new);
+            channelTypeRegistry.add("TOWNY_NATION", TownyNationChannel::new);
+        }
+        configManager.reload();
 
         registerCommands();
 
@@ -58,6 +67,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull UsersHolder usersHolder() {
         return usersHolder;
+    }
+
+    public @NotNull ChannelTypeRegistry channelTypeRegistry() {
+        return channelTypeRegistry;
     }
 
     public static @NotNull BukkitAudiences audiences() {
@@ -92,8 +105,8 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // register channel commands
         configManager.channels().channels().values().stream()
-                .filter(command -> !command.commandName().isEmpty()) // don't register empty command names
-                .map(Channel::commandName)
+                .map(Channel::commandName) // don't register empty command names
+                .filter(s -> !s.isEmpty())
                 .map(command -> new SwitchChannelCommand(this, command))
                 .forEach(commandManager::registerCommand);
     }

@@ -10,6 +10,7 @@ adventure-platform = "4.0.1"
 configurate = "4.1.2"
 cmds = "2.0.0-SNAPSHOT"
 papi = "2.11.1"
+towny = "0.98.1.3"
 
 [libraries]
 # Minecraft
@@ -23,3 +24,4 @@ adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", versi
 configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "cmds" }
 papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
+towny = {module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }

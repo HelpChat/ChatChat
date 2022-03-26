@@ -1,6 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
-import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -10,11 +11,18 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 
-public final class ChannelMapper implements TypeSerializer<ChatChannel> {
+public final class ChannelMapper implements TypeSerializer<Channel> {
 
     private static final String TOGGLE_COMMAND = "toggle-command";
     private static final String MESSAGE_PREFIX = "message-prefix";
     private static final String CHANNEL_PREFIX = "channel-prefix";
+    private static final String TYPE = "type";
+
+    private final ChannelTypeRegistry registry;
+
+    public ChannelMapper(final ChannelTypeRegistry registry) {
+        this.registry = registry;
+    }
 
     private ConfigurationNode nonVirtualNode(final ConfigurationNode source, final Object... path) throws SerializationException {
         if (!source.hasChild(path)) {
@@ -24,7 +32,7 @@ public final class ChannelMapper implements TypeSerializer<ChatChannel> {
     }
 
     @Override
-    public ChatChannel deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public Channel deserialize(Type type, ConfigurationNode node) throws SerializationException {
         final var keyNode = node.key();
         if (keyNode == null) {
             throw new SerializationException("A config key cannot be null!");
@@ -39,11 +47,17 @@ public final class ChannelMapper implements TypeSerializer<ChatChannel> {
         final var messagePrefix = nonVirtualNode(node, MESSAGE_PREFIX).getString("");
         final var channelPrefix = nonVirtualNode(node, CHANNEL_PREFIX).getString("");
 
-        return new ChatChannel(key, messagePrefix, commandName, channelPrefix);
+        final var channelType = node.node(TYPE).getString("default");
+
+        final var builder = registry.builders().get(channelType);
+        if (builder == null) {
+            throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", ignoring.");
+        }
+        return builder.build(key, messagePrefix, commandName, channelPrefix);
     }
 
     @Override
-    public void serialize(Type type, @Nullable ChatChannel channel, ConfigurationNode target) throws SerializationException {
+    public void serialize(Type type, @Nullable Channel channel, ConfigurationNode target) throws SerializationException {
         if (channel == null) {
             target.raw(null);
             return;

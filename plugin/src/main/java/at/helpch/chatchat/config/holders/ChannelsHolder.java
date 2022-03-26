@@ -1,18 +1,20 @@
 package at.helpch.chatchat.config.holders;
 
-import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Map;
 
+// configurate requires non-final fields
+@SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable
 public final class ChannelsHolder {
 
     private String defaultChannel = "default";
 
-    private Map<String, ChatChannel> channels = Map.of(
+    private Map<String, Channel> channels = Map.of(
             "staff", DefaultConfigObjects.createStaffChannel(),
             defaultChannel, DefaultConfigObjects.createDefaultChannel());
 
@@ -20,7 +22,7 @@ public final class ChannelsHolder {
         return defaultChannel;
     }
 
-    public @NotNull Map<String, ChatChannel> channels() {
+    public @NotNull Map<String, Channel> channels() {
         return Map.copyOf(channels);
     }
 }
