@@ -2,34 +2,19 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.util.MessageUtils;
 import dev.triumphteam.cmd.core.annotation.Default;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import org.jetbrains.annotations.NotNull;
-
-import static net.kyori.adventure.text.Component.text;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MainCommand extends ChatChatCommand {
 
-    private final ChatChatPlugin plugin;
-
-    public MainCommand(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
-    }
+    private static final JavaPlugin PLUGIN = JavaPlugin.getProvidingPlugin(ChatChatPlugin.class);
+    private static final Component TEXT = MessageUtils.parseToMiniMessage(
+            "<aqua><click:open_url:'https://helpch.at'>A Chat Plugin <gray>by <#3dbbe4>Help<#f3af4b>Chat<br><gray>Version: <aqua>" + PLUGIN.getDescription().getVersion());
 
     @Default
     public void defaultCommand(final User sender) {
-        var text = text("A Chat Plugin ", NamedTextColor.AQUA)
-                .append(text("by ", NamedTextColor.GRAY)
-                .append(text("Help", TextColor.fromCSSHexString("#3dbbe4"))
-                .append(text("Chat", TextColor.fromCSSHexString("#f3af4b")))))
-                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://helpch.at"))
-                .append(Component.newline())
-                .append(text("Version: ", NamedTextColor.GRAY))
-                .append(text(plugin.getDescription().getVersion(), NamedTextColor.AQUA));
-
-        sender.sendMessage(text);
+        sender.sendMessage(TEXT);
     }
 }

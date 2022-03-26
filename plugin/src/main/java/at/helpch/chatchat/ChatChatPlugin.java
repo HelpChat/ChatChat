@@ -104,7 +104,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         final var whisperCommand = new WhisperCommand(this);
 
         List.of(
-                new MainCommand(this),
+                new MainCommand(),
                 new ReloadCommand(this),
                 whisperCommand,
                 new ReplyCommand(this, whisperCommand),
