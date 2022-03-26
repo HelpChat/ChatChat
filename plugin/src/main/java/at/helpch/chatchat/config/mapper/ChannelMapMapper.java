@@ -8,8 +8,10 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A mapper for the channel map, ignoring invalid channels instead of failing entirely.
@@ -45,8 +47,15 @@ public class ChannelMapMapper implements TypeSerializer<Map<String, Channel>> {
     }
 
     @Override
-    public void serialize(final Type type, @Nullable final Map<String, Channel> obj, final ConfigurationNode node) {
-        // fixme
-        throw new UnsupportedOperationException("Not implemented");
+    public void serialize(final Type type, @Nullable final Map<String, Channel> obj, final ConfigurationNode node) throws SerializationException {
+        if (obj == null || obj.isEmpty()) {
+            node.set(Collections.emptyMap());
+            return;
+        }
+        obj.forEach((k, v) -> {
+            try {
+                channelMapper.serialize(Channel.class, v, node.node(k));
+            } catch (SerializationException ignored) {}
+        });
     }
 }
