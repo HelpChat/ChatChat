@@ -3,13 +3,16 @@ package at.helpch.chatchat.config;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.config.holders.ChannelsHolder;
 import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holders.MessagesHolder;
 import at.helpch.chatchat.config.holders.SettingsHolder;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
+import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
 import at.helpch.chatchat.config.mapper.PMFormatMapper;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.PMFormat;
 import io.leangen.geantyref.TypeToken;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -18,7 +21,6 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.Objects;
 
 public final class ConfigFactory {
@@ -44,6 +46,11 @@ public final class ConfigFactory {
     public @NotNull SettingsHolder settings() {
         final var config = create(SettingsHolder.class, "settings.yml");
         return Objects.requireNonNullElseGet(config, SettingsHolder::new);
+    }
+
+    public @NotNull MessagesHolder messages() {
+        final var config = create(MessagesHolder.class, "messages.yml");
+        return Objects.requireNonNullElseGet(config, MessagesHolder::new);
     }
 
     private @Nullable <T> T create(@NotNull final Class<T> clazz, @NotNull final String fileName) {
@@ -77,6 +84,7 @@ public final class ConfigFactory {
                 .defaultOptions(options -> options.shouldCopyDefaults(true)
                         .header("https://wiki.helpch.at")
                         .serializers(build -> build
+                                .register(Component.class, new MiniMessageComponentMapper())
                                 .register(ChatFormat.class, new ChatFormatMapper())
                                 .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                                 .register(PMFormat.class, new PMFormatMapper())))

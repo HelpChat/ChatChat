@@ -2,6 +2,7 @@ package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
@@ -30,15 +31,22 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull final UsersHolder usersHolder = new UsersHolder();
     private @NotNull final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private static BukkitAudiences audiences;
+    private BukkitCommandManager<User> commandManager;
 
     @Override
     public void onEnable() {
+        commandManager = BukkitCommandManager.create(this,
+                usersHolder::getUser,
+                new UserSenderValidator());
+
         audiences = BukkitAudiences.create(this);
+
         // fixme - there's probably a better place for this
         if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
             channelTypeRegistry.add("TOWNY_TOWN", TownyTownChannel::new);
             channelTypeRegistry.add("TOWNY_NATION", TownyNationChannel::new);
         }
+
         configManager.reload();
 
         registerCommands();
@@ -77,11 +85,11 @@ public final class ChatChatPlugin extends JavaPlugin {
         return audiences;
     }
 
-    private void registerCommands() {
-        final var commandManager = BukkitCommandManager.create(this,
-                usersHolder::getUser,
-                new UserSenderValidator());
+    public @NotNull BukkitCommandManager<User> commandManager() {
+        return commandManager;
+    }
 
+    private void registerCommands() {
         commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
             final var player = Bukkit.getPlayer(arg);
             if (player == null) {
@@ -96,10 +104,10 @@ public final class ChatChatPlugin extends JavaPlugin {
         final var whisperCommand = new WhisperCommand(this);
 
         List.of(
-                new MainCommand(this), // this causes tab complete errors? (default command)
+                new MainCommand(this),
                 new ReloadCommand(this),
                 whisperCommand,
-                new ReplyCommand(whisperCommand),
+                new ReplyCommand(this, whisperCommand),
                 new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 

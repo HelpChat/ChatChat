@@ -1,8 +1,6 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
 import net.kyori.adventure.audience.Audience;
