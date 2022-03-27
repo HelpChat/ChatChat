@@ -2,6 +2,7 @@ package at.helpch.chatchat.config.holders;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.format.PMFormat;
+import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -16,6 +17,7 @@ public final class SettingsHolder {
     private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
     private String mentionPrefix = "@";
+    private Sound mentionSound = DefaultConfigObjects.createMentionSound();
 
     public @NotNull PMFormat getSenderFormat() {
         return senderFormat;
@@ -31,5 +33,9 @@ public final class SettingsHolder {
 
     public @NotNull String getMentionPrefix() {
         return mentionPrefix;
+    }
+
+    public @NotNull Sound getMentionSound() {
+        return mentionSound;
     }
 }

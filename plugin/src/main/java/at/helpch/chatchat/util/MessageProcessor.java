@@ -15,8 +15,6 @@ public class MessageProcessor {
     private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String MENTION_PERMISSION = "chatchat.mention";
     private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
-    private static final Sound sound = Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1f, 0.75f);
-
 
     public static void process(
         @NotNull final ChatChatPlugin plugin,
@@ -49,6 +47,7 @@ public class MessageProcessor {
         if (user.player().hasPermission(MENTION_PERMISSION)) {
             final var canMentionEveryone = user.player().hasPermission(MENTION_EVERYONE_PERMISSION);
             final var prefix = plugin.configManager().settings().getMentionPrefix();
+            final var sound = plugin.configManager().settings().getMentionSound();
             for (final String word: message.split(" ")) {
                 if (!word.startsWith(prefix)) continue;
                 final var name = word.substring(1);
