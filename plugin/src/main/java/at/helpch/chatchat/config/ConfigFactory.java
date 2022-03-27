@@ -68,9 +68,9 @@ public final class ConfigFactory {
             if (!Files.exists(path)) {
                 Files.createFile(path);
                 node.set(clazz, config);
-                loader.save(node);
             }
 
+            loader.save(node);
             return config;
         } catch (final IOException exception) {
             exception.printStackTrace();
