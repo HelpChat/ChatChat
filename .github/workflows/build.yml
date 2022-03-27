@@ -23,7 +23,7 @@ jobs:
         with:
           arguments: shadowJar
       - name: Upload jarfiles
-          if: github.event_name != 'pull_request'
-          uses: actions/upload-artifact@v3
-          with:
-            path: plugin/build/libs/*.jar
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          path: plugin/build/libs/*.jar
