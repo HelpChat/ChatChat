@@ -23,7 +23,12 @@ public final class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
-        event.setCancelled(true);
+        try {
+            event.getRecipients().clear();
+        } catch (UnsupportedOperationException ignored) {
+            // a plugin is doing something weird so all we can do is cancel
+            event.setCancelled(true);
+        }
 
         final var player = event.getPlayer();
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
