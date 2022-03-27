@@ -1,0 +1,13 @@
+# https://wiki.helpch.at
+
+no-replies: <red>You have no one to reply to!
+cant-message-yourself: <red>You can't message yourself!
+special-characters-no-permission: <red>You do not have permission to use special characters!
+social-spy-enabled: <green>Social spy enabled
+social-spy-disabled: <red>Social spy disabled
+channel-no-permission: <red>You do not have permission to use this channel
+channel-switched: <green>You have switched to the %channel% channel!
+command-unknown-command: <red>Unknown Command.
+command-invalid-usage: <red>Invalid usage.
+command-invalid-argument: <red>Invalid argument.
+command-no-permission: <red>No Permission.

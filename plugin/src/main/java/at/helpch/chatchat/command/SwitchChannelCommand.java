@@ -7,8 +7,6 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Optional;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 public final class SwitchChannelCommand extends BaseCommand {
@@ -32,13 +30,14 @@ public final class SwitchChannelCommand extends BaseCommand {
             .get(); // this should probably only ever throw if the person has changed command names without restarting
 
         if (!channel.isUseableBy(user)) {
-            user.sendMessage(Component.text("You don't have permission to use this channel!", NamedTextColor.RED));
+            user.sendMessage(plugin.configManager().messages().channelNoPermission());
             return;
         }
 
         if (message.isEmpty()) {
             user.channel(channel);
-            user.sendMessage(Component.text("You have switched to the " + command + " channel!", NamedTextColor.GREEN));
+            user.sendMessage(plugin.configManager().messages().channelSwitched()
+                    .replaceText(builder -> builder.matchLiteral("%channel%").replacement(channel.name())));
             return;
         }
 

@@ -13,7 +13,6 @@ import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
@@ -33,12 +32,12 @@ public final class WhisperCommand extends BaseCommand {
     public void whisperCommand(final ChatUser user, final ChatUser recipient, @Join final String message) {
 
         if (user.equals(recipient)) {
-            user.sendMessage(Component.text("You can't message yourself!", NamedTextColor.RED));
+            user.sendMessage(plugin.configManager().messages().cantMessageYourself());
             return;
         }
 
         if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
+            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return;
         }
 

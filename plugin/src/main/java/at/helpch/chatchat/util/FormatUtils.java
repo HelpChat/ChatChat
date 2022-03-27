@@ -22,8 +22,8 @@ import java.util.Optional;
 
 public final class FormatUtils {
 
-    static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
-    static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
+    private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
+    private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
 
     private static final TextReplacementConfig URL_REPLACER_CONFIG = TextReplacementConfig.builder()
         .match(DEFAULT_URL_PATTERN)
@@ -38,9 +38,6 @@ public final class FormatUtils {
 
     private static final String URL_PERMISSION = "chatchat.url";
     private static final String FORMAT_PERMISSION = "chatchat.format.";
-
-
-    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     private FormatUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
@@ -68,7 +65,7 @@ public final class FormatUtils {
             @NotNull final ComponentLike message) {
         return format.parts().stream()
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> FormatUtils.parseToMiniMessage(part,
+            .map(part -> MessageUtils.parseToMiniMessage(part,
                 Placeholder.component("message", !player.hasPermission(URL_PERMISSION)
                     ? message
                     : message.asComponent().replaceText(URL_REPLACER_CONFIG))))
@@ -84,23 +81,11 @@ public final class FormatUtils {
             .map(part -> PlaceholderAPI.setPlaceholders(player, part))
             .map(part -> PlaceholderAPI.setRelationalPlaceholders(player, recipient, part))
             .map(part -> replaceRecipientPlaceholder(recipient, part))
-            .map(part -> FormatUtils.parseToMiniMessage(part,
+            .map(part -> MessageUtils.parseToMiniMessage(part,
                 Placeholder.component("message", !player.hasPermission(URL_PERMISSION)
                     ? message
                     : message.asComponent().replaceText(URL_REPLACER_CONFIG))))
             .collect(Component.toComponent());
-    }
-
-    public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
-        return miniMessage.deserialize(formatPart);
-    }
-
-    public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart, @NotNull final TagResolver tag) {
-        return miniMessage.deserialize(formatPart, tag);
-    }
-
-    public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart, @NotNull final List<TagResolver> tags) {
-        return miniMessage.deserialize(formatPart, TagResolver.resolver(tags));
     }
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
