@@ -18,18 +18,18 @@ channels:
     # pretty much a variable for the channel prefix
     channel-prefix: '[STAFF]'
 
-  # this one's for towny, disable if you don't have towny installed
-  town:
-    # a special, optional value, indicating that this is a towny town chat
-    # valid options are 'TOWNY_TOWN', 'TOWNY_NATION'
-    # falls back to a standard chat channel
-    type: 'TOWNY_TOWN'
-    toggle-command: 'townchat'
-    message-prefix: 't:'
-    channel-prefix: '[Town]'
-  # as above, but for nations instead of towns
-  nation:
-    type: 'TOWNY_NATION'
-    toggle-command: 'nationchat'
-    message-prefix: 'n:'
-    channel-prefix: '[Nation]'
+#  # this one's for towny, uncomment this section if you have towny installed
+#  town:
+#    # a special, optional value, indicating that this is a towny town chat
+#    # valid options are 'TOWNY_TOWN', 'TOWNY_NATION'
+#    # falls back to a standard chat channel
+#    type: 'TOWNY_TOWN'
+#    toggle-command: 'townchat'
+#    message-prefix: 't:'
+#    channel-prefix: '[Town]'
+#  # as above, but for nations instead of towns
+#  nation:
+#    type: 'TOWNY_NATION'
+#    toggle-command: 'nationchat'
+#    message-prefix: 'n:'
+#    channel-prefix: '[Nation]'

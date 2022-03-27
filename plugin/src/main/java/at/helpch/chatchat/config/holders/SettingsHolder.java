@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 // configurate requires non-final fields
-@SuppressWarnings("FieldMayBeFinal")
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
 public final class SettingsHolder {
 
@@ -14,6 +14,8 @@ public final class SettingsHolder {
 
     private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
     private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
+
+    private String mentionPrefix = "@";
 
     public @NotNull PMFormat getSenderFormat() {
         return senderFormat;
@@ -25,5 +27,9 @@ public final class SettingsHolder {
 
     public @NotNull PMFormat getSocialSpyFormat() {
         return socialSpyFormat;
+    }
+
+    public @NotNull String getMentionPrefix() {
+        return mentionPrefix;
     }
 }

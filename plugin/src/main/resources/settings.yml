@@ -12,3 +12,6 @@ recipient-format:
 social-spy-format:
   parts:
     - '<gray>(spy) %player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
+
+# The prefix to use for mentioning players
+mention-prefix: '@'
