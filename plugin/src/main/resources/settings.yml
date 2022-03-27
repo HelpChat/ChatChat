@@ -21,3 +21,6 @@ mention-sound:
   name: entity.experience_orb.pickup
   pitch: 1
   volume: 1
+
+# Whether to play the mention sound when a user is messaged.
+mention-on-message: true

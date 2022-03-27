@@ -76,6 +76,10 @@ public final class WhisperCommand extends BaseCommand {
             ))
         );
 
+        if (settingsConfig.getMentionOnMessage()) {
+            recipient.playSound(settingsConfig.getMentionSound());
+        }
+
         user.lastMessagedUser(recipient);
         recipient.lastMessagedUser(user);
     }

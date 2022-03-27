@@ -18,6 +18,7 @@ public final class SettingsHolder {
 
     private String mentionPrefix = "@";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
+    private boolean mentionOnMessage = true;
 
     public @NotNull PMFormat getSenderFormat() {
         return senderFormat;
@@ -37,5 +38,9 @@ public final class SettingsHolder {
 
     public @NotNull Sound getMentionSound() {
         return mentionSound;
+    }
+
+    public boolean getMentionOnMessage() {
+        return mentionOnMessage;
     }
 }
