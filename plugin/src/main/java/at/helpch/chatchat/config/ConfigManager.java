@@ -4,9 +4,12 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holders.ChannelsHolder;
 import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holders.MessagesHolder;
 import at.helpch.chatchat.config.holders.SettingsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
+import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
+import dev.triumphteam.cmd.core.message.MessageKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -14,20 +17,25 @@ import java.nio.file.Path;
 public final class ConfigManager {
 
     private @NotNull final ChatChatPlugin plugin;
-    private @NotNull final Path dataFolder;
     private ChannelsHolder channels;
     private FormatsHolder formats;
     private SettingsHolder settings;
+    private MessagesHolder messages;
+    private final ConfigFactory factory;
 
     public ConfigManager(final @NotNull ChatChatPlugin plugin, @NotNull final Path dataFolder) {
         this.plugin = plugin;
-        this.dataFolder = dataFolder;
+        this.factory = new ConfigFactory(dataFolder, plugin);
     }
 
     public void reload() {
+        messages = null;
         channels = null;
         formats = null;
         settings = null;
+
+        messages();
+        reloadCommandMessages();
 
         channels();
         var defaultChannel = channels.channels().get(channels.defaultChannel());
@@ -43,22 +51,39 @@ public final class ConfigManager {
 
     public @NotNull ChannelsHolder channels() {
         if (channels == null) {
-            this.channels = new ConfigFactory(dataFolder, plugin).channels();
+            this.channels = factory.channels();
         }
         return this.channels;
     }
 
     public @NotNull SettingsHolder settings() {
         if (settings == null) {
-            this.settings = new ConfigFactory(dataFolder, plugin).settings();
+            this.settings = factory.settings();
         }
         return this.settings;
     }
 
     public @NotNull FormatsHolder formats() {
         if (formats == null) {
-            this.formats = new ConfigFactory(dataFolder, plugin).formats();
+            this.formats = factory.formats();
         }
         return this.formats;
+    }
+
+    public @NotNull MessagesHolder messages() {
+        if (messages == null) {
+            this.messages = factory.messages();
+        }
+        return this.messages;
+    }
+
+    private void reloadCommandMessages() {
+        final var manager = plugin.commandManager();
+        manager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendMessage(messages.noPermission()));
+
+        manager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> sender.sendMessage(messages.unknownCommand()));
+        manager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> sender.sendMessage(messages.invalidArgument()));
+        manager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
+        manager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
     }
 }

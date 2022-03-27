@@ -5,7 +5,6 @@ import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.PMFormat;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
