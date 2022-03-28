@@ -20,27 +20,27 @@ public final class SettingsHolder {
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
 
-    public @NotNull PMFormat getSenderFormat() {
+    public @NotNull PMFormat senderFormat() {
         return senderFormat;
     }
 
-    public @NotNull PMFormat getRecipientFormat() {
+    public @NotNull PMFormat recipientFormat() {
         return recipientFormat;
     }
 
-    public @NotNull PMFormat getSocialSpyFormat() {
+    public @NotNull PMFormat socialSpyFormat() {
         return socialSpyFormat;
     }
 
-    public @NotNull String getMentionPrefix() {
+    public @NotNull String mentionPrefix() {
         return mentionPrefix;
     }
 
-    public @NotNull Sound getMentionSound() {
+    public @NotNull Sound mentionSound() {
         return mentionSound;
     }
 
-    public boolean getMentionOnMessage() {
+    public boolean mentionOnMessage() {
         return mentionOnMessage;
     }
 }

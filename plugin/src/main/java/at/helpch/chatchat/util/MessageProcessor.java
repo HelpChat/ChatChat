@@ -4,8 +4,6 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -46,8 +44,8 @@ public class MessageProcessor {
 
         if (user.player().hasPermission(MENTION_PERMISSION)) {
             final var canMentionEveryone = user.player().hasPermission(MENTION_EVERYONE_PERMISSION);
-            final var prefix = plugin.configManager().settings().getMentionPrefix();
-            final var sound = plugin.configManager().settings().getMentionSound();
+            final var prefix = plugin.configManager().settings().mentionPrefix();
+            final var sound = plugin.configManager().settings().mentionSound();
             for (final String word: message.split(" ")) {
                 if (!word.startsWith(prefix)) continue;
                 final var name = word.substring(1);
