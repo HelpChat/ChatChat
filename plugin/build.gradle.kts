@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.adventure.bukkit)
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
+    implementation(libs.bstats)
 
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
@@ -69,7 +70,8 @@ tasks {
             "dev.triumphteam",
             "org.spongepowered",
             "io.leangen",
-            "org.yaml"
+            "org.yaml",
+            "org.bstats"
         ).forEach { relocate(it, "at.helpch.chatchat.libs.$it") }
 
         archiveFileName.set("ChatChat-${project.version}.jar")

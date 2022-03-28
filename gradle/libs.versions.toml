@@ -11,6 +11,7 @@ configurate = "4.1.2"
 cmds = "2.0.0-SNAPSHOT"
 papi = "2.11.1"
 towny = "0.98.1.3"
+bstats = "3.0.0"
 
 [libraries]
 # Minecraft
@@ -25,3 +26,4 @@ configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "co
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "cmds" }
 papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
 towny = {module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
+bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }

@@ -16,6 +16,7 @@ import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,6 +41,9 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new UserSenderValidator());
 
         audiences = BukkitAudiences.create(this);
+
+        // bStats
+        Metrics metrics = new Metrics(this, 14781);
 
         // fixme - there's probably a better place for this
         if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
