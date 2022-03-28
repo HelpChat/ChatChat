@@ -1,9 +1,9 @@
 package at.helpch.chatchat.api;
 
-import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
+import java.util.Set;
 
-public interface Channel extends Audience {
+public interface Channel {
 
     @NotNull String name();
 
@@ -12,6 +12,8 @@ public interface Channel extends Audience {
     @NotNull String channelPrefix();
 
     @NotNull String commandName();
+
+    Set<User> targets(@NotNull final User source);
 
     boolean isUseableBy(@NotNull final ChatUser user);
 }

@@ -2,19 +2,18 @@ package at.helpch.chatchat.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.AbstractChannel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.MessageType;
-import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public abstract class AbstractTownyChannel extends AbstractChannel {
     protected AbstractTownyChannel(@NotNull final String name,
@@ -37,14 +36,16 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
 
     protected abstract @Nullable ResidentList residentList(@NotNull final Resident resident);
 
+    // fixme
+    private final ChatChatPlugin plugin = ChatChatPlugin.getPlugin(ChatChatPlugin.class);
+
     @Override
-    public void sendMessage(@NotNull final Identity source, @NotNull final Component message, @NotNull final MessageType type) {
+    public Set<User> targets(final @NotNull User source) {
         final var list = residentList(source.uuid());
-        if (list.isEmpty()) return;
-        list.get().getResidents().stream()
+        if (list.isEmpty()) return Set.of();
+        return list.get().getResidents().stream()
                 .map(Resident::getUUID)
-                .map(ChatChatPlugin.audiences()::player)
-                .collect(Audience.toAudience())
-                .sendMessage(source, message, type);
+                .map(plugin.usersHolder()::getUser)
+                .collect(Collectors.toSet());
     }
 }
