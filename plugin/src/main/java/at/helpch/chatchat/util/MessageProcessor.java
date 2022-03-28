@@ -4,13 +4,15 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageProcessor {
     private static final String UTF_PERMISSION = "chatchat.utf";
+    private static final String MENTION_PERMISSION = "chatchat.mention";
+    private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
 
     public static void process(
         @NotNull final ChatChatPlugin plugin,
@@ -38,6 +40,26 @@ public class MessageProcessor {
 
         if (chatEvent.isCancelled()) {
             return;
+        }
+
+        if (user.player().hasPermission(MENTION_PERMISSION)) {
+            final var canMentionEveryone = user.player().hasPermission(MENTION_EVERYONE_PERMISSION);
+            final var prefix = plugin.configManager().settings().mentionPrefix();
+            final var sound = plugin.configManager().settings().mentionSound();
+            for (final String word: message.split(" ")) {
+                if (!word.startsWith(prefix)) continue;
+                final var name = word.substring(1);
+
+                if (canMentionEveryone && (name.equals("everyone") || name.equals("here"))) {
+                    channel.playSound(sound);
+                    break;
+                }
+
+                final var player = Bukkit.getPlayer(name);
+                if (player == null) continue;
+                plugin.usersHolder().getUser(player).playSound(sound);
+            }
+
         }
 
         final var oldChannel = user.channel();
