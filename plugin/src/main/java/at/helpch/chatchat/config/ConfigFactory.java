@@ -9,11 +9,10 @@ import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
 import at.helpch.chatchat.config.mapper.PMFormatMapper;
-import at.helpch.chatchat.config.mapper.SoundMapper;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.PMFormat;
 import io.leangen.geantyref.TypeToken;
-import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +89,7 @@ public final class ConfigFactory {
                                 .register(ChatFormat.class, new ChatFormatMapper())
                                 .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                                 .register(PMFormat.class, new PMFormatMapper())
-                                .register(Sound.class, new SoundMapper())))
+                                .registerAll(ConfigurateComponentSerializer.configurate().serializers())))
                 .nodeStyle(NodeStyle.BLOCK)
                 .indent(2)
                 .build();

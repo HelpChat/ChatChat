@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.adventure.bukkit)
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
+    implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
