@@ -47,8 +47,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         Metrics metrics = new Metrics(this, 14781);
         metrics.addCustomChart(new SimpleBarChart("channelTypes", () ->
                 configManager().channels().channels().values().stream()
-                        .map(x -> x.getClass().getName())
-                        .collect(Collectors.toMap(s -> s, s -> 1, Integer::sum)))
+                        .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
         // fixme - there's probably a better place for this
