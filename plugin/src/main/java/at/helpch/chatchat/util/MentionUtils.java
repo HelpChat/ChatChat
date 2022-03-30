@@ -1,10 +1,14 @@
 package at.helpch.chatchat.util;
 
+import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.Format;
 import net.kyori.adventure.text.Component;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 public class MentionUtils {
@@ -27,18 +31,37 @@ public class MentionUtils {
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
-    public static MentionReplaceResult replaceMention(
+    private static MentionReplaceResult replaceMention(
             @RegExp @NotNull final String username,
             @NotNull final Component component,
-            @NotNull final String format) {
+            @NotNull final Function<MatchResult, Component> then) {
         final AtomicBoolean hasBeenReplaced = new AtomicBoolean();
         final var replaced = component.replaceText(builder -> builder
                 .match(Pattern.compile(username, Pattern.CASE_INSENSITIVE))
                 .replacement((result, ignored) -> {
                             hasBeenReplaced.set(true);
-                            return MessageUtils.parseToMiniMessage(format + result.group());
+                            return then.apply(result);
                         }
                 ));
         return new MentionReplaceResult(hasBeenReplaced.get(), replaced);
+    }
+
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static MentionReplaceResult replaceMention(
+            @RegExp @NotNull final String username,
+            @NotNull final Component component,
+            @NotNull final String format) {
+        return replaceMention(username, component, (r) -> MessageUtils.parseToMiniMessage(format + r.group()));
+    }
+
+    @Contract(value = "_, _, _, _ -> new", pure = true)
+    public static MentionReplaceResult replaceMention(
+            @NotNull final ChatUser user,
+            @NotNull final String prefix,
+            @NotNull final Component component,
+            @NotNull final Format format
+            ) {
+        return replaceMention(prefix + user.player().getName(), component,
+                r -> FormatUtils.parseFormat(format, user.player(), component));
     }
 }

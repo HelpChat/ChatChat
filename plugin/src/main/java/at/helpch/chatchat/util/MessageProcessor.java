@@ -55,7 +55,8 @@ public class MessageProcessor {
         var mentionEveryone = false;
 
         if (user.player().hasPermission(MENTION_EVERYONE_PERMISSION)) {
-            final var replaced = MentionUtils.replaceMention(mentionPrefix + "(everyone|here|channel)", component, mentionFormat);
+            final var replaced = MentionUtils.replaceMention(mentionPrefix + "(everyone|here|channel)",
+                    component, plugin.configManager().settings().globalMentionFormat());
             component = replaced.component();
             mentionEveryone = replaced.didReplace();
         }
@@ -64,7 +65,7 @@ public class MessageProcessor {
             var mention = mentionEveryone;
             var transformedComponent = component;
             if (target instanceof ChatUser && user.player().hasPermission(MENTION_PERMISSION)) {
-                final var replaced = MentionUtils.replaceMention(mentionPrefix + ((ChatUser) target).player().getName(),
+                final var replaced = MentionUtils.replaceMention((ChatUser) target, mentionPrefix,
                         component, mentionFormat);
                 mention = replaced.didReplace() || mention;
                 transformedComponent = replaced.component();

@@ -16,8 +16,12 @@ social-spy-format:
 # The prefix to use for mentioning players
 mention-prefix: '@'
 
-# The format to use for mentions
-mention-format: '<yellow>'
+# The format to use for individual player mentions
+mention-format:
+  parts: ['<yellow>@%player_name%']
+
+# The format to use for @channel/@here/@everyone
+global-mention-format: '<yellow>'
 
 # The sound to play when a player is mentioned
 mention-sound:
