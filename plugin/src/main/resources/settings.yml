@@ -16,10 +16,13 @@ social-spy-format:
 # The prefix to use for mentioning players
 mention-prefix: '@'
 
+# The format to use for mentions
+mention-format: '<yellow>'
+
 # The sound to play when a player is mentioned
 mention-sound:
   name: entity.experience_orb.pickup
-  source: MASTER
+  source: master
   pitch: 1
   volume: 1
 

@@ -36,7 +36,6 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
 
     protected abstract @Nullable ResidentList residentList(@NotNull final Resident resident);
 
-    // fixme
     private final ChatChatPlugin plugin = ChatChatPlugin.getPlugin(ChatChatPlugin.class);
 
     @Override

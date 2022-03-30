@@ -46,7 +46,7 @@ public final class ChatChannel extends AbstractChannel {
     @Override
     public Set<User> targets(final @NotNull User ignored) {
         return plugin.usersHolder().users().stream().filter(user ->
-            user instanceof ChatUser &&
+                !(user instanceof ChatUser) ||
                     ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name())
         ).collect(Collectors.toUnmodifiableSet());
     }
