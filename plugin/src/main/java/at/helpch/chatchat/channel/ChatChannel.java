@@ -1,15 +1,17 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ConfigSerializable
-public final class ChatChannel extends AbstractChannel implements ForwardingAudience.Single {
+public final class ChatChannel extends AbstractChannel {
 
     private static ChatChannel defaultChannel = DefaultConfigObjects.createDefaultChannel();
 
@@ -21,11 +23,6 @@ public final class ChatChannel extends AbstractChannel implements ForwardingAudi
         super(name, messagePrefix, toggleCommand, channelPrefix);
     }
 
-    @Override
-    public @NotNull Audience audience() {
-        return ChatChatPlugin.audiences().permission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
-    }
-
     public static @NotNull ChatChannel defaultChannel() {
         return defaultChannel;
     }
@@ -33,6 +30,8 @@ public final class ChatChannel extends AbstractChannel implements ForwardingAudi
     public static void defaultChannel(@NotNull final ChatChannel toSet) {
         defaultChannel = toSet;
     }
+
+    private final ChatChatPlugin plugin = ChatChatPlugin.getPlugin(ChatChatPlugin.class);
 
     @Override
     public String toString() {
@@ -42,5 +41,13 @@ public final class ChatChannel extends AbstractChannel implements ForwardingAudi
                 ", toggleCommand='" + commandName() + '\'' +
                 ", channelPrefix='" + channelPrefix() +
                 '}';
+    }
+
+    @Override
+    public Set<User> targets(final @NotNull User ignored) {
+        return plugin.usersHolder().users().stream().filter(user ->
+                !(user instanceof ChatUser) ||
+                    ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name())
+        ).collect(Collectors.toUnmodifiableSet());
     }
 }

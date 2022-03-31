@@ -55,6 +55,10 @@ public final class DefaultConfigObjects {
         return new PMFormat("socialspy", List.of("<gray>(spy) %player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>"));
     }
 
+    public static @NotNull PMFormat createMentionFormat() {
+        return new PMFormat("mention", List.of("<yellow>@%player_name%"));
+    }
+
     public static @NotNull Sound createMentionSound() {
         return Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1f, 1f);
     }

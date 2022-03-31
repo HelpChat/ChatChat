@@ -65,7 +65,7 @@ bukkit {
         }
         permission("chatchat.mention.everyone") {
             description = "Mention the whole channel"
-            default = "true"
+            default = "op"
         }
     }
 }
