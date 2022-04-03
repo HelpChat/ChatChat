@@ -49,7 +49,6 @@ public final class ChatChatDsrvHook implements ChatHook, Hook {
         final var message = GsonComponentSerializer.gson().deserialize(
                 github.scarsz.discordsrv.dependencies.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(component)
         );
-        // fixme - is it possible to actually find the sender?
         for (final var target : channel.targets(ConsoleUser.INSTANCE)) {
             target.sendMessage(message);
         }
