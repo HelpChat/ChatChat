@@ -4,13 +4,17 @@ import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
-import at.helpch.chatchat.command.*;
+import at.helpch.chatchat.command.MainCommand;
+import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.ReplyCommand;
+import at.helpch.chatchat.command.SocialSpyCommand;
+import at.helpch.chatchat.command.SwitchChannelCommand;
+import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.config.ConfigManager;
+import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
-import at.helpch.chatchat.towny.TownyNationChannel;
-import at.helpch.chatchat.towny.TownyTownChannel;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
@@ -20,7 +24,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
     private @NotNull final UsersHolder usersHolder = new UsersHolder();
     private @NotNull final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
+    private @NotNull final HookManager hookManager = new HookManager(this);
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
 
@@ -40,12 +44,7 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new UserSenderValidator());
 
         audiences = BukkitAudiences.create(this);
-
-        // fixme - there's probably a better place for this
-        if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
-            channelTypeRegistry.add("TOWNY_TOWN", TownyTownChannel::new);
-            channelTypeRegistry.add("TOWNY_NATION", TownyNationChannel::new);
-        }
+        hookManager.init();
 
         configManager.reload();
 

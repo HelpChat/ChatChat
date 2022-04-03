@@ -1,9 +1,9 @@
 # Set the default channel to talk in.
-default-channel: 'default'
+default-channel: 'global'
 
 # Channels configuration
 channels:
-  default:
+  global:
     #command to switch channel
     toggle-command: 'global'
     # prefix the message with this to automatically type the message in channel

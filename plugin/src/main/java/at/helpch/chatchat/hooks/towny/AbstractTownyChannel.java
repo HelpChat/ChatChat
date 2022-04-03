@@ -1,4 +1,4 @@
-package at.helpch.chatchat.towny;
+package at.helpch.chatchat.hooks.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
