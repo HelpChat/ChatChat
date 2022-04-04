@@ -1,4 +1,4 @@
-package at.helpch.chatchat.towny;
+package at.helpch.chatchat.hooks.towny;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;

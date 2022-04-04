@@ -10,7 +10,11 @@ plugins {
 repositories {
     papi()
     triumphSnapshots()
+    // towny
     maven("https://repo.glaremasters.me/repository/towny/")
+    // dsrv + dependencies
+    maven("https://m2.dv8tion.net/releases")
+    maven("https://nexus.scarsz.me/content/groups/public")
 }
 
 dependencies {
@@ -26,6 +30,7 @@ dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
     compileOnly(libs.towny)
+    compileOnly(libs.discordsrv)
 }
 
 bukkit {
@@ -33,7 +38,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny")
+    softdepend = listOf("Towny", "DiscordSRV")
     apiVersion = "1.13"
     permissions {
         permission("chatchat.format.default") {
