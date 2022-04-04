@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
     implementation(libs.bstats)
+    implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
@@ -57,6 +58,14 @@ bukkit {
         }
         permission("chatchat.channel.use.staff") {
             description = "Use staff channel"
+            default = "op"
+        }
+        permission("chatchat.mention") {
+            description = "Mention other players"
+            default = "true"
+        }
+        permission("chatchat.mention.everyone") {
+            description = "Mention the whole channel"
             default = "op"
         }
     }

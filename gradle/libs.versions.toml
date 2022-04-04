@@ -19,6 +19,7 @@ spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
 
 # Adventure
 adventure-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+adventure-configurate = { module = "net.kyori:adventure-serializer-configurate4", version.ref = "adventure-platform" }
 adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "minimessage" }
 
 # Other

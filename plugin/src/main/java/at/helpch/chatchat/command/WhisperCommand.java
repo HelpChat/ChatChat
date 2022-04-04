@@ -43,9 +43,9 @@ public final class WhisperCommand extends BaseCommand {
 
         final var settingsConfig = plugin.configManager().settings();
 
-        final var senderFormat = settingsConfig.getSenderFormat();
-        final var recipientFormat = settingsConfig.getRecipientFormat();
-        final var socialSpyFormat = settingsConfig.getSocialSpyFormat();
+        final var senderFormat = settingsConfig.senderFormat();
+        final var recipientFormat = settingsConfig.recipientFormat();
+        final var socialSpyFormat = settingsConfig.socialSpyFormat();
 
         final var pmSendEvent = new PMSendEvent(
             user,
@@ -74,6 +74,10 @@ public final class WhisperCommand extends BaseCommand {
                     pmSendEvent.message()
             ))
         );
+
+        if (settingsConfig.mentionOnMessage()) {
+            recipient.playSound(settingsConfig.mentionSound());
+        }
 
         user.lastMessagedUser(recipient);
         recipient.lastMessagedUser(user);

@@ -2,11 +2,12 @@ package at.helpch.chatchat.config.holders;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.format.PMFormat;
+import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 // configurate requires non-final fields
-@SuppressWarnings("FieldMayBeFinal")
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
 public final class SettingsHolder {
 
@@ -15,15 +16,41 @@ public final class SettingsHolder {
     private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
     private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
-    public @NotNull PMFormat getSenderFormat() {
+    private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
+    private String mentionPrefix = "@";
+    private String globalMentionFormat = "<yellow>";
+    private Sound mentionSound = DefaultConfigObjects.createMentionSound();
+    private boolean mentionOnMessage = true;
+
+    public @NotNull PMFormat senderFormat() {
         return senderFormat;
     }
 
-    public @NotNull PMFormat getRecipientFormat() {
+    public @NotNull PMFormat recipientFormat() {
         return recipientFormat;
     }
 
-    public @NotNull PMFormat getSocialSpyFormat() {
+    public @NotNull PMFormat socialSpyFormat() {
         return socialSpyFormat;
+    }
+
+    public @NotNull String mentionPrefix() {
+        return mentionPrefix;
+    }
+
+    public @NotNull PMFormat mentionFormat() {
+        return mentionFormat;
+    }
+
+    public @NotNull String globalMentionFormat() {
+        return globalMentionFormat;
+    }
+
+    public @NotNull Sound mentionSound() {
+        return mentionSound;
+    }
+
+    public boolean mentionOnMessage() {
+        return mentionOnMessage;
     }
 }

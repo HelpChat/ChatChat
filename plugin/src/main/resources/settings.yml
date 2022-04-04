@@ -12,3 +12,23 @@ recipient-format:
 social-spy-format:
   parts:
     - '<gray>(spy) %player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
+
+# The prefix to use for mentioning players
+mention-prefix: '@'
+
+# The format to use for individual player mentions
+mention-format:
+  parts: ['<yellow>@%player_name%']
+
+# The format to use for @channel/@here/@everyone
+global-mention-format: '<yellow>'
+
+# The sound to play when a player is mentioned
+mention-sound:
+  name: entity.experience_orb.pickup
+  source: master
+  pitch: 1
+  volume: 1
+
+# Whether to play the mention sound when a user is messaged
+mention-on-message: true
