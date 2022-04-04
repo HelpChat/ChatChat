@@ -29,7 +29,7 @@ public final class HookManager {
             throw new IllegalStateException("Hook manager initialized twice");
         }
         hasBeenInitialized = true;
-        for (final var constructor: constructors) {
+        for (final var constructor : constructors) {
             final var hook = constructor.apply(plugin);
             final @Nullable var hookPlugin = Bukkit.getPluginManager().getPlugin(hook.dependency());
             if (hookPlugin == null || !hookPlugin.isEnabled()) continue;
