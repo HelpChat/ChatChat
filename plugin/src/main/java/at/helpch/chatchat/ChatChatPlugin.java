@@ -20,6 +20,8 @@ import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,6 +47,13 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         audiences = BukkitAudiences.create(this);
         hookManager.init();
+
+        // bStats
+        Metrics metrics = new Metrics(this, 14781);
+        metrics.addCustomChart(new SimpleBarChart("channelTypes", () ->
+                configManager().channels().channels().values().stream()
+                        .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
+        );
 
         configManager.reload();
 
