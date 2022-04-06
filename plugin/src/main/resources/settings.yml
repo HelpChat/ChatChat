@@ -1,8 +1,8 @@
 # The format to send to the sender of a private message
+# All formats can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
 sender-format:
   parts:
     - '<gray>you <color:#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
-    -
 # The format to send to the recipient of a private message
 recipient-format:
   parts:
@@ -24,6 +24,9 @@ mention-format:
 global-mention-format: '<yellow>'
 
 # The sound to play when a player is mentioned
+# The sounds use the format of adventure sounds, which in turn use the original minecraft names, NOT spigot's.
+# Name - Set the sound to play: names of all sounds can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
+# Source - set where the source can be played through, the list of all sources can also be found on the above website.
 mention-sound:
   name: entity.experience_orb.pickup
   source: master
