@@ -3,26 +3,25 @@ default-channel: 'global'
 
 # Channels configuration
 channels:
-  global:
-    #command to switch channel
+  global: # default channel as set in default-channel, no permission required.
+    # command to switch channel
+    # Changes to this setting REQUIRES a server restart
     toggle-command: 'global'
     # prefix the message with this to automatically type the message in channel
     message-prefix: ''
-    # pretty much a variable for the channel prefix
+    # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
+    # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
     channel-prefix: '[global]'
-  staff: # perm node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
-    # command to switch channel
+  staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
     toggle-command: 'staffchat'
-    # prefix the message with this to automatically type the message in channel
     message-prefix: '#'
-    # pretty much a variable for the channel prefix
     channel-prefix: '[STAFF]'
 
 #  # this one's for towny, uncomment this section if you have towny installed
 #  town:
 #    # a special, optional value, indicating that this is a towny town chat
 #    # valid options are 'TOWNY_TOWN', 'TOWNY_NATION'
-#    # falls back to a standard chat channel
+#    # if the type is not valid, it falls back to a standard chat channel
 #    type: 'TOWNY_TOWN'
 #    toggle-command: 'townchat'
 #    message-prefix: 't:'

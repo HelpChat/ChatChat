@@ -27,6 +27,6 @@ adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", versi
 configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "cmds" }
 papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
-towny = {module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }

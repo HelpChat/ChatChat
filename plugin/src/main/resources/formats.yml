@@ -1,21 +1,24 @@
 # Set the default format. This will be used when players do not have any other format permissions
 default-format: 'default'
 formats:
-  default:
-    priority: 2 # if we have multiple formats which takes priority
-    format: # list of all the segments of the format, supports unlimited amount of segments
+  default: # this is the default format as set by default-format. No permission is needed.
+    priority: 2 # lower number = higher priority
+    # list of all the segments of the format, supports unlimited amount of segments.
+    # Technically only 1 line is needed, but to clean up the config, multiple lines can be used
+    # These parts can be formatted using MiniMessage, which can be found here: https://docs.adventure.kyori.net/minimessage/index.html
+    parts:
       - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%chatchat_channel_prefix%</hover></click>'
       - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> [%vault_group%]</hover>'
       - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
       - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
-      - '%message%'
+      - '<message>'
       - '<hover:show_text:"This forces everyone to have a ! on the end. Haha">!</hover>'
 
-  staff: # user needs chatchat.format.staff
-    priority: 1 # if we have multiple formats which takes priority
-    format: # list of all the segments of the format, supports unlimited amount of segments
+  staff: # user needs 'chatchat.format.staff' permission
+    priority: 1
+    parts:
       - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%chatchat_channel_prefix%</hover></click>'
       - '<hover:show_text:"Hey look, i am staff<newline>Some new line">  [STAFF]</hover>'
       - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
       - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
-      - '%message%'
+      - '<message>'
