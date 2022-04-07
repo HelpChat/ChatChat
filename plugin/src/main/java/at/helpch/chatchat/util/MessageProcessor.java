@@ -4,14 +4,34 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.ChatChatEvent;
+import java.util.Map;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageProcessor {
     private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String MENTION_PERMISSION = "chatchat.mention";
     private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
+    private static final String FORMAT_BASE_PERMISSION = "chatchat.format.";
+
+    private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
+        Map.entry("click", StandardTags.clickEvent()),
+        Map.entry("color", StandardTags.color()),
+        Map.entry("font", StandardTags.font()),
+        Map.entry("gradient", StandardTags.gradient()),
+        Map.entry("hover", StandardTags.hoverEvent()),
+        Map.entry("insertion", StandardTags.insertion()),
+        Map.entry("keybind", StandardTags.keybind()),
+        Map.entry("newline", StandardTags.newline()),
+        Map.entry("rainbow", StandardTags.rainbow()),
+        Map.entry("reset", StandardTags.reset()),
+        Map.entry("translatable", StandardTags.translatable())
+    );
 
     public static void process(
             @NotNull final ChatChatPlugin plugin,
@@ -24,6 +44,25 @@ public class MessageProcessor {
             user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
             return;
         }
+        final var resolver = TagResolver.builder();
+
+        for (final var entry : PERMISSION_TAGS.entrySet()) {
+            if (!user.player().hasPermission(FORMAT_BASE_PERMISSION + entry.getKey())) {
+                continue;
+            }
+
+            resolver.resolver(entry.getValue());
+        }
+
+        for (final var tag : TextDecoration.values()) {
+            if (!user.player().hasPermission(FORMAT_BASE_PERMISSION + tag.toString())) {
+                continue;
+            }
+
+            resolver.resolver(StandardTags.decorations(tag));
+        }
+
+        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
 
         final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
 
@@ -31,7 +70,7 @@ public class MessageProcessor {
                 async,
                 user,
                 format,
-                Component.text(message),
+                miniMessage.deserialize(message),
                 channel
         );
 
