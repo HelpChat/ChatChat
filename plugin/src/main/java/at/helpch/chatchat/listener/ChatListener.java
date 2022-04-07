@@ -36,7 +36,7 @@ public final class ChatListener implements Listener {
         final var channelByPrefix =
                 ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
 
-        final var message = channelByPrefix.isEmpty()
+        final var message = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
