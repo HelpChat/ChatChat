@@ -16,8 +16,8 @@ public final class SettingsHolder {
     private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
     private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
-    private String itemFormat = DefaultConfigObjects.createItemFormat();
-    private String itemFormatInfo = DefaultConfigObjects.createItemFormatInfo();
+    private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
+    private String itemFormatInfo = "<dark_gray><item> x <amount>";
 
     private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String mentionPrefix = "@";

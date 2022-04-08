@@ -15,7 +15,7 @@ social-spy-format:
 
 # The format that the <item> placeholder will use in chat. Needs to contain <item>.
 # Another available internal placeholder is <amount>.
-item-format: '<gray>[<reset><item><gray> x <amount>]'
+item-format: '<gray>[</gray><item><gray> x <amount>]'
 
 # Custom line that can show in the hover of the <item> placeholder displaying stuff like item's exact name and amount
 # Set to empty string '' if you want to disable it from ever showing.
