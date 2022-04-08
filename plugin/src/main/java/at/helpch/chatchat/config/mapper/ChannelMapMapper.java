@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * A mapper for the channel map, ignoring invalid channels instead of failing entirely.

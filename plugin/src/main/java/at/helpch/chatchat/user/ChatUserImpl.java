@@ -9,8 +9,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.util.ChannelUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;

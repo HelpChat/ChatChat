@@ -3,7 +3,6 @@ package at.helpch.chatchat.api.event;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
