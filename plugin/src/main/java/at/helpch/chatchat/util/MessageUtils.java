@@ -19,6 +19,10 @@ public final class MessageUtils {
         return miniMessage.deserialize(formatPart, tag);
     }
 
+    public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart, @NotNull final TagResolver... tags) {
+        return miniMessage.deserialize(formatPart, tags);
+    }
+
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart, @NotNull final List<TagResolver> tags) {
         return miniMessage.deserialize(formatPart, TagResolver.resolver(tags));
     }

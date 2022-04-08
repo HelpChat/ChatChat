@@ -16,6 +16,9 @@ public final class SettingsHolder {
     private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
     private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
+    private String itemFormat = DefaultConfigObjects.createItemFormat();
+    private String itemFormatInfo = DefaultConfigObjects.createItemFormatInfo();
+
     private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String mentionPrefix = "@";
     private String globalMentionFormat = "<yellow>";
@@ -32,6 +35,14 @@ public final class SettingsHolder {
 
     public @NotNull PMFormat socialSpyFormat() {
         return socialSpyFormat;
+    }
+
+    public @NotNull String itemFormat() {
+        return itemFormat;
+    }
+
+    public @NotNull String itemFormatInfo() {
+        return itemFormatInfo;
     }
 
     public @NotNull String mentionPrefix() {

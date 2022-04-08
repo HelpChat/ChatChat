@@ -13,6 +13,14 @@ social-spy-format:
   parts:
     - '<gray>(spy) %player_name% <#40c9ff>-> <gray>%recipient_player_name% <#e81cff>» <white><message>'
 
+# The format that the <item> placeholder will use in chat. Needs to contain <item>.
+# Another available internal placeholder is <amount>.
+item-format: '<gray>[<reset><item><gray> x <amount>]'
+
+# Custom line that can show in the hover of the <item> placeholder displaying stuff like item's exact name and amount
+# Set to empty string '' if you want to disable it from ever showing.
+item-format-info: '<dark_gray><item> x <amount>'
+
 # The prefix to use for mentioning players
 mention-prefix: '@'
 
