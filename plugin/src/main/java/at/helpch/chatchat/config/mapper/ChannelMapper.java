@@ -9,7 +9,6 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collections;
 
 public final class ChannelMapper implements TypeSerializer<Channel> {
 

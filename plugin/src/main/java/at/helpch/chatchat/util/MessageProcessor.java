@@ -4,35 +4,106 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.event.ChatChatEvent;
+import java.util.Map;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
-public class MessageProcessor {
+public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
+    private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
+
+    private static final TextReplacementConfig URL_REPLACER_CONFIG = TextReplacementConfig.builder()
+        .match(DEFAULT_URL_PATTERN)
+        .replacement(builder -> {
+            String clickUrl = builder.content();
+            if (!URL_SCHEME_PATTERN.matcher(clickUrl).find()) {
+                clickUrl = "https://" + clickUrl;
+            }
+            return builder.clickEvent(ClickEvent.openUrl(clickUrl));
+        })
+        .build();
+
+    private static final String URL_PERMISSION = "chatchat.url";
     private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String MENTION_PERMISSION = "chatchat.mention";
     private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
+    private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
+    private static final String ITEM_PERMISSION = TAG_BASE_PERMISSION + "item";
+
+    private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
+        Map.entry("click", StandardTags.clickEvent()),
+        Map.entry("color", StandardTags.color()),
+        Map.entry("font", StandardTags.font()),
+        Map.entry("gradient", StandardTags.gradient()),
+        Map.entry("hover", StandardTags.hoverEvent()),
+        Map.entry("insertion", StandardTags.insertion()),
+        Map.entry("keybind", StandardTags.keybind()),
+        Map.entry("newline", StandardTags.newline()),
+        Map.entry("rainbow", StandardTags.rainbow()),
+        Map.entry("reset", StandardTags.reset()),
+        Map.entry("translatable", StandardTags.translatable())
+    );
 
     public static void process(
-            @NotNull final ChatChatPlugin plugin,
-            @NotNull final ChatUser user,
-            @NotNull final Channel channel,
-            @NotNull final String message,
-            final boolean async
+        @NotNull final ChatChatPlugin plugin,
+        @NotNull final ChatUser user,
+        @NotNull final Channel channel,
+        @NotNull final String message,
+        final boolean async
     ) {
         if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
             user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
             return;
         }
 
+        final var resolver = TagResolver.builder();
+
+        for (final var entry : PERMISSION_TAGS.entrySet()) {
+            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
+                continue;
+            }
+
+            resolver.resolver(entry.getValue());
+        }
+
+        for (final var tag : TextDecoration.values()) {
+            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
+                continue;
+            }
+
+            resolver.resolver(StandardTags.decorations(tag));
+        }
+
+        if (user.player().hasPermission(ITEM_PERMISSION)) {
+            resolver.resolver(
+                ItemUtils.createItemPlaceholder(
+                    plugin.configManager().settings().itemFormat(),
+                    plugin.configManager().settings().itemFormatInfo(),
+                    user.player().getInventory().getItemInMainHand()
+                )
+            );
+        }
+
+        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
+        final var deserializedMessage = !user.player().hasPermission(URL_PERMISSION)
+            ? miniMessage.deserialize(message)
+            : miniMessage.deserialize(message).replaceText(URL_REPLACER_CONFIG);
+
         final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
 
         final var chatEvent = new ChatChatEvent(
-                async,
-                user,
-                format,
-                Component.text(message),
-                channel
+            async,
+            user,
+            format,
+            deserializedMessage,
+            channel
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -44,9 +115,9 @@ public class MessageProcessor {
         final var oldChannel = user.channel();
         user.channel(channel);
         var component = FormatUtils.parseFormat(
-                chatEvent.format(),
-                user.player(),
-                chatEvent.message()
+            chatEvent.format(),
+            user.player(),
+            chatEvent.message()
         );
 
         final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
