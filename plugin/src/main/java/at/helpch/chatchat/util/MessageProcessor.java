@@ -120,18 +120,15 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
 
         final var oldChannel = user.channel();
         user.channel(channel);
-        var component = FormatUtils.parseFormat(
-            chatEvent.format(),
-            user.player(),
-            chatEvent.message()
-        );
+
+        final var parsedMessage = chatEvent.message().compact();
 
         final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
         final var mentionSound = plugin.configManager().settings().mentionSound();
         final var mentionFormat = plugin.configManager().settings().mentionFormat();
         final var globalMentionFormat = plugin.configManager().settings().globalMentionFormat();
 
-        var userMessage = component;
+        var userMessage = parsedMessage;
         var userIsTarget = false;
 
         for (final var target : channel.targets(user)) {
@@ -145,7 +142,7 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
                 globalMentionFormat,
                 user,
                 target,
-                component
+                parsedMessage
             );
 
             if (!(target instanceof ChatUser)) {
@@ -162,8 +159,14 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
                 globalMentionProcessResult.getValue()
             );
 
+            var component = FormatUtils.parseFormat(
+                chatEvent.format(),
+                user.player(),
+                mentionProcessResult.getValue()
+            );
+
             if (mentionProcessResult.getKey() || globalMentionProcessResult.getKey()) target.playSound(mentionSound);
-            target.sendMessage(mentionProcessResult.getValue());
+            target.sendMessage(component);
 
             userMessage = processPersonalMentions(
                 mentionPrefix,
@@ -195,8 +198,14 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
             globalMentionProcessResult.getValue()
         );
 
+        var component = FormatUtils.parseFormat(
+            chatEvent.format(),
+            user.player(),
+            mentionProcessResult.getValue()
+        );
+
         if (mentionProcessResult.getKey() || globalMentionProcessResult.getKey()) user.playSound(mentionSound);
-        user.sendMessage(mentionProcessResult.getValue());
+        user.sendMessage(component);
         user.channel(oldChannel);
     }
 
