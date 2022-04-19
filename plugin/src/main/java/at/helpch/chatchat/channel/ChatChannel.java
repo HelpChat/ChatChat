@@ -64,8 +64,8 @@ public final class ChatChannel extends AbstractChannel {
             if (radius() != -1 && source instanceof ChatUser) {
                 final Location sourceLocation = ((ChatUser) source).player().getLocation();
                 final Location targetLocation = playerTarget.getLocation();
-                final int relativeX = Math.abs(targetLocation.getBlockX() - sourceLocation.getBlockX());
-                final int relativeZ = Math.abs(targetLocation.getBlockZ() - sourceLocation.getBlockZ());
+                final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
+                final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
 
                 allowed = relativeX*relativeX + relativeZ*relativeZ <= radius()*radius();
             }
