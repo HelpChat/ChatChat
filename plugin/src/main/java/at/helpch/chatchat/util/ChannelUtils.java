@@ -14,6 +14,7 @@ public final class ChannelUtils {
     public static final String BASE_CHANNEL_PERMISSION = "chatchat.channel.";
     public static final String SEE_CHANNEL_PERMISSION = BASE_CHANNEL_PERMISSION + "see.";
     public static final String USE_CHANNEL_PERMISSION = BASE_CHANNEL_PERMISSION + "use.";
+    public static final String BYPASS_RADIUS_CHANNEL_PERMISSION = BASE_CHANNEL_PERMISSION + "bypass-radius";
 
     private ChannelUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");

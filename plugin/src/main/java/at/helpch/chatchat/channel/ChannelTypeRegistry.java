@@ -13,7 +13,8 @@ public final class ChannelTypeRegistry {
         @NotNull T build(@NotNull final String name,
                 @NotNull final String messagePrefix,
                 @NotNull final String toggleCommand,
-                @NotNull final String channelPrefix);
+                @NotNull final String channelPrefix,
+                final int radius);
     }
 
     private final Map<String, Builder<?>> builders = new HashMap<>();

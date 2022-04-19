@@ -15,6 +15,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
     private static final String TOGGLE_COMMAND = "toggle-command";
     private static final String MESSAGE_PREFIX = "message-prefix";
     private static final String CHANNEL_PREFIX = "channel-prefix";
+    private static final String RADIUS = "radius";
     private static final String TYPE = "type";
 
     private final ChannelTypeRegistry registry;
@@ -45,6 +46,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
 
         final var messagePrefix = nonVirtualNode(node, MESSAGE_PREFIX).getString("");
         final var channelPrefix = nonVirtualNode(node, CHANNEL_PREFIX).getString("");
+        final var radius = nonVirtualNode(node, RADIUS).getInt();
 
         final var channelType = node.node(TYPE).getString("default");
 
@@ -52,7 +54,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         if (builder == null) {
             throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", ignoring.");
         }
-        return builder.build(key, messagePrefix, commandName, channelPrefix);
+        return builder.build(key, messagePrefix, commandName, channelPrefix, radius);
     }
 
     @Override

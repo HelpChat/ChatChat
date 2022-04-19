@@ -16,11 +16,11 @@ public final class DefaultConfigObjects {
 
     public static @NotNull ChatChannel createDefaultChannel() {
         return new ChatChannel("default",
-                "", "global", "<gray>[<blue>Global<gray>]");
+                "", "global", "<gray>[<blue>Global<gray>]", -1);
     }
 
     public static @NotNull ChatChannel createStaffChannel() {
-        return new ChatChannel("staff", "@", "staffchat", "<gray>[<green>Staff<gray>]");
+        return new ChatChannel("staff", "@", "staffchat", "<gray>[<green>Staff<gray>]", -1);
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {

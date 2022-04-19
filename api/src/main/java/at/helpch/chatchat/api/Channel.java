@@ -13,6 +13,8 @@ public interface Channel {
 
     @NotNull String commandName();
 
+    int radius();
+
     Set<User> targets(@NotNull final User source);
 
     boolean isUseableBy(@NotNull final ChatUser user);

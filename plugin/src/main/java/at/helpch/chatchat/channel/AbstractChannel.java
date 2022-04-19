@@ -15,15 +15,19 @@ public abstract class AbstractChannel implements Channel {
 
     private final String channelPrefix;
 
+    private final int radius;
+
     protected AbstractChannel(
             @NotNull final String name,
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
-            @NotNull final String channelPrefix) {
+            @NotNull final String channelPrefix,
+            final int radius) {
         this.name = name;
         this.messagePrefix = messagePrefix;
         this.toggleCommand = toggleCommand;
         this.channelPrefix = channelPrefix;
+        this.radius = radius;
     }
 
     @Override
@@ -44,6 +48,11 @@ public abstract class AbstractChannel implements Channel {
     @Override
     public @NotNull String commandName() {
         return toggleCommand;
+    }
+
+    @Override
+    public int radius() {
+        return radius;
     }
 
 

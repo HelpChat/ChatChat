@@ -19,8 +19,9 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
     protected AbstractTownyChannel(@NotNull final String name,
                                    @NotNull final String messagePrefix,
                                    @NotNull final String toggleCommand,
-                                   @NotNull final String channelPrefix) {
-        super(name, messagePrefix, toggleCommand, channelPrefix);
+                                   @NotNull final String channelPrefix,
+                                   final int radius) {
+        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
         if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
             throw new RuntimeException("Attempting to use a Towny channel but Towny is not installed.");
         }}

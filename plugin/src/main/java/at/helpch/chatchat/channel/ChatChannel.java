@@ -5,6 +5,8 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import java.util.Set;
@@ -19,8 +21,9 @@ public final class ChatChannel extends AbstractChannel {
             @NotNull final String name,
             @NotNull final String messagePrefix,
             @NotNull final String toggleCommand,
-            @NotNull final String channelPrefix) {
-        super(name, messagePrefix, toggleCommand, channelPrefix);
+            @NotNull final String channelPrefix,
+            final int radius) {
+        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
     }
 
     public static @NotNull ChatChannel defaultChannel() {
@@ -39,15 +42,35 @@ public final class ChatChannel extends AbstractChannel {
                 "name=" + name() +
                 ", messagePrefix='" + messagePrefix() + '\'' +
                 ", toggleCommand='" + commandName() + '\'' +
-                ", channelPrefix='" + channelPrefix() +
+                ", channelPrefix='" + channelPrefix() + '\'' +
+                ", radius='" + radius() +
                 '}';
     }
 
     @Override
-    public Set<User> targets(final @NotNull User ignored) {
-        return plugin.usersHolder().users().stream().filter(user ->
-                !(user instanceof ChatUser) ||
-                    ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name())
-        ).collect(Collectors.toUnmodifiableSet());
+    public Set<User> targets(final @NotNull User source) {
+        return plugin.usersHolder().users().stream().filter(user -> {
+            if (!(user instanceof ChatUser)) {
+                return true;
+            }
+
+            final Player playerTarget = ((ChatUser) user).player();
+            boolean allowed = ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
+
+            if (playerTarget.hasPermission(ChannelUtils.BYPASS_RADIUS_CHANNEL_PERMISSION)) {
+                return true;
+            }
+
+            if (radius() != -1 && source instanceof ChatUser) {
+                final Location sourceLocation = ((ChatUser) source).player().getLocation();
+                final Location targetLocation = playerTarget.getLocation();
+                final int relativeX = Math.abs(targetLocation.getBlockX() - sourceLocation.getBlockX());
+                final int relativeZ = Math.abs(targetLocation.getBlockZ() - sourceLocation.getBlockZ());
+
+                allowed = relativeX*relativeX + relativeZ*relativeZ <= radius()*radius();
+            }
+
+            return allowed;
+        }).collect(Collectors.toUnmodifiableSet());
     }
 }
