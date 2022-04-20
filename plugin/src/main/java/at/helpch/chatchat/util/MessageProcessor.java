@@ -3,7 +3,9 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.api.event.ChatChatEvent;
+import at.helpch.chatchat.format.PMFormat;
 import java.util.Map;
 import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
@@ -32,10 +34,14 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
 
     private static final String URL_PERMISSION = "chatchat.url";
     private static final String UTF_PERMISSION = "chatchat.utf";
-    private static final String MENTION_PERMISSION = "chatchat.mention";
+    private static final String MENTION_PERSONAL_PERMISSION = "chatchat.mention.personal";
     private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
+    private static final String MENTION_PERSONAL_BLOCK_PERMISSION = MENTION_PERSONAL_PERMISSION + ".block";
+    private static final String MENTION_EVERYONE_BLOCK_PERMISSION = MENTION_EVERYONE_PERMISSION + ".block";
+    private static final String MENTION_EVERYONE_BLOCK_OVERRIDE_PERMISSION = MENTION_EVERYONE_BLOCK_PERMISSION + ".override";
+    private static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION + ".override";
     private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
-    private static final String ITEM_PERMISSION = TAG_BASE_PERMISSION + "item";
+    private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
 
     private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
         Map.entry("click", StandardTags.clickEvent()),
@@ -81,7 +87,7 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
             resolver.resolver(StandardTags.decorations(tag));
         }
 
-        if (user.player().hasPermission(ITEM_PERMISSION)) {
+        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
             resolver.resolver(
                 ItemUtils.createItemPlaceholder(
                     plugin.configManager().settings().itemFormat(),
@@ -114,36 +120,150 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
 
         final var oldChannel = user.channel();
         user.channel(channel);
-        var component = FormatUtils.parseFormat(
-            chatEvent.format(),
-            user.player(),
-            chatEvent.message()
-        );
+
+        final var parsedMessage = chatEvent.message().compact();
 
         final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
         final var mentionSound = plugin.configManager().settings().mentionSound();
         final var mentionFormat = plugin.configManager().settings().mentionFormat();
-        var mentionEveryone = false;
+        final var globalMentionFormat = plugin.configManager().settings().globalMentionFormat();
 
-        if (user.player().hasPermission(MENTION_EVERYONE_PERMISSION)) {
-            final var replaced = MentionUtils.replaceMention(mentionPrefix + "(everyone|here|channel)",
-                    component, plugin.configManager().settings().globalMentionFormat());
-            component = replaced.component();
-            mentionEveryone = replaced.didReplace();
-        }
+        var userMessage = parsedMessage;
+        var userIsTarget = false;
 
         for (final var target : channel.targets(user)) {
-            var mention = mentionEveryone;
-            var transformedComponent = component;
-            if (target instanceof ChatUser && user.player().hasPermission(MENTION_PERMISSION)) {
-                final var replaced = MentionUtils.replaceMention((ChatUser) target, mentionPrefix,
-                        component, mentionFormat);
-                mention = replaced.didReplace() || mention;
-                transformedComponent = replaced.component();
+            if (target.uuid() == user.uuid()) {
+                userIsTarget = true;
+                continue;
             }
-            if (mention) target.playSound(mentionSound);
-            target.sendMessage(transformedComponent);
+
+            final var globalMentionProcessResult = processGlobalMentions(
+                mentionPrefix,
+                globalMentionFormat,
+                user,
+                target,
+                parsedMessage
+            );
+
+            if (!(target instanceof ChatUser)) {
+                if (globalMentionProcessResult.getKey()) target.playSound(mentionSound);
+                target.sendMessage(globalMentionProcessResult.getValue());
+                continue;
+            }
+
+            final var mentionProcessResult = processPersonalMentions(
+                mentionPrefix,
+                mentionFormat,
+                user,
+                (ChatUser) target,
+                globalMentionProcessResult.getValue()
+            );
+
+            var component = FormatUtils.parseFormat(
+                chatEvent.format(),
+                user.player(),
+                mentionProcessResult.getValue()
+            );
+
+            if (mentionProcessResult.getKey() || globalMentionProcessResult.getKey()) target.playSound(mentionSound);
+            target.sendMessage(component);
+
+            userMessage = processPersonalMentions(
+                mentionPrefix,
+                mentionFormat,
+                user,
+                (ChatUser) target,
+                userMessage
+            ).getValue();
         }
+
+        if (!userIsTarget) {
+            user.channel(oldChannel);
+            return;
+        }
+
+        final var globalMentionProcessResult = processGlobalMentions(
+            mentionPrefix,
+            globalMentionFormat,
+            user,
+            user,
+            userMessage
+        );
+
+        final var mentionProcessResult = processPersonalMentions(
+            mentionPrefix,
+            mentionFormat,
+            user,
+            user,
+            globalMentionProcessResult.getValue()
+        );
+
+        var component = FormatUtils.parseFormat(
+            chatEvent.format(),
+            user.player(),
+            mentionProcessResult.getValue()
+        );
+
+        if (mentionProcessResult.getKey() || globalMentionProcessResult.getKey()) user.playSound(mentionSound);
+        user.sendMessage(component);
         user.channel(oldChannel);
+    }
+
+    private static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processGlobalMentions(
+        @NotNull final String mentionPrefix,
+        @NotNull final String globalMentionFormat,
+        @NotNull final ChatUser user,
+        @NotNull final User target,
+        @NotNull final Component message
+    ) {
+        if (!user.player().hasPermission(MENTION_EVERYONE_PERMISSION)) {
+            return Map.entry(false, message);
+        }
+
+        if (target instanceof ChatUser) {
+            final var targetChatUser = (ChatUser) target;
+
+            if (targetChatUser.player().hasPermission(MENTION_EVERYONE_BLOCK_PERMISSION) && !user.player().hasPermission(MENTION_EVERYONE_BLOCK_OVERRIDE_PERMISSION)) {
+                return Map.entry(false, message);
+            }
+
+            final var replaced = MentionUtils.replaceMention(
+                mentionPrefix + "(everyone|here|channel)",
+                message,
+                globalMentionFormat);
+
+            return Map.entry(replaced.didReplace(), replaced.component());
+        }
+
+        final var replaced = MentionUtils.replaceMention(
+            mentionPrefix + "(everyone|here|channel)",
+            message,
+            globalMentionFormat);
+
+        return Map.entry(replaced.didReplace(), replaced.component());
+    }
+
+    private static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processPersonalMentions(
+        @NotNull final String mentionPrefix,
+        @NotNull final PMFormat mentionFormat,
+        @NotNull final ChatUser user,
+        @NotNull final ChatUser target,
+        @NotNull final Component message
+    ) {
+        if (!user.player().hasPermission(MENTION_PERSONAL_PERMISSION) ||
+            (target.player().hasPermission(MENTION_PERSONAL_BLOCK_PERMISSION) &&
+                !user.player().hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
+        ) {
+            return Map.entry(false, message);
+        }
+
+        final var replaced = MentionUtils.replaceMention(
+            target,
+            mentionPrefix,
+            message,
+            mentionFormat
+        );
+
+        return Map.entry(replaced.didReplace(), replaced.component());
     }
 }
