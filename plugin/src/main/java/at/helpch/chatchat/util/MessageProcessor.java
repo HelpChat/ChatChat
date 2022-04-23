@@ -70,7 +70,7 @@ public final class MessageProcessor {
         final boolean async
     ) {
         if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
+            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return;
         }
 
