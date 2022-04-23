@@ -11,7 +11,11 @@ import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-public class MentionUtils {
+public final class MentionUtils {
+    private MentionUtils() {
+        throw new AssertionError("Util classes are not to be instantiated!");
+    }
+
     public static final class MentionReplaceResult {
         private final boolean didReplace;
         private final Component component;

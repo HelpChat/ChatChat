@@ -18,7 +18,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
-public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
+public final class MessageProcessor {
+    private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
 
     private static final TextReplacementConfig URL_REPLACER_CONFIG = TextReplacementConfig.builder()
@@ -56,6 +57,10 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
         Map.entry("reset", StandardTags.reset()),
         Map.entry("translatable", StandardTags.translatable())
     );
+
+    private MessageProcessor() {
+        throw new AssertionError("Util classes are not to be instantiated!");
+    }
 
     public static void process(
         @NotNull final ChatChatPlugin plugin,
