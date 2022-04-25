@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class FormatUtils {
-
     private static final String FORMAT_PERMISSION = "chatchat.format.";
 
     private FormatUtils() {

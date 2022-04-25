@@ -8,8 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public final class MessageUtils {
-
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    private MessageUtils() {
+        throw new AssertionError("Util classes are not to be instantiated!");
+    }
 
     public static @NotNull Component parseToMiniMessage(@NotNull final String formatPart) {
         return miniMessage.deserialize(formatPart);

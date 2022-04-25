@@ -16,8 +16,12 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemUtils {
+public final class ItemUtils {
     private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
+
+    private ItemUtils() {
+        throw new AssertionError("Util classes are not to be instantiated!");
+    }
 
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
         @NotNull final String itemFormat,
