@@ -29,7 +29,7 @@ mention-format:
   parts: ['<yellow>@%player_name%']
 
 # The format to use for @channel/@here/@everyone
-global-mention-format: '<yellow>'
+channel-mention-format: '<yellow>'
 
 # The sound to play when a player is mentioned
 # The sounds use the format of adventure sounds, which in turn use the original minecraft names, NOT spigot's.

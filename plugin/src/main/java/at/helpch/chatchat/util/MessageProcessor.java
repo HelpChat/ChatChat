@@ -123,7 +123,7 @@ public final class MessageProcessor {
         final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
         final var mentionSound = plugin.configManager().settings().mentionSound();
         final var personalMentionFormat = plugin.configManager().settings().mentionFormat();
-        final var channelMentionFormat = plugin.configManager().settings().globalMentionFormat();
+        final var channelMentionFormat = plugin.configManager().settings().channelMentionFormat();
 
         var userMessage = parsedMessage;
         var userIsTarget = false;

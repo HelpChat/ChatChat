@@ -21,7 +21,7 @@ public final class SettingsHolder {
 
     private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String mentionPrefix = "@";
-    private String globalMentionFormat = "<yellow>";
+    private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
 
@@ -53,8 +53,8 @@ public final class SettingsHolder {
         return mentionFormat;
     }
 
-    public @NotNull String globalMentionFormat() {
-        return globalMentionFormat;
+    public @NotNull String channelMentionFormat() {
+        return channelMentionFormat;
     }
 
     public @NotNull Sound mentionSound() {
