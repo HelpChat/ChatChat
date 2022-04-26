@@ -25,7 +25,7 @@ public class MentionEvent extends Event implements Cancellable {
     }
 
     /**
-     * Called when a {@link ChatUser} mentions another {@link User}.
+     * Called when a {@link ChatUser} mentions a {@link User}.
      */
     public MentionEvent(@NotNull final ChatUser user, @NotNull final User target, @NotNull final Channel channel, @NotNull final MentionType type) {
         this.user = user;

@@ -134,7 +134,7 @@ public final class MessageProcessor {
                 continue;
             }
 
-            final var channelMentionProcessResult = MentionProcessor.processChannelMentions(
+            final var channelMentionProcessResult = MentionUtils.processChannelMentions(
                 mentionPrefix,
                 channelMentionFormat,
                 user,
@@ -165,7 +165,7 @@ public final class MessageProcessor {
                 continue;
             }
 
-            final var personalMentionProcessResult = MentionProcessor.processPersonalMentions(
+            final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
                 mentionPrefix,
                 personalMentionFormat,
                 user,
@@ -217,7 +217,7 @@ public final class MessageProcessor {
 
             target.playSound(mentionSound);
             target.sendMessage(component);
-            userMessage = MentionProcessor.processPersonalMentions(
+            userMessage = MentionUtils.processPersonalMentions(
                 mentionPrefix,
                 personalMentionFormat,
                 user,
@@ -231,7 +231,7 @@ public final class MessageProcessor {
             return;
         }
 
-        final var channelMentionProcessResult = MentionProcessor.processChannelMentions(
+        final var channelMentionProcessResult = MentionUtils.processChannelMentions(
             mentionPrefix,
             channelMentionFormat,
             user,
@@ -250,7 +250,7 @@ public final class MessageProcessor {
             plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
         }
 
-        final var personalMentionProcessResult = MentionProcessor.processPersonalMentions(
+        final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
             mentionPrefix,
             personalMentionFormat,
             user,
