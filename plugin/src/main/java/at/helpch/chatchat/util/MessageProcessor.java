@@ -143,6 +143,7 @@ public final class MessageProcessor {
             );
 
             final var channelMentionEvent = new MentionEvent(
+                async,
                 user,
                 target,
                 chatEvent.channel(),
@@ -176,6 +177,7 @@ public final class MessageProcessor {
             );
 
             final var personalMentionEvent = new MentionEvent(
+                async,
                 user,
                 target,
                 chatEvent.channel(),
@@ -240,6 +242,7 @@ public final class MessageProcessor {
         );
 
         final var channelMentionEvent = new MentionEvent(
+            async,
             user,
             user,
             chatEvent.channel(),
@@ -261,6 +264,7 @@ public final class MessageProcessor {
         );
 
         final var personalMentionEvent = new MentionEvent(
+            async,
             user,
             user,
             chatEvent.channel(),
