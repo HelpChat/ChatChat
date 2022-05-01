@@ -157,12 +157,24 @@ public final class MessageProcessor {
             // Personal mentions can only be used towards ChatUsers.
             if (!(target instanceof ChatUser)) {
                 if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                    target.sendMessage(parsedMessage);
+                    final var component = FormatUtils.parseFormat(
+                        chatEvent.format(),
+                        user.player(),
+                        parsedMessage
+                    );
+
+                    target.sendMessage(component);
                     continue;
                 }
 
+                final var component = FormatUtils.parseFormat(
+                    chatEvent.format(),
+                    user.player(),
+                    channelMentionProcessResult.getValue()
+                );
+
                 target.playSound(mentionSound);
-                target.sendMessage(channelMentionProcessResult.getValue());
+                target.sendMessage(component);
                 continue;
             }
 
