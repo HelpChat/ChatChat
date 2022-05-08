@@ -24,6 +24,7 @@ public final class ChatUserImpl implements ChatUser {
 
     private @NotNull final UUID uuid;
     private ChatUser lastMessaged;
+    private boolean privateMessages = true;
     private Channel channel;
     private Format format;
 
@@ -60,6 +61,16 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void lastMessagedUser(@Nullable final ChatUser user) {
         this.lastMessaged = user;
+    }
+
+    @Override
+    public boolean privateMessages() {
+        return privateMessages;
+    }
+
+    @Override
+    public void privateMessages(final boolean enabled) {
+        this.privateMessages = enabled;
     }
 
     @Override

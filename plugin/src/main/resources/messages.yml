@@ -1,6 +1,10 @@
 # https://wiki.helpch.at
 
 no-replies: <red>You have no one to reply to!
+replies-disabled: You can't send private messages while they're disabled!
+target-replies-disabled: <red>This user has their private messages disabled!
+private-messages-enabled: <green>Your private messages have been enabled!
+private-messages-disabled: <red>Your private messages have been disabled!
 cant-message-yourself: <red>You can't message yourself!
 special-characters-no-permission: <red>You do not have permission to use special characters!
 social-spy-enabled: <green>Social spy enabled

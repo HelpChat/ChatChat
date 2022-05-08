@@ -15,6 +15,10 @@ public final class MessagesHolder {
 
     // messaging related
     private Component noReplies = text("You have no one to reply to!", RED);
+    private Component repliesDisabled = text("You can't send private messages while they're disabled!", RED);
+    private Component targetRepliesDisabled = text("This user has their private messages disabled!", RED);
+    private Component privateMessagesEnabled = text("Your private messages have been enabled!", GREEN);
+    private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
     private Component cantMessageYourself = text("You can't message yourself!", RED);
     private Component specialCharactersNoPermission = text("You do not have permission to use special characters!", RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
@@ -34,8 +38,24 @@ public final class MessagesHolder {
         return noReplies;
     }
 
+    public @NotNull Component repliesDisabled() {
+        return repliesDisabled;
+    }
+
+    public @NotNull Component targetRepliesDisabled() {
+        return targetRepliesDisabled;
+    }
+
     public @NotNull Component cantMessageYourself() {
         return cantMessageYourself;
+    }
+
+    public @NotNull Component privateMessagesEnabled() {
+        return privateMessagesEnabled;
+    }
+
+    public @NotNull Component privateMessagesDisabled() {
+        return privateMessagesDisabled;
     }
 
     public @NotNull Component specialCharactersNoPermission() {
