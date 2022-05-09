@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 public final class ChatListener implements Listener {
 
+    private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("§[\\da-f]");
+    private static final Pattern LEGACY_HEX_COLOR_PATTERN = Pattern.compile("§x(§[\\da-fA-F]){6}");
     private final ChatChatPlugin plugin;
 
     public ChatListener(@NotNull final ChatChatPlugin plugin) {
@@ -30,6 +32,8 @@ public final class ChatListener implements Listener {
             event.setCancelled(true);
         }
 
+        event.setMessage(cleanseMessage(event.getMessage()));
+
         final var player = event.getPlayer();
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
@@ -43,5 +47,12 @@ public final class ChatListener implements Listener {
         final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user) ? user.channel() : channelByPrefix.get();
 
         MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous());
+    }
+
+    private static String cleanseMessage(@NotNull final String message) {
+        // TODO: Maybe kyorify instead
+        return LEGACY_COLOR_PATTERN.matcher(
+            LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
+        ).replaceAll("");
     }
 }
