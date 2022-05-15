@@ -2,6 +2,7 @@ package at.helpch.chatchat.format;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public final class DefaultFormatFactory {
@@ -12,8 +13,13 @@ public final class DefaultFormatFactory {
     B - The default-format config option isn't set correctly
      */
     public static @NotNull ChatFormat createDefaultFormat() {
-        return new ChatFormat("default", 1,
-                List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] %player_name% » %message%"));
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
+        map.put("name", List.of("<white>%player_name%"));
+        map.put("message", List.of(" <gray>» <white><message>"));
+
+        return new ChatFormat("default", 2, map);
     }
 
 }

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class FormatUtils {
     private static final String FORMAT_PERMISSION = "chatchat.format.";
@@ -42,7 +43,14 @@ public final class FormatUtils {
             @NotNull final Player player,
             @NotNull final ComponentLike message) {
         return MessageUtils.parseToMiniMessage(
-            PlaceholderAPI.setPlaceholders(player, String.join("", format.parts())),
+            PlaceholderAPI.setPlaceholders(
+                player,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ),
             Placeholder.component("message", message)
         );
     }
@@ -58,7 +66,14 @@ public final class FormatUtils {
                 PlaceholderAPI.setRelationalPlaceholders(
                     player,
                     recipient,
-                    PlaceholderAPI.setPlaceholders(player, String.join("", format.parts()))
+                    PlaceholderAPI.setPlaceholders(
+                        player,
+                        format.parts()
+                            .values()
+                            .stream()
+                            .map(part -> String.join("", part))
+                            .collect(Collectors.joining())
+                    )
                 )
             ),
             Placeholder.component("message", message)
@@ -76,8 +91,8 @@ public final class FormatUtils {
             toReplace
                 .replace("%recipient%", player.getName())
                 // This is to support PAPI placeholders for the recipient. Ex: %recipient_player_name%.
-                // I know it can be better and probably needs a complex parser but that requires, time, skills and patience,
-                // none of which I actually have.
+                // TODO: Improve this. We need an actual parser for this instead of this. Possibly an even better idea
+                //  is to use MiniMessage tags instead.
                 .replace("%recipient_", "%")
             );
     }

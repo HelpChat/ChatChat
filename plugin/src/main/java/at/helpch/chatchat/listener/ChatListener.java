@@ -50,7 +50,8 @@ public final class ChatListener implements Listener {
     }
 
     private static String cleanseMessage(@NotNull final String message) {
-        // TODO: Maybe kyorify instead
+        // TODO: Maybe kyorify instead. The issues with that is they will only work if the player has permission for
+        //  chat colors anyways.
         return LEGACY_COLOR_PATTERN.matcher(
             LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
         ).replaceAll("");

@@ -3,22 +3,52 @@ default-format: 'default'
 formats:
   default: # this is the default format as set by default-format. No permission is needed.
     priority: 2 # lower number = higher priority
-    # list of all the segments of the format, supports unlimited amount of segments.
-    # Technically only 1 line is needed, but to clean up the config, multiple lines can be used
+    # list of all the parts of the format, supports unlimited amount of parts.
+    # Technically only 1 part is needed and every part only needs one line but to clean up the config, multiple parts
+    # can be used and each part can have multiple lines.
     # These parts can be formatted using MiniMessage, which can be found here: https://docs.adventure.kyori.net/minimessage/index.html
     parts:
-      - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%chatchat_channel_prefix%</hover></click>'
-      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> [%vault_group%]</hover>'
-      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
-      - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
-      - '<message>'
-      - '<hover:show_text:"This forces everyone to have a ! on the end. Haha">!</hover>'
+      channel:
+        - '<click:open_url:"https://google.com">'
+        - '<hover:show_text:"I am chatting in the %channel_name% channel<newline>Some new line">'
+        - '%chatchat_channel_prefix%'
+        - '</hover>'
+        - '</click>'
+      group:
+        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
+        - ' [%vault_group%]'
+        - '</hover>'
+      name:
+        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
+        - ' %player_displayname%'
+        - '</hover>'
+      divider:
+        - '<hover:show_text:"Cool diver tooltip here">'
+        - ' > '
+        - '</hover>'
+      message:
+        - '<message>'
+        - '<hover:show_text:"This forces everyone to have a ! on the end. Haha">'
+        - '!'
+        - '</hover>'
 
   staff: # user needs 'chatchat.format.staff' permission
     priority: 1
     parts:
-      - '<click:open_url:"https://google.com"><hover:show_text:"I am chatting in the %channel% channel<newline>Some new line">%chatchat_channel_prefix%</hover></click>'
-      - '<hover:show_text:"Hey look, i am staff<newline>Some new line">  [STAFF]</hover>'
-      - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line"> %player_displayname%</hover>'
-      - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
-      - '<message>'
+      channel:
+        - '<click:open_url:"https://google.com">'
+        - '<hover:show_text:"I am chatting in the %channel_name% channel<newline>Some new line">'
+        - '%chatchat_channel_prefix%'
+        - '</hover>'
+        - '</click>'
+      prefix:
+        - '<hover:show_text:"Hey look, i am staff<newline>Some new line">'
+        - ' [STAFF]'
+        - '</hover>'
+      name:
+        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
+        - ' %player_displayname%'
+        - '</hover>'
+      message-and-divider:
+        - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
+        - '<message>'
