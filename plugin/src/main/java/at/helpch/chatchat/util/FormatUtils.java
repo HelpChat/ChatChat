@@ -41,10 +41,10 @@ public final class FormatUtils {
             @NotNull final Format format,
             @NotNull final Player player,
             @NotNull final ComponentLike message) {
-        return format.parts().stream()
-            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> MessageUtils.parseToMiniMessage(part, Placeholder.component("message", message)))
-            .collect(Component.toComponent());
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(player, String.join("", format.parts())),
+            Placeholder.component("message", message)
+        );
     }
 
     public static @NotNull Component parseFormat(
@@ -52,12 +52,17 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {
-        return format.parts().stream()
-            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> PlaceholderAPI.setRelationalPlaceholders(player, recipient, part))
-            .map(part -> replaceRecipientPlaceholder(recipient, part))
-            .map(part -> MessageUtils.parseToMiniMessage(part, Placeholder.component("message", message)))
-            .collect(Component.toComponent());
+        return MessageUtils.parseToMiniMessage(
+            replaceRecipientPlaceholder(
+                recipient,
+                PlaceholderAPI.setRelationalPlaceholders(
+                    player,
+                    recipient,
+                    PlaceholderAPI.setPlaceholders(player, String.join("", format.parts()))
+                )
+            ),
+            Placeholder.component("message", message)
+        );
     }
 
     private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {

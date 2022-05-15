@@ -31,8 +31,18 @@ public final class WhisperCommand extends BaseCommand {
     @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(final ChatUser user, final ChatUser recipient, @Join final String message) {
 
+        if (!user.privateMessages()) {
+            user.sendMessage(plugin.configManager().messages().repliesDisabled());
+            return;
+        }
+
         if (user.equals(recipient)) {
             user.sendMessage(plugin.configManager().messages().cantMessageYourself());
+            return;
+        }
+
+        if (!recipient.privateMessages()) {
+            user.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
             return;
         }
 

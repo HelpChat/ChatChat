@@ -13,4 +13,8 @@ public interface ChatUser extends User {
     @NotNull Optional<ChatUser> lastMessagedUser();
 
     void lastMessagedUser(@Nullable final ChatUser user);
+
+    boolean privateMessages();
+
+    void privateMessages(final boolean enable);
 }

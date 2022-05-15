@@ -10,6 +10,7 @@ import at.helpch.chatchat.command.ReplyCommand;
 import at.helpch.chatchat.command.SocialSpyCommand;
 import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.WhisperCommand;
+import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
@@ -116,6 +117,7 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new ReloadCommand(this),
                 whisperCommand,
                 new ReplyCommand(this, whisperCommand),
+                new WhisperToggleCommand(this),
                 new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 
