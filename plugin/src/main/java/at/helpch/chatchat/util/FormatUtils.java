@@ -6,7 +6,10 @@ import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,39 +64,34 @@ public final class FormatUtils {
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {
         return MessageUtils.parseToMiniMessage(
-            replaceRecipientPlaceholder(
+            PlaceholderAPI.setRelationalPlaceholders(
+                player,
                 recipient,
-                PlaceholderAPI.setRelationalPlaceholders(
+                PlaceholderAPI.setPlaceholders(
                     player,
-                    recipient,
-                    PlaceholderAPI.setPlaceholders(
-                        player,
-                        format.parts()
-                            .values()
-                            .stream()
-                            .map(part -> String.join("", part))
-                            .collect(Collectors.joining())
-                    )
+                    format.parts()
+                        .values()
+                        .stream()
+                        .map(part -> String.join("", part))
+                        .collect(Collectors.joining())
                 )
             ),
-            Placeholder.component("message", message)
+            Placeholder.component("message", message),
+            recipientTagResolver(recipient)
         );
     }
 
-    private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+    private static @NotNull TagResolver recipientTagResolver(@NotNull final Player player) {
+        return TagResolver.builder()
+            // Could make the name a set of strings if we want more alternative namings.
+            .tag("recipient", (queue, context) -> queue.hasNext()
+                // Parse <recipient:PLACEHOLDERS>
+                ? Tag.selfClosingInserting(
+                    LegacyComponentSerializer.legacySection()
+                        .deserialize(PlaceholderAPI.setPlaceholders(player, '%' + queue.pop().value() + '%')))
 
-        if (!toReplace.contains("%recipient")) {
-            return toReplace;
-        }
-
-        return PlaceholderAPI.setPlaceholders(
-            player,
-            toReplace
-                .replace("%recipient%", player.getName())
-                // This is to support PAPI placeholders for the recipient. Ex: %recipient_player_name%.
-                // TODO: Improve this. We need an actual parser for this instead of this. Possibly an even better idea
-                //  is to use MiniMessage tags instead.
-                .replace("%recipient_", "%")
-            );
+                // Parse <recipient>
+                : Tag.selfClosingInserting(Component.text(player.getName()))
+            ).build();
     }
 }

@@ -59,7 +59,7 @@ public final class DefaultConfigObjects {
 
         map.put("sender", List.of("<gray>you"));
         map.put("separator", List.of(" <color:#40c9ff>-> "));
-        map.put("recipient", List.of("<gray>%recipient_player_name%"));
+        map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
         return new PMFormat("sender", map);
@@ -82,7 +82,7 @@ public final class DefaultConfigObjects {
         map.put("prefix", List.of("<gray>(spy) "));
         map.put("sender", List.of("%player_name%"));
         map.put("separator", List.of(" <#40c9ff>-> "));
-        map.put("recipient", List.of("<gray>%recipient_player_name%"));
+        map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
         return new PMFormat("socialspy", map);

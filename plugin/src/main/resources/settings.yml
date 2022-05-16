@@ -7,7 +7,7 @@ sender-format:
     separator:
       - ' <color:#40c9ff>-> '
     recipient:
-      - '<gray>%recipient_player_name%'
+      - '<gray><recipient:player_name>'
     message:
       - ' <#e81cff>» <white><message>'
 # The format to send to the recipient of a private message
@@ -32,7 +32,7 @@ social-spy-format:
     separator:
       - ' <#40c9ff>-> '
     recipient:
-      - '<gray>%recipient_player_name%'
+      - '<gray><recipient:player_name>'
     message:
       - ' <#e81cff>» <white><message>'
 
