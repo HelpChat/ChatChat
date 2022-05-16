@@ -1,9 +1,12 @@
 package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.ChatUser;
 import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +36,11 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
     public @NotNull List<String> getPlaceholders() {
         return List.of(
             "%chatchat_channel_name%",
-            "%chatchat_channel_prefix%"
+            "%chatchat_channel_prefix%",
+            "%chatchat_channel_message_prefix%",
+            "%chatchat_social_spy_enabled%",
+            "%chatchat_private_messages_enabled%",
+            "%chatchat_private_messages_recipient%"
         );
     }
 
@@ -44,38 +51,47 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
 
     @Override
     public String onRequest(final OfflinePlayer offlinePlayer, @NotNull final String input) {
-        final var params = PlaceholderAPI.setBracketPlaceholders(offlinePlayer, input).split("_");
+        final var parsedInput = PlaceholderAPI.setBracketPlaceholders(offlinePlayer, input);
 
-        if (offlinePlayer == null) {
-            return "";
-        }
-
-        if (!offlinePlayer.isOnline()) {
-            return "";
-        }
-
-        final var player = offlinePlayer.getPlayer();
-
-        if (player == null) {
-            return "";
-        }
-
-        final var user = plugin.usersHolder().getUser(player);
-
-        if (params.length < 2) {
+        if (offlinePlayer != null && !offlinePlayer.isOnline()) {
             return null;
         }
 
-        if (params[0].equals("channel")) {
-            switch (params[1]) {
-                case "name":
-                    return user.channel().name();
-                case "prefix":
-                    return user.channel().channelPrefix();
-            }
+        final var user = plugin.usersHolder().getUser(
+            offlinePlayer == null
+                ? Identity.nil().uuid()
+                : offlinePlayer.getUniqueId()
+        );
 
+        switch(parsedInput) {
+            case "channel_name":
+                return user.channel().name();
+            case "channel_prefix":
+                return user.channel().channelPrefix();
+            case "channel_message_prefix":
+                return user.channel().messagePrefix();
+            case "social_spy_enabled":
+                return formatBoolean(plugin.usersHolder().isSocialSpy(user.uuid()));
+        }
+
+        if (!(user instanceof ChatUser)) {
+            return null;
+        }
+
+        final var chatUser = (ChatUser) user;
+
+        switch(parsedInput) {
+            case "private_messages_enabled":
+                return formatBoolean(chatUser.privateMessages());
+            case "private_messages_recipient":
+                return chatUser.lastMessagedUser().map(value -> value.player().getName()).orElse("");
         }
 
         return null;
+    }
+
+
+    private @NotNull String formatBoolean(boolean bool) {
+        return bool ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
     }
 }
