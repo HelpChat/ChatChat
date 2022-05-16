@@ -50,11 +50,6 @@ public final class ChatListener implements Listener {
     }
 
     private static String cleanseMessage(@NotNull final String message) {
-        // TODO: Maybe kyorify instead. The issues with that is they will only work if the player has permission for
-        //  chat colors anyways.
-        //  There's an updated. We might be able to use
-        //  https://jd.adventure.kyori.net/text-minimessage/4.10.1/net/kyori/adventure/text/minimessage/tag/resolver/Placeholder.html#parsed(java.lang.String,java.lang.String)
-        //
         return LEGACY_COLOR_PATTERN.matcher(
             LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
         ).replaceAll("");
