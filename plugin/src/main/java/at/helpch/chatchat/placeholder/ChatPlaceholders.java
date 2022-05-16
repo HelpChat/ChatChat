@@ -2,6 +2,7 @@ package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import java.util.List;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +44,7 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
 
     @Override
     public String onRequest(final OfflinePlayer offlinePlayer, @NotNull final String input) {
-        final var params = input.split("_");
+        final var params = PlaceholderAPI.setBracketPlaceholders(offlinePlayer, input).split("_");
 
         if (offlinePlayer == null) {
             return "";
