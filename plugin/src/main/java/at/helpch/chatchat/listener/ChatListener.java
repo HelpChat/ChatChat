@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public final class ChatListener implements Listener {
 
-    private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("§[\\da-f]");
+    private static final Pattern LEGACY_FORMATS_PATTERN = Pattern.compile("§[\\da-fk-or]");
     private static final Pattern LEGACY_HEX_COLOR_PATTERN = Pattern.compile("§x(§[\\da-fA-F]){6}");
     private final ChatChatPlugin plugin;
 
@@ -50,8 +50,8 @@ public final class ChatListener implements Listener {
     }
 
     private static String cleanseMessage(@NotNull final String message) {
-        return LEGACY_COLOR_PATTERN.matcher(
+        return LEGACY_FORMATS_PATTERN.matcher(
             LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
-        ).replaceAll("");
+        ).replaceAll("").replace("§", "");
     }
 }
