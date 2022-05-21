@@ -4,17 +4,19 @@ import at.helpch.chatchat.api.Format;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @ConfigSerializable
 public final class PMFormat implements Format {
 
     private final String name;
-    private final List<String> parts;
+    private final Map<String, List<String>> parts;
 
-    public PMFormat(@NotNull final String name, @NotNull final List<String> parts) {
+    public PMFormat(@NotNull final String name, @NotNull final Map<String, List<String>> parts) {
         this.name = name;
-        this.parts = parts;
+        this.parts = Collections.unmodifiableMap(parts);
     }
 
     @Override
@@ -38,12 +40,12 @@ public final class PMFormat implements Format {
     }
 
     @Override
-    public @NotNull List<String> parts() {
+    public @NotNull Map<String, List<String>> parts() {
         return parts;
     }
 
     @Override
-    public @NotNull PMFormat parts(@NotNull final List<String> parts) {
+    public @NotNull PMFormat parts(@NotNull final Map<String, List<String>> parts) {
         return new PMFormat(name, parts);
     }
 
