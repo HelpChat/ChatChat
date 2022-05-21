@@ -4,6 +4,10 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Hook;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
+import at.helpch.chatchat.hooks.vanish.VanishHook;
+import at.helpch.chatchat.hooks.vanish.impl.PremiumVanishHook;
+import at.helpch.chatchat.hooks.vanish.impl.SuperVanishHook;
+import at.helpch.chatchat.hooks.vanish.impl.VanillaVanishHook;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +17,15 @@ import java.util.function.Function;
 
 public final class HookManager {
     private static final Set<Function<ChatChatPlugin, ? extends Hook>> constructors = Set.of(
-            ChatChatDsrvHook::new,
-            ChatChatTownyHook::new
+        ChatChatDsrvHook::new,
+        ChatChatTownyHook::new,
+        VanillaVanishHook::new,
+        SuperVanishHook::new,
+        PremiumVanishHook::new
     );
     private final ChatChatPlugin plugin;
     private final Set<Hook> hooks = new HashSet<>();
+    private final Set<VanishHook> vanishHooks = new HashSet<>();
     private boolean hasBeenInitialized = false;
 
     public HookManager(final @NotNull ChatChatPlugin plugin) {
@@ -38,7 +46,12 @@ public final class HookManager {
             if (hook.dependency().isPresent() && (hookPlugin == null || !hookPlugin.isEnabled())) continue;
 
             hook.enable();
-            hooks.add(hook);
+
+            if (hook instanceof VanishHook) {
+                vanishHooks.add((VanishHook) hook);
+            } else {
+                hooks.add(hook);
+            }
 
             if (hookPlugin != null) {
                 plugin.getLogger().info("Enabled " + hook.dependency() + " hook");
@@ -48,5 +61,9 @@ public final class HookManager {
 
     public @NotNull Set<Hook> hooks() {
         return hooks;
+    }
+
+    public @NotNull Set<VanishHook> vanishHooks() {
+        return vanishHooks;
     }
 }

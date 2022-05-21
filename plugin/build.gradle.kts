@@ -15,6 +15,8 @@ repositories {
     // dsrv + dependencies
     maven("https://m2.dv8tion.net/releases")
     maven("https://nexus.scarsz.me/content/groups/public")
+    // supervanish
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -31,6 +33,7 @@ dependencies {
     compileOnly(libs.papi)
     compileOnly(libs.towny)
     compileOnly(libs.discordsrv)
+    compileOnly(libs.supervanish)
 }
 
 bukkit {
@@ -38,7 +41,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny", "DiscordSRV")
+    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish")
     apiVersion = "1.13"
     permissions {
         permission("chatchat.admin") {
