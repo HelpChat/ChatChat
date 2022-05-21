@@ -26,7 +26,7 @@ public final class MessagesHolder {
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
-    private Component channelSwitched = text("You have switched to the %channel% channel", GREEN);
+    private Component channelSwitched = text("You have switched to the <channel> channel", GREEN);
 
     // command related
     private Component commandUnknownCommand = text("Unknown Command.", RED);
