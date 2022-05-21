@@ -13,6 +13,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public final class MessagesHolder {
 
+    // user related
+    private Component consoleOnly = text("Only the console can do this!", RED);
+    private Component playersOnly = text("Only players can do this!", RED);
     // messaging related
     private Component noReplies = text("You have no one to reply to!", RED);
     private Component repliesDisabled = text("You can't send private messages while they're disabled!", RED);
@@ -33,6 +36,14 @@ public final class MessagesHolder {
     private Component commandInvalidUsage = text("Invalid usage.", RED);
     private Component commandInvalidArgument = text("Invalid argument.", RED);
     private Component commandNoPermission = text("No Permission.", RED);
+
+    public @NotNull Component consoleOnly() {
+        return consoleOnly;
+    }
+
+    public @NotNull Component playersOnly() {
+        return playersOnly;
+    }
 
     public @NotNull Component noReplies() {
         return noReplies;

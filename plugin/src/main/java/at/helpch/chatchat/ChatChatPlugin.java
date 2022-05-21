@@ -44,7 +44,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onEnable() {
         commandManager = BukkitCommandManager.create(this,
                 usersHolder::getUser,
-                new UserSenderValidator());
+                new UserSenderValidator(this));
 
         audiences = BukkitAudiences.create(this);
         hookManager.init();
