@@ -1,5 +1,6 @@
 package at.helpch.chatchat.api;
 
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,7 +10,7 @@ public interface Hook {
     /**
      * @return the plugin that this hook depends on
      */
-    @NotNull String dependency();
+    @NotNull Optional<String> dependency();
 
     /**
      * Enable the hook.

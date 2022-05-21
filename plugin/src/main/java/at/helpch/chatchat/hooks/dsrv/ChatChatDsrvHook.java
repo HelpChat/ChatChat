@@ -3,6 +3,7 @@ package at.helpch.chatchat.hooks.dsrv;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Hook;
 import github.scarsz.discordsrv.DiscordSRV;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,8 @@ public final class ChatChatDsrvHook implements Hook {
     }
 
     @Override
-    public @NotNull String dependency() {
-        return "DiscordSRV";
+    public @NotNull Optional<String> dependency() {
+        return Optional.of("DiscordSRV");
     }
 
     @Override

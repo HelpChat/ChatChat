@@ -2,6 +2,7 @@ package at.helpch.chatchat.hooks.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Hook;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 public class ChatChatTownyHook implements Hook {
@@ -13,8 +14,8 @@ public class ChatChatTownyHook implements Hook {
     }
 
     @Override
-    public @NotNull String dependency() {
-        return "Towny";
+    public @NotNull Optional<String> dependency() {
+        return Optional.of("Towny");
     }
 
     @Override

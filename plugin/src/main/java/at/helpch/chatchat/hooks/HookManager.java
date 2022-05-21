@@ -31,12 +31,18 @@ public final class HookManager {
         hasBeenInitialized = true;
         for (final var constructor : constructors) {
             final var hook = constructor.apply(plugin);
-            final @Nullable var hookPlugin = Bukkit.getPluginManager().getPlugin(hook.dependency());
-            if (hookPlugin == null || !hookPlugin.isEnabled()) continue;
+            final @Nullable var hookPlugin = hook.dependency().isPresent()
+                ? Bukkit.getPluginManager().getPlugin(hook.dependency().get())
+                : null;
+
+            if (hook.dependency().isPresent() && (hookPlugin == null || !hookPlugin.isEnabled())) continue;
 
             hook.enable();
             hooks.add(hook);
-            plugin.getLogger().info("Enabled " + hook.dependency() + " hook");
+
+            if (hookPlugin != null) {
+                plugin.getLogger().info("Enabled " + hook.dependency() + " hook");
+            }
         }
     }
 
