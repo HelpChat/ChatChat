@@ -4,11 +4,11 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
-
+import at.helpch.chatchat.cache.ExpiringCache;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;
@@ -22,11 +22,12 @@ public final class ChatUserImpl implements ChatUser {
         this.uuid = uuid;
     }
 
-    private @NotNull final UUID uuid;
-    private ChatUser lastMessaged;
-    private boolean privateMessages = true;
+    private final ExpiringCache<ChatUser> lastMessagedUser = new ExpiringCache<>(5, TimeUnit.MINUTES);
+
+    private final UUID uuid;
     private Channel channel;
     private Format format;
+    private boolean privateMessages = true;
 
     @Override
     public @NotNull Channel channel() {
@@ -55,12 +56,12 @@ public final class ChatUserImpl implements ChatUser {
 
     @Override
     public @NotNull Optional<ChatUser> lastMessagedUser() {
-        return Optional.ofNullable(lastMessaged);
+        return lastMessagedUser.get();
     }
 
     @Override
     public void lastMessagedUser(@Nullable final ChatUser user) {
-        this.lastMessaged = user;
+        lastMessagedUser.put(user);
     }
 
     @Override
