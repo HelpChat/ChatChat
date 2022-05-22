@@ -11,6 +11,7 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final ChatUser user, final ChatUser recipient, @Join final String message) {
+    public void whisperCommand(final ChatUser user, @Suggestion(value = "recipients") final ChatUser recipient, @Join final String message) {
 
         if (!user.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().repliesDisabled());
@@ -38,6 +39,11 @@ public final class WhisperCommand extends BaseCommand {
 
         if (user.equals(recipient)) {
             user.sendMessage(plugin.configManager().messages().cantMessageYourself());
+            return;
+        }
+
+        if (!user.canSee(recipient)) {
+            user.sendMessage(plugin.configManager().messages().userOffline());
             return;
         }
 
