@@ -17,4 +17,6 @@ public interface User extends ForwardingAudience.Single, Identified {
     void format(@NotNull final Format format);
 
     @NotNull UUID uuid();
+
+    boolean canSee(@NotNull final User target);
 }

@@ -20,6 +20,9 @@ import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
@@ -27,8 +30,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
@@ -45,6 +46,17 @@ public final class ChatChatPlugin extends JavaPlugin {
         commandManager = BukkitCommandManager.create(this,
                 usersHolder::getUser,
                 new UserSenderValidator(this));
+
+        commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
+            usersHolder.users()
+                .stream()
+                .filter(ChatUser.class::isInstance)
+                .map(ChatUser.class::cast)
+                .filter(sender::canSee)
+                .map(ChatUser::player)
+                .map(Player::getName)
+                .collect(Collectors.toUnmodifiableList())
+        );
 
         audiences = BukkitAudiences.create(this);
         hookManager.init();
@@ -96,6 +108,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull BukkitCommandManager<User> commandManager() {
         return commandManager;
+    }
+
+    public @NotNull HookManager hookManager() {
+        return hookManager;
     }
 
     private void registerCommands() {
