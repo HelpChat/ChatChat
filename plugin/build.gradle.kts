@@ -44,7 +44,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish")
+    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish", "Essentials")
     apiVersion = "1.13"
     permissions {
         permission("chatchat.admin") {

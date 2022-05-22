@@ -126,15 +126,13 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .map(Player::getName)
                 .collect(Collectors.toList())));
 
-        final var whisperCommand = new WhisperCommand(this);
-
         List.of(
-                new MainCommand(),
-                new ReloadCommand(this),
-                whisperCommand,
-                new ReplyCommand(this, whisperCommand),
-                new WhisperToggleCommand(this),
-                new SocialSpyCommand(this)
+            new MainCommand(),
+            new ReloadCommand(this),
+            new WhisperCommand(this, false),
+            new ReplyCommand(this, new WhisperCommand(this, true)),
+            new WhisperToggleCommand(this),
+            new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands

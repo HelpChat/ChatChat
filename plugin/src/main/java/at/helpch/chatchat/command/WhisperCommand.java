@@ -23,9 +23,11 @@ public final class WhisperCommand extends BaseCommand {
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
     private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
+    private final boolean reply;
 
-    public WhisperCommand(@NotNull final ChatChatPlugin plugin) {
+    public WhisperCommand(@NotNull final ChatChatPlugin plugin, final boolean reply) {
         this.plugin = plugin;
+        this.reply = reply;
     }
 
     @Default
@@ -46,8 +48,7 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        // TODO: Somehow allow the /reply command work even if this condition is met but do not allow the /msg command.
-        if (!user.canSee(recipient)) {
+        if (!user.canSee(recipient) && !reply) {
             user.sendMessage(plugin.configManager().messages().userOffline());
             return;
         }
