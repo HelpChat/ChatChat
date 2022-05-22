@@ -25,6 +25,7 @@ public final class MessagesHolder {
     private Component privateMessagesEnabled = text("Your private messages have been enabled!", GREEN);
     private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
     private Component cantMessageYourself = text("You can't message yourself!", RED);
+    private Component emptyMessage = text("You can't send an empty message!", RED);
     private Component specialCharactersNoPermission = text("You do not have permission to use special characters!", RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
@@ -65,6 +66,10 @@ public final class MessagesHolder {
 
     public @NotNull Component cantMessageYourself() {
         return cantMessageYourself;
+    }
+
+    public @NotNull Component emptyMessage() {
+        return emptyMessage;
     }
 
     public @NotNull Component privateMessagesEnabled() {

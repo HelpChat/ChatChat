@@ -30,7 +30,11 @@ public final class WhisperCommand extends BaseCommand {
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final ChatUser user, @Suggestion(value = "recipients") final ChatUser recipient, @Join final String message) {
+    public void whisperCommand(
+        final ChatUser user,
+        @Suggestion(value = "recipients") final ChatUser recipient,
+        @Join final String message
+    ) {
 
         if (!user.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().repliesDisabled());
@@ -42,6 +46,7 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
+        // TODO: Somehow allow the /reply command work even if this condition is met but do not allow the /msg command.
         if (!user.canSee(recipient)) {
             user.sendMessage(plugin.configManager().messages().userOffline());
             return;
@@ -49,6 +54,11 @@ public final class WhisperCommand extends BaseCommand {
 
         if (!recipient.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
+            return;
+        }
+
+        if (message.isBlank()) {
+            user.sendMessage(plugin.configManager().messages().emptyMessage());
             return;
         }
 
