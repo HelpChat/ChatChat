@@ -13,6 +13,7 @@ papi = "2.11.1"
 towny = "0.98.1.3"
 discordsrv = "1.25.1"
 supervanish = "6.2.6-4"
+essentials = "2.19.4"
 bstats = "3.0.0"
 
 [libraries]
@@ -31,4 +32,5 @@ papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
 supervanish = { module = "com.github.LeonMangler:SuperVanish", version.ref = "supervanish" }
+essentials = { module = "net.essentialsx:EssentialsX", version.ref = "essentials" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }

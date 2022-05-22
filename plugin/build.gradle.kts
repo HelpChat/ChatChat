@@ -17,6 +17,8 @@ repositories {
     maven("https://nexus.scarsz.me/content/groups/public")
     // supervanish
     maven("https://jitpack.io")
+    // essentialsx
+    maven("https://repo.essentialsx.net/releases/")
 }
 
 dependencies {
@@ -34,6 +36,7 @@ dependencies {
     compileOnly(libs.towny)
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
+    compileOnly(libs.essentials)
 }
 
 bukkit {

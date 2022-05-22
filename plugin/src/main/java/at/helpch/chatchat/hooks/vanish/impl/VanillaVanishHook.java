@@ -3,6 +3,7 @@ package at.helpch.chatchat.hooks.vanish.impl;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.hooks.vanish.VanishHook;
+import java.util.List;
 import java.util.Optional;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -22,7 +23,7 @@ public class VanillaVanishHook extends VanishHook {
     public VanillaVanishHook(ChatChatPlugin ignoredPlugin) {}
 
     @Override
-    public @NotNull Optional<String> dependency() {
+    public @NotNull Optional<@NotNull List<String>> dependency() {
         return Optional.empty();
     }
 

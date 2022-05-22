@@ -5,10 +5,15 @@ import at.helpch.chatchat.api.Hook;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.hooks.vanish.VanishHook;
-import at.helpch.chatchat.hooks.vanish.impl.PremiumVanishHook;
+import at.helpch.chatchat.hooks.vanish.impl.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.impl.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.impl.VanillaVanishHook;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
@@ -20,8 +25,8 @@ public final class HookManager {
         ChatChatDsrvHook::new,
         ChatChatTownyHook::new,
         VanillaVanishHook::new,
-        SuperVanishHook::new,
-        PremiumVanishHook::new
+        EssentialsVanishHook::new,
+        SuperVanishHook::new
     );
     private final ChatChatPlugin plugin;
     private final Set<Hook> hooks = new HashSet<>();
@@ -37,13 +42,21 @@ public final class HookManager {
             throw new IllegalStateException("Hook manager initialized twice");
         }
         hasBeenInitialized = true;
+
         for (final var constructor : constructors) {
             final var hook = constructor.apply(plugin);
-            final @Nullable var hookPlugin = hook.dependency().isPresent()
-                ? Bukkit.getPluginManager().getPlugin(hook.dependency().get())
-                : null;
 
-            if (hook.dependency().isPresent() && (hookPlugin == null || !hookPlugin.isEnabled())) continue;
+            final @Nullable List<Plugin> hookPlugins = hook.dependency().isPresent()
+                ? hook.dependency().get().stream()
+                .map(hookPlugin -> Bukkit.getPluginManager().getPlugin(hookPlugin))
+                .filter(Objects::nonNull)
+                .filter(Plugin::isEnabled)
+                .collect(Collectors.toUnmodifiableList())
+                : Collections.emptyList();
+
+            if (hook.dependency().isPresent() && hookPlugins.isEmpty()) {
+                continue;
+            }
 
             hook.enable();
 
@@ -53,8 +66,8 @@ public final class HookManager {
                 hooks.add(hook);
             }
 
-            if (hookPlugin != null) {
-                plugin.getLogger().info("Enabled " + hook.dependency() + " hook");
+            if (!hookPlugins.isEmpty()) {
+                plugin.getLogger().info("Enabled " + hookPlugins.get(0).getName() + " hook");
             }
         }
     }

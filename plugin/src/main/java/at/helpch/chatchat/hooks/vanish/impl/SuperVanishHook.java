@@ -3,7 +3,9 @@ package at.helpch.chatchat.hooks.vanish.impl;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.hooks.vanish.VanishHook;
+import at.helpch.chatchat.listener.SuperVanishListener;
 import de.myzelyam.api.vanish.VanishAPI;
+import java.util.List;
 import java.util.Optional;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +21,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SuperVanishHook extends VanishHook {
 
-    public SuperVanishHook(ChatChatPlugin ignoredPlugin) {}
+    private final ChatChatPlugin plugin;
 
-    @Override
-    public @NotNull Optional<String> dependency() {
-        return Optional.of("SuperVanish");
+    public SuperVanishHook(ChatChatPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
-    public void enable() {}
+    public @NotNull Optional<@NotNull List<String>> dependency() {
+        return Optional.of(List.of("SuperVanish", "PremiumVanish"));
+    }
+
+    @Override
+    public void enable() {
+        plugin.getServer().getPluginManager().registerEvents(new SuperVanishListener(plugin), plugin);
+    }
 
     @Override
     public boolean canSee(ChatUser user, ChatUser target) {
