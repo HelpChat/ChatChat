@@ -173,8 +173,10 @@ public final class MessageProcessor {
                     channelMentionProcessResult.getValue()
                 );
 
-                target.playSound(mentionSound);
                 target.sendMessage(component);
+                if (user.canSee(target)) {
+                    target.playSound(mentionSound);
+                }
                 continue;
             }
 
@@ -218,8 +220,10 @@ public final class MessageProcessor {
                     channelMentionProcessResult.getValue()
                 );
 
-                target.playSound(mentionSound);
                 target.sendMessage(component);
+                if (user.canSee(target)) {
+                    target.playSound(mentionSound);
+                }
                 continue;
             }
 
@@ -229,15 +233,17 @@ public final class MessageProcessor {
                 personalMentionProcessResult.getValue()
             );
 
-            target.playSound(mentionSound);
             target.sendMessage(component);
-            userMessage = MentionUtils.processPersonalMentions(
-                mentionPrefix,
-                personalMentionFormat,
-                user,
-                (ChatUser) target,
-                userMessage
-            ).getValue();
+            if (user.canSee(target)) {
+                target.playSound(mentionSound);
+                userMessage = MentionUtils.processPersonalMentions(
+                    mentionPrefix,
+                    personalMentionFormat,
+                    user,
+                    (ChatUser) target,
+                    userMessage
+                ).getValue();
+            }
         }
 
         if (!userIsTarget) {

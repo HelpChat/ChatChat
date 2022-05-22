@@ -40,6 +40,11 @@ public final class ConsoleUser implements User {
     }
 
     @Override
+    public boolean canSee(@NotNull User target) {
+        return true;
+    }
+
+    @Override
     public @NotNull Audience audience() {
         return ChatChatPlugin.audiences().console();
     }

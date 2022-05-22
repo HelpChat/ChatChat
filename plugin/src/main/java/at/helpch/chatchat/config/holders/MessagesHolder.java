@@ -16,6 +16,8 @@ public final class MessagesHolder {
     // user related
     private Component consoleOnly = text("Only the console can do this!", RED);
     private Component playersOnly = text("Only players can do this!", RED);
+    private Component userOffline = text("The user is not online!", RED);
+
     // messaging related
     private Component noReplies = text("You have no one to reply to!", RED);
     private Component repliesDisabled = text("You can't send private messages while they're disabled!", RED);
@@ -43,6 +45,10 @@ public final class MessagesHolder {
 
     public @NotNull Component playersOnly() {
         return playersOnly;
+    }
+
+    public @NotNull Component userOffline() {
+        return userOffline;
     }
 
     public @NotNull Component noReplies() {
