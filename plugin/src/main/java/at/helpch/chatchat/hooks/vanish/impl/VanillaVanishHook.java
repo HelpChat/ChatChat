@@ -3,6 +3,7 @@ package at.helpch.chatchat.hooks.vanish.impl;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.hooks.vanish.VanishHook;
+import at.helpch.chatchat.listener.VanillaVanishListener;
 import java.util.List;
 import java.util.Optional;
 import org.bukkit.entity.Player;
@@ -20,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VanillaVanishHook extends VanishHook {
 
-    public VanillaVanishHook(ChatChatPlugin ignoredPlugin) {}
+    private final ChatChatPlugin plugin;
+
+    public VanillaVanishHook(ChatChatPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public @NotNull Optional<@NotNull List<String>> dependency() {
@@ -28,7 +33,9 @@ public class VanillaVanishHook extends VanishHook {
     }
 
     @Override
-    public void enable() {}
+    public void enable() {
+        plugin.getServer().getPluginManager().registerEvents(new VanillaVanishListener(plugin), plugin);
+    }
 
     @Override
     public boolean canSee(ChatUser user, ChatUser target) {

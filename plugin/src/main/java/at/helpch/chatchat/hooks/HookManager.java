@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.Hook;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.hooks.vanish.VanishHook;
-import at.helpch.chatchat.hooks.vanish.impl.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.impl.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.impl.VanillaVanishHook;
 import java.util.Collections;
@@ -25,7 +24,6 @@ public final class HookManager {
         ChatChatDsrvHook::new,
         ChatChatTownyHook::new,
         VanillaVanishHook::new,
-        EssentialsVanishHook::new,
         SuperVanishHook::new
     );
     private final ChatChatPlugin plugin;
@@ -67,7 +65,7 @@ public final class HookManager {
             }
 
             if (!hookPlugins.isEmpty()) {
-                plugin.getLogger().info("Enabled " + hookPlugins.get(0).getName() + " hook");
+                plugin.getLogger().info("Enabled " + hookPlugins.get(0).getName() + " hook.");
             }
         }
     }
