@@ -1,12 +1,12 @@
 package at.helpch.chatchat.hooks;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Hook;
+import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
-import at.helpch.chatchat.hooks.vanish.VanishHook;
-import at.helpch.chatchat.hooks.vanish.impl.SuperVanishHook;
-import at.helpch.chatchat.hooks.vanish.impl.VanillaVanishHook;
+import at.helpch.chatchat.api.hook.VanishHook;
+import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
+import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

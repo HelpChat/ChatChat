@@ -1,8 +1,8 @@
-package at.helpch.chatchat.hooks.vanish.impl;
+package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.hooks.vanish.VanishHook;
+import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.VanillaVanishListener;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class VanillaVanishHook extends VanishHook {
 
     private final ChatChatPlugin plugin;
 
-    public VanillaVanishHook(ChatChatPlugin plugin) {
+    public VanillaVanishHook(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,7 +38,7 @@ public class VanillaVanishHook extends VanishHook {
     }
 
     @Override
-    public boolean canSee(ChatUser user, ChatUser target) {
+    public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
         return user.player().canSee(target.player());
     }
 }

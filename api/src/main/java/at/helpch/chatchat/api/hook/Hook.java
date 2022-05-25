@@ -1,4 +1,4 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.hook;
 
 import java.util.List;
 import java.util.Optional;

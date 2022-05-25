@@ -1,8 +1,8 @@
-package at.helpch.chatchat.hooks.vanish.impl;
+package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.hooks.vanish.VanishHook;
+import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.SuperVanishListener;
 import de.myzelyam.api.vanish.VanishAPI;
 import java.util.List;
@@ -23,7 +23,7 @@ public class SuperVanishHook extends VanishHook {
 
     private final ChatChatPlugin plugin;
 
-    public SuperVanishHook(ChatChatPlugin plugin) {
+    public SuperVanishHook(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,7 +38,7 @@ public class SuperVanishHook extends VanishHook {
     }
 
     @Override
-    public boolean canSee(ChatUser user, ChatUser target) {
+    public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
         return VanishAPI.canSee(user.player(), target.player());
     }
 }

@@ -1,7 +1,8 @@
-package at.helpch.chatchat.hooks.vanish;
+package at.helpch.chatchat.api.hook;
 
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.Hook;
+import at.helpch.chatchat.api.hook.Hook;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class VanishHook implements Hook {
     /**
@@ -10,5 +11,5 @@ public abstract class VanishHook implements Hook {
      * @param target the target for which to check if its visible to the user.
      * @return true if the user can see the target, false otherwise.
      */
-    public abstract boolean canSee(ChatUser user, ChatUser target);
+    public abstract boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target);
 }
