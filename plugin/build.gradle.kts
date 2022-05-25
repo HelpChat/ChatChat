@@ -42,6 +42,7 @@ bukkit {
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
     softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish")
+    loadbefore = listOf("Essentials")
     apiVersion = "1.13"
     permissions {
         permission("chatchat.admin") {
