@@ -23,8 +23,6 @@ public class VanillaVanishListener implements Listener {
             return;
         }
 
-        plugin.getLogger().info("Player: " + event.getEntity().getName() + "has vanished for: " + event.getPlayer().getName());
-
         final var chatUser = (ChatUser) plugin.usersHolder().getUser(event.getPlayer());
 
         final var lastMessaged = chatUser.lastMessagedUser();
