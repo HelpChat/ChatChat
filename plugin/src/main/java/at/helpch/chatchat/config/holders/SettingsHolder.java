@@ -19,8 +19,8 @@ public final class SettingsHolder {
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
 
-    private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String mentionPrefix = "@";
+    private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;

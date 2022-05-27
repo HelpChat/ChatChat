@@ -37,7 +37,7 @@ public final class SwitchChannelCommand extends BaseCommand {
         if (message.isEmpty()) {
             user.channel(channel);
             user.sendMessage(plugin.configManager().messages().channelSwitched()
-                    .replaceText(builder -> builder.matchLiteral("%channel%").replacement(channel.name())));
+                    .replaceText(builder -> builder.matchLiteral("<channel>").replacement(channel.name())));
             return;
         }
 

@@ -11,6 +11,7 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -22,14 +23,20 @@ public final class WhisperCommand extends BaseCommand {
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
     private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
+    private final boolean reply;
 
-    public WhisperCommand(@NotNull final ChatChatPlugin plugin) {
+    public WhisperCommand(@NotNull final ChatChatPlugin plugin, final boolean reply) {
         this.plugin = plugin;
+        this.reply = reply;
     }
 
     @Default
     @Permission(MESSAGE_PERMISSION)
-    public void whisperCommand(final ChatUser user, final ChatUser recipient, @Join final String message) {
+    public void whisperCommand(
+        final ChatUser user,
+        @Suggestion(value = "recipients") final ChatUser recipient,
+        @Join final String message
+    ) {
 
         if (!user.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().repliesDisabled());
@@ -41,8 +48,18 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
+        if (!user.canSee(recipient) && !reply) {
+            user.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
         if (!recipient.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
+            return;
+        }
+
+        if (message.isBlank()) {
+            user.sendMessage(plugin.configManager().messages().emptyMessage());
             return;
         }
 

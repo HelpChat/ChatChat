@@ -9,6 +9,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>
+ *     Called when a {@link ChatUser} mentions a {@link User}.
+ * </p>
+ * <p>
+ *     Make sure to check if the user can see the target using {@link User#canSee(User)} since the event is called even
+ *     when a user mentions another vanished user.
+ * </p>
+ */
 public class MentionEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -24,9 +33,6 @@ public class MentionEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    /**
-     * Called when a {@link ChatUser} mentions a {@link User}.
-     */
     public MentionEvent(
         final boolean async,
         @NotNull final ChatUser user,

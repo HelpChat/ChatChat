@@ -68,5 +68,5 @@ mention-sound:
   pitch: 1
   volume: 1
 
-# Whether to play the mention sound when a user is messaged
+# Whether to play the mention sound when a user receives a private message
 mention-on-message: true

@@ -1,16 +1,20 @@
 # https://wiki.helpch.at
 
+console-only: <red>Only the console can do this!
+players-only: <red>Only players can do this!
+user-offline: <red>The user is not online!
 no-replies: <red>You have no one to reply to!
 replies-disabled: You can't send private messages while they're disabled!
 target-replies-disabled: <red>This user has their private messages disabled!
 private-messages-enabled: <green>Your private messages have been enabled!
 private-messages-disabled: <red>Your private messages have been disabled!
 cant-message-yourself: <red>You can't message yourself!
+empty-message: <red>You can't send an empty message!
 special-characters-no-permission: <red>You do not have permission to use special characters!
 social-spy-enabled: <green>Social spy enabled
 social-spy-disabled: <red>Social spy disabled
-channel-no-permission: <red>You do not have permission to use this channel
-channel-switched: <green>You have switched to the %channel% channel!
+channel-no-permission: <red>You do not have permission to use this channel!
+channel-switched: <green>You have switched to the <channel> channel!
 command-unknown-command: <red>Unknown Command.
 command-invalid-usage: <red>Invalid usage.
 command-invalid-argument: <red>Invalid argument.

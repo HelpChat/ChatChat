@@ -15,11 +15,15 @@ import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
+import at.helpch.chatchat.listener.ServerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
@@ -27,8 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
@@ -44,10 +46,20 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onEnable() {
         commandManager = BukkitCommandManager.create(this,
                 usersHolder::getUser,
-                new UserSenderValidator());
+                new UserSenderValidator(this));
+
+        commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
+            usersHolder.users()
+                .stream()
+                .filter(ChatUser.class::isInstance)
+                .map(ChatUser.class::cast)
+                .filter(sender::canSee)
+                .map(ChatUser::player)
+                .map(Player::getName)
+                .collect(Collectors.toUnmodifiableList())
+        );
 
         audiences = BukkitAudiences.create(this);
-        hookManager.init();
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
@@ -62,8 +74,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // event listener registration
         List.of(
-                new PlayerListener(this),
-                new ChatListener(this)
+            new ServerListener(this),
+            new PlayerListener(this),
+            new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
         new ChatPlaceholders(this).register();
@@ -98,6 +111,10 @@ public final class ChatChatPlugin extends JavaPlugin {
         return commandManager;
     }
 
+    public @NotNull HookManager hookManager() {
+        return hookManager;
+    }
+
     private void registerCommands() {
         commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
             final var player = Bukkit.getPlayer(arg);
@@ -110,15 +127,13 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .map(Player::getName)
                 .collect(Collectors.toList())));
 
-        final var whisperCommand = new WhisperCommand(this);
-
         List.of(
-                new MainCommand(),
-                new ReloadCommand(this),
-                whisperCommand,
-                new ReplyCommand(this, whisperCommand),
-                new WhisperToggleCommand(this),
-                new SocialSpyCommand(this)
+            new MainCommand(),
+            new ReloadCommand(this),
+            new WhisperCommand(this, false),
+            new ReplyCommand(this, new WhisperCommand(this, true)),
+            new WhisperToggleCommand(this),
+            new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands
