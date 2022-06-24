@@ -1,7 +1,9 @@
 package at.helpch.chatchat.hooks;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.hook.Hook;
+import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.api.hook.VanishHook;
@@ -11,6 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +51,7 @@ public final class HookManager {
 
             final @Nullable List<Plugin> hookPlugins = hook.dependency().isPresent()
                 ? hook.dependency().get().stream()
-                .map(hookPlugin -> Bukkit.getPluginManager().getPlugin(hookPlugin))
+                .map(Bukkit.getPluginManager()::getPlugin)
                 .filter(Objects::nonNull)
                 .filter(Plugin::isEnabled)
                 .collect(Collectors.toUnmodifiableList())

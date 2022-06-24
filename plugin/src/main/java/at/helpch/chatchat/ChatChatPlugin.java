@@ -15,7 +15,6 @@ import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
-import at.helpch.chatchat.listener.ServerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
@@ -61,6 +60,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         audiences = BukkitAudiences.create(this);
 
+        hookManager.init();
+        configManager.reload();
+
         // bStats
         Metrics metrics = new Metrics(this, 14781);
         metrics.addCustomChart(new SimpleBarChart("channelTypes", () ->
@@ -68,13 +70,10 @@ public final class ChatChatPlugin extends JavaPlugin {
                         .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
-        configManager.reload();
-
         registerCommands();
 
         // event listener registration
         List.of(
-            new ServerListener(this),
             new PlayerListener(this),
             new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
