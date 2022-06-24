@@ -47,17 +47,6 @@ public final class ChatChatPlugin extends JavaPlugin {
                 usersHolder::getUser,
                 new UserSenderValidator(this));
 
-        commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
-            usersHolder.users()
-                .stream()
-                .filter(ChatUser.class::isInstance)
-                .map(ChatUser.class::cast)
-                .filter(sender::canSee)
-                .map(ChatUser::player)
-                .map(Player::getName)
-                .collect(Collectors.toUnmodifiableList())
-        );
-
         audiences = BukkitAudiences.create(this);
 
         hookManager.init();
@@ -70,6 +59,7 @@ public final class ChatChatPlugin extends JavaPlugin {
                         .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
+        registerSuggestion();
         registerCommands();
 
         // event listener registration
@@ -112,6 +102,19 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull HookManager hookManager() {
         return hookManager;
+    }
+
+    private void registerSuggestion() {
+        commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
+                usersHolder.users()
+                        .stream()
+                        .filter(ChatUser.class::isInstance)
+                        .map(ChatUser.class::cast)
+                        .filter(sender::canSee)
+                        .map(ChatUser::player)
+                        .map(Player::getName)
+                        .collect(Collectors.toUnmodifiableList())
+        );
     }
 
     private void registerCommands() {
