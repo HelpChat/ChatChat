@@ -59,7 +59,7 @@ public final class ChatChatPlugin extends JavaPlugin {
                         .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
-        registerSuggestion();
+        registerSuggestions();
         registerCommands();
 
         // event listener registration
@@ -104,7 +104,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         return hookManager;
     }
 
-    private void registerSuggestion() {
+    private void registerSuggestions() {
         commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
                 usersHolder.users()
                         .stream()
@@ -115,6 +115,9 @@ public final class ChatChatPlugin extends JavaPlugin {
                         .map(Player::getName)
                         .collect(Collectors.toUnmodifiableList())
         );
+        commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.toList())));
     }
 
     private void registerCommands() {
@@ -125,9 +128,6 @@ public final class ChatChatPlugin extends JavaPlugin {
             }
             return usersHolder.getUser(player);
         });
-        commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
-                .collect(Collectors.toList())));
 
         List.of(
             new MainCommand(),
