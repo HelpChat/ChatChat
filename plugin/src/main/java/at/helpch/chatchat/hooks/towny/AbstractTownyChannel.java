@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.AbstractChannel;
+import at.helpch.chatchat.util.ChannelUtils;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -46,6 +47,7 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
         return list.get().getResidents().stream()
                 .map(Resident::getUUID)
                 .map(plugin.usersHolder()::getUser)
+                .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
                 .collect(Collectors.toSet());
     }
 }
