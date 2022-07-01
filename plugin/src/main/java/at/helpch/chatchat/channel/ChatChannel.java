@@ -7,6 +7,8 @@ import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,9 +20,9 @@ public final class ChatChannel extends AbstractChannel {
     public ChatChannel(
             @NotNull final String name,
             @NotNull final String messagePrefix,
-            @NotNull final String toggleCommand,
+            @NotNull final List<String> toggleCommands,
             @NotNull final String channelPrefix) {
-        super(name, messagePrefix, toggleCommand, channelPrefix);
+        super(name, messagePrefix, toggleCommands, channelPrefix);
     }
 
     public static @NotNull ChatChannel defaultChannel() {
@@ -38,7 +40,7 @@ public final class ChatChannel extends AbstractChannel {
         return "ChatChannel{" +
                 "name=" + name() +
                 ", messagePrefix='" + messagePrefix() + '\'' +
-                ", toggleCommand='" + commandName() + '\'' +
+                ", toggleCommand='" + commandNames() + '\'' +
                 ", channelPrefix='" + channelPrefix() +
                 '}';
     }

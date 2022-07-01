@@ -25,7 +25,7 @@ public final class SwitchChannelCommand extends BaseCommand {
         final var channels = plugin.configManager().channels().channels();
         final var channel = channels.values()
             .stream()
-            .filter(value -> value.commandName().equals(command))
+            .filter(value -> value.commandNames().contains(command))
             .findAny()
             .get(); // this should probably only ever throw if the person has changed command names without restarting
 

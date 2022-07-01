@@ -6,14 +6,16 @@ channels:
   global: # default channel as set in default-channel, no permission required.
     # command to switch channel
     # Changes to this setting REQUIRES a server restart
-    toggle-command: 'global'
+    toggle-command:
+      - 'global'
     # prefix the message with this to automatically type the message in channel
     message-prefix: ''
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
     # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
     channel-prefix: '[global]'
   staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
-    toggle-command: 'staffchat'
+    toggle-command:
+      - 'staffchat'
     message-prefix: '#'
     channel-prefix: '[STAFF]'
 

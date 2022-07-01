@@ -4,6 +4,7 @@ import at.helpch.chatchat.api.Channel;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ChannelTypeRegistry {
@@ -12,7 +13,7 @@ public final class ChannelTypeRegistry {
     public interface Builder<T extends Channel> {
         @NotNull T build(@NotNull final String name,
                 @NotNull final String messagePrefix,
-                @NotNull final String toggleCommand,
+                @NotNull final List<String> toggleCommands,
                 @NotNull final String channelPrefix);
     }
 
