@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -17,12 +18,12 @@ public final class DefaultConfigObjects {
 
     public static @NotNull ChatChannel createDefaultChannel() {
         return new ChatChannel("default",
-            "", "global", "<gray>[<blue>Global<gray>]");
+            "", List.of("global"), "<gray>[<blue>Global<gray>]");
     }
 
     public static @NotNull ChatChannel createStaffChannel() {
         return new ChatChannel("staff",
-            "@", "staffchat", "<gray>[<green>Staff<gray>]");
+            "@", List.of("staffchat"), "<gray>[<green>Staff<gray>]");
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {
