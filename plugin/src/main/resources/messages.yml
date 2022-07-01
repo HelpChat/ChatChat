@@ -3,6 +3,7 @@
 console-only: <red>Only the console can do this!
 players-only: <red>Only players can do this!
 user-offline: <red>The user is not online!
+user-no-town-found: <red>You are not in a town!
 no-replies: <red>You have no one to reply to!
 replies-disabled: You can't send private messages while they're disabled!
 target-replies-disabled: <red>This user has their private messages disabled!

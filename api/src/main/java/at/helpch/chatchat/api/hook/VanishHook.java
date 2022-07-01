@@ -1,7 +1,6 @@
 package at.helpch.chatchat.api.hook;
 
 import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.hook.Hook;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class VanishHook implements Hook {

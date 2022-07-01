@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public final class HookManager {
 
             final @Nullable List<Plugin> hookPlugins = hook.dependency().isPresent()
                 ? hook.dependency().get().stream()
-                .map(hookPlugin -> Bukkit.getPluginManager().getPlugin(hookPlugin))
+                .map(Bukkit.getPluginManager()::getPlugin)
                 .filter(Objects::nonNull)
                 .filter(Plugin::isEnabled)
                 .collect(Collectors.toUnmodifiableList())

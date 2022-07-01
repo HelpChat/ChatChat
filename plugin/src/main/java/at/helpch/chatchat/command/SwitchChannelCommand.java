@@ -2,7 +2,10 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.hooks.towny.AbstractTownyChannel;
 import at.helpch.chatchat.util.MessageProcessor;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Resident;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
@@ -32,6 +35,15 @@ public final class SwitchChannelCommand extends BaseCommand {
                 .findAny()
                 .get(); // this should probably only ever throw if the person has changed command names without
         // restarting
+
+        if (channel instanceof AbstractTownyChannel) {
+            final var town = TownyUniverse.getInstance().getResidentOpt(user.uuid())
+                    .map(Resident::getTownOrNull);
+            if (town.isEmpty() || town.get().isRuined()) { // the API will still see a player in that town if it is ruined
+                user.sendMessage(plugin.configManager().messages().userNotInTown());
+                return;
+            }
+        }
 
         if (!channel.isUseableBy(user)) {
             user.sendMessage(plugin.configManager().messages().channelNoPermission());
