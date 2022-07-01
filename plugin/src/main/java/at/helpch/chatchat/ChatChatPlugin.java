@@ -4,13 +4,7 @@ import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
-import at.helpch.chatchat.command.MainCommand;
-import at.helpch.chatchat.command.ReloadCommand;
-import at.helpch.chatchat.command.ReplyCommand;
-import at.helpch.chatchat.command.SocialSpyCommand;
-import at.helpch.chatchat.command.SwitchChannelCommand;
-import at.helpch.chatchat.command.WhisperCommand;
-import at.helpch.chatchat.command.WhisperToggleCommand;
+import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
@@ -21,8 +15,6 @@ import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
-import java.util.List;
-import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
@@ -31,13 +23,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
 
-    private @NotNull final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
-    private @NotNull final UsersHolder usersHolder = new UsersHolder();
-    private @NotNull final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
-    private @NotNull final HookManager hookManager = new HookManager(this);
+    private @NotNull
+    final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
+    private @NotNull
+    final UsersHolder usersHolder = new UsersHolder();
+    private @NotNull
+    final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
+    private @NotNull
+    final HookManager hookManager = new HookManager(this);
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
 
@@ -64,8 +63,8 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // event listener registration
         List.of(
-            new PlayerListener(this),
-            new ChatListener(this)
+                new PlayerListener(this),
+                new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
         new ChatPlaceholders(this).register();
@@ -130,19 +129,19 @@ public final class ChatChatPlugin extends JavaPlugin {
         });
 
         List.of(
-            new MainCommand(),
-            new ReloadCommand(this),
-            new WhisperCommand(this, false),
-            new ReplyCommand(this, new WhisperCommand(this, true)),
-            new WhisperToggleCommand(this),
-            new SocialSpyCommand(this)
+                new MainCommand(),
+                new ReloadCommand(this),
+                new WhisperCommand(this, false),
+                new ReplyCommand(this, new WhisperCommand(this, true)),
+                new WhisperToggleCommand(this),
+                new SocialSpyCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands
         configManager.channels().channels().values().stream()
-                .map(Channel::commandName) // don't register empty command names
+                .map(Channel::commandNames) // don't register empty command names
                 .filter(s -> !s.isEmpty())
-                .map(command -> new SwitchChannelCommand(this, command))
+                .map(commandNames -> new SwitchChannelCommand(this, commandNames.remove(0), commandNames))
                 .forEach(commandManager::registerCommand);
     }
 }

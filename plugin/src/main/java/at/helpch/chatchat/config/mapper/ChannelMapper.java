@@ -38,7 +38,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         }
         final var key = keyNode.toString();
 
-        final var commandName = nonVirtualNode(node, TOGGLE_COMMAND).getString();
+        final var commandName = nonVirtualNode(node, TOGGLE_COMMAND).getList(String.class);
         if (commandName == null) {
             throw new SerializationException("Command name for " + key + " cannot be null!");
         }
@@ -50,7 +50,8 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
 
         final var builder = registry.builders().get(channelType);
         if (builder == null) {
-            throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", ignoring.");
+            throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", " +
+                    "ignoring.");
         }
         return builder.build(key, messagePrefix, commandName, channelPrefix);
     }
@@ -62,7 +63,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
             return;
         }
 
-        target.node(TOGGLE_COMMAND).set(channel.commandName());
+        target.node(TOGGLE_COMMAND).set(channel.commandNames());
         target.node(MESSAGE_PREFIX).set(channel.messagePrefix());
         target.node(CHANNEL_PREFIX).set(channel.channelPrefix());
     }
