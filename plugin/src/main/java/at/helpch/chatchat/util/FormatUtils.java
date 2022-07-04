@@ -6,13 +6,17 @@ import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class FormatUtils {
     private static final String FORMAT_PERMISSION = "chatchat.format.";
@@ -41,10 +45,17 @@ public final class FormatUtils {
             @NotNull final Format format,
             @NotNull final Player player,
             @NotNull final ComponentLike message) {
-        return format.parts().stream()
-            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> MessageUtils.parseToMiniMessage(part, Placeholder.component("message", message)))
-            .collect(Component.toComponent());
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(
+                player,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ),
+            Placeholder.component("message", message)
+        );
     }
 
     public static @NotNull Component parseFormat(
@@ -52,28 +63,35 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {
-        return format.parts().stream()
-            .map(part -> PlaceholderAPI.setPlaceholders(player, part))
-            .map(part -> PlaceholderAPI.setRelationalPlaceholders(player, recipient, part))
-            .map(part -> replaceRecipientPlaceholder(recipient, part))
-            .map(part -> MessageUtils.parseToMiniMessage(part, Placeholder.component("message", message)))
-            .collect(Component.toComponent());
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setRelationalPlaceholders(
+                player,
+                recipient,
+                PlaceholderAPI.setPlaceholders(
+                    player,
+                    format.parts()
+                        .values()
+                        .stream()
+                        .map(part -> String.join("", part))
+                        .collect(Collectors.joining())
+                )
+            ),
+            Placeholder.component("message", message),
+            recipientTagResolver(recipient)
+        );
     }
 
-    private static @NotNull String replaceRecipientPlaceholder(@NotNull final Player player, @NotNull final String toReplace) {
+    private static @NotNull TagResolver recipientTagResolver(@NotNull final Player player) {
+        return TagResolver.builder()
+            // Could make the name a set of strings if we want more alternative namings.
+            .tag("recipient", (queue, context) -> queue.hasNext()
+                // Parse <recipient:PLACEHOLDERS>
+                ? Tag.selfClosingInserting(
+                    LegacyComponentSerializer.legacySection()
+                        .deserialize(PlaceholderAPI.setPlaceholders(player, '%' + queue.pop().value() + '%')))
 
-        if (!toReplace.contains("%recipient")) {
-            return toReplace;
-        }
-
-        return PlaceholderAPI.setPlaceholders(
-            player,
-            toReplace
-                .replace("%recipient%", player.getName())
-                // This is to support PAPI placeholders for the recipient. Ex: %recipient_player_name%.
-                // I know it can be better and probably needs a complex parser but that requires, time, skills and patience,
-                // none of which I actually have.
-                .replace("%recipient_", "%")
-            );
+                // Parse <recipient>
+                : Tag.selfClosingInserting(Component.text(player.getName()))
+            ).build();
     }
 }

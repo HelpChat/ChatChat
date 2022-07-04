@@ -1,6 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
 import at.helpch.chatchat.format.PMFormat;
+import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -8,9 +9,12 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public final class PMFormatMapper implements TypeSerializer<PMFormat> {
 
+    private static final TypeToken<Map<String, List<String>>> mapTypeToken = new TypeToken<>() {};
     private static final String PARTS = "parts";
 
     private ConfigurationNode nonVirtualNode(final ConfigurationNode source, final Object... path) throws SerializationException {
@@ -28,7 +32,7 @@ public final class PMFormatMapper implements TypeSerializer<PMFormat> {
         }
         final var key = keyNode.toString();
 
-        final var parts = nonVirtualNode(node, PARTS).getList(String.class);
+        final var parts = nonVirtualNode(node, PARTS).get(mapTypeToken);
         if (parts == null) {
             throw new SerializationException("Parts list of node: " + key + " cannot be null!");
         }

@@ -5,24 +5,26 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public abstract class AbstractChannel implements Channel {
 
     private final String name;
 
     private final String messagePrefix;
 
-    private final String toggleCommand;
+    private final List<String> toggleCommands;
 
     private final String channelPrefix;
 
     protected AbstractChannel(
             @NotNull final String name,
             @NotNull final String messagePrefix,
-            @NotNull final String toggleCommand,
+            @NotNull final List<String> toggleCommands,
             @NotNull final String channelPrefix) {
         this.name = name;
         this.messagePrefix = messagePrefix;
-        this.toggleCommand = toggleCommand;
+        this.toggleCommands = toggleCommands;
         this.channelPrefix = channelPrefix;
     }
 
@@ -42,8 +44,8 @@ public abstract class AbstractChannel implements Channel {
     }
 
     @Override
-    public @NotNull String commandName() {
-        return toggleCommand;
+    public @NotNull List<String> commandNames() {
+        return toggleCommands;
     }
 
 
@@ -58,7 +60,7 @@ public abstract class AbstractChannel implements Channel {
         if (o == null || getClass() != o.getClass()) return false;
         ChatChannel that = (ChatChannel) o;
         return messagePrefix.equals(that.messagePrefix()) &&
-                toggleCommand.equals(that.commandName()) &&
+                toggleCommands.equals(that.commandNames()) &&
                 channelPrefix.equals(that.channelPrefix());
     }
 }
