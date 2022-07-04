@@ -49,28 +49,14 @@ public final class ChatChannel extends AbstractChannel {
 
     @Override
     public Set<User> targets(final @NotNull User source) {
-        return plugin.usersHolder().users().stream().filter(user -> {
-            if (!(user instanceof ChatUser)) {
-                return true;
-            }
-
-            final Player playerTarget = ((ChatUser) user).player();
-            boolean allowed = ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
-
-            if (playerTarget.hasPermission(ChannelUtils.BYPASS_RADIUS_CHANNEL_PERMISSION)) {
-                return true;
-            }
-
-            if (radius() != -1 && source instanceof ChatUser) {
-                final Location sourceLocation = ((ChatUser) source).player().getLocation();
-                final Location targetLocation = playerTarget.getLocation();
-                final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
-                final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
-
-                allowed = relativeX*relativeX + relativeZ*relativeZ <= radius()*radius();
-            }
-
-            return allowed;
-        }).collect(Collectors.toUnmodifiableSet());
+        return plugin.usersHolder().users().stream()
+                .filter(user -> {
+                    if (!(user instanceof ChatUser)) {
+                        return true;
+                    }
+                    return ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
+                })
+                .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

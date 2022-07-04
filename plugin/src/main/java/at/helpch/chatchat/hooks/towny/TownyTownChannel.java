@@ -10,8 +10,9 @@ public final class TownyTownChannel extends AbstractTownyChannel {
     public TownyTownChannel(@NotNull final String name,
                             @NotNull final String messagePrefix,
                             @NotNull final String toggleCommand,
-                            @NotNull final String channelPrefix) {
-        super(name, messagePrefix, toggleCommand, channelPrefix);
+                            @NotNull final String channelPrefix,
+                            final int radius) {
+        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
     }
 
     @Override

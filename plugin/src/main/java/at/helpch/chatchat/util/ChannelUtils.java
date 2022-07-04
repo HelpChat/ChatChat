@@ -1,7 +1,11 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChatChannel;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,5 +38,31 @@ public final class ChannelUtils {
                 .filter(channel -> !channel.messagePrefix().isEmpty()) // ignore empty prefixes
                 .filter(channel -> input.startsWith(channel.messagePrefix()))
                 .findFirst();
+    }
+
+    public static boolean isTargetWithinRadius(
+            @NotNull final User source,
+            @NotNull final User target,
+            final int radius) {
+        if (!(target instanceof ChatUser)) {
+            return true;
+        }
+
+        final Player playerTarget = ((ChatUser) target).player();
+
+        if (playerTarget.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION)) {
+            return true;
+        }
+
+        if (radius != -1 && source instanceof ChatUser) {
+            final Location sourceLocation = ((ChatUser) source).player().getLocation();
+            final Location targetLocation = playerTarget.getLocation();
+            final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
+            final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
+
+            return relativeX*relativeX + relativeZ*relativeZ <= radius*radius;
+        }
+
+        return true;
     }
 }
