@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -19,10 +21,10 @@ import java.util.stream.Collectors;
 public abstract class AbstractTownyChannel extends AbstractChannel {
     protected AbstractTownyChannel(@NotNull final String name,
                                    @NotNull final String messagePrefix,
-                                   @NotNull final String toggleCommand,
+                                   @NotNull final List<String> toggleCommands,
                                    @NotNull final String channelPrefix,
                                    final int radius) {
-        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
         if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
             throw new RuntimeException("Attempting to use a Towny channel but Towny is not installed.");
         }}

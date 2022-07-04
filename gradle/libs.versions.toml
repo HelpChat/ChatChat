@@ -3,8 +3,8 @@
 spigot = "1.18.1-R0.1-SNAPSHOT"
 
 # Adventure
-minimessage = "4.10.1"
-adventure-platform = "4.0.1"
+minimessage = "4.11.0"
+adventure-platform = "4.1.1"
 
 # Other
 configurate = "4.1.2"
@@ -12,6 +12,7 @@ cmds = "2.0.0-SNAPSHOT"
 papi = "2.11.1"
 towny = "0.98.1.3"
 discordsrv = "1.25.1"
+supervanish = "6.2.6-4"
 bstats = "3.0.0"
 
 [libraries]
@@ -29,4 +30,5 @@ triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "c
 papi = { module = "me.clip:placeholderapi", version.ref = "papi" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
+supervanish = { module = "com.github.LeonMangler:SuperVanish", version.ref = "supervanish" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }

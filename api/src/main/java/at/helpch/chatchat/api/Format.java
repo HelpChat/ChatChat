@@ -3,6 +3,7 @@ package at.helpch.chatchat.api;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Format {
 
@@ -14,7 +15,7 @@ public interface Format {
 
     @NotNull Format priority(final int priority);
 
-    @NotNull List<String> parts();
+    @NotNull Map<String, List<String>> parts();
 
-    @NotNull Format parts(@NotNull final List<String> parts);
+    @NotNull Format parts(@NotNull final Map<String, List<String>> parts);
 }

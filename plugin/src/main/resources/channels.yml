@@ -6,7 +6,8 @@ channels:
   global: # default channel as set in default-channel, no permission required.
     # command to switch channel
     # Changes to this setting REQUIRES a server restart
-    toggle-command: 'global'
+    toggle-command:
+      - 'global'
     # prefix the message with this to automatically type the message in channel
     message-prefix: ''
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
@@ -15,7 +16,8 @@ channels:
     # radius from sender other players need to be in to see sender's message. -1 for no radius
     radius: -1
   staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
-    toggle-command: 'staffchat'
+    toggle-command:
+      - 'staffchat'
     message-prefix: '#'
     channel-prefix: '[STAFF]'
     radius: -1

@@ -3,21 +3,22 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
+import at.helpch.chatchat.api.event.MentionEvent;
 import java.util.Map;
 import java.util.regex.Pattern;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
-public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
-    private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z0-9+\\-.]*:");
+public final class MessageProcessor {
+    private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
+    private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
     private static final TextReplacementConfig URL_REPLACER_CONFIG = TextReplacementConfig.builder()
         .match(DEFAULT_URL_PATTERN)
@@ -32,10 +33,8 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
 
     private static final String URL_PERMISSION = "chatchat.url";
     private static final String UTF_PERMISSION = "chatchat.utf";
-    private static final String MENTION_PERMISSION = "chatchat.mention";
-    private static final String MENTION_EVERYONE_PERMISSION = "chatchat.mention.everyone";
     private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
-    private static final String ITEM_PERMISSION = TAG_BASE_PERMISSION + "item";
+    private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
 
     private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
         Map.entry("click", StandardTags.clickEvent()),
@@ -51,6 +50,10 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
         Map.entry("translatable", StandardTags.translatable())
     );
 
+    private MessageProcessor() {
+        throw new AssertionError("Util classes are not to be instantiated!");
+    }
+
     public static void process(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,
@@ -59,7 +62,7 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
         final boolean async
     ) {
         if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(Component.text("You can't use special characters in chat!", NamedTextColor.RED));
+            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return;
         }
 
@@ -81,7 +84,7 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
             resolver.resolver(StandardTags.decorations(tag));
         }
 
-        if (user.player().hasPermission(ITEM_PERMISSION)) {
+        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
             resolver.resolver(
                 ItemUtils.createItemPlaceholder(
                     plugin.configManager().settings().itemFormat(),
@@ -114,36 +117,215 @@ public class MessageProcessor { private static final Pattern DEFAULT_URL_PATTERN
 
         final var oldChannel = user.channel();
         user.channel(channel);
-        var component = FormatUtils.parseFormat(
-            chatEvent.format(),
-            user.player(),
-            chatEvent.message()
-        );
+
+        final var parsedMessage = chatEvent.message().compact();
 
         final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
         final var mentionSound = plugin.configManager().settings().mentionSound();
-        final var mentionFormat = plugin.configManager().settings().mentionFormat();
-        var mentionEveryone = false;
+        final var personalMentionFormat = plugin.configManager().settings().mentionFormat();
+        final var channelMentionFormat = plugin.configManager().settings().channelMentionFormat();
 
-        if (user.player().hasPermission(MENTION_EVERYONE_PERMISSION)) {
-            final var replaced = MentionUtils.replaceMention(mentionPrefix + "(everyone|here|channel)",
-                    component, plugin.configManager().settings().globalMentionFormat());
-            component = replaced.component();
-            mentionEveryone = replaced.didReplace();
-        }
+        var userMessage = parsedMessage;
+        var userIsTarget = false;
 
         for (final var target : channel.targets(user)) {
-            var mention = mentionEveryone;
-            var transformedComponent = component;
-            if (target instanceof ChatUser && user.player().hasPermission(MENTION_PERMISSION)) {
-                final var replaced = MentionUtils.replaceMention((ChatUser) target, mentionPrefix,
-                        component, mentionFormat);
-                mention = replaced.didReplace() || mention;
-                transformedComponent = replaced.component();
+            if (target.uuid() == user.uuid()) {
+                userIsTarget = true;
+                continue;
             }
-            if (mention) target.playSound(mentionSound);
-            target.sendMessage(transformedComponent);
+
+            final var channelMentionProcessResult = MentionUtils.processChannelMentions(
+                mentionPrefix,
+                channelMentionFormat,
+                user,
+                target,
+                parsedMessage
+            );
+
+            final var channelMentionEvent = new MentionEvent(
+                async,
+                user,
+                target,
+                chatEvent.channel(),
+                MentionType.CHANNEL
+            );
+
+            if (channelMentionProcessResult.getKey()) {
+                plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
+            }
+
+            // Personal mentions can only be used towards ChatUsers.
+            if (!(target instanceof ChatUser)) {
+                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
+                    final var component = FormatUtils.parseFormat(
+                        chatEvent.format(),
+                        user.player(),
+                        parsedMessage
+                    );
+
+                    target.sendMessage(component);
+                    continue;
+                }
+
+                final var component = FormatUtils.parseFormat(
+                    chatEvent.format(),
+                    user.player(),
+                    channelMentionProcessResult.getValue()
+                );
+
+                target.sendMessage(component);
+                if (user.canSee(target)) {
+                    target.playSound(mentionSound);
+                }
+                continue;
+            }
+
+            final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
+                mentionPrefix,
+                personalMentionFormat,
+                user,
+                (ChatUser) target,
+                !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
+                    ? parsedMessage
+                    : channelMentionProcessResult.getValue()
+            );
+
+            final var personalMentionEvent = new MentionEvent(
+                async,
+                user,
+                target,
+                chatEvent.channel(),
+                MentionType.PERSONAL
+            );
+
+            if (personalMentionProcessResult.getKey()) {
+                plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
+            }
+
+            if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
+                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
+                    final var component = FormatUtils.parseFormat(
+                        chatEvent.format(),
+                        user.player(),
+                        parsedMessage
+                    );
+
+                    target.sendMessage(component);
+                    continue;
+                }
+
+                final var component = FormatUtils.parseFormat(
+                    chatEvent.format(),
+                    user.player(),
+                    channelMentionProcessResult.getValue()
+                );
+
+                target.sendMessage(component);
+                if (user.canSee(target)) {
+                    target.playSound(mentionSound);
+                }
+                continue;
+            }
+
+            final var component = FormatUtils.parseFormat(
+                chatEvent.format(),
+                user.player(),
+                personalMentionProcessResult.getValue()
+            );
+
+            target.sendMessage(component);
+            if (user.canSee(target)) {
+                target.playSound(mentionSound);
+                userMessage = MentionUtils.processPersonalMentions(
+                    mentionPrefix,
+                    personalMentionFormat,
+                    user,
+                    (ChatUser) target,
+                    userMessage
+                ).getValue();
+            }
         }
+
+        if (!userIsTarget) {
+            user.channel(oldChannel);
+            return;
+        }
+
+        final var channelMentionProcessResult = MentionUtils.processChannelMentions(
+            mentionPrefix,
+            channelMentionFormat,
+            user,
+            user,
+            userMessage
+        );
+
+        final var channelMentionEvent = new MentionEvent(
+            async,
+            user,
+            user,
+            chatEvent.channel(),
+            MentionType.CHANNEL
+        );
+
+        if (channelMentionProcessResult.getKey()) {
+            plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
+        }
+
+        final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
+            mentionPrefix,
+            personalMentionFormat,
+            user,
+            user,
+            !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
+                ? userMessage
+                : channelMentionProcessResult.getValue()
+        );
+
+        final var personalMentionEvent = new MentionEvent(
+            async,
+            user,
+            user,
+            chatEvent.channel(),
+            MentionType.PERSONAL
+        );
+
+        if (personalMentionProcessResult.getKey()) {
+            plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
+        }
+
+        if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
+            if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
+                final var component = FormatUtils.parseFormat(
+                    chatEvent.format(),
+                    user.player(),
+                    userMessage
+                );
+
+                user.sendMessage(component);
+                user.channel(oldChannel);
+                return;
+            }
+
+            final var component = FormatUtils.parseFormat(
+                chatEvent.format(),
+                user.player(),
+                channelMentionProcessResult.getValue()
+            );
+
+            user.playSound(mentionSound);
+            user.sendMessage(component);
+            user.channel(oldChannel);
+            return;
+        }
+
+        final var component = FormatUtils.parseFormat(
+            chatEvent.format(),
+            user.player(),
+            personalMentionProcessResult.getValue()
+        );
+
+        user.playSound(mentionSound);
+        user.sendMessage(component);
         user.channel(oldChannel);
     }
 }

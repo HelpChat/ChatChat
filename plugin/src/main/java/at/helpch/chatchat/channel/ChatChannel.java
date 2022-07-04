@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,10 +22,10 @@ public final class ChatChannel extends AbstractChannel {
     public ChatChannel(
             @NotNull final String name,
             @NotNull final String messagePrefix,
-            @NotNull final String toggleCommand,
+            @NotNull final List<String> toggleCommands,
             @NotNull final String channelPrefix,
             final int radius) {
-        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
     }
 
     public static @NotNull ChatChannel defaultChannel() {
@@ -41,7 +43,7 @@ public final class ChatChannel extends AbstractChannel {
         return "ChatChannel{" +
                 "name=" + name() +
                 ", messagePrefix='" + messagePrefix() + '\'' +
-                ", toggleCommand='" + commandName() + '\'' +
+                ", toggleCommands='" + commandNames() + '\'' +
                 ", channelPrefix='" + channelPrefix() + '\'' +
                 ", radius='" + radius() +
                 '}';
@@ -49,13 +51,9 @@ public final class ChatChannel extends AbstractChannel {
 
     @Override
     public Set<User> targets(final @NotNull User source) {
-        return plugin.usersHolder().users().stream()
-                .filter(user -> {
-                    if (!(user instanceof ChatUser)) {
-                        return true;
-                    }
-                    return ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name());
-                })
+        return plugin.usersHolder().users().stream().filter(user ->
+                !(user instanceof ChatUser) ||
+                    ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
                 .collect(Collectors.toUnmodifiableSet());
     }

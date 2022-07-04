@@ -15,13 +15,15 @@ import java.util.regex.Pattern;
 
 public final class ChatListener implements Listener {
 
+    private static final Pattern LEGACY_FORMATS_PATTERN = Pattern.compile("§[\\da-fk-or]");
+    private static final Pattern LEGACY_HEX_COLOR_PATTERN = Pattern.compile("§x(§[\\da-fA-F]){6}");
     private final ChatChatPlugin plugin;
 
     public ChatListener(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
         try {
             event.getRecipients().clear();
@@ -29,6 +31,8 @@ public final class ChatListener implements Listener {
             // a plugin is doing something weird so all we can do is cancel
             event.setCancelled(true);
         }
+
+        event.setMessage(cleanseMessage(event.getMessage()));
 
         final var player = event.getPlayer();
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
@@ -43,5 +47,11 @@ public final class ChatListener implements Listener {
         final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user) ? user.channel() : channelByPrefix.get();
 
         MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous());
+    }
+
+    private static String cleanseMessage(@NotNull final String message) {
+        return LEGACY_FORMATS_PATTERN.matcher(
+            LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
+        ).replaceAll("").replace("§", "");
     }
 }

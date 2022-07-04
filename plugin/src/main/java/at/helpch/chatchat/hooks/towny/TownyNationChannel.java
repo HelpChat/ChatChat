@@ -5,14 +5,16 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public final class TownyNationChannel extends AbstractTownyChannel {
 
     public TownyNationChannel(@NotNull final String name,
                             @NotNull final String messagePrefix,
-                            @NotNull final String toggleCommand,
+                            @NotNull final List<String> toggleCommands,
                             @NotNull final String channelPrefix,
                             final int radius) {
-        super(name, messagePrefix, toggleCommand, channelPrefix, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
     }
 
     @Override
