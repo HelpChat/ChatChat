@@ -13,11 +13,14 @@ channels:
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
     # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
     channel-prefix: '[global]'
+    # radius from sender other players need to be in to see sender's message. -1 for no radius
+    radius: -1
   staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
     toggle-command:
       - 'staffchat'
     message-prefix: '#'
     channel-prefix: '[STAFF]'
+    radius: -1
 
 #  # this one's for towny, uncomment this section if you have towny installed
 #  town:

@@ -5,6 +5,8 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -21,8 +23,9 @@ public final class ChatChannel extends AbstractChannel {
             @NotNull final String name,
             @NotNull final String messagePrefix,
             @NotNull final List<String> toggleCommands,
-            @NotNull final String channelPrefix) {
-        super(name, messagePrefix, toggleCommands, channelPrefix);
+            @NotNull final String channelPrefix,
+            final int radius) {
+        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
     }
 
     public static @NotNull ChatChannel defaultChannel() {
@@ -40,16 +43,18 @@ public final class ChatChannel extends AbstractChannel {
         return "ChatChannel{" +
                 "name=" + name() +
                 ", messagePrefix='" + messagePrefix() + '\'' +
-                ", toggleCommand='" + commandNames() + '\'' +
-                ", channelPrefix='" + channelPrefix() +
+                ", toggleCommands='" + commandNames() + '\'' +
+                ", channelPrefix='" + channelPrefix() + '\'' +
+                ", radius='" + radius() +
                 '}';
     }
 
     @Override
-    public Set<User> targets(final @NotNull User ignored) {
+    public Set<User> targets(final @NotNull User source) {
         return plugin.usersHolder().users().stream().filter(user ->
                 !(user instanceof ChatUser) ||
-                    ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name())
-        ).collect(Collectors.toUnmodifiableSet());
+                    ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
+                .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
+                .collect(Collectors.toUnmodifiableSet());
     }
 }
