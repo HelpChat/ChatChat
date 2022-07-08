@@ -2,6 +2,7 @@ package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.format.ConsoleFormat;
 import at.helpch.chatchat.format.PMFormat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -23,6 +24,16 @@ public final class DefaultConfigObjects {
     public static @NotNull ChatChannel createStaffChannel() {
         return new ChatChannel("staff",
             "@", List.of("staffchat"), "<gray>[<green>Staff<gray>]", -1);
+    }
+
+    public static @NotNull ConsoleFormat createDefaultConsoleFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put("channel", List.of("%chatchat_channel_prefix% "));
+        map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
+        map.put("name", List.of("<white>%player_name%"));
+        map.put("message", List.of(" <gray>» <white><message>"));
+        return new ConsoleFormat("console-format", map);
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {

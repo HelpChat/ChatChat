@@ -6,12 +6,13 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
+import at.helpch.chatchat.user.ConsoleUser;
 import java.util.Map;
 import java.util.regex.Pattern;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
@@ -66,46 +67,11 @@ public final class MessageProcessor {
             return;
         }
 
-        final var resolver = TagResolver.builder();
-
-        for (final var entry : PERMISSION_TAGS.entrySet()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
-                continue;
-            }
-
-            resolver.resolver(entry.getValue());
-        }
-
-        for (final var tag : TextDecoration.values()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
-                continue;
-            }
-
-            resolver.resolver(StandardTags.decorations(tag));
-        }
-
-        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
-            resolver.resolver(
-                ItemUtils.createItemPlaceholder(
-                    plugin.configManager().settings().itemFormat(),
-                    plugin.configManager().settings().itemFormatInfo(),
-                    user.player().getInventory().getItemInMainHand()
-                )
-            );
-        }
-
-        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
-        final var deserializedMessage = !user.player().hasPermission(URL_PERMISSION)
-            ? miniMessage.deserialize(message)
-            : miniMessage.deserialize(message).replaceText(URL_REPLACER_CONFIG);
-
-        final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
-
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            format,
-            deserializedMessage,
+            FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
+            MessageProcessor.processMessage(plugin, user, message),
             channel
         );
 
@@ -133,6 +99,8 @@ public final class MessageProcessor {
                 userIsTarget = true;
                 continue;
             }
+
+            if (target instanceof ConsoleUser) continue;
 
             final var channelMentionProcessResult = MentionUtils.processChannelMentions(
                 mentionPrefix,
@@ -327,5 +295,43 @@ public final class MessageProcessor {
         user.playSound(mentionSound);
         user.sendMessage(component);
         user.channel(oldChannel);
+    }
+
+    public static @NotNull Component processMessage(
+        @NotNull final ChatChatPlugin plugin,
+        @NotNull final ChatUser user,
+        @NotNull final String message) {
+
+        final var resolver = TagResolver.builder();
+
+        for (final var entry : PERMISSION_TAGS.entrySet()) {
+            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
+                continue;
+            }
+
+            resolver.resolver(entry.getValue());
+        }
+
+        for (final var tag : TextDecoration.values()) {
+            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
+                continue;
+            }
+
+            resolver.resolver(StandardTags.decorations(tag));
+        }
+
+        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
+            resolver.resolver(
+                ItemUtils.createItemPlaceholder(
+                    plugin.configManager().settings().itemFormat(),
+                    plugin.configManager().settings().itemFormatInfo(),
+                    user.player().getInventory().getItemInMainHand()
+                )
+            );
+        }
+
+        return !user.player().hasPermission(URL_PERMISSION)
+            ? MessageUtils.parseToMiniMessage(message, resolver.build())
+            : MessageUtils.parseToMiniMessage(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
 }

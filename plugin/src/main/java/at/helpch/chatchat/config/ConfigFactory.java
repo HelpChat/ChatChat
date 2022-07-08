@@ -7,9 +7,11 @@ import at.helpch.chatchat.config.holders.MessagesHolder;
 import at.helpch.chatchat.config.holders.SettingsHolder;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
+import at.helpch.chatchat.config.mapper.ConsoleFormatMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
 import at.helpch.chatchat.config.mapper.PMFormatMapper;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.format.ConsoleFormat;
 import at.helpch.chatchat.format.PMFormat;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
@@ -87,6 +89,7 @@ public final class ConfigFactory {
                         .serializers(build -> build
                                 .register(Component.class, new MiniMessageComponentMapper())
                                 .register(ChatFormat.class, new ChatFormatMapper())
+                                .register(ConsoleFormat.class, new ConsoleFormatMapper())
                                 .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                                 .register(PMFormat.class, new PMFormatMapper())
                                 .registerAll(ConfigurateComponentSerializer.configurate().serializers())))
