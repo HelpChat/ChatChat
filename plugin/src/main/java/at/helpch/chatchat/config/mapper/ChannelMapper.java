@@ -44,9 +44,9 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
             throw new SerializationException("Command name for " + key + " cannot be null!");
         }
 
-        final var messagePrefix = nonVirtualNode(node, MESSAGE_PREFIX).getString("");
-        final var channelPrefix = nonVirtualNode(node, CHANNEL_PREFIX).getString("");
-        final var radius = nonVirtualNode(node, RADIUS).getInt(-1);
+        final var messagePrefix = node.node(MESSAGE_PREFIX).getString("");
+        final var channelPrefix = node.node(CHANNEL_PREFIX).getString("");
+        final var radius = node.node(RADIUS).getInt(-1);
 
         final var channelType = node.node(TYPE).getString("default");
 
@@ -68,5 +68,6 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         target.node(TOGGLE_COMMAND).set(channel.commandNames());
         target.node(MESSAGE_PREFIX).set(channel.messagePrefix());
         target.node(CHANNEL_PREFIX).set(channel.channelPrefix());
+        target.node(RADIUS).set(channel.radius());
     }
 }
