@@ -28,7 +28,7 @@ public final class ChannelTypeRegistry {
         if (builders.containsKey(name)) {
             throw new IllegalStateException("Attempted to register duplicate channel type " + name);
         }
-        builders.put(name, builder);
+        builders.put(name.toLowerCase(), builder);
     }
 
     public @NotNull Map<String, Builder<?>> builders() {
