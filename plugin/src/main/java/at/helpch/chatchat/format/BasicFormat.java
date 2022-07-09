@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 @ConfigSerializable
-public final class PMFormat implements Format {
+public final class BasicFormat implements Format {
 
     private final String name;
     private final Map<String, List<String>> parts;
 
-    public PMFormat(@NotNull final String name, @NotNull final Map<String, List<String>> parts) {
+    public BasicFormat(@NotNull final String name, @NotNull final Map<String, List<String>> parts) {
         this.name = name;
         this.parts = Collections.unmodifiableMap(parts);
     }
@@ -25,18 +25,8 @@ public final class PMFormat implements Format {
     }
 
     @Override
-    public @NotNull Format name(@NotNull String name) {
-        return new PMFormat(name, parts);
-    }
-
-    @Override
-    public int priority() {
-        return 1;
-    }
-
-    @Override
-    public @NotNull Format priority(final int priority) {
-        return this;
+    public @NotNull BasicFormat name(@NotNull String name) {
+        return new BasicFormat(name, parts);
     }
 
     @Override
@@ -45,16 +35,15 @@ public final class PMFormat implements Format {
     }
 
     @Override
-    public @NotNull PMFormat parts(@NotNull final Map<String, List<String>> parts) {
-        return new PMFormat(name, parts);
+    public @NotNull BasicFormat parts(@NotNull final Map<String, List<String>> parts) {
+        return new BasicFormat(name, parts);
     }
 
     @Override
     public String toString() {
-        return "PMFormat{" +
-                "name=" + name +
-                ", priority=" + priority() +
-                ", parts=" + parts +
-                '}';
+        return "BasicFormat{" +
+            "name=" + name +
+            ", parts=" + parts +
+            '}';
     }
 }

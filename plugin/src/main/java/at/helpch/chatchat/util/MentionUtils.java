@@ -3,7 +3,7 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
-import at.helpch.chatchat.format.PMFormat;
+import at.helpch.chatchat.format.BasicFormat;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
 import org.intellij.lang.annotations.RegExp;
@@ -115,7 +115,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processPersonalMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final PMFormat mentionFormat,
+        @NotNull final BasicFormat mentionFormat,
         @NotNull final ChatUser user,
         @NotNull final ChatUser target,
         @NotNull final Component message

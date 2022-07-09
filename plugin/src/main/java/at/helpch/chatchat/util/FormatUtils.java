@@ -3,7 +3,6 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.config.holders.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.format.ConsoleFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -40,25 +39,6 @@ public final class FormatUtils {
         final var formatOptional = findPermissionFormat(player, formats.formats());
 
         return formatOptional.orElse(ChatFormat.defaultFormat());
-    }
-
-    public static @NotNull String parseConsoleFormat(
-        @NotNull final ConsoleFormat format,
-        @NotNull final Player player,
-        @NotNull final ComponentLike message) {
-        return LegacyComponentSerializer.legacySection().serialize(
-          MessageUtils.parseToMiniMessage(
-              PlaceholderAPI.setPlaceholders(
-                  player,
-                  format.parts()
-                      .values()
-                      .stream()
-                      .map(part -> String.join("", part))
-                      .collect(Collectors.joining())
-              ),
-              Placeholder.component("message", message)
-          )
-        );
     }
 
     public static @NotNull Component parseFormat(

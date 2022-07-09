@@ -1,8 +1,8 @@
 package at.helpch.chatchat.config.holders;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
+import at.helpch.chatchat.format.BasicFormat;
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.format.ConsoleFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -15,7 +15,7 @@ public final class FormatsHolder {
 
     private String defaultFormat = "default";
 
-    private ConsoleFormat consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
+    private BasicFormat consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
 
     private Map<String, ChatFormat> formats = Map.of(
             "other", DefaultConfigObjects.createOtherFormat(),
@@ -25,7 +25,7 @@ public final class FormatsHolder {
         return defaultFormat;
     }
 
-    public @NotNull ConsoleFormat consoleFormat() {
+    public @NotNull BasicFormat consoleFormat() {
         return consoleFormat;
     }
 

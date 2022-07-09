@@ -58,7 +58,7 @@ public final class ChatListener implements Listener {
 
         event.setMessage(LegacyComponentSerializer.legacySection().serialize(finalMessage));
         try {
-            event.setFormat(FormatUtils.parseConsoleFormat(consoleFormat, player, finalMessage));
+            event.setFormat(LegacyComponentSerializer.legacySection().serialize(FormatUtils.parseFormat(consoleFormat, player, finalMessage)));
         } catch (UnknownFormatConversionException exception) {
             plugin.getLogger().severe(
                 "Your console format contains illegal characters: '%" +
