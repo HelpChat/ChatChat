@@ -3,7 +3,10 @@ package at.helpch.chatchat.listener;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.util.ChannelUtils;
+import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
+import java.util.UnknownFormatConversionException;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -38,13 +41,36 @@ public final class ChatListener implements Listener {
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
         final var channelByPrefix =
-                ChannelUtils.findChannelByPrefix(List.copyOf(plugin.configManager().channels().channels().values()), event.getMessage());
+                ChannelUtils.findChannelByPrefix(
+                    List.copyOf(plugin.configManager().channels().channels().values()),
+                    event.getMessage());
 
         final var message = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
                 ? event.getMessage()
                 : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user) ? user.channel() : channelByPrefix.get();
+        final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
+            ? user.channel()
+            : channelByPrefix.get();
+
+        final var consoleFormat = plugin.configManager().formats().consoleFormat();
+        final var finalMessage = MessageProcessor.processMessage(plugin, user, message);
+
+        event.setMessage(LegacyComponentSerializer.legacySection().serialize(finalMessage));
+        try {
+            event.setFormat(LegacyComponentSerializer.legacySection().serialize(FormatUtils.parseFormat(consoleFormat, player, finalMessage)));
+        } catch (UnknownFormatConversionException exception) {
+            plugin.getLogger().severe(
+                "Your console format contains illegal characters: '%" +
+                    exception
+                        .getMessage()
+                        .replace("Conversion = ", "")
+                        .replace("'", "") +
+                    "'. You cannot use the % symbol in your console format.");
+            plugin.getLogger().severe(
+                "Make sure that all the PlaceholderAPI expansions for the placeholders you use in your console " +
+                    "format are installed and work properly.");
+        }
 
         MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous());
     }

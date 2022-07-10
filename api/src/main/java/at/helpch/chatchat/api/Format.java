@@ -11,10 +11,6 @@ public interface Format {
 
     @NotNull Format name(@NotNull final String name);
 
-    int priority();
-
-    @NotNull Format priority(final int priority);
-
     @NotNull Map<String, List<String>> parts();
 
     @NotNull Format parts(@NotNull final Map<String, List<String>> parts);

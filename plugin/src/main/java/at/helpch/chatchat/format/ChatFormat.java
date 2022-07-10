@@ -1,6 +1,6 @@
 package at.helpch.chatchat.format;
 
-import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.PriorityFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @ConfigSerializable
-public final class ChatFormat implements Format {
+public final class ChatFormat implements PriorityFormat {
 
     private static ChatFormat defaultFormat = DefaultFormatFactory.createDefaultFormat();
     private final String name;

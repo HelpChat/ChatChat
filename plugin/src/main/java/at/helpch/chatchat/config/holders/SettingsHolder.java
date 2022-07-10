@@ -1,7 +1,7 @@
 package at.helpch.chatchat.config.holders;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
-import at.helpch.chatchat.format.PMFormat;
+import at.helpch.chatchat.format.BasicFormat;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -11,29 +11,29 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public final class SettingsHolder {
 
-    private PMFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
+    private BasicFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
 
-    private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
-    private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
+    private BasicFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
+    private BasicFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
 
     private String mentionPrefix = "@";
-    private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
+    private BasicFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
 
-    public @NotNull PMFormat senderFormat() {
+    public @NotNull BasicFormat senderFormat() {
         return senderFormat;
     }
 
-    public @NotNull PMFormat recipientFormat() {
+    public @NotNull BasicFormat recipientFormat() {
         return recipientFormat;
     }
 
-    public @NotNull PMFormat socialSpyFormat() {
+    public @NotNull BasicFormat socialSpyFormat() {
         return socialSpyFormat;
     }
 
@@ -49,7 +49,7 @@ public final class SettingsHolder {
         return mentionPrefix;
     }
 
-    public @NotNull PMFormat mentionFormat() {
+    public @NotNull BasicFormat mentionFormat() {
         return mentionFormat;
     }
 

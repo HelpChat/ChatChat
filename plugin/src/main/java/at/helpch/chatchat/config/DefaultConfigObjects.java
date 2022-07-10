@@ -1,8 +1,8 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.format.BasicFormat;
 import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.format.PMFormat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +23,16 @@ public final class DefaultConfigObjects {
     public static @NotNull ChatChannel createStaffChannel() {
         return new ChatChannel("staff",
             "@", List.of("staffchat"), "<gray>[<green>Staff<gray>]", -1);
+    }
+
+    public static @NotNull BasicFormat createDefaultConsoleFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put("channel", List.of("%chatchat_channel_prefix% "));
+        map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
+        map.put("name", List.of("<white>%player_name%"));
+        map.put("message", List.of(" <gray>» <white><message>"));
+        return new BasicFormat("console-format", map);
     }
 
     public static @NotNull ChatFormat createDefaultFormat() {
@@ -54,7 +64,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("other", 1, map);
     }
 
-    public static @NotNull PMFormat createPrivateMessageSenderFormat() {
+    public static @NotNull BasicFormat createPrivateMessageSenderFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>you"));
@@ -62,10 +72,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new PMFormat("sender", map);
+        return new BasicFormat("sender", map);
     }
 
-    public static @NotNull PMFormat createPrivateMessageRecipientFormat() {
+    public static @NotNull BasicFormat createPrivateMessageRecipientFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>%player_name%"));
@@ -73,10 +83,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray>you"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new PMFormat("recipient", map);
+        return new BasicFormat("recipient", map);
     }
 
-    public static @NotNull PMFormat createPrivateMessageSocialSpyFormat() {
+    public static @NotNull BasicFormat createPrivateMessageSocialSpyFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>(spy) "));
@@ -85,10 +95,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new PMFormat("socialspy", map);
+        return new BasicFormat("socialspy", map);
     }
 
-    public static @NotNull PMFormat createMentionFormat() {
+    public static @NotNull BasicFormat createMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -100,7 +110,7 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new PMFormat("mention", map);
+        return new BasicFormat("mention", map);
     }
 
     public static @NotNull Sound createMentionSound() {

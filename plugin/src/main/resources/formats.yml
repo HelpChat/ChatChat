@@ -1,12 +1,27 @@
 # Set the default format. This will be used when players do not have any other format permissions
 default-format: 'default'
+# Set the console format. This is the format that will be seen from the console. You will have to use %s to specify
+# the player name and the message location instead of <message>
+console-format:
+  parts:
+    channel:
+      - '%chatchat_channel_prefix% '
+    prefix:
+      - '<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] '
+    name:
+      - <white>%player_name%
+    message:
+      - ' <gray>» <white><message>'
+
+
 formats:
   default: # this is the default format as set by default-format. No permission is needed.
     priority: 2 # lower number = higher priority
     # list of all the parts of the format, supports unlimited amount of parts.
     # Technically only 1 part is needed and every part only needs one line but to clean up the config, multiple parts
     # can be used and each part can have multiple lines.
-    # These parts can be formatted using MiniMessage, which can be found here: https://docs.adventure.kyori.net/minimessage/index.html
+    # These parts can be formatted using MiniMessage, which can be found here:
+    # https://docs.adventure.kyori.net/minimessage/index.html
     parts:
       channel:
         - '<click:open_url:"https://google.com">'
