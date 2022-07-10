@@ -48,7 +48,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         final var channelPrefix = node.node(CHANNEL_PREFIX).getString("");
         final var radius = node.node(RADIUS).getInt(-1);
 
-        final var channelType = node.node(TYPE).getString("default");
+        final var channelType = node.node(TYPE).getString("default").toLowerCase();
 
         final var builder = registry.builders().get(channelType);
         if (builder == null) {
