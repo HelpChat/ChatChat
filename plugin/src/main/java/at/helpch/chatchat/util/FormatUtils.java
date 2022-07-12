@@ -41,6 +41,21 @@ public final class FormatUtils {
         return formatOptional.orElse(ChatFormat.defaultFormat());
     }
 
+    public static @NotNull Component parseConsoleFormat(
+        @NotNull final Format format,
+        @NotNull final Player player) {
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(
+                player,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ).replace("<message>", "%2$s")
+        );
+    }
+
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
             @NotNull final Player player,
