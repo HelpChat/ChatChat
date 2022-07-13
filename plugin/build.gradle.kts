@@ -17,6 +17,8 @@ repositories {
     maven("https://nexus.scarsz.me/content/groups/public")
     // supervanish
     maven("https://jitpack.io")
+    // essentialsx
+    maven("https://repo.essentialsx.net/releases/")
 }
 
 dependencies {
@@ -27,6 +29,7 @@ dependencies {
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
     implementation(libs.bstats)
+    implementation(libs.essentials)
     implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)

@@ -14,6 +14,7 @@ towny = "0.98.1.3"
 discordsrv = "1.25.1"
 supervanish = "6.2.6-4"
 bstats = "3.0.0"
+essentials = "2.19.4"
 
 [libraries]
 # Minecraft
@@ -32,3 +33,4 @@ towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
 supervanish = { module = "com.github.LeonMangler:SuperVanish", version.ref = "supervanish" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+essentials = { module = "net.essentialsx:EssentialsX", version.ref="essentials" }

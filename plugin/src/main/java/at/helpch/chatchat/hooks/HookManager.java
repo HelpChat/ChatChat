@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.api.hook.VanishHook;
+import at.helpch.chatchat.hooks.vanish.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
 
@@ -18,6 +19,7 @@ public final class HookManager {
         ChatChatDsrvHook::new,
         ChatChatTownyHook::new,
         VanillaVanishHook::new,
+        EssentialsVanishHook::new,
         SuperVanishHook::new
     );
     private final ChatChatPlugin plugin;
