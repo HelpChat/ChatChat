@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,12 @@ public final class ItemUtils {
             ? MessageUtils.parseToMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
             : null;
 
-        if (item.getType().isAir() || !item.hasItemMeta()) {
+        if (item.getType() == Material.AIR ||
+            item.getType() == Material.CAVE_AIR ||
+            item.getType() == Material.VOID_AIR ||
+            item.getType() == Material.LEGACY_AIR ||
+            !item.hasItemMeta()
+        ) {
             return Placeholder.component(
                 "item",
                 MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent));
