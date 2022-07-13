@@ -7,15 +7,8 @@ import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -45,18 +38,7 @@ public final class HookManager {
         for (final var constructor : constructors) {
             final var hook = constructor.apply(plugin);
 
-            final @Nullable List<Plugin> hookPlugins = hook.dependency().isPresent()
-                ? hook.dependency().get().stream()
-                .map(Bukkit.getPluginManager()::getPlugin)
-                .filter(Objects::nonNull)
-                .filter(Plugin::isEnabled)
-                .collect(Collectors.toUnmodifiableList())
-                : Collections.emptyList();
-
-            if (hook.dependency().isPresent() && hookPlugins.isEmpty()) {
-                continue;
-            }
-
+            if (!hook.register()) return;
             hook.enable();
 
             if (hook instanceof VanishHook) {
@@ -65,9 +47,7 @@ public final class HookManager {
                 hooks.add(hook);
             }
 
-            if (!hookPlugins.isEmpty()) {
-                plugin.getLogger().info("Enabled " + hookPlugins.get(0).getName() + " hook.");
-            }
+            if (hook.name().isPresent()) plugin.getLogger().info("Enabled the " + hook.name().get() + " hook.");
         }
     }
 

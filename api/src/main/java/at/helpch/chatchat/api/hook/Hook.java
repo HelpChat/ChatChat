@@ -1,6 +1,5 @@
 package at.helpch.chatchat.api.hook;
 
-import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,9 +8,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Hook {
     /**
-     * @return the plugin that this hook depends on
+     * @return true if ChatChat should register the hook or false otherwise.
      */
-    @NotNull Optional<@NotNull List<String>> dependency();
+    boolean register();
+
+    /**
+     * @return the name of the hook. this is only going to be used for display purposes and not for anything internally.
+     */
+    @NotNull Optional<@NotNull String> name();
 
     /**
      * Enable the hook.
