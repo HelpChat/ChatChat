@@ -55,7 +55,7 @@ public final class MessageProcessor {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static void process(
+    public static boolean process(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,
         @NotNull final Channel channel,
@@ -64,7 +64,7 @@ public final class MessageProcessor {
     ) {
         if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
-            return;
+            return false;
         }
 
         final var chatEvent = new ChatChatEvent(
@@ -78,7 +78,7 @@ public final class MessageProcessor {
         plugin.getServer().getPluginManager().callEvent(chatEvent);
 
         if (chatEvent.isCancelled()) {
-            return;
+            return false;
         }
 
         final var oldChannel = user.channel();
@@ -216,7 +216,7 @@ public final class MessageProcessor {
 
         if (!userIsTarget) {
             user.channel(oldChannel);
-            return;
+            return true;
         }
 
         final var channelMentionProcessResult = MentionUtils.processChannelMentions(
@@ -271,7 +271,7 @@ public final class MessageProcessor {
 
                 user.sendMessage(component);
                 user.channel(oldChannel);
-                return;
+                return true;
             }
 
             final var component = FormatUtils.parseFormat(
@@ -283,7 +283,7 @@ public final class MessageProcessor {
             user.playSound(mentionSound);
             user.sendMessage(component);
             user.channel(oldChannel);
-            return;
+            return true;
         }
 
         final var component = FormatUtils.parseFormat(
@@ -295,6 +295,7 @@ public final class MessageProcessor {
         user.playSound(mentionSound);
         user.sendMessage(component);
         user.channel(oldChannel);
+        return true;
     }
 
     public static @NotNull Component processMessage(

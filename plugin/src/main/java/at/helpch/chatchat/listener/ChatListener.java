@@ -76,7 +76,9 @@ public final class ChatListener implements Listener {
                     "format are installed and work properly.");
         }
 
-        MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous());
+        // Cancel the event if the message doesn't end up being sent
+        // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
+        event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
     }
 
     private static String cleanseMessage(@NotNull final String message) {
