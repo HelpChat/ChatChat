@@ -148,11 +148,13 @@ public final class MessageProcessor {
                 continue;
             }
 
+            final var chatUserTarget = (ChatUser) target;
+
             final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
                 mentionPrefix,
                 personalMentionFormat,
                 user,
-                (ChatUser) target,
+                chatUserTarget,
                 !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
                     ? parsedMessage
                     : channelMentionProcessResult.getValue()
@@ -175,6 +177,7 @@ public final class MessageProcessor {
                     final var component = FormatUtils.parseFormat(
                         chatEvent.format(),
                         user.player(),
+                        chatUserTarget.player(),
                         parsedMessage
                     );
 
@@ -185,6 +188,7 @@ public final class MessageProcessor {
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
+                    chatUserTarget.player(),
                     channelMentionProcessResult.getValue()
                 );
 
@@ -198,6 +202,7 @@ public final class MessageProcessor {
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
                 user.player(),
+                chatUserTarget.player(),
                 personalMentionProcessResult.getValue()
             );
 
@@ -208,7 +213,7 @@ public final class MessageProcessor {
                     mentionPrefix,
                     personalMentionFormat,
                     user,
-                    (ChatUser) target,
+                    chatUserTarget,
                     userMessage
                 ).getValue();
             }
@@ -266,6 +271,7 @@ public final class MessageProcessor {
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
+                    user.player(),
                     userMessage
                 );
 
@@ -276,6 +282,7 @@ public final class MessageProcessor {
 
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
+                user.player(),
                 user.player(),
                 channelMentionProcessResult.getValue()
             );
@@ -288,6 +295,7 @@ public final class MessageProcessor {
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
+            user.player(),
             user.player(),
             personalMentionProcessResult.getValue()
         );
