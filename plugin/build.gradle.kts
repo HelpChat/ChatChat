@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
     implementation(libs.bstats)
-    implementation(libs.essentials)
+    compileOnly(libs.essentials)
     implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)
