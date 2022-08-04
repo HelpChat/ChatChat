@@ -65,21 +65,25 @@ public final class ItemUtils {
 
         final var newItemPlaceholder = Placeholder.component("item", name);
 
-        final List<Component> enchants = meta.hasEnchants() && !meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)
-                ? meta.getEnchants()
-                .entrySet()
-                .stream()
-                .map(entry -> formattedEnchantment(entry.getKey(), entry.getValue()).color(NamedTextColor.GRAY))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+        var enchants = Collections.<Component>emptyList();
 
-        final List<Component> lore = meta.hasLore()
-                ? meta.getLore()
+        if (meta.hasEnchants() && !meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+            enchants = meta.getEnchants().entrySet()
+                .stream()
+                .map(entry -> formattedEnchantment(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+        }
+
+        var lore = Collections.<Component>emptyList();
+
+        if (meta.hasLore()) {
+            //noinspection ConstantConditions
+            lore = meta.getLore()
                 .stream()
                 .map(LEGACY_COMPONENT_SERIALIZER::deserialize)
                 .map(it -> it.hasStyling() ? it : it.color(NamedTextColor.DARK_PURPLE))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+                .collect(Collectors.toList());
+        }
 
         final var hoverComponents = new ArrayList<Component>();
 
@@ -107,7 +111,11 @@ public final class ItemUtils {
         }
 
         final var isVanilla = enchantment.getKey().getNamespace().equals(NamespacedKey.MINECRAFT);
-        final Component enchantmentName = isVanilla ? Component.translatable("enchantment.minecraft." + enchantment.getKey().getKey()) : Component.text(enchantment.getName());
+        Component enchantmentName = isVanilla ? Component.translatable("enchantment.minecraft." + enchantment.getKey().getKey()) : Component.text(enchantment.getName());
+
+        if (!enchantmentName.hasStyling()) {
+            enchantmentName = enchantmentName.color(NamedTextColor.GRAY);
+        }
 
         if (enchantment.getMaxLevel() == 1) {
             return enchantmentName;
