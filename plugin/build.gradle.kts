@@ -32,7 +32,7 @@ dependencies {
     compileOnly(libs.essentials)
     implementation(libs.adventure.configurate)
 
-    compileOnly(libs.paper)
+    compileOnly(libs.spigot)
     compileOnly(libs.papi)
     compileOnly(libs.towny)
     compileOnly(libs.discordsrv)

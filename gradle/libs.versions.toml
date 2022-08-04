@@ -1,6 +1,6 @@
 [versions]
 # Minecraft
-paper = "1.18.1-R0.1-SNAPSHOT"
+spigot = "1.18.1-R0.1-SNAPSHOT"
 
 # Adventure
 minimessage = "4.11.0"
@@ -18,7 +18,7 @@ essentials = "2.19.4"
 
 [libraries]
 # Minecraft
-paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
 
 # Adventure
 adventure-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }

@@ -26,17 +26,11 @@ public final class ItemUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    @SuppressWarnings("deprecation")
     private static @NotNull Component getTranslation(@NotNull final Material material) {
-        if (VersionHelper.IS_PAPER_AND_MATERIAL_HAS_TRANSLATION_KEY) {
-            return Component.translatable(material.getTranslationKey());
-        }
-
-        final var prefix = material.isBlock() ? "block.minecraft." : "item.minecraft.";
-        return Component.translatable(prefix + material.getKey().getKey());
+        final var type = material.isBlock() ? "block" : "item";
+        return Component.translatable(String.format("%s.minecraft.%s", type, material.getKey().getKey()));
     }
 
-    @SuppressWarnings("deprecation")
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
             @NotNull final String itemFormat,
             @NotNull final String itemFormatInfo,
