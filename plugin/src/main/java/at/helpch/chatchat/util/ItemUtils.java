@@ -26,12 +26,17 @@ public final class ItemUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
+    private static @NotNull Component getTranslation(@NotNull final Material material) {
+        final var type = material.isBlock() ? "block" : "item";
+        return Component.translatable(String.format("%s.minecraft.%s", type, material.getKey().getKey()));
+    }
+
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
             @NotNull final String itemFormat,
             @NotNull final String itemFormatInfo,
             @NotNull final ItemStack item
     ) {
-        final var materialName = Component.translatable("item.minecraft." + item.getType().getKey().getKey());
+        final var materialName = getTranslation(item.getType());
         final var itemPlaceholder = Placeholder.component("item", materialName);
         final var amountPlaceholder = Placeholder.component("amount", Component.text(item.getAmount()));
 
@@ -39,12 +44,7 @@ public final class ItemUtils {
                 ? MessageUtils.parseToMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
                 : null;
 
-        if (item.getType() == Material.AIR ||
-                item.getType() == Material.CAVE_AIR ||
-                item.getType() == Material.VOID_AIR ||
-                item.getType() == Material.LEGACY_AIR ||
-                !item.hasItemMeta()
-        ) {
+        if (item.getType() == Material.AIR || item.getType() == Material.CAVE_AIR || item.getType() == Material.VOID_AIR || !item.hasItemMeta()) {
             return Placeholder.component(
                     "item",
                     MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
@@ -65,21 +65,25 @@ public final class ItemUtils {
 
         final var newItemPlaceholder = Placeholder.component("item", name);
 
-        final List<Component> enchants = meta.hasEnchants() && !meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)
-                ? meta.getEnchants()
-                .entrySet()
-                .stream()
-                .map(entry -> formattedEnchantment(entry.getKey(), entry.getValue()).color(NamedTextColor.GRAY))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+        var enchants = Collections.<Component>emptyList();
 
-        final List<Component> lore = meta.hasLore()
-                ? meta.getLore()
+        if (meta.hasEnchants() && !meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+            enchants = meta.getEnchants().entrySet()
+                .stream()
+                .map(entry -> formattedEnchantment(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+        }
+
+        var lore = Collections.<Component>emptyList();
+
+        if (meta.hasLore()) {
+            //noinspection ConstantConditions
+            lore = meta.getLore()
                 .stream()
                 .map(LEGACY_COMPONENT_SERIALIZER::deserialize)
                 .map(it -> it.hasStyling() ? it : it.color(NamedTextColor.DARK_PURPLE))
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+                .collect(Collectors.toList());
+        }
 
         final var hoverComponents = new ArrayList<Component>();
 
@@ -100,13 +104,18 @@ public final class ItemUtils {
         );
     }
 
+    @SuppressWarnings("deprecation")
     private static @NotNull Component formattedEnchantment(@Nullable final Enchantment enchantment, @Nullable final Integer level) {
         if (enchantment == null) {
             return Component.empty();
         }
 
         final var isVanilla = enchantment.getKey().getNamespace().equals(NamespacedKey.MINECRAFT);
-        final Component enchantmentName = isVanilla ? Component.translatable("enchantment.minecraft." + enchantment.getKey().getKey()) : Component.text(enchantment.getName());
+        Component enchantmentName = isVanilla ? Component.translatable("enchantment.minecraft." + enchantment.getKey().getKey()) : Component.text(enchantment.getName());
+
+        if (!enchantmentName.hasStyling()) {
+            enchantmentName = enchantmentName.color(NamedTextColor.GRAY);
+        }
 
         if (enchantment.getMaxLevel() == 1) {
             return enchantmentName;
