@@ -3,6 +3,7 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.api.exception.ChatChatException;
 import com.google.common.primitives.Ints;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
@@ -23,10 +24,16 @@ public final class VersionHelper {
     public static final int V1_13_2 = 1132;
     public static final int V1_14_4 = 1144;
     public static final int V1_15_2 = 1152;
+    public static final int V1_16 = 1160;
     public static final int V1_16_5 = 1165;
     public static final int V1_17_1 = 1171;
     public static final int V1_18_2 = 1182;
     public static final int V1_19_0 = 1190;
+
+    /**
+     * @see Material#getTranslationKey()
+     */
+    public static final boolean IS_PAPER_AND_MATERIAL_HAS_TRANSLATION_KEY = IS_PAPER && CURRENT_VERSION >= V1_16;
 
     /**
      * Check if the server has access to the Paper API

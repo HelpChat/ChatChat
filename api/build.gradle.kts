@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.adventure.bukkit)
-    compileOnly(libs.spigot)
+    compileOnly(libs.paper)
 }
 
 publishing {

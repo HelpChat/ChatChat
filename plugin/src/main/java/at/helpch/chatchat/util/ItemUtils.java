@@ -26,12 +26,23 @@ public final class ItemUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
+    @SuppressWarnings("deprecation")
+    private static @NotNull Component getTranslation(@NotNull final Material material) {
+        if (VersionHelper.IS_PAPER_AND_MATERIAL_HAS_TRANSLATION_KEY) {
+            return Component.translatable(material.getTranslationKey());
+        }
+
+        final var prefix = material.isBlock() ? "block.minecraft." : "item.minecraft.";
+        return Component.translatable(prefix + material.getKey().getKey());
+    }
+
+    @SuppressWarnings("deprecation")
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
             @NotNull final String itemFormat,
             @NotNull final String itemFormatInfo,
             @NotNull final ItemStack item
     ) {
-        final var materialName = Component.translatable("item.minecraft." + item.getType().getKey().getKey());
+        final var materialName = getTranslation(item.getType());
         final var itemPlaceholder = Placeholder.component("item", materialName);
         final var amountPlaceholder = Placeholder.component("amount", Component.text(item.getAmount()));
 
@@ -39,12 +50,7 @@ public final class ItemUtils {
                 ? MessageUtils.parseToMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
                 : null;
 
-        if (item.getType() == Material.AIR ||
-                item.getType() == Material.CAVE_AIR ||
-                item.getType() == Material.VOID_AIR ||
-                item.getType() == Material.LEGACY_AIR ||
-                !item.hasItemMeta()
-        ) {
+        if (item.getType() == Material.AIR || item.getType() == Material.CAVE_AIR || item.getType() == Material.VOID_AIR || !item.hasItemMeta()) {
             return Placeholder.component(
                     "item",
                     MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
@@ -100,6 +106,7 @@ public final class ItemUtils {
         );
     }
 
+    @SuppressWarnings("deprecation")
     private static @NotNull Component formattedEnchantment(@Nullable final Enchantment enchantment, @Nullable final Integer level) {
         if (enchantment == null) {
             return Component.empty();
