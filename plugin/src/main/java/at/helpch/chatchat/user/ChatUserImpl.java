@@ -30,6 +30,7 @@ public final class ChatUserImpl implements ChatUser {
     private Channel channel;
     private Format format;
     private boolean privateMessages = true;
+    private boolean mentions = true;
 
     @Override
     public @NotNull Channel channel() {
@@ -74,6 +75,16 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void privateMessages(final boolean enabled) {
         this.privateMessages = enabled;
+    }
+
+    @Override
+    public boolean mentions() {
+        return mentions;
+    }
+
+    @Override
+    public void mentions(boolean receivesMentions) {
+        mentions = receivesMentions;
     }
 
     @Override

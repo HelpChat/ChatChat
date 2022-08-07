@@ -1,12 +1,12 @@
 package at.helpch.chatchat.config.holders;
 
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
-
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
+import static net.kyori.adventure.text.format.NamedTextColor.RED;
 
 // configurate requires non-final fields
 @SuppressWarnings("FieldMayBeFinal")
@@ -27,7 +27,8 @@ public final class MessagesHolder {
     private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
     private Component cantMessageYourself = text("You can't message yourself!", RED);
     private Component emptyMessage = text("You can't send an empty message!", RED);
-    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!", RED);
+    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!",
+        RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
 
@@ -40,6 +41,10 @@ public final class MessagesHolder {
     private Component commandInvalidUsage = text("Invalid usage.", RED);
     private Component commandInvalidArgument = text("Invalid argument.", RED);
     private Component commandNoPermission = text("No Permission.", RED);
+
+    // mention related
+    private Component mentionsEnabled = text("Successfully enabled mentions!", GREEN);
+    private Component mentionsDisabled = text("Successfully disabled mentions!", GREEN);
 
     public @NotNull Component consoleOnly() {
         return consoleOnly;
@@ -119,5 +124,13 @@ public final class MessagesHolder {
 
     public @NotNull Component noPermission() {
         return commandNoPermission;
+    }
+
+    public @NotNull Component mentionsEnabled() {
+        return mentionsEnabled;
+    }
+
+    public @NotNull Component mentionsDisabled() {
+        return mentionsDisabled;
     }
 }

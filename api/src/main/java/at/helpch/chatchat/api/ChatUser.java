@@ -17,4 +17,8 @@ public interface ChatUser extends User {
     boolean privateMessages();
 
     void privateMessages(final boolean enable);
+
+    boolean mentions();
+
+    void mentions(final boolean receivesMentions);
 }

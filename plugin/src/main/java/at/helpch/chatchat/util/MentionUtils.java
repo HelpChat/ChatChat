@@ -4,11 +4,12 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.format.BasicFormat;
-import java.util.Map;
 import net.kyori.adventure.text.Component;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
@@ -93,7 +94,9 @@ public final class MentionUtils {
         if (target instanceof ChatUser) {
             final var targetChatUser = (ChatUser) target;
 
-            if (targetChatUser.player().hasPermission(MENTION_CHANNEL_BLOCK_PERMISSION) && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
+            if (!targetChatUser.mentions() &&
+                targetChatUser.player().hasPermission(MENTION_CHANNEL_BLOCK_PERMISSION)
+                && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
                 return Map.entry(false, message);
             }
 
@@ -121,7 +124,8 @@ public final class MentionUtils {
         @NotNull final Component message
     ) {
         if (!user.player().hasPermission(MENTION_PERSONAL_PERMISSION) ||
-            (target.player().hasPermission(MENTION_PERSONAL_BLOCK_PERMISSION) &&
+            (!target.mentions() &&
+                target.player().hasPermission(MENTION_PERSONAL_BLOCK_PERMISSION) &&
                 !user.player().hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
         ) {
             return Map.entry(false, message);
