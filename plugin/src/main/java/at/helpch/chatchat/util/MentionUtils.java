@@ -20,8 +20,10 @@ public final class MentionUtils {
     private static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.channel";
     private static final String MENTION_PERSONAL_BLOCK_PERMISSION = MENTION_PERSONAL_PERMISSION + ".block";
     private static final String MENTION_CHANNEL_BLOCK_PERMISSION = MENTION_CHANNEL_PERMISSION + ".block";
-    private static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION + ".override";
-    private static final String MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION = MENTION_CHANNEL_BLOCK_PERMISSION + ".override";
+    private static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION +
+        ".override";
+    private static final String MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION = MENTION_CHANNEL_BLOCK_PERMISSION +
+        ".override";
 
     private MentionUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
@@ -47,37 +49,37 @@ public final class MentionUtils {
 
     @Contract(value = "_, _, _ -> new", pure = true)
     private static MentionReplaceResult replaceMention(
-            @RegExp @NotNull final String username,
-            @NotNull final Component component,
-            @NotNull final Function<MatchResult, Component> then) {
+        @RegExp @NotNull final String username,
+        @NotNull final Component component,
+        @NotNull final Function<MatchResult, Component> then) {
         final AtomicBoolean hasBeenReplaced = new AtomicBoolean();
         final var replaced = component.replaceText(builder -> builder
-                .match(Pattern.compile(username, Pattern.CASE_INSENSITIVE))
-                .replacement((result, ignored) -> {
-                            hasBeenReplaced.set(true);
-                            return then.apply(result);
-                        }
-                ));
+            .match(Pattern.compile(username, Pattern.CASE_INSENSITIVE))
+            .replacement((result, ignored) -> {
+                    hasBeenReplaced.set(true);
+                    return then.apply(result);
+                }
+            ));
         return new MentionReplaceResult(hasBeenReplaced.get(), replaced);
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
     public static MentionReplaceResult replaceMention(
-            @RegExp @NotNull final String username,
-            @NotNull final Component component,
-            @NotNull final String format) {
+        @RegExp @NotNull final String username,
+        @NotNull final Component component,
+        @NotNull final String format) {
         return replaceMention(username, component, (r) -> MessageUtils.parseToMiniMessage(format + r.group()));
     }
 
     @Contract(value = "_, _, _, _ -> new", pure = true)
     public static MentionReplaceResult replaceMention(
-            @NotNull final ChatUser user,
-            @NotNull final String prefix,
-            @NotNull final Component component,
-            @NotNull final Format format
-            ) {
+        @NotNull final ChatUser user,
+        @NotNull final String prefix,
+        @NotNull final Component component,
+        @NotNull final Format format
+    ) {
         return replaceMention(prefix + user.player().getName(), component,
-                r -> FormatUtils.parseFormat(format, user.player(), component));
+            r -> FormatUtils.parseFormat(format, user.player(), component));
     }
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(
@@ -94,9 +96,7 @@ public final class MentionUtils {
         if (target instanceof ChatUser) {
             final var targetChatUser = (ChatUser) target;
 
-            if (!targetChatUser.mentions() &&
-                targetChatUser.player().hasPermission(MENTION_CHANNEL_BLOCK_PERMISSION)
-                && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
+            if (!targetChatUser.channelMentions() && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
                 return Map.entry(false, message);
             }
 
@@ -124,9 +124,7 @@ public final class MentionUtils {
         @NotNull final Component message
     ) {
         if (!user.player().hasPermission(MENTION_PERSONAL_PERMISSION) ||
-            (!target.mentions() &&
-                target.player().hasPermission(MENTION_PERSONAL_BLOCK_PERMISSION) &&
-                !user.player().hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
+            (!target.personalMentions() && !user.player().hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
         ) {
             return Map.entry(false, message);
         }

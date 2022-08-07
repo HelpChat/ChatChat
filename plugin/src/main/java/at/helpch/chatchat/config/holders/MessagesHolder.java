@@ -43,8 +43,10 @@ public final class MessagesHolder {
     private Component commandNoPermission = text("No Permission.", RED);
 
     // mention related
-    private Component mentionsEnabled = text("Successfully enabled mentions!", GREEN);
-    private Component mentionsDisabled = text("Successfully disabled mentions!", GREEN);
+    private Component personalMentionsEnabled = text("Successfully enabled personal mentions!", GREEN);
+    private Component personalMentionsDisabled = text("Successfully disabled personal mentions!", GREEN);
+    private Component channelMentionsEnabled = text("Successfully enabled channel mentions!", GREEN);
+    private Component channelMentionsDisabled = text("Successfully disabled channel mentions!", GREEN);
 
     public @NotNull Component consoleOnly() {
         return consoleOnly;
@@ -126,11 +128,20 @@ public final class MessagesHolder {
         return commandNoPermission;
     }
 
-    public @NotNull Component mentionsEnabled() {
-        return mentionsEnabled;
+    public @NotNull Component personalMentionsEnabled() {
+        return personalMentionsEnabled;
     }
 
-    public @NotNull Component mentionsDisabled() {
-        return mentionsDisabled;
+    public @NotNull Component personalMentionsDisabled() {
+        return personalMentionsDisabled;
     }
+
+    public @NotNull Component channelMentionsEnabled() {
+        return channelMentionsEnabled;
+    }
+
+    public @NotNull Component channelMentionsDisabled() {
+        return channelMentionsDisabled;
+    }
+
 }
