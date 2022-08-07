@@ -62,15 +62,6 @@ bukkit {
             default = "op"
         }
 
-        permission("chatchat.mentiontoggle.channel") {
-            description = "Toggle channel mentions"
-            default = "op"
-        }
-        permission("chatchat.mentiontoggle.personal") {
-            description = "Toggle personal mentions"
-            default = "op"
-        }
-
         permission("chatchat.utf") {
             description = "Send any char in chat"
             default = "op"

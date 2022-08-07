@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.util.MentionUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -10,8 +11,6 @@ import dev.triumphteam.cmd.core.annotation.SubCommand;
 @Command(value = "togglemention", alias = "toggleping")
 public class MentionToggleCommand extends BaseCommand {
 
-    private static final String PERSONAL_TOGGLE_PERMISSION = "chatchat.mentiontoggle.personal";
-    private static final String CHANNEL_TOGGLE_PERMISSION = "chatchat.mentiontoggle.channel";
     private final ChatChatPlugin plugin;
 
     public MentionToggleCommand(final ChatChatPlugin plugin) {
@@ -19,7 +18,7 @@ public class MentionToggleCommand extends BaseCommand {
     }
 
     @SubCommand("personal")
-    @Permission(PERSONAL_TOGGLE_PERMISSION)
+    @Permission(MentionUtils.MENTION_PERSONAL_BLOCK_PERMISSION)
     public void togglePersonal(final ChatUser sender) {
         sender.personalMentions(!sender.personalMentions());
 
@@ -32,7 +31,7 @@ public class MentionToggleCommand extends BaseCommand {
     }
 
     @SubCommand("channel")
-    @Permission(CHANNEL_TOGGLE_PERMISSION)
+    @Permission(MentionUtils.MENTION_CHANNEL_BLOCK_PERMISSION)
     public void toggleChannel(final ChatUser sender) {
         sender.channelMentions(!sender.channelMentions());
 
