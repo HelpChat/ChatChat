@@ -17,4 +17,8 @@ public interface ChatUser extends User {
     boolean privateMessages();
 
     void privateMessages(final boolean enable);
+
+    void socialSpy(final boolean enable);
+
+    boolean socialSpy();
 }

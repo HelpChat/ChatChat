@@ -12,6 +12,7 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
+import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -92,7 +93,11 @@ public final class WhisperCommand extends BaseCommand {
         Map.of(
                 user, pmSendEvent.senderFormat(),
                 recipient, pmSendEvent.recipientFormat(),
-                Audience.audience(plugin.usersHolder().socialSpies()), socialSpyFormat
+                Audience.audience(
+                    plugin.usersHolder().users()
+                        .stream()
+                        .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
+                        .collect(Collectors.toUnmodifiableList())), socialSpyFormat
         ).forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                     format,
