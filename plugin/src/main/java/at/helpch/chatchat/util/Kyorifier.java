@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public final class Kyorifier {
     private static final Map<Character, String> COLOURS = new HashMap<>(15);
@@ -12,28 +14,30 @@ public final class Kyorifier {
     private static final Pattern pattern = Pattern.compile("&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
 
     static {
-        COLOURS.put('0', "black");
-        COLOURS.put('1', "dark_blue");
-        COLOURS.put('2', "dark_green");
-        COLOURS.put('3', "dark_aqua");
-        COLOURS.put('4', "dark_red");
-        COLOURS.put('5', "dark_purple");
-        COLOURS.put('6', "gold");
-        COLOURS.put('7', "gray");
-        COLOURS.put('8', "dark_gray");
-        COLOURS.put('9', "blue");
-        COLOURS.put('a', "green");
-        COLOURS.put('b', "aqua");
-        COLOURS.put('c', "red");
-        COLOURS.put('d', "light_purple");
-        COLOURS.put('e', "yellow");
-        COLOURS.put('f', "white");
+        COLOURS.put('0', NamedTextColor.BLACK.toString());
+        COLOURS.put('1', NamedTextColor.DARK_BLUE.toString());
+        COLOURS.put('2', NamedTextColor.DARK_GREEN.toString());
+        COLOURS.put('3', NamedTextColor.DARK_AQUA.toString());
+        COLOURS.put('4', NamedTextColor.DARK_RED.toString());
+        COLOURS.put('5', NamedTextColor.DARK_PURPLE.toString());
+        COLOURS.put('6', NamedTextColor.GOLD.toString());
+        COLOURS.put('7', NamedTextColor.GRAY.toString());
+        COLOURS.put('8', NamedTextColor.DARK_GRAY.toString());
+        COLOURS.put('9', NamedTextColor.BLUE.toString());
+        COLOURS.put('a', NamedTextColor.GREEN.toString());
+        COLOURS.put('b', NamedTextColor.AQUA.toString());
+        COLOURS.put('c', NamedTextColor.RED.toString());
+        COLOURS.put('d', NamedTextColor.LIGHT_PURPLE.toString());
+        COLOURS.put('e', NamedTextColor.YELLOW.toString());
+        COLOURS.put('f', NamedTextColor.WHITE.toString());
 
-        FORMATTERS.put('k', "obfuscated");
-        FORMATTERS.put('l', "bold");
-        FORMATTERS.put('m', "strikethrough");
-        FORMATTERS.put('n', "underlined");
-        FORMATTERS.put('o', "italic");
+        FORMATTERS.put('k', TextDecoration.OBFUSCATED.toString());
+        FORMATTERS.put('l', TextDecoration.BOLD.toString());
+        FORMATTERS.put('m', TextDecoration.STRIKETHROUGH.toString());
+        FORMATTERS.put('n', TextDecoration.UNDERLINED.toString());
+        FORMATTERS.put('o', TextDecoration.ITALIC.toString());
+        // The <reset> tag is never placed. Instead, we close existent tags. So it doesn't matter what name we give
+        // here. Also, there isn't a way to get the name of the reset tag from adventure.
         FORMATTERS.put('r', "reset");
     }
 
