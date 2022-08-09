@@ -12,6 +12,7 @@ import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.task.DataSaveTask;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
@@ -23,6 +24,7 @@ import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -42,19 +44,21 @@ public final class ChatChatPlugin extends JavaPlugin {
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
     final HookManager hookManager = new HookManager(this);
+    private @NotNull
+    final BukkitRunnable dataSaveTask = new DataSaveTask(this);
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
 
     @Override
     public void onEnable() {
-        commandManager = BukkitCommandManager.create(this,
-                usersHolder::getUser,
-                new UserSenderValidator(this));
-
         audiences = BukkitAudiences.create(this);
 
-        hookManager.init();
+        commandManager = BukkitCommandManager.create(this,
+            usersHolder::getUser,
+            new UserSenderValidator(this));
+
         configManager.reload();
+        hookManager.init();
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
@@ -74,12 +78,16 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         new ChatPlaceholders(this).register();
 
+        // Run the user save task every 5 minutes.
+        dataSaveTask.runTaskTimerAsynchronously(this, 20 * 300L , 20 * 300L);
+
         getLogger().info("Plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         audiences.close();
+        if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             usersHolder.removeUser(player);
