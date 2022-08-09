@@ -1,7 +1,6 @@
 package at.helpch.chatchat.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,38 +8,39 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
 public final class Kyorifier {
-    private static final Map<Character, String> COLOURS = new HashMap<>(15);
-    private static final Map<Character, String> FORMATTERS = new HashMap<>(6);
-    private static final Pattern LEGACY_HEX_COLORS_PATTERN = Pattern.compile(
-        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
+    private static final ImmutableMap<Character, String> COLOURS = new ImmutableMap.Builder<Character, String>()
+        .put('0', NamedTextColor.BLACK.toString())
+        .put('0', NamedTextColor.BLACK.toString())
+        .put('1', NamedTextColor.DARK_BLUE.toString())
+        .put('2', NamedTextColor.DARK_GREEN.toString())
+        .put('3', NamedTextColor.DARK_AQUA.toString())
+        .put('4', NamedTextColor.DARK_RED.toString())
+        .put('5', NamedTextColor.DARK_PURPLE.toString())
+        .put('6', NamedTextColor.GOLD.toString())
+        .put('7', NamedTextColor.GRAY.toString())
+        .put('8', NamedTextColor.DARK_GRAY.toString())
+        .put('9', NamedTextColor.BLUE.toString())
+        .put('a', NamedTextColor.GREEN.toString())
+        .put('b', NamedTextColor.AQUA.toString())
+        .put('c', NamedTextColor.RED.toString())
+        .put('d', NamedTextColor.LIGHT_PURPLE.toString())
+        .put('e', NamedTextColor.YELLOW.toString())
+        .put('f', NamedTextColor.WHITE.toString())
+        .build();
 
-    static {
-        COLOURS.put('0', NamedTextColor.BLACK.toString());
-        COLOURS.put('1', NamedTextColor.DARK_BLUE.toString());
-        COLOURS.put('2', NamedTextColor.DARK_GREEN.toString());
-        COLOURS.put('3', NamedTextColor.DARK_AQUA.toString());
-        COLOURS.put('4', NamedTextColor.DARK_RED.toString());
-        COLOURS.put('5', NamedTextColor.DARK_PURPLE.toString());
-        COLOURS.put('6', NamedTextColor.GOLD.toString());
-        COLOURS.put('7', NamedTextColor.GRAY.toString());
-        COLOURS.put('8', NamedTextColor.DARK_GRAY.toString());
-        COLOURS.put('9', NamedTextColor.BLUE.toString());
-        COLOURS.put('a', NamedTextColor.GREEN.toString());
-        COLOURS.put('b', NamedTextColor.AQUA.toString());
-        COLOURS.put('c', NamedTextColor.RED.toString());
-        COLOURS.put('d', NamedTextColor.LIGHT_PURPLE.toString());
-        COLOURS.put('e', NamedTextColor.YELLOW.toString());
-        COLOURS.put('f', NamedTextColor.WHITE.toString());
-
-        FORMATTERS.put('k', TextDecoration.OBFUSCATED.toString());
-        FORMATTERS.put('l', TextDecoration.BOLD.toString());
-        FORMATTERS.put('m', TextDecoration.STRIKETHROUGH.toString());
-        FORMATTERS.put('n', TextDecoration.UNDERLINED.toString());
-        FORMATTERS.put('o', TextDecoration.ITALIC.toString());
+    private static final ImmutableMap<Character, String> FORMATTERS = new ImmutableMap.Builder<Character, String>()
+        .put('k', TextDecoration.OBFUSCATED.toString())
+        .put('l', TextDecoration.BOLD.toString())
+        .put('m', TextDecoration.STRIKETHROUGH.toString())
+        .put('n', TextDecoration.UNDERLINED.toString())
+        .put('o', TextDecoration.ITALIC.toString())
         // The <reset> tag is never placed. Instead, we close existent tags. So it doesn't matter what name we give
         // here. Also, there isn't a way to get the name of the reset tag from adventure.
-        FORMATTERS.put('r', "reset");
-    }
+        .put('r', "reset")
+        .build();
+
+    private static final Pattern LEGACY_HEX_COLORS_PATTERN = Pattern.compile(
+        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
 
     private static StringBuilder closeAll(Stack<String> activeFormatters) {
         final var out = new StringBuilder();
