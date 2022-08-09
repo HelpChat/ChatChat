@@ -61,6 +61,10 @@ bukkit {
             description = "Send or reply to private messages"
             default = "op"
         }
+        permission("chatchat.pm.toggle") {
+            description = "Toggle private messages"
+            default = "op"
+        }
 
         permission("chatchat.utf") {
             description = "Send any char in chat"
@@ -69,6 +73,10 @@ bukkit {
         permission("chatchat.url") {
             description = "Send clickable URLs in chat"
             default = "false"
+        }
+        permission("chatchat.channel.bypass-radius") {
+            description = "Bypass the channel radius"
+            default = "op"
         }
 
         permission("chatchat.mention.personal") {

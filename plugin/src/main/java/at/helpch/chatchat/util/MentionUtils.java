@@ -16,6 +16,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 public final class MentionUtils {
+
     private static final String MENTION_PERSONAL_PERMISSION = "chatchat.mention.personal";
     private static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.channel";
     public static final String MENTION_PERSONAL_BLOCK_PERMISSION = MENTION_PERSONAL_PERMISSION + ".block";
@@ -30,6 +31,7 @@ public final class MentionUtils {
     }
 
     public static final class MentionReplaceResult {
+
         private final boolean didReplace;
         private final Component component;
 
@@ -45,14 +47,16 @@ public final class MentionUtils {
         public Component component() {
             return component;
         }
+
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
     private static MentionReplaceResult replaceMention(
-        @RegExp @NotNull final String username,
+        @NotNull @RegExp final String username,
         @NotNull final Component component,
-        @NotNull final Function<MatchResult, Component> then) {
-        final AtomicBoolean hasBeenReplaced = new AtomicBoolean();
+        @NotNull final Function<MatchResult, Component> then
+    ) {
+        final var hasBeenReplaced = new AtomicBoolean();
         final var replaced = component.replaceText(builder -> builder
             .match(Pattern.compile(username, Pattern.CASE_INSENSITIVE))
             .replacement((result, ignored) -> {
@@ -99,13 +103,6 @@ public final class MentionUtils {
             if (!targetChatUser.channelMentions() && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
                 return Map.entry(false, message);
             }
-
-            final var replaced = MentionUtils.replaceMention(
-                mentionPrefix + "(everyone|here|channel)",
-                message,
-                channelMentionFormat);
-
-            return Map.entry(replaced.didReplace(), replaced.component());
         }
 
         final var replaced = MentionUtils.replaceMention(
@@ -138,4 +135,5 @@ public final class MentionUtils {
 
         return Map.entry(replaced.didReplace(), replaced.component());
     }
+
 }
