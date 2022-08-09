@@ -1,12 +1,12 @@
 package at.helpch.chatchat.config.holders;
 
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
-
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
+import static net.kyori.adventure.text.format.NamedTextColor.RED;
 
 // configurate requires non-final fields
 @SuppressWarnings("FieldMayBeFinal")
@@ -27,9 +27,12 @@ public final class MessagesHolder {
     private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
     private Component cantMessageYourself = text("You can't message yourself!", RED);
     private Component emptyMessage = text("You can't send an empty message!", RED);
-    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!", RED);
+    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!",
+        RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
+    private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
+    private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
@@ -120,4 +123,13 @@ public final class MessagesHolder {
     public @NotNull Component noPermission() {
         return commandNoPermission;
     }
+
+    public @NotNull Component ignoredPlayer() {
+        return ignoredPlayer;
+    }
+
+    public @NotNull Component unignoredPlayer() {
+        return unignoredPlayer;
+    }
+
 }

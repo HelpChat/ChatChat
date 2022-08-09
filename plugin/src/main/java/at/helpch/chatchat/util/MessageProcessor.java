@@ -6,6 +6,7 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
+import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.user.ConsoleUser;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -36,6 +37,7 @@ public final class MessageProcessor {
     private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
     private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
+    private static final String IGNORE_BYPASS_PERMISSION = IgnoreCommand.IGNORE_PERMISSION + ".bypass";
 
     private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
         Map.entry("click", StandardTags.clickEvent()),
@@ -99,6 +101,9 @@ public final class MessageProcessor {
                 userIsTarget = true;
                 continue;
             }
+
+            if (target.ignoredUsers().contains(user.uuid()) &&
+                !user.player().hasPermission(IGNORE_BYPASS_PERMISSION)) continue;
 
             if (target instanceof ConsoleUser) continue;
 
