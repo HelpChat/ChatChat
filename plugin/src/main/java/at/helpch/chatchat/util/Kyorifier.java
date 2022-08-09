@@ -11,7 +11,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 public final class Kyorifier {
     private static final Map<Character, String> COLOURS = new HashMap<>(15);
     private static final Map<Character, String> FORMATTERS = new HashMap<>(6);
-    private static final Pattern pattern = Pattern.compile("&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
+    private static final Pattern LEGACY_HEX_COLORS_PATTERN = Pattern.compile(
+        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
 
     static {
         COLOURS.put('0', NamedTextColor.BLACK.toString());
@@ -51,7 +52,7 @@ public final class Kyorifier {
 
     public static String kyorify(String input) {
         final Stack<String> activeFormatters = new Stack<>();
-        return pattern.matcher(input.replace("§", "&")).replaceAll(result -> {
+        return LEGACY_HEX_COLORS_PATTERN.matcher(input.replace("§", "&")).replaceAll(result -> {
             final Matcher matcher = (Matcher) result;
             final var hex = matcher.group("hex");
             final var code = matcher.group("code");
