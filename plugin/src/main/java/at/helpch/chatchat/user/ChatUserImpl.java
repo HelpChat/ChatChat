@@ -28,6 +28,7 @@ public final class ChatUserImpl implements ChatUser {
 
     private final UUID uuid;
     private Channel channel;
+    // TODO: 8/9/22 Remove unused field!
     private Format format;
     private boolean privateMessages = true;
     private boolean socialSpy = false;

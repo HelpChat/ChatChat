@@ -6,6 +6,8 @@ import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
+import at.helpch.chatchat.data.base.Database;
+import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -31,8 +33,11 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private @NotNull
     final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
+    // We can move this inside onLoad or inside onEnable when we add different database types
     private @NotNull
-    final UsersHolder usersHolder = new UsersHolder();
+    final Database database = new GsonDatabase(this);
+    private @NotNull
+    final UsersHolder usersHolder = new UsersHolder(this);
     private @NotNull
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
@@ -76,6 +81,10 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onDisable() {
         audiences.close();
 
+        for (final Player player : Bukkit.getOnlinePlayers()) {
+            usersHolder.removeUser(player);
+        }
+
         getLogger().info("Plugin disabled successfully!");
     }
 
@@ -85,6 +94,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull UsersHolder usersHolder() {
         return usersHolder;
+    }
+
+    public @NotNull Database database() {
+        return database;
     }
 
     public @NotNull ChannelTypeRegistry channelTypeRegistry() {
