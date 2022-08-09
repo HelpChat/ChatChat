@@ -10,11 +10,11 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.UUID;
 
-public final class ChatUserAdapterFactory extends TypeAdapter<ChatUser> {
+public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
     private final ChatChatPlugin plugin;
 
-    public ChatUserAdapterFactory(ChatChatPlugin plugin) {
+    public ChatUserAdapter(ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 

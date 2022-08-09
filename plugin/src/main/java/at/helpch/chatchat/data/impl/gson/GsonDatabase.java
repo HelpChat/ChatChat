@@ -25,9 +25,10 @@ public class GsonDatabase implements Database {
 
     public GsonDatabase(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
+        final var chatUserAdapter = new ChatUserAdapter(plugin);
         this.gson = new GsonBuilder()
-            .registerTypeAdapter(ChatUser.class, new ChatUserAdapterFactory(plugin))
-            .registerTypeAdapter(ChatUserImpl.class, new ChatUserAdapterFactory(plugin))
+            .registerTypeAdapter(ChatUser.class, chatUserAdapter)
+            .registerTypeAdapter(ChatUserImpl.class, chatUserAdapter)
             .disableHtmlEscaping()
             .setPrettyPrinting()
             .serializeNulls()

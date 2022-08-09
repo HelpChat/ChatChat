@@ -27,7 +27,7 @@ public final class UsersHolder {
     }
 
     public @NotNull User getUser(@NotNull final UUID uuid) {
-        return users.computeIfAbsent(uuid, user -> plugin.database().loadChatUser(uuid));
+        return users.computeIfAbsent(uuid, ignored -> plugin.database().loadChatUser(uuid));
     }
 
     public @NotNull User getUser(@NotNull final CommandSender user) {
