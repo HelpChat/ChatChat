@@ -12,7 +12,6 @@ import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
-import at.helpch.chatchat.task.DataSaveTask;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
@@ -24,7 +23,7 @@ import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -44,10 +43,10 @@ public final class ChatChatPlugin extends JavaPlugin {
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
     final HookManager hookManager = new HookManager(this);
-    private @NotNull
-    final BukkitRunnable dataSaveTask = new DataSaveTask(this);
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
+
+    private BukkitTask dataSaveTask;
 
     @Override
     public void onEnable() {
@@ -78,8 +77,13 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         new ChatPlaceholders(this).register();
 
-        // Run the user save task every 5 minutes.
-        dataSaveTask.runTaskTimerAsynchronously(this, 20 * 300L , 20 * 300L);
+        dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
+            this,
+            () -> Bukkit.getOnlinePlayers().stream().map(usersHolder::getUser).filter(user -> user instanceof ChatUser)
+                .forEach(user -> database().saveChatUser((ChatUser) user)),
+            20 * 60 * 5L,
+            20 * 60 * 5L // Run the user save task every 5 minutes.
+        );
 
         getLogger().info("Plugin enabled successfully!");
     }

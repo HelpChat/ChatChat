@@ -54,13 +54,10 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         in.nextName();
         final var channelName = in.nextString();
         final var contains = plugin.configManager().channels().channels().containsKey(channelName);
-        System.out.println(contains ? "Contains" : "Does not contain");
 
         final var channel = contains
             ? plugin.configManager().channels().channels().get(channelName)
             : plugin.configManager().channels().channels().get(plugin.configManager().channels().defaultChannel());
-
-        System.out.println("Channel Found: " + channel.name());
 
         if (channel == null) {
             in.close();

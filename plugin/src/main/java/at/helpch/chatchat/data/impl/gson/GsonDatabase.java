@@ -89,11 +89,11 @@ public class GsonDatabase implements Database {
             // copy contents of userFile to backupFile
             try {
                 copyFileContents(userFile, backupFile);
-            } catch (RuntimeException runtimeException) {
+            } catch (IOException ioException) {
                 plugin.getLogger().log(
                     Level.WARNING,
                     "Something went wrong while creating backup file. Shutting plugin down!",
-                    runtimeException
+                    ioException
                 );
 
                 plugin.getServer().getPluginManager().disablePlugin(plugin);
@@ -154,22 +154,14 @@ public class GsonDatabase implements Database {
     private static void copyFileContents(
         @NotNull final File source,
         @NotNull final File destination
-    ) throws RuntimeException {
-        try {
-            final var inStream = new FileInputStream(source);
-            final var outStream = new FileOutputStream(destination);
-
+    ) throws IOException {
+        try (final var inStream = new FileInputStream(source); final var outStream = new FileOutputStream(destination)) {
             final byte[] buffer = new byte[1024];
 
             int length;
             while ((length = inStream.read(buffer)) > 0){
                 outStream.write(buffer, 0, length);
             }
-
-            inStream.close();
-            outStream.close();
-        } catch (final IOException exception) {
-            throw new RuntimeException(exception);
         }
     }
 }
