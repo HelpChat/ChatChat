@@ -51,8 +51,7 @@ public class GsonDatabase implements Database {
             return user;
         }
 
-        try {
-            final var reader = new FileReader(userFile);
+        try(final var reader = new FileReader(userFile)) {
             return gson.fromJson(reader, ChatUser.class);
         } catch (final JsonParseException exception) { // Handles invalid JSON
             plugin.getLogger().warning(
@@ -106,7 +105,7 @@ public class GsonDatabase implements Database {
             user.channel(channel);
             return user;
 
-        } catch (final FileNotFoundException exception) { // Handles missing file
+        } catch (final IOException exception) { // Handles missing file
             final var user = new ChatUserImpl(uuid);
             final var channel = plugin.configManager().channels().channels()
                 .get(plugin.configManager().channels().defaultChannel());
