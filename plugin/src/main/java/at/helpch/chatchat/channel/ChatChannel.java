@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.config.DefaultConfigObjects;
-import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -53,12 +52,8 @@ public final class ChatChannel extends AbstractChannel {
     @Override
     public Set<User> targets(final @NotNull User source) {
 
-        final Predicate<User> filterIgnores = user -> {
-            // console can't be ignored
-            if (source instanceof ConsoleUser) return true;
-            return !user.ignoredUsers().contains(source.uuid()) ||
-                ((ChatUser) source).player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
-        };
+        final Predicate<User> filterIgnores = user -> !user.ignoredUsers().contains(source.uuid()) ||
+            (source instanceof ChatUser && ((ChatUser) source).player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
 
         if (plugin.configManager().channels().defaultChannel().equals(this.name()))
             return plugin.usersHolder().users().stream()

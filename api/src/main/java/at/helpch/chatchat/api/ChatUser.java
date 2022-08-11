@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 public interface ChatUser extends User {
 
@@ -23,4 +21,5 @@ public interface ChatUser extends User {
     void socialSpy(final boolean enable);
 
     boolean socialSpy();
+
 }

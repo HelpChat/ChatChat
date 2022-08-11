@@ -81,6 +81,8 @@ public final class ChatUserImpl implements ChatUser {
     public void privateMessages(final boolean enabled) {
         this.privateMessages = enabled;
     }
+
+    @Override
     public void socialSpy(final boolean enabled) {
         socialSpy = enabled;
     }
