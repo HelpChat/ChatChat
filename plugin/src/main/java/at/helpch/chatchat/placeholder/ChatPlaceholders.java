@@ -70,8 +70,6 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
                 return user.channel().channelPrefix();
             case "channel_message_prefix":
                 return user.channel().messagePrefix();
-            case "social_spy_enabled":
-                return formatBoolean(plugin.usersHolder().isSocialSpy(user.uuid()));
         }
 
         if (!(user instanceof ChatUser)) {
@@ -81,6 +79,8 @@ public final class ChatPlaceholders extends PlaceholderExpansion {
         final var chatUser = (ChatUser) user;
 
         switch(parsedInput) {
+            case "social_spy_enabled":
+                return formatBoolean(chatUser.socialSpy());
             case "private_messages_enabled":
                 return formatBoolean(chatUser.privateMessages());
             case "private_messages_recipient":

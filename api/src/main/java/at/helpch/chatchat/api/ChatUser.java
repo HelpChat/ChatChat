@@ -25,4 +25,8 @@ public interface ChatUser extends User {
     boolean channelMentions();
 
     void channelMentions(final boolean receivesChannelMentions);
+
+    void socialSpy(final boolean enable);
+
+    boolean socialSpy();
 }
