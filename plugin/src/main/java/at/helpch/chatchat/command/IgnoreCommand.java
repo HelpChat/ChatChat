@@ -11,7 +11,8 @@ import dev.triumphteam.cmd.core.annotation.Default;
 public class IgnoreCommand extends BaseCommand {
 
     final ChatChatPlugin plugin;
-    public final static String IGNORE_PERMISSION = "chatchat.ignore";
+    private final static String IGNORE_PERMISSION = "chatchat.ignore";
+    public static final String IGNORE_BYPASS_PERMISSION = IgnoreCommand.IGNORE_PERMISSION + ".bypass";
 
     public IgnoreCommand(final ChatChatPlugin plugin) {
         this.plugin = plugin;

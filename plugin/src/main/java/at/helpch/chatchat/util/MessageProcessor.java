@@ -6,10 +6,7 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
-import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.user.ConsoleUser;
-import java.util.Map;
-import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -18,7 +15,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public final class MessageProcessor {
+
     private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
@@ -37,7 +38,6 @@ public final class MessageProcessor {
     private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
     private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
-    private static final String IGNORE_BYPASS_PERMISSION = IgnoreCommand.IGNORE_PERMISSION + ".bypass";
 
     private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
         Map.entry("click", StandardTags.clickEvent()),
@@ -101,9 +101,6 @@ public final class MessageProcessor {
                 userIsTarget = true;
                 continue;
             }
-
-            if (target.ignoredUsers().contains(user.uuid()) &&
-                !user.player().hasPermission(IGNORE_BYPASS_PERMISSION)) continue;
 
             if (target instanceof ConsoleUser) continue;
 
@@ -348,4 +345,5 @@ public final class MessageProcessor {
             ? MessageUtils.parseToMiniMessage(message, resolver.build())
             : MessageUtils.parseToMiniMessage(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
+
 }
