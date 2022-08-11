@@ -34,8 +34,8 @@ public final class ChatUserImpl implements ChatUser {
     // TODO: 8/9/22 Remove unused field!
     private Format format;
     private boolean privateMessages = true;
-    private Set<UUID> ignoredUsers = new HashSet<>();
     private boolean socialSpy = false;
+    private Set<UUID> ignoredUsers = new HashSet<>();
 
     @Override
     public @NotNull Channel channel() {
@@ -81,6 +81,14 @@ public final class ChatUserImpl implements ChatUser {
     public void privateMessages(final boolean enabled) {
         this.privateMessages = enabled;
     }
+    public void socialSpy(final boolean enabled) {
+        socialSpy = enabled;
+    }
+
+    @Override
+    public boolean socialSpy() {
+        return socialSpy;
+    }
 
     @Override
     public @NotNull Set<UUID> ignoredUsers() {
@@ -100,15 +108,6 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void unignoreUser(@NotNull User user) {
         ignoredUsers.remove(user.uuid());
-    }
-
-    public void socialSpy(final boolean enabled) {
-        socialSpy = enabled;
-    }
-
-    @Override
-    public boolean socialSpy() {
-        return socialSpy;
     }
 
     @Override

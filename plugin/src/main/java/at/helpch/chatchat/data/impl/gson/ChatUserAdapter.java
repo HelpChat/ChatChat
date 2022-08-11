@@ -7,8 +7,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
@@ -30,6 +34,10 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         out.value(value.privateMessages());
         out.name("social-spy");
         out.value(value.socialSpy());
+        out.name("ignored-users");
+        out.beginArray();
+        for (UUID uuid : value.ignoredUsers()) out.value(uuid.toString());
+        out.endArray();
 
         out.endObject();
     }
@@ -79,6 +87,27 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
         in.nextName();
         final var socialSpy = in.nextBoolean();
+
+        if (!in.hasNext()) {
+            in.close();
+            throw new JsonParseException("Expected JSON object to have property 'ignored-users'");
+        }
+
+        in.nextName();
+        in.beginArray();
+        final var ignoredUsers = new HashSet<UUID>();
+        while (in.hasNext()) {
+            final var uuidString = in.nextString();
+            final UUID uuidFromString;
+            try {
+                uuidFromString = UUID.fromString(uuidString);
+            } catch (final IllegalArgumentException exception) {
+                throw new JsonParseException("Ignored User UUID (" + uuidString + ") is invalid!", exception);
+            }
+            ignoredUsers.add(uuidFromString);
+        }
+        in.endArray();
+
         in.endObject();
 
         final ChatUser user;
@@ -90,7 +119,9 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         user.channel(channel);
         user.privateMessages(privateMessages);
         user.socialSpy(socialSpy);
+        user.ignoredUsers(ignoredUsers);
 
         return user;
     }
+
 }
