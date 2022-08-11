@@ -48,6 +48,9 @@ public final class MessagesHolder {
     private Component channelMentionsEnabled = text("Successfully enabled channel mentions!", GREEN);
     private Component channelMentionsDisabled = text("Successfully disabled channel mentions!", GREEN);
 
+    // format related
+    private Component invalidFormat = text("Invalid format.", RED);
+
     public @NotNull Component consoleOnly() {
         return consoleOnly;
     }
@@ -144,4 +147,7 @@ public final class MessagesHolder {
         return channelMentionsDisabled;
     }
 
+    public @NotNull Component invalidFormat() {
+        return invalidFormat;
+    }
 }
