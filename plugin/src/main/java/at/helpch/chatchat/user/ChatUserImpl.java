@@ -28,8 +28,10 @@ public final class ChatUserImpl implements ChatUser {
 
     private final UUID uuid;
     private Channel channel;
+    // TODO: 8/9/22 Remove unused field!
     private Format format;
     private boolean privateMessages = true;
+    private boolean socialSpy = false;
 
     @Override
     public @NotNull Channel channel() {
@@ -74,6 +76,16 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void privateMessages(final boolean enabled) {
         this.privateMessages = enabled;
+    }
+
+    @Override
+    public void socialSpy(final boolean enabled) {
+        socialSpy = enabled;
+    }
+
+    @Override
+    public boolean socialSpy() {
+        return socialSpy;
     }
 
     @Override

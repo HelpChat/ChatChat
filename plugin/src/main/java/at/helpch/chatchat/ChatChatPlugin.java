@@ -6,6 +6,8 @@ import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
+import at.helpch.chatchat.data.base.Database;
+import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -21,6 +23,7 @@ import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,8 +34,11 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private @NotNull
     final ConfigManager configManager = new ConfigManager(this, this.getDataFolder().toPath());
+    // We can move this inside onLoad or inside onEnable when we add different database types
     private @NotNull
-    final UsersHolder usersHolder = new UsersHolder();
+    final Database database = new GsonDatabase(this);
+    private @NotNull
+    final UsersHolder usersHolder = new UsersHolder(this);
     private @NotNull
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
@@ -40,16 +46,18 @@ public final class ChatChatPlugin extends JavaPlugin {
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
 
+    private BukkitTask dataSaveTask;
+
     @Override
     public void onEnable() {
-        commandManager = BukkitCommandManager.create(this,
-                usersHolder::getUser,
-                new UserSenderValidator(this));
-
         audiences = BukkitAudiences.create(this);
 
-        hookManager.init();
+        commandManager = BukkitCommandManager.create(this,
+            usersHolder::getUser,
+            new UserSenderValidator(this));
+
         configManager.reload();
+        hookManager.init();
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
@@ -69,12 +77,25 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         new ChatPlaceholders(this).register();
 
+        dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
+            this,
+            () -> Bukkit.getOnlinePlayers().stream().map(usersHolder::getUser).filter(user -> user instanceof ChatUser)
+                .forEach(user -> database().saveChatUser((ChatUser) user)),
+            20 * 60 * 5L,
+            20 * 60 * 5L // Run the user save task every 5 minutes.
+        );
+
         getLogger().info("Plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         audiences.close();
+        if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
+
+        for (final Player player : Bukkit.getOnlinePlayers()) {
+            usersHolder.removeUser(player);
+        }
 
         getLogger().info("Plugin disabled successfully!");
     }
@@ -85,6 +106,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull UsersHolder usersHolder() {
         return usersHolder;
+    }
+
+    public @NotNull Database database() {
+        return database;
     }
 
     public @NotNull ChannelTypeRegistry channelTypeRegistry() {

@@ -22,10 +22,10 @@ public final class SocialSpyCommand extends BaseCommand {
     @Permission(MESSAGE_PERMISSION)
     public void socialSpy(final ChatUser user, @Optional final String toggle) {
         final boolean newState = toggle == null ?
-                !plugin.usersHolder().isSocialSpy(user.uuid()) :
-                toggle.equals("true") || toggle.equals("yes") || toggle.equals("on");
+                !user.socialSpy() :
+                toggle.equals("true") || toggle.equals("yes") || toggle.equals("on") || toggle.equals("enable");
 
-        plugin.usersHolder().setSocialSpy(user.uuid(), newState);
+        user.socialSpy(newState);
         final var messages = plugin.configManager().messages();
         user.sendMessage(newState ? messages.socialSpyEnabled() : messages.socialSpyDisabled());
     }
