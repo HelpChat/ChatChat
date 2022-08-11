@@ -52,27 +52,26 @@ public final class ChatChannel extends AbstractChannel {
 
     @Override
     public Set<User> targets(final @NotNull User source) {
+
+        final Predicate<User> filterIgnores = user -> {
+            // console can't be ignored
+            if (source instanceof ConsoleUser) return true;
+            return !user.ignoredUsers().contains(source.uuid()) ||
+                ((ChatUser) source).player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
+        };
+
         if (plugin.configManager().channels().defaultChannel().equals(this.name()))
             return plugin.usersHolder().users().stream()
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
-                .filter(filterIgnores(source))
+                .filter(filterIgnores)
                 .collect(Collectors.toUnmodifiableSet());
 
         return plugin.usersHolder().users().stream().filter(user ->
                 !(user instanceof ChatUser) ||
                     ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
             .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
-            .filter(filterIgnores(source))
+            .filter(filterIgnores)
             .collect(Collectors.toUnmodifiableSet());
-    }
-
-    private Predicate<User> filterIgnores(final @NotNull User source) {
-        return user -> {
-            // console can't be ignored
-            if (source instanceof ConsoleUser) return true;
-            return !user.ignoredUsers().contains(source.uuid()) ||
-                ((ChatUser) source).player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
-        };
     }
 
 }
