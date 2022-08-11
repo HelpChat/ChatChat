@@ -7,8 +7,6 @@ import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
 import at.helpch.chatchat.user.ConsoleUser;
-import java.util.Map;
-import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -17,7 +15,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public final class MessageProcessor {
+
     private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
@@ -72,7 +74,8 @@ public final class MessageProcessor {
             user,
             FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
             MessageProcessor.processMessage(plugin, user, message),
-            channel
+            channel,
+            channel.targets(user)
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -94,7 +97,7 @@ public final class MessageProcessor {
         var userMessage = parsedMessage;
         var userIsTarget = false;
 
-        for (final var target : channel.targets(user)) {
+        for (final var target : chatEvent.recipients()) {
             if (target.uuid() == user.uuid()) {
                 userIsTarget = true;
                 continue;
@@ -343,4 +346,5 @@ public final class MessageProcessor {
             ? MessageUtils.parseToMiniMessage(message, resolver.build())
             : MessageUtils.parseToMiniMessage(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
+
 }

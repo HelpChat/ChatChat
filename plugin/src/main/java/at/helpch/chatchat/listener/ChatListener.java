@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
-import java.util.UnknownFormatConversionException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UnknownFormatConversionException;
 import java.util.regex.Pattern;
 
 public final class ChatListener implements Listener {
@@ -41,13 +41,13 @@ public final class ChatListener implements Listener {
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
         final var channelByPrefix =
-                ChannelUtils.findChannelByPrefix(
-                    List.copyOf(plugin.configManager().channels().channels().values()),
-                    event.getMessage());
+            ChannelUtils.findChannelByPrefix(
+                List.copyOf(plugin.configManager().channels().channels().values()),
+                event.getMessage());
 
         final var message = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
-                ? event.getMessage()
-                : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
+            ? event.getMessage()
+            : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
         final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
             ? user.channel()
@@ -86,4 +86,5 @@ public final class ChatListener implements Listener {
             LEGACY_HEX_COLOR_PATTERN.matcher(message).replaceAll("")
         ).replaceAll("").replace("§", "");
     }
+
 }
