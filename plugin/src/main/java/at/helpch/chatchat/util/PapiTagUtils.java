@@ -26,18 +26,27 @@ public final class PapiTagUtils {
             }
 
             final boolean inserting;
+            final boolean append;
             switch (next) {
                 case "closing":
                     inserting = false;
+                    append = false;
                     break;
                 case "inserting":
                     inserting = true;
+                    append = false;
                     break;
                 default:
-                    return null;
+                    inserting = false;
+                    append = true;
+                    break;
             }
 
             final var arguments = new ArrayList<String>();
+            if (append) {
+                arguments.add(next);
+            }
+
             while (argumentQueue.hasNext()) {
                 arguments.add(argumentQueue.pop().value());
             }
