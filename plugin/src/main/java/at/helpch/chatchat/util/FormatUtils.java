@@ -69,7 +69,8 @@ public final class FormatUtils {
                     .map(part -> String.join("", part))
                     .collect(Collectors.joining())
             ),
-            Placeholder.component("message", message)
+            Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(player)
         );
     }
 
@@ -92,6 +93,8 @@ public final class FormatUtils {
                 )
             ),
             Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(player),
+            PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
             recipientTagResolver(recipient)
         );
     }
