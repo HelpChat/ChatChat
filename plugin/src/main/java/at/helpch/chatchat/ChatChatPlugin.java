@@ -8,6 +8,7 @@ import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
+import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -17,6 +18,9 @@ import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
+
+import java.util.ArrayList;
+
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
@@ -26,6 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,6 +72,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         );
 
         registerSuggestions();
+        registerArguments();
         registerCommands();
 
         // event listener registration
@@ -128,6 +134,11 @@ public final class ChatChatPlugin extends JavaPlugin {
         return hookManager;
     }
 
+    private void registerArguments() {
+        commandManager.registerArgument(ChatFormat.class, (sender, argument) ->
+            configManager().formats().formats().get(argument));
+    }
+
     private void registerSuggestions() {
         commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
                 usersHolder.users()
@@ -142,6 +153,10 @@ public final class ChatChatPlugin extends JavaPlugin {
         commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList())));
+
+        commandManager.registerSuggestion(ChatFormat.class, ((sender, context) ->
+            new ArrayList<>(configManager.formats().formats().keySet())
+        ));
     }
 
     private void registerCommands() {
@@ -160,7 +175,8 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new WhisperCommand(this, false),
                 new ReplyCommand(this, new WhisperCommand(this, true)),
                 new WhisperToggleCommand(this),
-                new SocialSpyCommand(this)
+                new SocialSpyCommand(this),
+                new FormatTestCommand(this)
         ).forEach(commandManager::registerCommand);
 
         // register channel commands

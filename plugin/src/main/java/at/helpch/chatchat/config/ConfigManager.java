@@ -82,7 +82,14 @@ public final class ConfigManager {
         manager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendMessage(messages.noPermission()));
 
         manager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> sender.sendMessage(messages.unknownCommand()));
-        manager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> sender.sendMessage(messages.invalidArgument()));
+        manager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
+            if (context.getArgumentType() == ChatFormat.class) {
+                sender.sendMessage(messages.invalidFormat());
+                return;
+            }
+
+            sender.sendMessage(messages.invalidArgument());
+        });
         manager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
         manager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
     }
