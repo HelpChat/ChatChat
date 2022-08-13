@@ -44,7 +44,7 @@ public final class ItemUtils {
                 ? MessageUtils.parseToMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
                 : null;
 
-        if (item.getType() == Material.AIR || item.getType() == Material.CAVE_AIR || item.getType() == Material.VOID_AIR || !item.hasItemMeta()) {
+        if (item.getType().isAir() || !item.hasItemMeta()) {
             return Placeholder.component(
                     "item",
                     MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
