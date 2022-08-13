@@ -12,6 +12,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @ConfigSerializable
@@ -54,12 +55,12 @@ public final class ChatChannel extends AbstractChannel {
         if (plugin.configManager().channels().defaultChannel().equals(this.name()))
             return plugin.usersHolder().users().stream()
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
 
         return plugin.usersHolder().users().stream().filter(user ->
                 !(user instanceof ChatUser) ||
                     ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 }
