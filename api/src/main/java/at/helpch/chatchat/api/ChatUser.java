@@ -18,6 +18,14 @@ public interface ChatUser extends User {
 
     void privateMessages(final boolean enable);
 
+    boolean personalMentions();
+
+    void personalMentions(final boolean receivesPersonalMentions);
+
+    boolean channelMentions();
+
+    void channelMentions(final boolean receivesChannelMentions);
+
     void socialSpy(final boolean enable);
 
     boolean socialSpy();

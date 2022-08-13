@@ -28,6 +28,10 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         out.value(value.channel().name());
         out.name("private-messages");
         out.value(value.privateMessages());
+        out.name("personal-mentions");
+        out.value(value.personalMentions());
+        out.name("channel-mentions");
+        out.value(value.channelMentions());
         out.name("social-spy");
         out.value(value.socialSpy());
 
@@ -74,6 +78,22 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
         if (!in.hasNext()) {
             in.close();
+            throw new JsonParseException("Expected JSON object to have property 'personal-mentions'");
+        }
+
+        in.nextName();
+        final var personalMentions = in.nextBoolean();
+
+        if (!in.hasNext()) {
+            in.close();
+            throw new JsonParseException("Expected JSON object to have property 'channel-mentions'");
+        }
+
+        in.nextName();
+        final var channelMentions = in.nextBoolean();
+
+        if (!in.hasNext()) {
+            in.close();
             throw new JsonParseException("Expected JSON object to have property 'social-spy'");
         }
 
@@ -89,6 +109,8 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         }
         user.channel(channel);
         user.privateMessages(privateMessages);
+        user.personalMentions(personalMentions);
+        user.channelMentions(channelMentions);
         user.socialSpy(socialSpy);
 
         return user;
