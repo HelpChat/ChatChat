@@ -17,6 +17,8 @@ import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
+import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         registerSuggestions();
         registerArguments();
+        registerCommandMessages();
         registerCommands();
 
         // event listener registration
@@ -157,6 +159,26 @@ public final class ChatChatPlugin extends JavaPlugin {
         commandManager.registerSuggestion(ChatFormat.class, ((sender, context) ->
             new ArrayList<>(configManager.formats().formats().keySet())
         ));
+    }
+
+    private void registerCommandMessages() {
+        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) ->
+            sender.sendMessage(configManager.messages().noPermission()));
+
+        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
+            sender.sendMessage(configManager.messages().unknownCommand()));
+        commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
+            if (context.getArgumentType() == ChatFormat.class) {
+                sender.sendMessage(configManager.messages().invalidFormat());
+                return;
+            }
+
+            sender.sendMessage(configManager.messages().invalidArgument());
+        });
+        commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
+            sender.sendMessage(configManager.messages().invalidUsage()));
+        commandManager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) ->
+            sender.sendMessage(configManager.messages().invalidUsage()));
     }
 
     private void registerCommands() {
