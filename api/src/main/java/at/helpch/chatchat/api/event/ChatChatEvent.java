@@ -3,11 +3,14 @@ package at.helpch.chatchat.api.event;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 public class ChatChatEvent extends Event implements Cancellable {
 
@@ -18,6 +21,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     private @NotNull Format format;
     private @NotNull Component message;
     private @NotNull final Channel channel;
+    private @NotNull final Set<User> recipients;
 
     public static @NotNull HandlerList getHandlerList() {
         return HANDLERS;
@@ -28,13 +32,14 @@ public class ChatChatEvent extends Event implements Cancellable {
         @NotNull final ChatUser user,
         @NotNull final Format format,
         @NotNull final Component message,
-        @NotNull final Channel channel
-    ) {
+        @NotNull final Channel channel,
+        @NotNull Set<User> recipients) {
         super(async);
         this.user = user;
         this.format = format;
         this.message = message;
         this.channel = channel;
+        this.recipients = recipients;
     }
 
     @Override
@@ -75,4 +80,9 @@ public class ChatChatEvent extends Event implements Cancellable {
     public @NotNull Channel channel() {
         return channel;
     }
+
+    public Set<User> recipients() {
+        return recipients;
+    }
+
 }

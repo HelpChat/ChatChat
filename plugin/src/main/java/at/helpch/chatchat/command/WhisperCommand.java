@@ -12,6 +12,8 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
+
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -90,15 +92,20 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        Map.of(
-                user, pmSendEvent.senderFormat(),
-                recipient, pmSendEvent.recipientFormat(),
-                Audience.audience(
-                    plugin.usersHolder().users()
-                        .stream()
-                        .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
-                        .collect(Collectors.toUnmodifiableList())), socialSpyFormat
-        ).forEach((Audience audience, Format format) ->
+        final var formats = new LinkedHashMap<Audience, Format>();
+        formats.put(user, pmSendEvent.senderFormat());
+        formats.put(recipient, pmSendEvent.recipientFormat());
+        formats.put(
+            Audience.audience(
+                plugin.usersHolder().users()
+                    .stream()
+                    .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
+                    .collect(Collectors.toUnmodifiableList())
+            ),
+            socialSpyFormat
+        );
+
+        formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                     format,
                     user.player(),

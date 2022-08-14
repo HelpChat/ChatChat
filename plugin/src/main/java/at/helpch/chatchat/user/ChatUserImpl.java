@@ -34,6 +34,8 @@ public final class ChatUserImpl implements ChatUser {
     // TODO: 8/9/22 Remove unused field!
     private Format format;
     private boolean privateMessages = true;
+    private boolean personalMentions = true;
+    private boolean channelMentions = true;
     private boolean socialSpy = false;
     private Set<UUID> ignoredUsers = new HashSet<>();
 
@@ -83,6 +85,25 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
+    public boolean personalMentions() {
+        return personalMentions;
+    }
+
+    @Override
+    public void personalMentions(boolean receivesPersonalMentions) {
+        this.personalMentions = receivesPersonalMentions;
+    }
+
+    @Override
+    public boolean channelMentions() {
+        return channelMentions;
+    }
+
+    @Override
+    public void channelMentions(boolean receivesChannelMentions) {
+        this.channelMentions = receivesChannelMentions;
+    }
+
     public void socialSpy(final boolean enabled) {
         socialSpy = enabled;
     }

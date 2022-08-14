@@ -59,14 +59,14 @@ public final class ChatChannel extends AbstractChannel {
             return plugin.usersHolder().users().stream()
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
                 .filter(filterIgnores)
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
 
         return plugin.usersHolder().users().stream().filter(user ->
                 !(user instanceof ChatUser) ||
                     ((ChatUser) user).player().hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
             .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
             .filter(filterIgnores)
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(Collectors.toSet());
     }
 
 }

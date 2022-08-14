@@ -56,6 +56,10 @@ bukkit {
             description = "Spy on private messages"
             default = "op"
         }
+        permission("chatchat.test.format") {
+            description = "Test formats"
+            default = "op"
+        }
 
         permission("chatchat.pm") {
             description = "Send or reply to private messages"

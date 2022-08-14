@@ -44,6 +44,15 @@ public final class MessagesHolder {
     private Component commandInvalidArgument = text("Invalid argument.", RED);
     private Component commandNoPermission = text("No Permission.", RED);
 
+    // mention related
+    private Component personalMentionsEnabled = text("Successfully enabled personal mentions!", GREEN);
+    private Component personalMentionsDisabled = text("Successfully disabled personal mentions!", GREEN);
+    private Component channelMentionsEnabled = text("Successfully enabled channel mentions!", GREEN);
+    private Component channelMentionsDisabled = text("Successfully disabled channel mentions!", GREEN);
+
+    // format related
+    private Component invalidFormat = text("Invalid format.", RED);
+
     public @NotNull Component consoleOnly() {
         return consoleOnly;
     }
@@ -132,4 +141,23 @@ public final class MessagesHolder {
         return unignoredPlayer;
     }
 
+    public @NotNull Component personalMentionsEnabled() {
+        return personalMentionsEnabled;
+    }
+
+    public @NotNull Component personalMentionsDisabled() {
+        return personalMentionsDisabled;
+    }
+
+    public @NotNull Component channelMentionsEnabled() {
+        return channelMentionsEnabled;
+    }
+
+    public @NotNull Component channelMentionsDisabled() {
+        return channelMentionsDisabled;
+    }
+
+    public @NotNull Component invalidFormat() {
+        return invalidFormat;
+    }
 }

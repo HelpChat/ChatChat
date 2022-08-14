@@ -74,7 +74,8 @@ public final class MessageProcessor {
             user,
             FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
             MessageProcessor.processMessage(plugin, user, message),
-            channel
+            channel,
+            channel.targets(user)
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
@@ -96,7 +97,7 @@ public final class MessageProcessor {
         var userMessage = parsedMessage;
         var userIsTarget = false;
 
-        for (final var target : channel.targets(user)) {
+        for (final var target : chatEvent.recipients()) {
             if (target.uuid() == user.uuid()) {
                 userIsTarget = true;
                 continue;

@@ -40,7 +40,7 @@ public final class HookManager {
         for (final var constructor : constructors) {
             final var hook = constructor.apply(plugin);
 
-            if (!hook.register()) return;
+            if (!hook.register()) continue;
             hook.enable();
 
             if (hook instanceof VanishHook) {
