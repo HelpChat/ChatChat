@@ -70,6 +70,16 @@ bukkit {
             default = "op"
         }
 
+        permission("chatchat.ignore") {
+            description = "Permission to use /ignore to toggle ignoring a user"
+            default = "op"
+        }
+
+        permission("chatchat.ignore.bypass") {
+            description = "Bypass being ignored."
+            default = "op"
+        }
+
         permission("chatchat.utf") {
             description = "Send any char in chat"
             default = "op"

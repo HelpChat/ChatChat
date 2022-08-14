@@ -31,6 +31,8 @@ public final class MessagesHolder {
         RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
+    private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
+    private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
@@ -129,6 +131,14 @@ public final class MessagesHolder {
 
     public @NotNull Component noPermission() {
         return commandNoPermission;
+    }
+
+    public @NotNull Component ignoredPlayer() {
+        return ignoredPlayer;
+    }
+
+    public @NotNull Component unignoredPlayer() {
+        return unignoredPlayer;
     }
 
     public @NotNull Component personalMentionsEnabled() {

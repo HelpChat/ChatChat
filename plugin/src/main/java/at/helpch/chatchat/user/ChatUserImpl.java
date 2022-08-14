@@ -6,8 +6,11 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.cache.ExpiringCache;
+
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.audience.Audience;
@@ -34,6 +37,7 @@ public final class ChatUserImpl implements ChatUser {
     private boolean personalMentions = true;
     private boolean channelMentions = true;
     private boolean socialSpy = false;
+    private Set<UUID> ignoredUsers = new HashSet<>();
 
     @Override
     public @NotNull Channel channel() {
@@ -107,6 +111,26 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public boolean socialSpy() {
         return socialSpy;
+    }
+
+    @Override
+    public @NotNull Set<UUID> ignoredUsers() {
+        return ignoredUsers;
+    }
+
+    @Override
+    public void ignoredUsers(@NotNull Set<UUID> users) {
+        this.ignoredUsers = users;
+    }
+
+    @Override
+    public void ignoreUser(@NotNull User user) {
+        ignoredUsers.add(user.uuid());
+    }
+
+    @Override
+    public void unignoreUser(@NotNull User user) {
+        ignoredUsers.remove(user.uuid());
     }
 
     @Override

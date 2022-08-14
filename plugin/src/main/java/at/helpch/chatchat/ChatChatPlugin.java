@@ -192,6 +192,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         List.of(
                 new MainCommand(),
+                new IgnoreCommand(this),
                 new ReloadCommand(this),
                 new MentionToggleCommand(this),
                 new WhisperCommand(this, false),

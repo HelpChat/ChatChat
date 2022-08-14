@@ -10,13 +10,15 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.UUID;
 
 public final class ConsoleUser implements User {
 
     public static final ConsoleUser INSTANCE = new ConsoleUser();
 
-    private ConsoleUser() {}
+    private ConsoleUser() {
+    }
 
     @Override
     public @NotNull Channel channel() {
@@ -24,7 +26,8 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public void channel(@NotNull final Channel channel) {}
+    public void channel(@NotNull final Channel channel) {
+    }
 
     @Override
     public @NotNull Format format() {
@@ -32,7 +35,8 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public void format(@NotNull final Format format) {}
+    public void format(@NotNull final Format format) {
+    }
 
     @Override
     public @NotNull UUID uuid() {
@@ -45,6 +49,23 @@ public final class ConsoleUser implements User {
     }
 
     @Override
+    public @NotNull Set<UUID> ignoredUsers() {
+        return Set.of();
+    }
+
+    @Override
+    public void ignoredUsers(@NotNull Set<UUID> users) {
+    }
+
+    @Override
+    public void ignoreUser(@NotNull User user) {
+    }
+
+    @Override
+    public void unignoreUser(@NotNull User user) {
+    }
+
+    @Override
     public @NotNull Audience audience() {
         return ChatChatPlugin.audiences().console();
     }
@@ -53,4 +74,5 @@ public final class ConsoleUser implements User {
     public @NotNull Identity identity() {
         return Identity.nil();
     }
+
 }

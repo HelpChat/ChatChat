@@ -29,4 +29,5 @@ public interface ChatUser extends User {
     void socialSpy(final boolean enable);
 
     boolean socialSpy();
+
 }
