@@ -25,6 +25,8 @@ public final class SettingsHolder {
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
 
+    private long lastMessagedCacheDuration = 300;
+
     public @NotNull BasicFormat senderFormat() {
         return senderFormat;
     }
@@ -63,5 +65,9 @@ public final class SettingsHolder {
 
     public boolean mentionOnMessage() {
         return mentionOnMessage;
+    }
+
+    public long lastMessagedCacheDuration() {
+        return lastMessagedCacheDuration;
     }
 }

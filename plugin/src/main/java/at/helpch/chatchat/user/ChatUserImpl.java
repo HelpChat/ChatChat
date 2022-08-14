@@ -24,7 +24,8 @@ public final class ChatUserImpl implements ChatUser {
         this.uuid = uuid;
     }
 
-    private final ExpiringCache<ChatUser> lastMessagedUser = new ExpiringCache<>(5, TimeUnit.MINUTES);
+    private final ExpiringCache<ChatUser> lastMessagedUser =
+        new ExpiringCache<>(ChatChatPlugin.cacheDuration(), TimeUnit.SECONDS);
 
     private final UUID uuid;
     private Channel channel;
