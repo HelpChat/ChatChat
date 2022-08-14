@@ -40,7 +40,9 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         out.value(value.socialSpy());
         out.name("ignored-users");
         out.beginArray();
-        for (UUID uuid : value.ignoredUsers()) out.value(uuid.toString());
+        for (UUID uuid : value.ignoredUsers()) {
+            out.value(uuid.toString());
+        }
         out.endArray();
 
         out.endObject();
