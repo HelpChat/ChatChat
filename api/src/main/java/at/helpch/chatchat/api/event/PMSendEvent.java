@@ -19,6 +19,10 @@ public class PMSendEvent extends Event implements Cancellable {
     private @NotNull Format recipientFormat;
     private @NotNull Component message;
     private final boolean reply;
+    
+    public static @NotNull HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     public PMSendEvent(
         @NotNull final ChatUser sender,
