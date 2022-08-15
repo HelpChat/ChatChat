@@ -33,6 +33,8 @@ public final class MessagesHolder {
     private Component socialSpyDisabled = text("Social spy disabled", RED);
     private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
     private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
+    private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
+    private Component currentlyIgnored = text("You are ignored by <player>.", RED);
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
@@ -159,5 +161,13 @@ public final class MessagesHolder {
 
     public @NotNull Component invalidFormat() {
         return invalidFormat;
+    }
+
+    public @NotNull Component cantMessageIgnoredPlayer() {
+        return cantMessageIgnoredPlayer;
+    }
+
+    public @NotNull Component currentlyIgnored() {
+        return currentlyIgnored;
     }
 }
