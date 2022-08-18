@@ -61,15 +61,12 @@ public final class WhisperCommand extends BaseCommand {
         }
 
         final var userHasBypassPerm = user.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
-        // x ignore y; y has bypass
         if (recipient.ignoredUsers().contains(user.uuid()) && !userHasBypassPerm) {
-            user.sendMessage(plugin.configManager().messages().currentlyIgnored()
-                .replaceText(builder -> builder.matchLiteral("<player>").replacement(recipient.player().getDisplayName())));
+            user.sendMessage(plugin.configManager().messages().cantMessageGeneral());
             return;
         }
 
-        // y ignore x; x has bypass;
-        final var  recipientHasBypassPerm = recipient.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
+        final var recipientHasBypassPerm = recipient.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
         if (user.ignoredUsers().contains(recipient.uuid()) && !recipientHasBypassPerm) {
             user.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
             return;
