@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 public final class MessageProcessor {
 
+    private static final MiniMessage USER_MESSAGE_MINI_MESSAGE = MiniMessage.builder().tags(TagResolver.empty()).build();
     private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
@@ -343,10 +344,9 @@ public final class MessageProcessor {
             );
         }
 
-        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
         return !user.player().hasPermission(URL_PERMISSION)
-            ? miniMessage.deserialize(message)
-            : miniMessage.deserialize(message).replaceText(URL_REPLACER_CONFIG);
+            ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
+            : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
 
 }
