@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
@@ -342,9 +343,10 @@ public final class MessageProcessor {
             );
         }
 
+        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
         return !user.player().hasPermission(URL_PERMISSION)
-            ? MessageUtils.parseToMiniMessage(message, resolver.build())
-            : MessageUtils.parseToMiniMessage(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
+            ? miniMessage.deserialize(message)
+            : miniMessage.deserialize(message).replaceText(URL_REPLACER_CONFIG);
     }
 
 }
