@@ -20,9 +20,6 @@ import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
-
-import java.util.ArrayList;
-
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
@@ -32,6 +29,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +51,8 @@ public final class ChatChatPlugin extends JavaPlugin {
     private BukkitCommandManager<User> commandManager;
 
     private BukkitTask dataSaveTask;
+
+    private static long cacheDuration;
 
     @Override
     public void onEnable() {
@@ -85,6 +85,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         new ChatPlaceholders(this).register();
 
+        cacheDuration = configManager().settings().lastMessagedCacheDuration();
         dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
             this,
             () -> Bukkit.getOnlinePlayers().stream().map(usersHolder::getUser).filter(user -> user instanceof ChatUser)
@@ -106,6 +107,10 @@ public final class ChatChatPlugin extends JavaPlugin {
         }
 
         getLogger().info("Plugin disabled successfully!");
+    }
+
+    public static long cacheDuration() {
+        return cacheDuration;
     }
 
     public @NotNull ConfigManager configManager() {
