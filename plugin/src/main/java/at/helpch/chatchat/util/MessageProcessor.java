@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 
 public final class MessageProcessor {
 
+    private static final MiniMessage USER_MESSAGE_MINI_MESSAGE = MiniMessage.builder().tags(TagResolver.empty()).build();
     private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
@@ -343,8 +345,8 @@ public final class MessageProcessor {
         }
 
         return !user.player().hasPermission(URL_PERMISSION)
-            ? MessageUtils.parseToMiniMessage(message, resolver.build())
-            : MessageUtils.parseToMiniMessage(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
+            ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
+            : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
 
 }
