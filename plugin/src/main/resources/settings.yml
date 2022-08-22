@@ -74,3 +74,6 @@ mention-sound:
 
 # Whether to play the mention sound when a user receives a private message
 mention-on-message: true
+
+# After how many seconds should the last messaged user be cleared. Set to below 0 to disable expiration.
+last-messaged-cache-duration: 300

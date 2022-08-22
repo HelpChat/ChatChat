@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ItemUtils {
-    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
+    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
 
     private ItemUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");

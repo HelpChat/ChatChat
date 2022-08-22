@@ -21,6 +21,7 @@ public final class SettingsHolder {
     private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
+    private long lastMessagedCacheDuration = 300;
 
     public @NotNull PMSettingsHolder privateMessagesSettings() {
         return privateMessages;
@@ -52,5 +53,9 @@ public final class SettingsHolder {
 
     public boolean mentionOnMessage() {
         return mentionOnMessage;
+    }
+
+    public long lastMessagedCacheDuration() {
+        return lastMessagedCacheDuration;
     }
 }

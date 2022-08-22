@@ -12,12 +12,12 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
-
-import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 @Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
 public final class WhisperCommand extends BaseCommand {
@@ -61,6 +61,18 @@ public final class WhisperCommand extends BaseCommand {
 
         if (!recipient.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
+            return;
+        }
+
+        final var userHasBypassPerm = user.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
+        if (recipient.ignoredUsers().contains(user.uuid()) && !userHasBypassPerm) {
+            user.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+            return;
+        }
+
+        final var recipientHasBypassPerm = recipient.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
+        if (user.ignoredUsers().contains(recipient.uuid()) && !recipientHasBypassPerm) {
+            user.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
             return;
         }
 
@@ -110,10 +122,10 @@ public final class WhisperCommand extends BaseCommand {
 
         formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
-                    format,
-                    user.player(),
-                    recipient.player(),
-                    pmSendEvent.message()
+                format,
+                user.player(),
+                recipient.player(),
+                pmSendEvent.message()
             ))
         );
 
@@ -124,4 +136,5 @@ public final class WhisperCommand extends BaseCommand {
         user.lastMessagedUser(recipient);
         recipient.lastMessagedUser(user);
     }
+
 }
