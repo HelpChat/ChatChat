@@ -1,10 +1,10 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.config.holders.ChannelsHolder;
-import at.helpch.chatchat.config.holders.FormatsHolder;
-import at.helpch.chatchat.config.holders.MessagesHolder;
-import at.helpch.chatchat.config.holders.SettingsHolder;
+import at.helpch.chatchat.config.holder.ChannelsHolder;
+import at.helpch.chatchat.config.holder.FormatsHolder;
+import at.helpch.chatchat.config.holder.MessagesHolder;
+import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
