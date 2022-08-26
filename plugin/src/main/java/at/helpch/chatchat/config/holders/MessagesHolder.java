@@ -46,6 +46,10 @@ public final class MessagesHolder {
     private Component commandInvalidArgument = text("Invalid argument.", RED);
     private Component commandNoPermission = text("No Permission.", RED);
 
+    // dump reloated
+    private Component dumpFailed = text("Failed to create dump!", RED);
+    private Component dumpSuccess = text("Dump created successfully! You can find it at: <url>", GREEN);
+
     // mention related
     private Component personalMentionsEnabled = text("Successfully enabled personal mentions!", GREEN);
     private Component personalMentionsDisabled = text("Successfully disabled personal mentions!", GREEN);
@@ -133,6 +137,14 @@ public final class MessagesHolder {
 
     public @NotNull Component noPermission() {
         return commandNoPermission;
+    }
+
+    public @NotNull Component dumpFailed() {
+        return dumpFailed;
+    }
+
+    public @NotNull Component dumpSuccess() {
+        return dumpSuccess;
     }
 
     public @NotNull Component ignoredPlayer() {

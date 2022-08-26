@@ -15,6 +15,8 @@ special-characters-no-permission: <red>You do not have permission to use special
 social-spy-enabled: <green>Social spy enabled
 social-spy-disabled: <red>Social spy disabled
 channel-no-permission: <red>You do not have permission to use this channel!
+dump-fail: <red>Failed to create dump!
+dump-success: '<green>Dump created successfully! You can find it at: <url>'
 channel-switched: <green>You have switched to the <channel> channel!
 command-unknown-command: <red>Unknown Command.
 command-invalid-usage: <red>Invalid usage.
