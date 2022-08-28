@@ -198,12 +198,12 @@ public final class ChatChatPlugin extends JavaPlugin {
         });
 
         List.of(
-                new MainCommand(),
-                new IgnoreCommand(this),
-                new ReloadCommand(this),
-                new MentionToggleCommand(this),
-                new FormatTestCommand(this),
-              new DumpCommand(this)
+            new MainCommand(),
+            new IgnoreCommand(this),
+            new ReloadCommand(this),
+            new MentionToggleCommand(this),
+            new FormatTestCommand(this),
+            new DumpCommand(this)
         ).forEach(commandManager::registerCommand);
 
         if (configManager.settings().privateMessagesSettings().enabled()) {
