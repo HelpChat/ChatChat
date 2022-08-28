@@ -1,8 +1,8 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.cmd.core.annotation.Optional;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
