@@ -2,7 +2,6 @@ package at.helpch.chatchat.hooks.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.Hook;
-import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +21,8 @@ public class ChatChatTownyHook implements Hook {
     }
 
     @Override
-    public @NotNull Optional<@NotNull String> name() {
-        if (register()) return Optional.of(TOWNY);
-        return Optional.empty();
+    public @NotNull String name() {
+        return "ChatChat:" + TOWNY + "Hook";
     }
 
     @Override

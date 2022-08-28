@@ -15,6 +15,7 @@ import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolder;
+import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
@@ -68,8 +69,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         // bStats
         Metrics metrics = new Metrics(this, 14781);
         metrics.addCustomChart(new SimpleBarChart("channelTypes", () ->
-                configManager().channels().channels().values().stream()
-                        .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
+            configManager().channels().channels().values().stream()
+                .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
         registerSuggestions();
@@ -79,8 +80,8 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // event listener registration
         List.of(
-                new PlayerListener(this),
-                new ChatListener(this)
+            new PlayerListener(this),
+            new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
         new ChatPlaceholders(this).register();
@@ -144,22 +145,31 @@ public final class ChatChatPlugin extends JavaPlugin {
     private void registerArguments() {
         commandManager.registerArgument(ChatFormat.class, (sender, argument) ->
             configManager().formats().formats().get(argument));
+
+        commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
+            final var player = Bukkit.getPlayer(arg);
+            if (player == null) {
+                return null;
+            }
+            return usersHolder.getUser(player);
+        });
     }
 
     private void registerSuggestions() {
         commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
-                usersHolder.users()
-                        .stream()
-                        .filter(ChatUser.class::isInstance)
-                        .map(ChatUser.class::cast)
-                        .filter(sender::canSee)
-                        .map(ChatUser::player)
-                        .map(Player::getName)
-                        .collect(Collectors.toUnmodifiableList())
-        );
-        commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
+            usersHolder.users()
+                .stream()
+                .filter(ChatUser.class::isInstance)
+                .map(ChatUser.class::cast)
+                .filter(sender::canSee)
+                .map(ChatUser::player)
                 .map(Player::getName)
-                .collect(Collectors.toList())));
+                .collect(Collectors.toUnmodifiableList())
+        );
+        commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.FILES);
+        commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
+            .map(Player::getName)
+            .collect(Collectors.toList())));
 
         commandManager.registerSuggestion(ChatFormat.class, ((sender, context) ->
             new ArrayList<>(configManager.formats().formats().keySet())
@@ -178,6 +188,11 @@ public final class ChatChatPlugin extends JavaPlugin {
                 return;
             }
 
+            if (context.getArgumentType() == ChatUser.class) {
+                sender.sendMessage(configManager.messages().userOffline());
+                return;
+            }
+
             sender.sendMessage(configManager.messages().invalidArgument());
         });
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
@@ -187,20 +202,13 @@ public final class ChatChatPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-        commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
-            final var player = Bukkit.getPlayer(arg);
-            if (player == null) {
-                return null;
-            }
-            return usersHolder.getUser(player);
-        });
-
         List.of(
-                new MainCommand(),
-                new IgnoreCommand(this),
-                new ReloadCommand(this),
-                new MentionToggleCommand(this),
-                new FormatTestCommand(this)
+            new MainCommand(),
+            new IgnoreCommand(this),
+            new ReloadCommand(this),
+            new MentionToggleCommand(this),
+            new FormatTestCommand(this),
+            new DumpCommand(this)
         ).forEach(commandManager::registerCommand);
 
         if (configManager.settings().privateMessagesSettings().enabled()) {
@@ -214,9 +222,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // register channel commands
         configManager.channels().channels().values().stream()
-                .map(Channel::commandNames) // don't register empty command names
-                .filter(s -> !s.isEmpty())
-                .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
-                .forEach(commandManager::registerCommand);
+            .map(Channel::commandNames) // don't register empty command names
+            .filter(s -> !s.isEmpty())
+            .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
+            .forEach(commandManager::registerCommand);
     }
 }
