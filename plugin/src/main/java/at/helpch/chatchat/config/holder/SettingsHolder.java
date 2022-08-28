@@ -1,4 +1,4 @@
-package at.helpch.chatchat.config.holders;
+package at.helpch.chatchat.config.holder;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.format.BasicFormat;
@@ -11,10 +11,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public final class SettingsHolder {
 
-    private BasicFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
-
-    private BasicFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
-    private BasicFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
+    private PMSettingsHolder privateMessages = new PMSettingsHolder();
 
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
@@ -24,19 +21,10 @@ public final class SettingsHolder {
     private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
-
     private long lastMessagedCacheDuration = 300;
 
-    public @NotNull BasicFormat senderFormat() {
-        return senderFormat;
-    }
-
-    public @NotNull BasicFormat recipientFormat() {
-        return recipientFormat;
-    }
-
-    public @NotNull BasicFormat socialSpyFormat() {
-        return socialSpyFormat;
+    public @NotNull PMSettingsHolder privateMessagesSettings() {
+        return privateMessages;
     }
 
     public @NotNull String itemFormat() {

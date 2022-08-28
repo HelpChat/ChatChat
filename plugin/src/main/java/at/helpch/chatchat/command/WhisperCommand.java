@@ -39,6 +39,10 @@ public final class WhisperCommand extends BaseCommand {
         @Suggestion(value = "recipients") final ChatUser recipient,
         @Join final String message
     ) {
+        if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
+            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            return;
+        }
 
         if (!user.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().repliesDisabled());
@@ -84,9 +88,9 @@ public final class WhisperCommand extends BaseCommand {
 
         final var settingsConfig = plugin.configManager().settings();
 
-        final var senderFormat = settingsConfig.senderFormat();
-        final var recipientFormat = settingsConfig.recipientFormat();
-        final var socialSpyFormat = settingsConfig.socialSpyFormat();
+        final var senderFormat = settingsConfig.privateMessagesSettings().formats().senderFormat();
+        final var recipientFormat = settingsConfig.privateMessagesSettings().formats().recipientFormat();
+        final var socialSpyFormat = settingsConfig.privateMessagesSettings().formats().socialSpyFormat();
 
         final var pmSendEvent = new PMSendEvent(
             user,

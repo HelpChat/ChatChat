@@ -1,7 +1,7 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holder.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;

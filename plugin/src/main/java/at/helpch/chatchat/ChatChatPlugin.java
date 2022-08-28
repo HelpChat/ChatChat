@@ -200,12 +200,17 @@ public final class ChatChatPlugin extends JavaPlugin {
                 new IgnoreCommand(this),
                 new ReloadCommand(this),
                 new MentionToggleCommand(this),
+                new FormatTestCommand(this)
+        ).forEach(commandManager::registerCommand);
+
+        if (configManager.settings().privateMessagesSettings().enabled()) {
+            List.of(
                 new WhisperCommand(this, false),
                 new ReplyCommand(this, new WhisperCommand(this, true)),
                 new WhisperToggleCommand(this),
-                new SocialSpyCommand(this),
-                new FormatTestCommand(this)
-        ).forEach(commandManager::registerCommand);
+                new SocialSpyCommand(this)
+            ).forEach(commandManager::registerCommand);
+        }
 
         // register channel commands
         configManager.channels().channels().values().stream()

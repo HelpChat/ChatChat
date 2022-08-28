@@ -1,4 +1,4 @@
-package at.helpch.chatchat.config.holders;
+package at.helpch.chatchat.config.holder;
 
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;

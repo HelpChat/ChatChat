@@ -24,6 +24,11 @@ public final class ReplyCommand extends BaseCommand {
     @Default
     @Permission(MESSAGE_PERMISSION)
     public void reply(final ChatUser user, @Join final String message) {
+        if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
+            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            return;
+        }
+
         final var lastMessaged = user.lastMessagedUser();
 
         if (lastMessaged.isEmpty()) {

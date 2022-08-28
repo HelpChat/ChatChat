@@ -1,4 +1,4 @@
-package at.helpch.chatchat.config.holders;
+package at.helpch.chatchat.config.holder;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.config.DefaultConfigObjects;
