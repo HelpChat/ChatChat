@@ -144,6 +144,14 @@ public final class ChatChatPlugin extends JavaPlugin {
     private void registerArguments() {
         commandManager.registerArgument(ChatFormat.class, (sender, argument) ->
             configManager().formats().formats().get(argument));
+
+        commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
+            final var player = Bukkit.getPlayer(arg);
+            if (player == null) {
+                return null;
+            }
+            return usersHolder.getUser(player);
+        });
     }
 
     private void registerSuggestions() {
@@ -178,6 +186,11 @@ public final class ChatChatPlugin extends JavaPlugin {
                 return;
             }
 
+            if (context.getArgumentType() == ChatUser.class) {
+                sender.sendMessage(configManager.messages().userOffline());
+                return;
+            }
+
             sender.sendMessage(configManager.messages().invalidArgument());
         });
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
@@ -187,14 +200,6 @@ public final class ChatChatPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-        commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
-            final var player = Bukkit.getPlayer(arg);
-            if (player == null) {
-                return null;
-            }
-            return usersHolder.getUser(player);
-        });
-
         List.of(
                 new MainCommand(),
                 new IgnoreCommand(this),
