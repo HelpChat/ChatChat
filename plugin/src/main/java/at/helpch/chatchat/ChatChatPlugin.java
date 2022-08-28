@@ -1,11 +1,21 @@
 package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
-import at.helpch.chatchat.command.*;
+import at.helpch.chatchat.command.DumpCommand;
+import at.helpch.chatchat.command.FormatTestCommand;
+import at.helpch.chatchat.command.IgnoreCommand;
+import at.helpch.chatchat.command.MainCommand;
+import at.helpch.chatchat.command.MentionToggleCommand;
+import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.ReplyCommand;
+import at.helpch.chatchat.command.SocialSpyCommand;
+import at.helpch.chatchat.command.SwitchChannelCommand;
+import at.helpch.chatchat.command.WhisperCommand;
+import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;

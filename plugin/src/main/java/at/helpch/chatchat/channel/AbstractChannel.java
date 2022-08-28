@@ -1,8 +1,8 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.holder.FormatsHolder;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,8 +1,8 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;

@@ -2,9 +2,9 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
-import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;

@@ -2,10 +2,10 @@ package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.api.utils.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.utils.MentionType;
 import at.helpch.chatchat.user.ConsoleUser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;

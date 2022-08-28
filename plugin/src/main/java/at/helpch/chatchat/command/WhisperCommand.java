@@ -1,10 +1,9 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.api.format.BasicFormat;
 import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.api.format.Format;
-import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.StringUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -121,7 +120,7 @@ public final class WhisperCommand extends BaseCommand {
             socialSpyFormat
         );
 
-        formats.forEach((Audience audience, Format format) ->
+        formats.forEach((Audience audience, BasicFormat format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                 format,
                 user.player(),

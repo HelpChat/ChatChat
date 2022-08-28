@@ -1,8 +1,8 @@
 package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.hook.VanishHook;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.VanillaVanishListener;
 import at.helpch.chatchat.util.VersionHelper;
 import org.bukkit.entity.Player;

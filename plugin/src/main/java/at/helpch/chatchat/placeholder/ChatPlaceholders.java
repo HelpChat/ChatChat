@@ -2,13 +2,14 @@ package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
-import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public final class ChatPlaceholders extends PlaceholderExpansion {
     private final ChatChatPlugin plugin;

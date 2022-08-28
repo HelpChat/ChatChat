@@ -1,12 +1,13 @@
 package at.helpch.chatchat.util;
 
-import java.util.ArrayList;
-import java.util.Locale;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public final class PapiTagUtils {
 

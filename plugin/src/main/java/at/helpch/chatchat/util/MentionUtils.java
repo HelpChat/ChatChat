@@ -1,8 +1,8 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.format.BasicFormat;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
 import org.intellij.lang.annotations.RegExp;
