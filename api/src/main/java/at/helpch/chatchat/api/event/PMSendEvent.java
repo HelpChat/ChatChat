@@ -1,7 +1,7 @@
 package at.helpch.chatchat.api.event;
 
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.user.ChatUser;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,8 +15,8 @@ public class PMSendEvent extends Event implements Cancellable {
 
     private @NotNull final ChatUser sender;
     private @NotNull final ChatUser recipient;
-    private @NotNull Format senderFormat;
-    private @NotNull Format recipientFormat;
+    private @NotNull BasicFormat senderFormat;
+    private @NotNull BasicFormat recipientFormat;
     private @NotNull Component message;
     private final boolean reply;
     
@@ -27,8 +27,8 @@ public class PMSendEvent extends Event implements Cancellable {
     public PMSendEvent(
         @NotNull final ChatUser sender,
         @NotNull final ChatUser recipient,
-        @NotNull final Format senderFormat,
-        @NotNull final Format recipientFormat,
+        @NotNull final BasicFormat senderFormat,
+        @NotNull final BasicFormat recipientFormat,
         @NotNull final Component message,
         final boolean reply
     ) {
@@ -63,19 +63,19 @@ public class PMSendEvent extends Event implements Cancellable {
         return recipient;
     }
 
-    public @NotNull Format senderFormat() {
+    public @NotNull BasicFormat senderFormat() {
         return senderFormat;
     }
 
-    public void senderFormat(@NotNull final Format format) {
+    public void senderFormat(@NotNull final BasicFormat format) {
         this.senderFormat = format;
     }
 
-    public @NotNull Format recipientFormat() {
+    public @NotNull BasicFormat recipientFormat() {
         return recipientFormat;
     }
 
-    public void recipientFormat(@NotNull final Format format) {
+    public void recipientFormat(@NotNull final BasicFormat format) {
         this.recipientFormat = format;
     }
 

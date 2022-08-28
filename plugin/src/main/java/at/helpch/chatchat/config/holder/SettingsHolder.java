@@ -1,7 +1,7 @@
 package at.helpch.chatchat.config.holder;
 
+import at.helpch.chatchat.api.format.BasicFormat;
 import at.helpch.chatchat.config.DefaultConfigObjects;
-import at.helpch.chatchat.format.BasicFormat;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;

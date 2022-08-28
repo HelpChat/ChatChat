@@ -1,6 +1,6 @@
 package at.helpch.chatchat.config.mapper;
 
-import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.config.holder.FormatsHolderImpl;
 import org.jetbrains.annotations.Nullable;

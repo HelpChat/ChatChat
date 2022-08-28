@@ -1,14 +1,14 @@
 package at.helpch.chatchat;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
-import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.hooks.HookManager;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
@@ -143,7 +143,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     }
 
     private void registerArguments() {
-        commandManager.registerArgument(ChatFormat.class, (sender, argument) ->
+        commandManager.registerArgument(PriorityFormat.class, (sender, argument) ->
             configManager().formats().formats().get(argument));
 
         commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
@@ -171,7 +171,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             .map(Player::getName)
             .collect(Collectors.toList())));
 
-        commandManager.registerSuggestion(ChatFormat.class, ((sender, context) ->
+        commandManager.registerSuggestion(PriorityFormat.class, ((sender, context) ->
             new ArrayList<>(configManager.formats().formats().keySet())
         ));
     }
@@ -183,7 +183,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
             sender.sendMessage(configManager.messages().unknownCommand()));
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
-            if (context.getArgumentType() == ChatFormat.class) {
+            if (context.getArgumentType() == PriorityFormat.class) {
                 sender.sendMessage(configManager.messages().invalidFormat());
                 return;
             }

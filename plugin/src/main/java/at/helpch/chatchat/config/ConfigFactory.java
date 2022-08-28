@@ -1,19 +1,18 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.PriorityFormat;
+import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
 import at.helpch.chatchat.config.mapper.BasicFormatMapper;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
-import at.helpch.chatchat.config.mapper.ChatFormatMapper;
-import at.helpch.chatchat.config.mapper.FormatMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
 import at.helpch.chatchat.config.mapper.PriorityFormatMapper;
-import at.helpch.chatchat.format.BasicFormat;
+import at.helpch.chatchat.format.BasicFormatImpl;
 import at.helpch.chatchat.format.ChatFormat;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
@@ -43,7 +42,7 @@ public final class ConfigFactory {
         return Objects.requireNonNullElseGet(config, ChannelsHolder::new);
     }
 
-    public @NotNull GlobalFormatsHolderImpl formats() {
+    public @NotNull GlobalFormatsHolder formats() {
         final var config = create(GlobalFormatsHolderImpl.class, "formats.yml");
         return Objects.requireNonNullElseGet(config, GlobalFormatsHolderImpl::new);
     }
@@ -90,10 +89,13 @@ public final class ConfigFactory {
                 .header("https://wiki.helpch.at")
                 .serializers(build -> build
                     .register(Component.class, new MiniMessageComponentMapper())
-                    .register(ChatFormat.class, new ChatFormatMapper())
+
+                    .register(BasicFormatImpl.class, new BasicFormatMapper())
                     .register(BasicFormat.class, new BasicFormatMapper())
+
                     .register(PriorityFormat.class, new PriorityFormatMapper())
-                    .register(Format.class, new FormatMapper())
+                    .register(ChatFormat.class, new PriorityFormatMapper())
+
                     .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                     .registerAll(ConfigurateComponentSerializer.configurate().serializers())))
             .nodeStyle(NodeStyle.BLOCK)

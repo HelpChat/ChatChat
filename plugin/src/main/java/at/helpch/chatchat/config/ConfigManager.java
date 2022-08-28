@@ -1,11 +1,11 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
-import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public final class ConfigManager {
 
     private @NotNull final ChatChatPlugin plugin;
     private ChannelsHolder channels;
-    private GlobalFormatsHolderImpl formats;
+    private GlobalFormatsHolder formats;
     private SettingsHolder settings;
     private MessagesHolder messages;
     private final ConfigFactory factory;
@@ -35,9 +35,12 @@ public final class ConfigManager {
         messages();
 
         channels();
-        var defaultChannel = channels.channels().get(channels.defaultChannel());
-        if (!(defaultChannel instanceof ChatChannel)) defaultChannel = DefaultConfigObjects.createDefaultChannel();
-        ChatChannel.defaultChannel((ChatChannel) defaultChannel);
+        final var defaultChannel = channels.channels().get(channels.defaultChannel());
+        ChatChannel.defaultChannel(
+            defaultChannel instanceof ChatChannel
+                ? defaultChannel
+                : DefaultConfigObjects.createDefaultChannel()
+        );
 
         settings();
 
@@ -60,7 +63,7 @@ public final class ConfigManager {
         return this.settings;
     }
 
-    public @NotNull GlobalFormatsHolderImpl formats() {
+    public @NotNull GlobalFormatsHolder formats() {
         if (formats == null) {
             this.formats = factory.formats();
         }

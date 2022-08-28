@@ -1,8 +1,8 @@
 package at.helpch.chatchat.hooks.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.channel.AbstractChannel;
 import at.helpch.chatchat.util.ChannelUtils;
@@ -36,8 +36,8 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
     }
 
     @Override
-    public boolean isUseableBy(@NotNull final ChatUser user) {
-        return super.isUseableBy(user) && residentList(user.uuid()).isPresent();
+    public boolean isUsableBy(@NotNull final ChatUser user) {
+        return super.isUsableBy(user) && residentList(user.uuid()).isPresent();
     }
 
     protected abstract @Nullable ResidentList residentList(@NotNull final Resident resident);

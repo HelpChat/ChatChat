@@ -1,7 +1,7 @@
 package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

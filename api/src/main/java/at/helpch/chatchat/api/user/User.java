@@ -1,5 +1,7 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.user;
 
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.Format;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.identity.Identified;
 import org.jetbrains.annotations.NotNull;

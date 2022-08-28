@@ -1,7 +1,7 @@
 package at.helpch.chatchat.data.impl.gson;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.user.ChatUserImpl;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
@@ -10,9 +10,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 

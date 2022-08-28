@@ -1,7 +1,7 @@
 package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;

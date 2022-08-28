@@ -1,7 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.channel.Channel;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;

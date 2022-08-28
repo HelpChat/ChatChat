@@ -1,9 +1,9 @@
 package at.helpch.chatchat.api.event;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.MentionType;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.utils.MentionType;
+import at.helpch.chatchat.api.user.User;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -1,4 +1,4 @@
-package at.helpch.chatchat.util;
+package at.helpch.chatchat.api.utils;
 
 import at.helpch.chatchat.api.hook.Hook;
 import org.bukkit.Bukkit;

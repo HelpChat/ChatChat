@@ -1,9 +1,9 @@
 package at.helpch.chatchat.user;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.audience.Audience;

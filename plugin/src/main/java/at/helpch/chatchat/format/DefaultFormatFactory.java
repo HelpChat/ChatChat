@@ -1,6 +1,6 @@
 package at.helpch.chatchat.format;
 
-import at.helpch.chatchat.api.PriorityFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;

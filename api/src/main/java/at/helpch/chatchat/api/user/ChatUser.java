@@ -1,4 +1,4 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.user;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

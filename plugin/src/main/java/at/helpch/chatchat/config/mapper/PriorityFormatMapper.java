@@ -1,6 +1,6 @@
 package at.helpch.chatchat.config.mapper;
 
-import at.helpch.chatchat.api.PriorityFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.format.ChatFormat;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.Nullable;

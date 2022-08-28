@@ -1,4 +1,4 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.format;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
-import at.helpch.chatchat.format.BasicFormat;
+import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.format.BasicFormatImpl;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -37,7 +38,7 @@ public final class BasicFormatMapper implements TypeSerializer<BasicFormat> {
             throw new SerializationException("Parts list of node: " + key + " cannot be null!");
         }
 
-        return new BasicFormat(key, parts);
+        return new BasicFormatImpl(key, parts);
     }
 
     @Override

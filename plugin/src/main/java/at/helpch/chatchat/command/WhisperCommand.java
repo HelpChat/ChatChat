@@ -1,8 +1,9 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.StringUtils;
@@ -107,7 +108,7 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        final var formats = new LinkedHashMap<Audience, Format>();
+        final var formats = new LinkedHashMap<Audience, BasicFormat>();
         formats.put(user, pmSendEvent.senderFormat());
         formats.put(recipient, pmSendEvent.recipientFormat());
         formats.put(

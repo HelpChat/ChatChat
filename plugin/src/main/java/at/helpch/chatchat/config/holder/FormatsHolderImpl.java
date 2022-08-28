@@ -1,6 +1,6 @@
 package at.helpch.chatchat.config.holder;
 
-import at.helpch.chatchat.api.PriorityFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import org.jetbrains.annotations.NotNull;

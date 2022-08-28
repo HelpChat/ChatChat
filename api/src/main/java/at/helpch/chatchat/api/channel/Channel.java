@@ -1,6 +1,8 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.channel;
 
 import at.helpch.chatchat.api.holder.FormatsHolder;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,5 +25,5 @@ public interface Channel {
 
     Set<User> targets(@NotNull final User source);
 
-    boolean isUseableBy(@NotNull final ChatUser user);
+    boolean isUsableBy(@NotNull final ChatUser user);
 }

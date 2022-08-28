@@ -1,4 +1,4 @@
-package at.helpch.chatchat.api;
+package at.helpch.chatchat.api.utils;
 
 import com.google.common.collect.Maps;
 import java.util.Map;

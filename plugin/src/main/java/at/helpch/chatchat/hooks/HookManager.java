@@ -3,12 +3,12 @@ package at.helpch.chatchat.hooks;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.hook.VanishHook;
+import at.helpch.chatchat.api.utils.Validators;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.hooks.vanish.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
-import at.helpch.chatchat.util.Validators;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

@@ -1,9 +1,9 @@
 package at.helpch.chatchat.api.event;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

@@ -1,7 +1,7 @@
 package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.SuperVanishListener;
 import de.myzelyam.api.vanish.VanishAPI;

@@ -1,9 +1,11 @@
 package at.helpch.chatchat.config;
 
-import at.helpch.chatchat.api.PriorityFormat;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.FormatsHolderImpl;
-import at.helpch.chatchat.format.BasicFormat;
+import at.helpch.chatchat.format.BasicFormatImpl;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -17,12 +19,12 @@ import java.util.List;
  */
 public final class DefaultConfigObjects {
 
-    public static @NotNull ChatChannel createDefaultChannel() {
+    public static @NotNull Channel createDefaultChannel() {
         return new ChatChannel("default", "",
             List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), -1);
     }
 
-    public static @NotNull ChatChannel createStaffChannel() {
+    public static @NotNull Channel createStaffChannel() {
         return new ChatChannel("staff", "@",
             List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
@@ -34,7 +36,7 @@ public final class DefaultConfigObjects {
         map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
         map.put("name", List.of("<white>%player_name%"));
         map.put("message", List.of(" <gray>» <white><message>"));
-        return new BasicFormat("console-format", map);
+        return new BasicFormatImpl("console-format", map);
     }
 
     public static @NotNull PriorityFormat createDefaultChannelFormat() {
@@ -53,7 +55,7 @@ public final class DefaultConfigObjects {
     }
 
 
-    public static @NotNull ChatFormat createDefaultFormat() {
+    public static @NotNull PriorityFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
@@ -64,7 +66,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("default", 2, map);
     }
 
-    public static @NotNull ChatFormat createOtherFormat() {
+    public static @NotNull PriorityFormat createOtherFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
@@ -90,7 +92,7 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("sender", map);
+        return new BasicFormatImpl("sender", map);
     }
 
     public static @NotNull BasicFormat createPrivateMessageRecipientFormat() {
@@ -101,7 +103,7 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray>you"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("recipient", map);
+        return new BasicFormatImpl("recipient", map);
     }
 
     public static @NotNull BasicFormat createPrivateMessageSocialSpyFormat() {
@@ -113,7 +115,7 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("socialspy", map);
+        return new BasicFormatImpl("socialspy", map);
     }
 
     public static @NotNull BasicFormat createMentionFormat() {
@@ -128,7 +130,7 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new BasicFormat("mention", map);
+        return new BasicFormatImpl("mention", map);
     }
 
     public static @NotNull Sound createMentionSound() {

@@ -1,9 +1,9 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.PriorityFormat;
-import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -49,7 +49,7 @@ public final class FormatUtils {
     public static @NotNull PriorityFormat findFormat(
         @NotNull final Player player,
         @NotNull final Channel channel,
-        @NotNull final GlobalFormatsHolderImpl formats) {
+        @NotNull final GlobalFormatsHolder formats) {
         final var formatOptional = findPermissionFormat(player, channel, formats.formats());
 
         return formatOptional.orElse(ChatFormat.defaultFormat());

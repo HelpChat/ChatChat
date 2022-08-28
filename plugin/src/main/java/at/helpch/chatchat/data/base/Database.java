@@ -1,6 +1,6 @@
 package at.helpch.chatchat.data.base;
 
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 

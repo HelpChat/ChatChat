@@ -1,7 +1,7 @@
 package at.helpch.chatchat.channel;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +70,7 @@ public abstract class AbstractChannel implements Channel {
 
 
     @Override
-    public boolean isUseableBy(@NotNull final ChatUser user) {
+    public boolean isUsableBy(@NotNull final ChatUser user) {
         return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 
