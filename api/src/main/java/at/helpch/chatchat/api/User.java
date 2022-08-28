@@ -19,6 +19,8 @@ public interface User extends ForwardingAudience.Single, Identified {
 
     @NotNull UUID uuid();
 
+    boolean hasPermission(@NotNull final String node);
+
     boolean canSee(@NotNull final User target);
 
     @NotNull Set<UUID> ignoredUsers();

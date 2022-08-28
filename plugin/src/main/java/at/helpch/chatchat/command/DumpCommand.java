@@ -26,8 +26,7 @@ public class DumpCommand extends ChatChatCommand {
 
     @SubCommand("dump")
     public void dump(final User user, final @Suggestion("files") @Optional String file) {
-        // TODO: 8/26/22 Implement a User#hasPermission method
-        if (user instanceof ChatUser && !((ChatUser )user).player().hasPermission(DUMP_PERMISSION)) {
+        if (!user.hasPermission(DUMP_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().noPermission());
             return;
         }

@@ -8,6 +8,7 @@ import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -41,6 +42,11 @@ public final class ConsoleUser implements User {
     @Override
     public @NotNull UUID uuid() {
         return Identity.nil().uuid();
+    }
+
+    @Override
+    public boolean hasPermission(@NotNull final String node) {
+        return Bukkit.getConsoleSender().hasPermission(node);
     }
 
     @Override

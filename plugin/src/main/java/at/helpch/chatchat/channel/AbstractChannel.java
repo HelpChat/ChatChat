@@ -60,7 +60,7 @@ public abstract class AbstractChannel implements Channel {
 
     @Override
     public boolean isUseableBy(@NotNull final ChatUser user) {
-        return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
+        return user.hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 
     @Override
