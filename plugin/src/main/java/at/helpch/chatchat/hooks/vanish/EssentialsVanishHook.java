@@ -4,7 +4,6 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.EssentialsVanishListener;
-import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,8 +32,8 @@ public class EssentialsVanishHook extends VanishHook {
     }
 
     @Override
-    public @NotNull Optional<@NotNull String> name() {
-        return Optional.of(ESSENTIALS);
+    public @NotNull String name() {
+        return "ChatChat:" + ESSENTIALS + "Hook";
     }
 
     @Override

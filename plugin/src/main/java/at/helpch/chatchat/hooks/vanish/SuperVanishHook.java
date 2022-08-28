@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.SuperVanishListener;
 import de.myzelyam.api.vanish.VanishAPI;
-import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -37,10 +36,10 @@ public class SuperVanishHook extends VanishHook {
     }
 
     @Override
-    public @NotNull Optional<@NotNull String> name() {
-        if (Bukkit.getPluginManager().isPluginEnabled(SUPER_VANISH)) return Optional.of(SUPER_VANISH);
-        if (Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH)) return Optional.of(PREMIUM_VANISH);
-        return Optional.empty();
+    public @NotNull String name() {
+        return "ChatChat:" +
+            (Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH) ? PREMIUM_VANISH : SUPER_VANISH) +
+            "Hook";
     }
 
     @Override
