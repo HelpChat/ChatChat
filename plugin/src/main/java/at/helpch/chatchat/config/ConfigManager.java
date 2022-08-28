@@ -3,9 +3,9 @@ package at.helpch.chatchat.config;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
-import at.helpch.chatchat.config.holder.FormatsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
+import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public final class ConfigManager {
 
     private @NotNull final ChatChatPlugin plugin;
     private ChannelsHolder channels;
-    private FormatsHolder formats;
+    private GlobalFormatsHolderImpl formats;
     private SettingsHolder settings;
     private MessagesHolder messages;
     private final ConfigFactory factory;
@@ -60,7 +60,7 @@ public final class ConfigManager {
         return this.settings;
     }
 
-    public @NotNull FormatsHolder formats() {
+    public @NotNull GlobalFormatsHolderImpl formats() {
         if (formats == null) {
             this.formats = factory.formats();
         }

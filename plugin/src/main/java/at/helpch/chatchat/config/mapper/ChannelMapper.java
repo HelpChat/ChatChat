@@ -2,6 +2,7 @@ package at.helpch.chatchat.config.mapper;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
+import at.helpch.chatchat.config.holder.FormatsHolderImpl;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -15,6 +16,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
     private static final String TOGGLE_COMMAND = "toggle-command";
     private static final String MESSAGE_PREFIX = "message-prefix";
     private static final String CHANNEL_PREFIX = "channel-prefix";
+    private static final String FORMATS = "formats";
     private static final String RADIUS = "radius";
     private static final String TYPE = "type";
 
@@ -46,6 +48,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
 
         final var messagePrefix = node.node(MESSAGE_PREFIX).getString("");
         final var channelPrefix = node.node(CHANNEL_PREFIX).getString("");
+        final var formats = node.node(FORMATS).get(FormatsHolderImpl.class, new FormatsHolderImpl());
         final var radius = node.node(RADIUS).getInt(-1);
 
         final var channelType = node.node(TYPE).getString("default").toLowerCase();
@@ -55,7 +58,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
             throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", " +
                     "ignoring.");
         }
-        return builder.build(key, messagePrefix, commandName, channelPrefix, radius);
+        return builder.build(key, messagePrefix, commandName, channelPrefix, formats, radius);
     }
 
     @Override
@@ -68,6 +71,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         target.node(TOGGLE_COMMAND).set(channel.commandNames());
         target.node(MESSAGE_PREFIX).set(channel.messagePrefix());
         target.node(CHANNEL_PREFIX).set(channel.channelPrefix());
+        target.node(FORMATS).set(channel.formats());
         target.node(RADIUS).set(channel.radius());
     }
 }

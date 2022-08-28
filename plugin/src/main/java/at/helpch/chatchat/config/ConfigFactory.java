@@ -1,14 +1,18 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.Format;
+import at.helpch.chatchat.api.PriorityFormat;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
-import at.helpch.chatchat.config.holder.FormatsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
+import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
+import at.helpch.chatchat.config.mapper.BasicFormatMapper;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.ChatFormatMapper;
+import at.helpch.chatchat.config.mapper.FormatMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
-import at.helpch.chatchat.config.mapper.BasicFormatMapper;
+import at.helpch.chatchat.config.mapper.PriorityFormatMapper;
 import at.helpch.chatchat.format.BasicFormat;
 import at.helpch.chatchat.format.ChatFormat;
 import io.leangen.geantyref.TypeToken;
@@ -39,9 +43,9 @@ public final class ConfigFactory {
         return Objects.requireNonNullElseGet(config, ChannelsHolder::new);
     }
 
-    public @NotNull FormatsHolder formats() {
-        final var config = create(FormatsHolder.class, "formats.yml");
-        return Objects.requireNonNullElseGet(config, FormatsHolder::new);
+    public @NotNull GlobalFormatsHolderImpl formats() {
+        final var config = create(GlobalFormatsHolderImpl.class, "formats.yml");
+        return Objects.requireNonNullElseGet(config, GlobalFormatsHolderImpl::new);
     }
 
     public @NotNull SettingsHolder settings() {
@@ -81,17 +85,19 @@ public final class ConfigFactory {
 
     private @NotNull YamlConfigurationLoader loader(@NotNull final Path path) {
         return YamlConfigurationLoader.builder()
-                .path(path)
-                .defaultOptions(options -> options.shouldCopyDefaults(true)
-                        .header("https://wiki.helpch.at")
-                        .serializers(build -> build
-                                .register(Component.class, new MiniMessageComponentMapper())
-                                .register(ChatFormat.class, new ChatFormatMapper())
-                                .register(BasicFormat.class, new BasicFormatMapper())
-                                .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
-                                .registerAll(ConfigurateComponentSerializer.configurate().serializers())))
-                .nodeStyle(NodeStyle.BLOCK)
-                .indent(2)
-                .build();
+            .path(path)
+            .defaultOptions(options -> options.shouldCopyDefaults(true)
+                .header("https://wiki.helpch.at")
+                .serializers(build -> build
+                    .register(Component.class, new MiniMessageComponentMapper())
+                    .register(ChatFormat.class, new ChatFormatMapper())
+                    .register(BasicFormat.class, new BasicFormatMapper())
+                    .register(PriorityFormat.class, new PriorityFormatMapper())
+                    .register(Format.class, new FormatMapper())
+                    .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
+                    .registerAll(ConfigurateComponentSerializer.configurate().serializers())))
+            .nodeStyle(NodeStyle.BLOCK)
+            .indent(2)
+            .build();
     }
 }

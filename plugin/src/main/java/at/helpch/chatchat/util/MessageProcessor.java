@@ -74,7 +74,7 @@ public final class MessageProcessor {
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
+            FormatUtils.findFormat(user.player(), channel, plugin.configManager().formats()),
             MessageProcessor.processMessage(plugin, user, message),
             channel,
             channel.targets(user)

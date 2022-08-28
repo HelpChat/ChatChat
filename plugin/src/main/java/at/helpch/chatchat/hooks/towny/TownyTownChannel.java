@@ -1,5 +1,6 @@
 package at.helpch.chatchat.hooks.towny;
 
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,9 @@ public final class TownyTownChannel extends AbstractTownyChannel {
                             @NotNull final String messagePrefix,
                             @NotNull final List<String> toggleCommands,
                             @NotNull final String channelPrefix,
+                            @NotNull final FormatsHolder formats,
                             final int radius) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
     }
 
     @Override

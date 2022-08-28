@@ -11,7 +11,7 @@ import java.util.Map;
 @ConfigSerializable
 public final class ChatFormat implements PriorityFormat {
 
-    private static ChatFormat defaultFormat = DefaultFormatFactory.createDefaultFormat();
+    private static PriorityFormat defaultFormat = DefaultFormatFactory.createDefaultFormat();
     private final String name;
     private final int priority;
     private final Map<String, List<String>> parts;
@@ -50,11 +50,11 @@ public final class ChatFormat implements PriorityFormat {
         return new ChatFormat(name, priority, parts);
     }
 
-    public static @NotNull ChatFormat defaultFormat() {
+    public static @NotNull PriorityFormat defaultFormat() {
         return defaultFormat;
     }
 
-    public static void defaultFormat(@NotNull final ChatFormat format) {
+    public static void defaultFormat(@NotNull final PriorityFormat format) {
         defaultFormat = format;
     }
 

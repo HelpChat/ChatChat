@@ -2,6 +2,7 @@ package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,18 +18,23 @@ public abstract class AbstractChannel implements Channel {
 
     private final String channelPrefix;
 
+    private final FormatsHolder formats;
+
     private final int radius;
 
     protected AbstractChannel(
-            @NotNull final String name,
-            @NotNull final String messagePrefix,
-            @NotNull final List<String> toggleCommands,
-            @NotNull final String channelPrefix,
-            final int radius) {
+        @NotNull final String name,
+        @NotNull final String messagePrefix,
+        @NotNull final List<String> toggleCommands,
+        @NotNull final String channelPrefix,
+        @NotNull final FormatsHolder formats,
+        final int radius
+    ) {
         this.name = name;
         this.messagePrefix = messagePrefix;
         this.toggleCommands = toggleCommands;
         this.channelPrefix = channelPrefix;
+        this.formats = formats;
         this.radius = radius;
     }
 
@@ -50,6 +56,11 @@ public abstract class AbstractChannel implements Channel {
     @Override
     public @NotNull List<String> commandNames() {
         return toggleCommands;
+    }
+
+    @Override
+    public @NotNull FormatsHolder formats() {
+        return formats;
     }
 
     @Override

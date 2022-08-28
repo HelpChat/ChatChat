@@ -3,6 +3,7 @@ package at.helpch.chatchat.hooks.towny;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.channel.AbstractChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -23,8 +24,9 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
                                    @NotNull final String messagePrefix,
                                    @NotNull final List<String> toggleCommands,
                                    @NotNull final String channelPrefix,
+                                   @NotNull final FormatsHolder formats,
                                    final int radius) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
         if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
             throw new RuntimeException("Attempting to use a Towny channel but Towny is not installed.");
         }}

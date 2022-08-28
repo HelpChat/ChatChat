@@ -3,6 +3,7 @@ package at.helpch.chatchat.channel;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
@@ -24,8 +25,10 @@ public final class ChatChannel extends AbstractChannel {
         @NotNull final String messagePrefix,
         @NotNull final List<String> toggleCommands,
         @NotNull final String channelPrefix,
-        final int radius) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
+        @NotNull final FormatsHolder formats,
+        final int radius
+    ) {
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
     }
 
     public static @NotNull ChatChannel defaultChannel() {

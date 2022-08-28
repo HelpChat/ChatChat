@@ -1,6 +1,8 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.api.PriorityFormat;
 import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.config.holder.FormatsHolderImpl;
 import at.helpch.chatchat.format.BasicFormat;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.key.Key;
@@ -16,13 +18,13 @@ import java.util.List;
 public final class DefaultConfigObjects {
 
     public static @NotNull ChatChannel createDefaultChannel() {
-        return new ChatChannel("default",
-            "", List.of("global"), "<gray>[<blue>Global<gray>]", -1);
+        return new ChatChannel("default", "",
+            List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), -1);
     }
 
     public static @NotNull ChatChannel createStaffChannel() {
-        return new ChatChannel("staff",
-            "@", List.of("staffchat"), "<gray>[<green>Staff<gray>]", -1);
+        return new ChatChannel("staff", "@",
+            List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
 
     public static @NotNull BasicFormat createDefaultConsoleFormat() {
@@ -34,6 +36,22 @@ public final class DefaultConfigObjects {
         map.put("message", List.of(" <gray>» <white><message>"));
         return new BasicFormat("console-format", map);
     }
+
+    public static @NotNull PriorityFormat createDefaultChannelFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put("channel", List.of(
+            "<hover:show_text:'<aqua>This is a default channel format!'>",
+            "%chatchat_channel_prefix%",
+            "</hover>"
+        ));
+        map.put("prefix", List.of(" <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
+        map.put("name", List.of("<white>%player_name%"));
+        map.put("message", List.of(" <gray>» <white><message>"));
+
+        return new ChatFormat("default-channel", 1, map);
+    }
+
 
     public static @NotNull ChatFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();

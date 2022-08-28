@@ -1,6 +1,7 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.api.Channel;
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public final class ChannelTypeRegistry {
                 @NotNull final String messagePrefix,
                 @NotNull final List<String> toggleCommands,
                 @NotNull final String channelPrefix,
+                @NotNull final FormatsHolder formats,
                 final int radius);
     }
 

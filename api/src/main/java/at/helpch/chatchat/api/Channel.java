@@ -1,5 +1,6 @@
 package at.helpch.chatchat.api;
 
+import at.helpch.chatchat.api.holder.FormatsHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,7 +16,10 @@ public interface Channel {
 
     @NotNull List<String> commandNames();
 
+    @NotNull FormatsHolder formats();
+
     int radius();
+
 
     Set<User> targets(@NotNull final User source);
 

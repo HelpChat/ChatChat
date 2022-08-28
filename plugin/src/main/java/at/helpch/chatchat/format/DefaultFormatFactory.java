@@ -1,5 +1,6 @@
 package at.helpch.chatchat.format;
 
+import at.helpch.chatchat.api.PriorityFormat;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -12,7 +13,7 @@ public final class DefaultFormatFactory {
     A - doesn't have any format permissions
     B - The default-format config option isn't set correctly
      */
-    public static @NotNull ChatFormat createDefaultFormat() {
+    public static @NotNull PriorityFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
