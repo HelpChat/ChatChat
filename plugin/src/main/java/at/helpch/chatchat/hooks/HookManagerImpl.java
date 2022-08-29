@@ -3,6 +3,7 @@ package at.helpch.chatchat.hooks;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.Hook;
+import at.helpch.chatchat.api.hook.HookManager;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.utils.Validators;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
@@ -18,7 +19,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 
-public final class HookManager {
+public final class HookManagerImpl implements HookManager {
     private static final Set<Function<ChatChatAPI, ? extends Hook>> constructors = Set.of(
         ChatChatDsrvHook::new,
         ChatChatTownyHook::new,
@@ -32,7 +33,7 @@ public final class HookManager {
     private final Set<VanishHook> vanishHooks = new HashSet<>();
     private boolean hasBeenInitialized = false;
 
-    public HookManager(final @NotNull ChatChatPlugin plugin) {
+    public HookManagerImpl(final @NotNull ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 

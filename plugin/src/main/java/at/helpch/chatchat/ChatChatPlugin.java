@@ -20,7 +20,7 @@ import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
-import at.helpch.chatchat.hooks.HookManager;
+import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
@@ -59,7 +59,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
-    final HookManager hookManager = new HookManager(this);
+    final HookManagerImpl hookManager = new HookManagerImpl(this);
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -156,7 +156,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         return commandManager;
     }
 
-    public @NotNull HookManager hookManager() {
+    public @NotNull HookManagerImpl hookManager() {
         return hookManager;
     }
 
