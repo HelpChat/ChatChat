@@ -1,10 +1,10 @@
 package at.helpch.chatchat;
 
+import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
-import at.helpch.chatchat.api.user.UsersHolder;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.DumpCommand;
 import at.helpch.chatchat.command.FormatTestCommand;
@@ -37,6 +37,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -59,15 +60,20 @@ public final class ChatChatPlugin extends JavaPlugin {
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
     final HookManager hookManager = new HookManager(this);
+    private @NotNull
+    final ChatChatAPIImpl chatChatAPI = new ChatChatAPIImpl(this);
+
+
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
-
     private BukkitTask dataSaveTask;
 
     private static long cacheDuration;
 
     @Override
     public void onEnable() {
+        getServer().getServicesManager().register(ChatChatAPI.class, chatChatAPI, this, ServicePriority.Normal);
+
         audiences = BukkitAudiences.create(this);
 
         commandManager = BukkitCommandManager.create(this,
@@ -111,6 +117,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getServer().getServicesManager().unregisterAll(this);
         audiences.close();
         if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
 
