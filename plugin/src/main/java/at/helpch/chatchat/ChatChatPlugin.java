@@ -61,7 +61,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final HookManager hookManager = new HookManager(this);
     private @NotNull
-    final ChatChatAPIImpl chatChatAPI = new ChatChatAPIImpl(this);
+    final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
 
     private static BukkitAudiences audiences;
@@ -72,7 +72,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getServicesManager().register(ChatChatAPI.class, chatChatAPI, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(ChatChatAPI.class, api, this, ServicePriority.Normal);
 
         audiences = BukkitAudiences.create(this);
 
@@ -158,6 +158,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull HookManager hookManager() {
         return hookManager;
+    }
+
+    public @NotNull ChatChatAPIImpl api() {
+        return api;
     }
 
     private void registerArguments() {

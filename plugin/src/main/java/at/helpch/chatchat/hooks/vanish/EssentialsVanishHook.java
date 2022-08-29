@@ -1,6 +1,7 @@
 package at.helpch.chatchat.hooks.vanish;
 
-import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.ChatChatAPIImpl;
+import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.EssentialsVanishListener;
@@ -20,10 +21,14 @@ public class EssentialsVanishHook extends VanishHook {
 
     private static final String ESSENTIALS = "Essentials";
 
-    private final ChatChatPlugin plugin;
+    private final ChatChatAPIImpl api;
 
-    public EssentialsVanishHook(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
+    public EssentialsVanishHook(@NotNull final ChatChatAPI api) {
+        if (!(api instanceof ChatChatAPIImpl)) {
+            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
+        }
+
+        this.api = (ChatChatAPIImpl) api;
     }
 
     @Override
@@ -38,7 +43,7 @@ public class EssentialsVanishHook extends VanishHook {
 
     @Override
     public void enable() {
-        plugin.getServer().getPluginManager().registerEvents(new EssentialsVanishListener(plugin), plugin);
+        api.plugin().getServer().getPluginManager().registerEvents(new EssentialsVanishListener(api), api.plugin());
     }
 
     @Override

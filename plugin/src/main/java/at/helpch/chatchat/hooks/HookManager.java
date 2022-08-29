@@ -1,6 +1,7 @@
 package at.helpch.chatchat.hooks;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.utils.Validators;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 
 public final class HookManager {
-    private static final Set<Function<ChatChatPlugin, ? extends Hook>> constructors = Set.of(
+    private static final Set<Function<ChatChatAPI, ? extends Hook>> constructors = Set.of(
         ChatChatDsrvHook::new,
         ChatChatTownyHook::new,
         VanillaVanishHook::new,
@@ -58,7 +59,7 @@ public final class HookManager {
      *
      * @return False if the registration failed, true otherwise.
      */
-    public boolean addHook(@NotNull final Function<ChatChatPlugin, ? extends Hook> constructor) {
+    public boolean addHook(@NotNull final Function<ChatChatAPI, ? extends Hook> constructor) {
         return registerHook(constructor);
     }
 
@@ -80,11 +81,11 @@ public final class HookManager {
         return Collections.unmodifiableSet(vanishHooks);
     }
 
-    private boolean registerHook(@NotNull final Function<ChatChatPlugin, ? extends Hook> constructor) {
+    private boolean registerHook(@NotNull final Function<ChatChatAPI, ? extends Hook> constructor) {
         final Hook hook;
 
         try {
-            hook = constructor.apply(plugin);
+            hook = constructor.apply(plugin.api());
         } catch (final Throwable exception) { // Catching Throwable is a necessary evil to stop other hooks that don't
             // manage their own exceptions and just end up breaking our entire hook manager. This is a very common issue
             // with PlaceholderAPI.

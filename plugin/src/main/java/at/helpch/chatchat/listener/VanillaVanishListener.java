@@ -1,6 +1,6 @@
 package at.helpch.chatchat.listener;
 
-import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.ChatChatAPIImpl;
 import at.helpch.chatchat.api.user.ChatUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class VanillaVanishListener implements Listener {
 
-    private final ChatChatPlugin plugin;
+    private final ChatChatAPIImpl api;
 
-    public VanillaVanishListener(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
+    public VanillaVanishListener(@NotNull final ChatChatAPIImpl api) {
+        this.api = api;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -23,7 +23,7 @@ public class VanillaVanishListener implements Listener {
             return;
         }
 
-        final var chatUser = (ChatUser) plugin.usersHolder().getUser(event.getPlayer());
+        final var chatUser = (ChatUser) api.usersHolder().getUser(event.getPlayer());
 
         final var lastMessaged = chatUser.lastMessagedUser();
         if (lastMessaged.isEmpty()) {

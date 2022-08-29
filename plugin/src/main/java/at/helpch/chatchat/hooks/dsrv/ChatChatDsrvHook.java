@@ -1,6 +1,7 @@
 package at.helpch.chatchat.hooks.dsrv;
 
-import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.ChatChatAPIImpl;
+import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.Hook;
 import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.Bukkit;
@@ -9,10 +10,14 @@ import org.jetbrains.annotations.NotNull;
 public final class ChatChatDsrvHook implements Hook {
     private static final String DISCORD_SRV = "DiscordSRV";
 
-    private final ChatChatPlugin plugin;
+    private final ChatChatAPIImpl api;
 
-    public ChatChatDsrvHook(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
+    public ChatChatDsrvHook(@NotNull final ChatChatAPI api) {
+        if (!(api instanceof ChatChatAPIImpl)) {
+            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
+        }
+
+        this.api = (ChatChatAPIImpl) api;
     }
 
     @Override
@@ -27,9 +32,9 @@ public final class ChatChatDsrvHook implements Hook {
 
     @Override
     public void enable() {
-        final var hook = new DsrvListener(plugin);
+        final var hook = new DsrvListener(api);
         DiscordSRV.getPlugin().getPluginHooks().add(hook);
-        Bukkit.getPluginManager().registerEvents(hook, plugin);
+        Bukkit.getPluginManager().registerEvents(hook, api.plugin());
     }
 
 }

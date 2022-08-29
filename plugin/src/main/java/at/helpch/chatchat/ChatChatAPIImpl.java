@@ -15,4 +15,8 @@ public class ChatChatAPIImpl implements ChatChatAPI {
     public @NotNull UsersHolder usersHolder() {
         return plugin.usersHolder();
     }
+
+    public @NotNull ChatChatPlugin plugin() {
+        return plugin;
+    }
 }

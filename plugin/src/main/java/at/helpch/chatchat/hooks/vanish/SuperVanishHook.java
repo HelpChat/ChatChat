@@ -1,6 +1,7 @@
 package at.helpch.chatchat.hooks.vanish;
 
-import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.ChatChatAPIImpl;
+import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.SuperVanishListener;
@@ -23,10 +24,14 @@ public class SuperVanishHook extends VanishHook {
     private static final String SUPER_VANISH = "SuperVanish";
     private static final String PREMIUM_VANISH = "PremiumVanish";
 
-    private final ChatChatPlugin plugin;
+    private final ChatChatAPIImpl api;
 
-    public SuperVanishHook(@NotNull final ChatChatPlugin plugin) {
-        this.plugin = plugin;
+    public SuperVanishHook(@NotNull final ChatChatAPI api) {
+        if (!(api instanceof ChatChatAPIImpl)) {
+            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
+        }
+
+        this.api = (ChatChatAPIImpl) api;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class SuperVanishHook extends VanishHook {
 
     @Override
     public void enable() {
-        plugin.getServer().getPluginManager().registerEvents(new SuperVanishListener(plugin), plugin);
+        api.plugin().getServer().getPluginManager().registerEvents(new SuperVanishListener(api), api.plugin());
     }
 
     @Override
