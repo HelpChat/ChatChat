@@ -32,8 +32,7 @@ public class ChatChatTownyHook implements Hook {
 
     @Override
     public void enable() {
-        // TODO: 8/29/22 Provide the channel type registry in the api! This will remove the need to cast in constructor.
-        api.plugin().channelTypeRegistry().add("TOWNY_TOWN", TownyTownChannel::new);
-        api.plugin().channelTypeRegistry().add("TOWNY_NATION", TownyNationChannel::new);
+        api.channelTypeRegistry().add("TOWNY_TOWN", TownyTownChannel::new);
+        api.channelTypeRegistry().add("TOWNY_NATION", TownyNationChannel::new);
     }
 }

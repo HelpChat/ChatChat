@@ -1,7 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.channel.ChannelTypeRegistry;
+import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
 import at.helpch.chatchat.config.holder.FormatsHolderImpl;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -20,9 +20,9 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
     private static final String RADIUS = "radius";
     private static final String TYPE = "type";
 
-    private final ChannelTypeRegistry registry;
+    private final ChannelTypeRegistryImpl registry;
 
-    public ChannelMapper(final ChannelTypeRegistry registry) {
+    public ChannelMapper(final ChannelTypeRegistryImpl registry) {
         this.registry = registry;
     }
 

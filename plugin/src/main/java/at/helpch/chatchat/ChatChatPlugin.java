@@ -5,7 +5,7 @@ import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
-import at.helpch.chatchat.channel.ChannelTypeRegistry;
+import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
 import at.helpch.chatchat.command.DumpCommand;
 import at.helpch.chatchat.command.FormatTestCommand;
 import at.helpch.chatchat.command.IgnoreCommand;
@@ -57,7 +57,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final UsersHolderImpl usersHolder = new UsersHolderImpl(this);
     private @NotNull
-    final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
+    final ChannelTypeRegistryImpl channelTypeRegistryImpl = new ChannelTypeRegistryImpl();
     private @NotNull
     final HookManagerImpl hookManager = new HookManagerImpl(this);
     private @NotNull
@@ -144,8 +144,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         return database;
     }
 
-    public @NotNull ChannelTypeRegistry channelTypeRegistry() {
-        return channelTypeRegistry;
+    public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
+        return channelTypeRegistryImpl;
     }
 
     public static @NotNull BukkitAudiences audiences() {

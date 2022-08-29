@@ -1,6 +1,7 @@
 package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.ChatChatAPI;
+import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
 import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,10 @@ public class ChatChatAPIImpl implements ChatChatAPI {
 
     public @NotNull HookManagerImpl hookManager() {
         return plugin.hookManager();
+    }
+
+    public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
+        return plugin.channelTypeRegistry();
     }
 
     public @NotNull ChatChatPlugin plugin() {
