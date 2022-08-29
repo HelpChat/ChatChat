@@ -4,6 +4,7 @@ import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.api.user.UsersHolder;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.DumpCommand;
 import at.helpch.chatchat.command.FormatTestCommand;
@@ -24,7 +25,7 @@ import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.user.UserSenderValidator;
-import at.helpch.chatchat.user.UsersHolder;
+import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -53,7 +54,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final Database database = new GsonDatabase(this);
     private @NotNull
-    final UsersHolder usersHolder = new UsersHolder(this);
+    final UsersHolderImpl usersHolder = new UsersHolderImpl(this);
     private @NotNull
     final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
     private @NotNull
@@ -128,7 +129,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         return configManager;
     }
 
-    public @NotNull UsersHolder usersHolder() {
+    public @NotNull UsersHolderImpl usersHolder() {
         return usersHolder;
     }
 
