@@ -46,7 +46,7 @@ public final class ConsoleUser implements User {
 
     @Override
     public boolean hasPermission(@NotNull final String node) {
-        return Bukkit.getConsoleSender().hasPermission(node);
+        return true;
     }
 
     @Override
