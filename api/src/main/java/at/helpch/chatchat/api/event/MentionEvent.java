@@ -62,18 +62,38 @@ public class MentionEvent extends Event implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    /**
+     * Get the user that mentioned the target.
+     *
+     * @return The user that mentioned the target.
+     */
     public @NotNull ChatUser user() {
         return user;
     }
 
+    /**
+     * Get the user that was mentioned.
+     *
+     * @return The target of the mention.
+     */
     public @NotNull User target() {
         return target;
     }
 
+    /**
+     * Get the channel that the mention was sent in.
+     *
+     * @return The channel that the mention was sent in.
+     */
     public @NotNull Channel channel() {
         return channel;
     }
 
+    /**
+     * Get the type of the mention.
+     *
+     * @return The mention type.
+     */
     public MentionType type() {
         return type;
     }

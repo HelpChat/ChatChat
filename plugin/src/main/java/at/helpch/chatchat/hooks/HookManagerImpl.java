@@ -48,36 +48,14 @@ public final class HookManagerImpl implements HookManager {
         }
     }
 
-    /**
-     * Adds and registers a new {@link Hook} with the manager.
-     * <br>
-     * Registration will fail if the hook name is invalid (Check {@link Hook#name()} for valid hook name), if a hook
-     * with the same name is already registered, if the hook throws an unhandled exception during registration or if the
-     * hook returns false from {@link Hook#register()}.
-     *
-     * @param constructor A static method that takes in a {@link ChatChatPlugin} and returns a {@link Hook}. Preferably
-     *                   a constructor.
-     *
-     * @return False if the registration failed, true otherwise.
-     */
     public boolean addHook(@NotNull final Function<ChatChatAPI, ? extends Hook> constructor) {
         return registerHook(constructor);
     }
 
-    /**
-     * Get all normal hooks.
-     *
-     * @return An unmodifiable {@link Set} of all {@link Hook}s.
-     */
     public @NotNull Set<Hook> hooks() {
         return Collections.unmodifiableSet(hooks);
     }
 
-    /**
-     * Get all vanish hooks.
-     *
-     * @return An unmodifiable {@link Set} of all {@link VanishHook}s.
-     */
     public @NotNull Set<VanishHook> vanishHooks() {
         return Collections.unmodifiableSet(vanishHooks);
     }

@@ -8,6 +8,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when a {@link ChatUser} sends a private message to another {@link ChatUser}.
+ */
 public class PMSendEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -55,38 +58,84 @@ public class PMSendEvent extends Event implements Cancellable {
         cancelled = cancel;
     }
 
+    /**
+     * Get the {@link ChatUser} that sent the message.
+     *
+     * @return the {@link ChatUser} that sent the message.
+     */
     public @NotNull ChatUser sender() {
         return sender;
     }
 
+    /**
+     * Get the {@link ChatUser} that will receive the message.
+     *
+     * @return the {@link ChatUser} that will receive the message.
+     */
     public @NotNull ChatUser recipient() {
         return recipient;
     }
 
+    /**
+     * Get the {@link BasicFormat} that will be used to format the message that the sender sees.
+     *
+     * @return the {@link BasicFormat} that will be used to format the message that the sender sees.
+     */
     public @NotNull BasicFormat senderFormat() {
         return senderFormat;
     }
 
+    /**
+     * Change the {@link BasicFormat} that will be used to format the message that the sender sees.
+     *
+     * @param format the new {@link BasicFormat} that will be used to format the message that the sender sees.
+     */
     public void senderFormat(@NotNull final BasicFormat format) {
         this.senderFormat = format;
     }
 
+    /**
+     * Get the {@link BasicFormat} that will be used to format the message that the recipient sees.
+     *
+     * @return the {@link BasicFormat} that will be used to format the message that the recipient sees.
+     */
     public @NotNull BasicFormat recipientFormat() {
         return recipientFormat;
     }
 
+    /**
+     * Change the {@link BasicFormat} that will be used to format the message that the recipient sees.
+     *
+     * @param format the new {@link BasicFormat} that will be used to format the message that the recipient sees.
+     */
     public void recipientFormat(@NotNull final BasicFormat format) {
         this.recipientFormat = format;
     }
 
+    /**
+     * Get the message that the sender sent.
+     *
+     * @return the message that the sender sent.
+     */
     public @NotNull Component message() {
         return message;
     }
 
+    /**
+     * Change the message that both the sender and the recipient will see.
+     *
+     * @param message the new message that both the sender and the recipient will see.
+     */
     public void message(@NotNull final Component message) {
         this.message = message;
     }
 
+    /**
+     * A private message is a reply when the sender used one of the reply commands like /r. This will not return true
+     * if the {@link ChatUser#lastMessagedUser()} of the sender is the recipient unless the sender used a reply command.
+     *
+     * @return true if the message is a reply, false otherwise.
+     */
     public boolean reply() {
         return reply;
     }
