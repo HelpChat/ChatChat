@@ -42,6 +42,10 @@ public class EssentialsVanishHook extends VanishHook {
     }
 
     @Override
+    public void disable() {
+    }
+
+    @Override
     public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
         return user.player().canSee(target.player());
     }

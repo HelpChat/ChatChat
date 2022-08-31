@@ -48,6 +48,10 @@ public class SuperVanishHook extends VanishHook {
     }
 
     @Override
+    public void disable() {
+    }
+
+    @Override
     public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
         return VanishAPI.canSee(user.player(), target.player());
     }

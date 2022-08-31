@@ -30,4 +30,9 @@ public class ChatChatTownyHook implements Hook {
         plugin.channelTypeRegistry().add("TOWNY_TOWN", TownyTownChannel::new);
         plugin.channelTypeRegistry().add("TOWNY_NATION", TownyNationChannel::new);
     }
+
+    @Override
+    public void disable() {
+    }
+
 }

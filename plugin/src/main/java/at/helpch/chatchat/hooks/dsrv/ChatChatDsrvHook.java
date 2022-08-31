@@ -10,9 +10,11 @@ public final class ChatChatDsrvHook implements Hook {
     private static final String DISCORD_SRV = "DiscordSRV";
 
     private final ChatChatPlugin plugin;
+    private final DsrvListener hook;
 
     public ChatChatDsrvHook(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
+        this.hook = new DsrvListener(plugin);
     }
 
     @Override
@@ -27,9 +29,12 @@ public final class ChatChatDsrvHook implements Hook {
 
     @Override
     public void enable() {
-        final var hook = new DsrvListener(plugin);
         DiscordSRV.getPlugin().getPluginHooks().add(hook);
         Bukkit.getPluginManager().registerEvents(hook, plugin);
+    }
+
+    @Override
+    public void disable() {
     }
 
 }

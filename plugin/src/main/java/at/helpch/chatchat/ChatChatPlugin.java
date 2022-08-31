@@ -3,6 +3,7 @@ package at.helpch.chatchat;
 import at.helpch.chatchat.api.Channel;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
@@ -100,6 +101,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        hookManager().hooks().forEach(Hook::disable);
+        hookManager().vanishHooks().forEach(Hook::disable);
+
         audiences.close();
         if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
 
