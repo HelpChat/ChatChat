@@ -64,14 +64,14 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        final var userHasBypassPerm = user.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
-        if (recipient.ignoredUsers().contains(user.uuid()) && !userHasBypassPerm) {
+        if (recipient.ignoredUsers().contains(user.uuid()) &&
+            !user.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().cantMessageGeneral());
             return;
         }
 
-        final var recipientHasBypassPerm = recipient.player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
-        if (user.ignoredUsers().contains(recipient.uuid()) && !recipientHasBypassPerm) {
+        if (user.ignoredUsers().contains(recipient.uuid()) &&
+            !recipient.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
             return;
         }
@@ -81,7 +81,7 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+        if (StringUtils.containsIllegalChars(message) && !user.hasPermission(UTF_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return;
         }

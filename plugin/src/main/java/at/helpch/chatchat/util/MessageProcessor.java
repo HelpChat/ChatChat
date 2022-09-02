@@ -66,7 +66,7 @@ public final class MessageProcessor {
         @NotNull final String message,
         final boolean async
     ) {
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+        if (StringUtils.containsIllegalChars(message) && !user.hasPermission(UTF_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return false;
         }
@@ -319,7 +319,7 @@ public final class MessageProcessor {
         final var resolver = TagResolver.builder();
 
         for (final var entry : PERMISSION_TAGS.entrySet()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
                 continue;
             }
 
@@ -327,14 +327,14 @@ public final class MessageProcessor {
         }
 
         for (final var tag : TextDecoration.values()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
                 continue;
             }
 
             resolver.resolver(StandardTags.decorations(tag));
         }
 
-        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
+        if (user.hasPermission(ITEM_TAG_PERMISSION)) {
             resolver.resolver(
                 ItemUtils.createItemPlaceholder(
                     plugin.configManager().settings().itemFormat(),
@@ -344,7 +344,7 @@ public final class MessageProcessor {
             );
         }
 
-        return !user.player().hasPermission(URL_PERMISSION)
+        return !user.hasPermission(URL_PERMISSION)
             ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
             : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }
