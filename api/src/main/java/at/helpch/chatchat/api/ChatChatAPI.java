@@ -2,6 +2,7 @@ package at.helpch.chatchat.api;
 
 import at.helpch.chatchat.api.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.api.hook.HookManager;
+import at.helpch.chatchat.api.rule.RuleManager;
 import at.helpch.chatchat.api.user.UsersHolder;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,4 +28,11 @@ public interface ChatChatAPI {
      * @return The {@link ChannelTypeRegistry}
      */
     @NotNull ChannelTypeRegistry channelTypeRegistry();
+
+    /**
+     * Get the {@link RuleManager}
+     *
+     * @return The {@link RuleManager}
+     */
+    @NotNull RuleManager ruleManager();
 }

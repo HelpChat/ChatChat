@@ -29,6 +29,7 @@ public final class MessagesHolder {
     private Component emptyMessage = text("You can't send an empty message!", RED);
     private Component specialCharactersNoPermission = text("You do not have permission to use special characters!",
         RED);
+    private Component invalidMessage = text("The message you sent is invalid!", RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
     private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
@@ -105,6 +106,10 @@ public final class MessagesHolder {
 
     public @NotNull Component specialCharactersNoPermission() {
         return specialCharactersNoPermission;
+    }
+
+    public @NotNull Component invalidMessage() {
+        return invalidMessage;
     }
 
     public @NotNull Component socialSpyEnabled() {

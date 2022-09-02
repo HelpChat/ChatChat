@@ -24,6 +24,7 @@ import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
@@ -60,6 +61,8 @@ public final class ChatChatPlugin extends JavaPlugin {
     final ChannelTypeRegistryImpl channelTypeRegistryImpl = new ChannelTypeRegistryImpl();
     private @NotNull
     final HookManagerImpl hookManager = new HookManagerImpl(this);
+    private @NotNull
+    final RuleManagerImpl ruleManager = new RuleManagerImpl(this);
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -158,6 +161,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull HookManagerImpl hookManager() {
         return hookManager;
+    }
+
+    public @NotNull RuleManagerImpl ruleManager() {
+        return ruleManager;
     }
 
     public @NotNull ChatChatAPIImpl api() {

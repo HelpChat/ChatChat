@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.api.format.BasicFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.util.FormatUtils;
-import at.helpch.chatchat.util.StringUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public final class WhisperCommand extends BaseCommand {
 
     private static final String MESSAGE_PERMISSION = "chatchat.pm";
-    private static final String UTF_PERMISSION = "chatchat.utf";
     private final ChatChatPlugin plugin;
     private final boolean reply;
 
@@ -81,8 +79,9 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
+        final var rulesResult = plugin.ruleManager().isAllowedPrivateChat(user, recipient, message);
+        if (rulesResult.isPresent()) {
+            user.sendMessage(rulesResult.get());
             return;
         }
 

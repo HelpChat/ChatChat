@@ -37,7 +37,6 @@ public final class MessageProcessor {
         .build();
 
     private static final String URL_PERMISSION = "chatchat.url";
-    private static final String UTF_PERMISSION = "chatchat.utf";
     private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
     private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
 
@@ -66,8 +65,9 @@ public final class MessageProcessor {
         @NotNull final String message,
         final boolean async
     ) {
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
+        final var rulesResult = plugin.ruleManager().isAllowedPublicChat(user, message);
+        if (rulesResult.isPresent()) {
+            user.sendMessage(rulesResult.get());
             return false;
         }
 
