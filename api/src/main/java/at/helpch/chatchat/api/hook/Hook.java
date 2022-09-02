@@ -29,5 +29,5 @@ public interface Hook {
     /**
      * Disable the hook.
      */
-    void disable();
+    default void disable() {}
 }

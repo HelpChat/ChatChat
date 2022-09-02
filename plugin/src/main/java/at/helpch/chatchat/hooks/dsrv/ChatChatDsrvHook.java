@@ -32,9 +32,4 @@ public final class ChatChatDsrvHook implements Hook {
         DiscordSRV.getPlugin().getPluginHooks().add(hook);
         Bukkit.getPluginManager().registerEvents(hook, plugin);
     }
-
-    @Override
-    public void disable() {
-    }
-
 }
