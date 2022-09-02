@@ -7,13 +7,16 @@ import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
 import at.helpch.chatchat.config.holder.MessagesHolder;
+import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.config.mapper.BasicFormatMapper;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
+import at.helpch.chatchat.config.mapper.MiniPlaceholderMapper;
 import at.helpch.chatchat.config.mapper.PriorityFormatMapper;
 import at.helpch.chatchat.format.BasicFormatImpl;
 import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.placeholder.MiniPlaceholderImpl;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -57,6 +60,11 @@ public final class ConfigFactory {
         return Objects.requireNonNullElseGet(config, MessagesHolder::new);
     }
 
+    public @NotNull MiniPlaceholdersHolder miniPlaceholders() {
+        final var config = create(MiniPlaceholdersHolder.class, "placeholders.yml");
+        return Objects.requireNonNullElseGet(config, MiniPlaceholdersHolder::new);
+    }
+
     private @Nullable <T> T create(@NotNull final Class<T> clazz, @NotNull final String fileName) {
         try {
             if (!Files.exists(dataFolder)) {
@@ -95,6 +103,8 @@ public final class ConfigFactory {
 
                     .register(PriorityFormat.class, new PriorityFormatMapper())
                     .register(ChatFormat.class, new PriorityFormatMapper())
+
+                    .register(MiniPlaceholderImpl.class, new MiniPlaceholderMapper())
 
                     .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                     .registerAll(ConfigurateComponentSerializer.configurate().serializers())))

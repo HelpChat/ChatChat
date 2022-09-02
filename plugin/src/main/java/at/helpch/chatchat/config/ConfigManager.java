@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
+import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
@@ -19,6 +20,7 @@ public final class ConfigManager {
     private GlobalFormatsHolder formats;
     private SettingsHolder settings;
     private MessagesHolder messages;
+    private MiniPlaceholdersHolder miniPlaceholders;
     private final ConfigFactory factory;
 
     public ConfigManager(final @NotNull ChatChatPlugin plugin, @NotNull final Path dataFolder) {
@@ -31,6 +33,7 @@ public final class ConfigManager {
         channels = null;
         formats = null;
         settings = null;
+        miniPlaceholders = null;
 
         messages();
 
@@ -47,6 +50,9 @@ public final class ConfigManager {
         formats();
         final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), DefaultFormatFactory.createDefaultFormat());
         ChatFormat.defaultFormat(defaultFormat);
+
+        miniPlaceholders();
+        miniPlaceholders.placeholders().forEach(placeholder -> plugin.miniPlaceholdersManager().addPlaceholder(placeholder));
     }
 
     public @NotNull ChannelsHolder channels() {
@@ -75,5 +81,12 @@ public final class ConfigManager {
             this.messages = factory.messages();
         }
         return this.messages;
+    }
+
+    public @NotNull MiniPlaceholdersHolder miniPlaceholders() {
+        if (miniPlaceholders == null) {
+            this.miniPlaceholders = factory.miniPlaceholders();
+        }
+        return this.miniPlaceholders;
     }
 }

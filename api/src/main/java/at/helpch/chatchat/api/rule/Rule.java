@@ -30,12 +30,12 @@ public interface Rule {
      * either with the message given by {@link #deniedMessage()} or the invalid-message from ChatChat.
      *
      * @param sender The sender of the message.
-     * @param receiver The receiver of the message.
+     * @param recipient The recipient of the message.
      * @param message The message the user sent.
      *
      * @return true if the message sent by the player is allowed, false otherwise.
      */
-    boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User receiver, @NotNull String message);
+    boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User recipient, @NotNull String message);
 
     /**
      * @return the message that should be sent to the player if the message they sent is not allowed.

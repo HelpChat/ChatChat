@@ -10,6 +10,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,9 +28,9 @@ public final class FormatUtils {
     }
 
     public static @NotNull Optional<PriorityFormat> findPermissionFormat(
-            @NotNull final Player player,
-            @NotNull final Channel channel,
-            @NotNull final Map<String, PriorityFormat> formats) {
+        @NotNull final Player player,
+        @NotNull final Channel channel,
+        @NotNull final Map<String, PriorityFormat> formats) {
         final var channelFormat = channel.formats().formats().values().stream()
             .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
             .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
@@ -69,9 +70,17 @@ public final class FormatUtils {
     }
 
     public static @NotNull Component parseFormat(
-            @NotNull final Format format,
-            @NotNull final Player player,
-            @NotNull final ComponentLike message) {
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final ComponentLike message) {
+        return parseFormat(format, player, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 player,
@@ -82,13 +91,21 @@ public final class FormatUtils {
                     .collect(Collectors.joining())
             ),
             Placeholder.component("message", message),
-            PapiTagUtils.createPlaceholderAPITag(player)
+            PapiTagUtils.createPlaceholderAPITag(player),
+            miniPlaceholders
         );
     }
 
     public static @NotNull Component parseFormat(
         @NotNull final Format format,
         @NotNull final ComponentLike message) {
+        return parseFormat(format, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 null,
@@ -99,7 +116,8 @@ public final class FormatUtils {
                     .collect(Collectors.joining())
             ),
             Placeholder.component("message", message),
-            PapiTagUtils.createPlaceholderAPITag(null)
+            PapiTagUtils.createPlaceholderAPITag(null),
+            miniPlaceholders
         );
     }
 
@@ -108,6 +126,15 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {
+        return parseFormat(format, player, recipient, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final Player recipient,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setRelationalPlaceholders(
                 player,
@@ -124,7 +151,8 @@ public final class FormatUtils {
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
             PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
-            PapiTagUtils.createRecipientTag(recipient)
+            PapiTagUtils.createRecipientTag(recipient),
+            miniPlaceholders
         );
     }
 }

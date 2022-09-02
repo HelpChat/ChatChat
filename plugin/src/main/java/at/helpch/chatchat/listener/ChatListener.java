@@ -2,6 +2,7 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
@@ -56,7 +57,7 @@ public final class ChatListener implements Listener {
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
 
         event.setMessage(LegacyComponentSerializer.legacySection().serialize(
-            MessageProcessor.processMessage(plugin, user, message)
+            MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message)
         ));
 
         try {

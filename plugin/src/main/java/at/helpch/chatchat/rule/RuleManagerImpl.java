@@ -66,12 +66,12 @@ public class RuleManagerImpl implements RuleManager {
 
     public Optional<Component> isAllowedPrivateChat(
         @NotNull final ChatUser sender,
-        @NotNull final ChatUser receiver,
+        @NotNull final ChatUser recipient,
         @NotNull final String message
     ) {
         final var unfulfilledRules = publicChatRules()
             .stream()
-            .filter(rule -> !rule.isAllowedPrivate(sender, receiver, message))
+            .filter(rule -> !rule.isAllowedPrivate(sender, recipient, message))
             .collect(Collectors.toList());
 
         if (unfulfilledRules.isEmpty()) {

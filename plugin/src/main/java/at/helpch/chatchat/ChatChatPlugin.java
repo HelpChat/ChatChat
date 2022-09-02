@@ -24,6 +24,7 @@ import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.mention.MentionsManagerImpl;
+import at.helpch.chatchat.placeholder.MiniPlaceholdersManagerImpl;
 import at.helpch.chatchat.placeholder.PAPIPlaceholders;
 import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
@@ -66,6 +67,8 @@ public final class ChatChatPlugin extends JavaPlugin {
     final RuleManagerImpl ruleManager = new RuleManagerImpl(this);
     private @NotNull
     final MentionsManagerImpl mentionsManager = new MentionsManagerImpl(this);
+    private @NotNull
+    final MiniPlaceholdersManagerImpl miniPlaceholdersManager = new MiniPlaceholdersManagerImpl();
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -172,6 +175,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull MentionsManagerImpl mentionsManager() {
         return mentionsManager;
+    }
+
+    public @NotNull MiniPlaceholdersManagerImpl miniPlaceholdersManager() {
+        return miniPlaceholdersManager;
     }
 
     public @NotNull ChatChatAPIImpl api() {

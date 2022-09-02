@@ -4,6 +4,7 @@ import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
 import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.mention.MentionsManagerImpl;
+import at.helpch.chatchat.placeholder.MiniPlaceholdersManagerImpl;
 import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,10 @@ public class ChatChatAPIImpl implements ChatChatAPI {
 
     public @NotNull MentionsManagerImpl mentionsManager() {
         return plugin.mentionsManager();
+    }
+
+    public @NotNull MiniPlaceholdersManagerImpl miniPlaceholdersManager() {
+        return plugin.miniPlaceholdersManager();
     }
 
     public @NotNull ChatChatPlugin plugin() {

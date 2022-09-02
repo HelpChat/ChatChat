@@ -24,7 +24,7 @@ public class InvalidCharsRule implements Rule {
         return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.player().hasPermission(UTF_PERMISSION);
     }
 
-    public boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User receiver, @NotNull String message) {
+    public boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User recipient, @NotNull String message) {
         return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.player().hasPermission(UTF_PERMISSION);
     }
 
