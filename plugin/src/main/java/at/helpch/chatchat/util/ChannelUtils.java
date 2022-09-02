@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChatChannel;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -47,15 +46,13 @@ public final class ChannelUtils {
             return true;
         }
 
-        final Player playerTarget = ((ChatUser) target).player();
-
-        if (playerTarget.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION)) {
+        if (target.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION)) {
             return true;
         }
 
         if (radius != -1 && source instanceof ChatUser) {
             final Location sourceLocation = ((ChatUser) source).player().getLocation();
-            final Location targetLocation = playerTarget.getLocation();
+            final Location targetLocation = ((ChatUser) target).player().getLocation();
             final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
             final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
 

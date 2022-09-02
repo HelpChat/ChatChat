@@ -196,7 +196,7 @@ public final class MessageProcessor {
         final var resolver = TagResolver.builder();
 
         for (final var entry : PERMISSION_TAGS.entrySet()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
                 continue;
             }
 
@@ -204,14 +204,14 @@ public final class MessageProcessor {
         }
 
         for (final var tag : TextDecoration.values()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
                 continue;
             }
 
             resolver.resolver(StandardTags.decorations(tag));
         }
 
-        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
+        if (user.hasPermission(ITEM_TAG_PERMISSION)) {
             resolver.resolver(
                 ItemUtils.createItemPlaceholder(
                     plugin.configManager().settings().itemFormat(),
@@ -223,7 +223,7 @@ public final class MessageProcessor {
 
         resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(true, user, recipient));
 
-        return !user.player().hasPermission(URL_PERMISSION)
+        return !user.hasPermission(URL_PERMISSION)
             ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
             : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
     }

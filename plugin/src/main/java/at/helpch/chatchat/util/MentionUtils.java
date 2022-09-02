@@ -96,14 +96,14 @@ public final class MentionUtils {
         @NotNull final User target,
         @NotNull final Component message
     ) {
-        if (!user.player().hasPermission(MENTION_CHANNEL_PERMISSION)) {
+        if (!user.hasPermission(MENTION_CHANNEL_PERMISSION)) {
             return Map.entry(false, message);
         }
 
         if (target instanceof ChatUser) {
             final var targetChatUser = (ChatUser) target;
 
-            if (!targetChatUser.channelMentions() && !user.player().hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
+            if (!targetChatUser.channelMentions() && !user.hasPermission(MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION)) {
                 return Map.entry(false, message);
             }
         }
@@ -124,8 +124,8 @@ public final class MentionUtils {
         @NotNull final ChatUser target,
         @NotNull final Component message
     ) {
-        if (!user.player().hasPermission(MENTION_PERSONAL_PERMISSION) ||
-            (!target.personalMentions() && !user.player().hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
+        if (!user.hasPermission(MENTION_PERSONAL_PERMISSION) ||
+            (!target.personalMentions() && !user.hasPermission(MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION))
         ) {
             return Map.entry(false, message);
         }

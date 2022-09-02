@@ -51,6 +51,14 @@ public interface User extends ForwardingAudience.Single, Identified {
     @NotNull UUID uuid();
 
     /**
+     * Check if the user has a permission.
+     *
+     * @param node The permission to check.
+     * @return True if the user has the permission, false otherwise.
+     */
+    boolean hasPermission(@NotNull final String node);
+
+    /**
      * Checks to see if the user can see another {@link User}.
      *
      * @param target The target to check if the user can see.

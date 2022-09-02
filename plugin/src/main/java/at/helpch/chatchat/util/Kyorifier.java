@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 public final class Kyorifier {
     private static final ImmutableMap<Character, String> COLOURS = new ImmutableMap.Builder<Character, String>()
         .put('0', NamedTextColor.BLACK.toString())
-        .put('0', NamedTextColor.BLACK.toString())
         .put('1', NamedTextColor.DARK_BLUE.toString())
         .put('2', NamedTextColor.DARK_GREEN.toString())
         .put('3', NamedTextColor.DARK_AQUA.toString())
@@ -35,13 +34,15 @@ public final class Kyorifier {
         .put('m', TextDecoration.STRIKETHROUGH.toString())
         .put('n', TextDecoration.UNDERLINED.toString())
         .put('o', TextDecoration.ITALIC.toString())
-        // The <reset> tag is never placed. Instead, we close existent tags. So it doesn't matter what name we give
-        // here. Also, there isn't a way to get the name of the reset tag from adventure.
+        // There is no way to get the reset tag name from Adventure. Also doesn't really matter as we never actually
+        // use it. Instead, we close all the opened tags.
         .put('r', "reset")
         .build();
 
     private static final Pattern LEGACY_HEX_COLORS_PATTERN = Pattern.compile(
-        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
+        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[a-f\\d]){6})[}\\]>]?",
+        Pattern.CASE_INSENSITIVE // Turns out colors are not case-sensitive.
+    );
 
     private static StringBuilder closeAll(Stack<String> activeFormatters) {
         final var out = new StringBuilder();
@@ -57,21 +58,22 @@ public final class Kyorifier {
             final Matcher matcher = (Matcher) result;
             final var hex = matcher.group("hex");
             final var code = matcher.group("code");
-            final var colour = hex == null ? COLOURS.get(code.charAt(0)) : "#" + hex.replace("&", "");
+            final var colour = hex == null
+                ? COLOURS.get(Character.toLowerCase(code.charAt(0)))
+                : "#" + hex.replace("&", "");
 
             if (colour == null) {
-                final var formatter = FORMATTERS.get(code.charAt(0));
+                final var formatter = FORMATTERS.get(Character.toLowerCase(code.charAt(0)));
                 if (formatter.equals("reset")) {
                     return closeAll(activeFormatters).toString();
                 }
                 activeFormatters.push(formatter);
                 return "<" + formatter + ">";
-            } else {
-                final var out = closeAll(activeFormatters);
-                out.append("<").append(colour).append(">");
-
-                return out.toString();
             }
+
+            final var out = closeAll(activeFormatters);
+            out.append("<").append(colour).append(">");
+            return out.toString();
         });
     }
 }

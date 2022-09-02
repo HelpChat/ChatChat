@@ -66,6 +66,11 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
+    public boolean hasPermission(@NotNull final String node) {
+        return player().hasPermission(node);
+    }
+
+    @Override
     public @NotNull Optional<ChatUser> lastMessagedUser() {
         return lastMessagedUser.get();
     }

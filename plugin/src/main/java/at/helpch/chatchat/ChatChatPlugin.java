@@ -17,6 +17,7 @@ import at.helpch.chatchat.command.SocialSpyCommand;
 import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
+import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
@@ -126,7 +127,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        hookManager().hooks().forEach(Hook::disable);
+        hookManager().vanishHooks().forEach(Hook::disable);
         getServer().getServicesManager().unregisterAll(this);
+
         audiences.close();
         if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
 

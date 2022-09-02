@@ -44,6 +44,11 @@ public final class ConsoleUser implements User {
     }
 
     @Override
+    public boolean hasPermission(@NotNull final String node) {
+        return true;
+    }
+
+    @Override
     public boolean canSee(@NotNull User target) {
         return true;
     }

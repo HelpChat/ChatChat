@@ -1,7 +1,6 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.cmd.core.annotation.Optional;
@@ -26,8 +25,7 @@ public class DumpCommand extends ChatChatCommand {
 
     @SubCommand("dump")
     public void dump(final User user, final @Suggestion("files") @Optional String file) {
-        // TODO: 8/26/22 Implement a User#hasPermission method
-        if (user instanceof ChatUser && !((ChatUser )user).player().hasPermission(DUMP_PERMISSION)) {
+        if (!user.hasPermission(DUMP_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().noPermission());
             return;
         }
