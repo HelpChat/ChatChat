@@ -2,6 +2,7 @@ package at.helpch.chatchat.data.impl.gson;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.user.ChatUserImpl;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
@@ -69,7 +70,7 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
         final var channel = contains
             ? plugin.configManager().channels().channels().get(channelName)
-            : plugin.configManager().channels().channels().get(plugin.configManager().channels().defaultChannel());
+            : ChatChannel.defaultChannel();
 
         if (channel == null) {
             in.close();

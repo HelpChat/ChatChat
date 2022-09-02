@@ -59,11 +59,12 @@ public final class ChatChannel extends AbstractChannel {
         final Predicate<User> filterIgnores = user -> !user.ignoredUsers().contains(source.uuid()) ||
             (source instanceof ChatUser && ((ChatUser) source).player().hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
 
-        if (plugin.configManager().channels().defaultChannel().equals(this.name()))
+        if (ChatChannel.defaultChannel().equals(this)) {
             return plugin.usersHolder().users().stream()
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
                 .filter(filterIgnores)
                 .collect(Collectors.toSet());
+        }
 
         return plugin.usersHolder().users().stream().filter(user ->
                 !(user instanceof ChatUser) ||

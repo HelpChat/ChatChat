@@ -2,6 +2,7 @@ package at.helpch.chatchat.data.impl.gson;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.user.ChatUserImpl;
 import com.google.gson.Gson;
@@ -44,8 +45,7 @@ public class GsonDatabase implements Database {
         final var userFile = new File(usersDirectory, uuid + ".json");
         if (!userFile.exists()) {
             final var user = new ChatUserImpl(uuid);
-            final var channel = plugin.configManager().channels().channels()
-                .get(plugin.configManager().channels().defaultChannel());
+            final var channel = ChatChannel.defaultChannel();
 
             user.channel(channel);
             return user;
@@ -99,16 +99,14 @@ public class GsonDatabase implements Database {
             }
 
             final var user = new ChatUserImpl(uuid);
-            final var channel = plugin.configManager().channels().channels()
-                .get(plugin.configManager().channels().defaultChannel());
+            final var channel = ChatChannel.defaultChannel();
 
             user.channel(channel);
             return user;
 
         } catch (final IOException exception) { // Handles missing file
             final var user = new ChatUserImpl(uuid);
-            final var channel = plugin.configManager().channels().channels()
-                .get(plugin.configManager().channels().defaultChannel());
+            final var channel = ChatChannel.defaultChannel();
 
             user.channel(channel);
             return user;

@@ -78,9 +78,11 @@ public abstract class AbstractChannel implements Channel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChatChannel that = (ChatChannel) o;
-        return messagePrefix.equals(that.messagePrefix()) &&
-                toggleCommands.equals(that.commandNames()) &&
-                channelPrefix.equals(that.channelPrefix());
+        AbstractChannel that = (AbstractChannel) o;
+        return name.equals(that.name()) &&
+            messagePrefix.equals(that.messagePrefix()) &&
+            toggleCommands.equals(that.commandNames()) &&
+            channelPrefix.equals(that.channelPrefix()) &&
+            radius == that.radius();
     }
 }

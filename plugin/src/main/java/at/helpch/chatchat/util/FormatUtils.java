@@ -37,8 +37,8 @@ public final class FormatUtils {
             .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
             .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
 
+        // Channel formats take precedent.
         if (channelFormat.isPresent()) {
-            // Channel formats take precedent.
             return channelFormat;
         }
 
