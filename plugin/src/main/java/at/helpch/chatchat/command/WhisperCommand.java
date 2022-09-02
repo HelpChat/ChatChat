@@ -128,8 +128,8 @@ public final class WhisperCommand extends BaseCommand {
             ))
         );
 
-        if (settingsConfig.mentionOnMessage()) {
-            recipient.playSound(settingsConfig.mentionSound());
+        if (settingsConfig.mentions().privateMessage()) {
+            recipient.playSound(settingsConfig.mentions().sound());
         }
 
         user.lastMessagedUser(recipient);

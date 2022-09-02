@@ -91,6 +91,23 @@ public final class FormatUtils {
 
     public static @NotNull Component parseFormat(
         @NotNull final Format format,
+        @NotNull final ComponentLike message) {
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(
+                null,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ),
+            Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(null)
+        );
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
         @NotNull final Player player,
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {

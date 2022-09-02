@@ -91,10 +91,7 @@ public final class MessageProcessor {
 
         final var parsedMessage = chatEvent.message().compact();
 
-        final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
-        final var mentionSound = plugin.configManager().settings().mentionSound();
-        final var personalMentionFormat = plugin.configManager().settings().mentionFormat();
-        final var channelMentionFormat = plugin.configManager().settings().channelMentionFormat();
+        final var mentions = plugin.configManager().settings().mentions();
 
         var userMessage = parsedMessage;
         var userIsTarget = false;
@@ -108,8 +105,8 @@ public final class MessageProcessor {
             if (target instanceof ConsoleUser) continue;
 
             final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-                mentionPrefix,
-                channelMentionFormat,
+                mentions.prefix(),
+                mentions.channelFormat(),
                 user,
                 target,
                 parsedMessage
@@ -148,7 +145,7 @@ public final class MessageProcessor {
 
                 target.sendMessage(component);
                 if (user.canSee(target)) {
-                    target.playSound(mentionSound);
+                    target.playSound(mentions.sound());
                 }
                 continue;
             }
@@ -156,8 +153,8 @@ public final class MessageProcessor {
             final var chatUserTarget = (ChatUser) target;
 
             final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-                mentionPrefix,
-                personalMentionFormat,
+                mentions.prefix(),
+                mentions.personalFormat(),
                 user,
                 chatUserTarget,
                 !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
@@ -199,7 +196,7 @@ public final class MessageProcessor {
 
                 target.sendMessage(component);
                 if (user.canSee(target)) {
-                    target.playSound(mentionSound);
+                    target.playSound(mentions.sound());
                 }
                 continue;
             }
@@ -213,10 +210,10 @@ public final class MessageProcessor {
 
             target.sendMessage(component);
             if (user.canSee(target)) {
-                target.playSound(mentionSound);
+                target.playSound(mentions.sound());
                 userMessage = MentionUtils.processPersonalMentions(
-                    mentionPrefix,
-                    personalMentionFormat,
+                    mentions.prefix(),
+                    mentions.personalFormat(),
                     user,
                     chatUserTarget,
                     userMessage
@@ -230,8 +227,8 @@ public final class MessageProcessor {
         }
 
         final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-            mentionPrefix,
-            channelMentionFormat,
+            mentions.prefix(),
+            mentions.channelFormat(),
             user,
             user,
             userMessage
@@ -250,8 +247,8 @@ public final class MessageProcessor {
         }
 
         final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-            mentionPrefix,
-            personalMentionFormat,
+            mentions.prefix(),
+            mentions.personalFormat(),
             user,
             user,
             !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
@@ -292,7 +289,7 @@ public final class MessageProcessor {
                 channelMentionProcessResult.getValue()
             );
 
-            user.playSound(mentionSound);
+            user.playSound(mentions.sound());
             user.sendMessage(component);
             user.channel(oldChannel);
             return true;
@@ -305,7 +302,7 @@ public final class MessageProcessor {
             personalMentionProcessResult.getValue()
         );
 
-        user.playSound(mentionSound);
+        user.playSound(mentions.sound());
         user.sendMessage(component);
         user.channel(oldChannel);
         return true;

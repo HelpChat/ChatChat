@@ -1,8 +1,5 @@
 package at.helpch.chatchat.config.holder;
 
-import at.helpch.chatchat.api.format.BasicFormat;
-import at.helpch.chatchat.config.DefaultConfigObjects;
-import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -15,12 +12,7 @@ public final class SettingsHolder {
 
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
-
-    private String mentionPrefix = "@";
-    private BasicFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
-    private String channelMentionFormat = "<yellow>";
-    private Sound mentionSound = DefaultConfigObjects.createMentionSound();
-    private boolean mentionOnMessage = true;
+    private MentionSettingsHolder mentions = new MentionSettingsHolder();
     private long lastMessagedCacheDuration = 300;
 
     public @NotNull PMSettingsHolder privateMessagesSettings() {
@@ -35,24 +27,8 @@ public final class SettingsHolder {
         return itemFormatInfo;
     }
 
-    public @NotNull String mentionPrefix() {
-        return mentionPrefix;
-    }
-
-    public @NotNull BasicFormat mentionFormat() {
-        return mentionFormat;
-    }
-
-    public @NotNull String channelMentionFormat() {
-        return channelMentionFormat;
-    }
-
-    public @NotNull Sound mentionSound() {
-        return mentionSound;
-    }
-
-    public boolean mentionOnMessage() {
-        return mentionOnMessage;
+    public @NotNull MentionSettingsHolder mentions() {
+        return mentions;
     }
 
     public long lastMessagedCacheDuration() {

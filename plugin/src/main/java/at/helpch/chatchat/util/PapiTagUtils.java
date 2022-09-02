@@ -3,11 +3,14 @@ package at.helpch.chatchat.util;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import org.jetbrains.annotations.Nullable;
 
 public final class PapiTagUtils {
 
@@ -15,7 +18,7 @@ public final class PapiTagUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull TagResolver createPlaceholderAPITag(final @NotNull Player player) {
+    public static @NotNull TagResolver createPlaceholderAPITag(final @Nullable OfflinePlayer player) {
         return TagResolver.resolver("papi", (argumentQueue, context) -> {
             if (!argumentQueue.hasNext()) {
                 return null;

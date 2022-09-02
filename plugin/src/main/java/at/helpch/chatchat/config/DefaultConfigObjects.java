@@ -118,7 +118,7 @@ public final class DefaultConfigObjects {
         return new BasicFormatImpl("socialspy", map);
     }
 
-    public static @NotNull BasicFormat createMentionFormat() {
+    public static @NotNull BasicFormat createPersonalMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -130,7 +130,22 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new BasicFormatImpl("mention", map);
+        return new BasicFormatImpl("personal-mention", map);
+    }
+
+    public static @NotNull BasicFormat createChannelMentionFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put(
+            "name",
+            List.of(
+                "<hover:show_text:\"<gold>This is a mention!\">",
+                "<yellow>@everyone",
+                "</hover>"
+            )
+        );
+
+        return new BasicFormatImpl("channel-mention", map);
     }
 
     public static @NotNull Sound createMentionSound() {
