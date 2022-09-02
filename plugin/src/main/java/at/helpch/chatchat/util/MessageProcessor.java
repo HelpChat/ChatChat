@@ -3,9 +3,7 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import at.helpch.chatchat.api.event.MentionEvent;
 import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.api.utils.MentionType;
 import at.helpch.chatchat.user.ConsoleUser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -90,7 +88,6 @@ public final class MessageProcessor {
         user.channel(channel);
 
         final var parsedMessage = chatEvent.message().compact();
-
         final var mentions = plugin.configManager().settings().mentions();
 
         var userMessage = parsedMessage;
@@ -102,101 +99,42 @@ public final class MessageProcessor {
                 continue;
             }
 
+            // Console Users have their own format we set in ChatListener.java
             if (target instanceof ConsoleUser) continue;
 
-            final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-                mentions.prefix(),
-                mentions.channelFormat(),
-                user,
-                target,
-                parsedMessage
-            );
-
-            final var channelMentionEvent = new MentionEvent(
+            // Process mentions and get the result.
+            final var mentionResult = plugin.mentionsManager().processMentions(
                 async,
                 user,
                 target,
                 chatEvent.channel(),
-                MentionType.CHANNEL
+                parsedMessage,
+                true
             );
 
-            if (channelMentionProcessResult.getKey()) {
-                plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
-            }
-
-            // Personal mentions can only be used towards ChatUsers.
-            if (!(target instanceof ChatUser)) {
-                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                    final var component = FormatUtils.parseFormat(
-                        chatEvent.format(),
-                        user.player(),
-                        parsedMessage
-                    );
-
-                    target.sendMessage(component);
-                    continue;
-                }
+            if (target instanceof ChatUser) {
+                final var chatTarget = (ChatUser) target;
 
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
-                    channelMentionProcessResult.getValue()
+                    chatTarget.player(),
+                    mentionResult.message()
                 );
 
                 target.sendMessage(component);
-                if (user.canSee(target)) {
+                if (mentionResult.playSound()) {
                     target.playSound(mentions.sound());
                 }
-                continue;
-            }
-
-            final var chatUserTarget = (ChatUser) target;
-
-            final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-                mentions.prefix(),
-                mentions.personalFormat(),
-                user,
-                chatUserTarget,
-                !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
-                    ? parsedMessage
-                    : channelMentionProcessResult.getValue()
-            );
-
-            final var personalMentionEvent = new MentionEvent(
-                async,
-                user,
-                target,
-                chatEvent.channel(),
-                MentionType.PERSONAL
-            );
-
-            if (personalMentionProcessResult.getKey()) {
-                plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
-            }
-
-            if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
-                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                    final var component = FormatUtils.parseFormat(
-                        chatEvent.format(),
-                        user.player(),
-                        chatUserTarget.player(),
-                        parsedMessage
-                    );
-
-                    target.sendMessage(component);
-                    continue;
-                }
-
-                final var component = FormatUtils.parseFormat(
-                    chatEvent.format(),
-                    user.player(),
-                    chatUserTarget.player(),
-                    channelMentionProcessResult.getValue()
-                );
-
-                target.sendMessage(component);
-                if (user.canSee(target)) {
-                    target.playSound(mentions.sound());
+                if (user.canSee(chatTarget)) {
+                    userMessage = plugin.mentionsManager().processMentions(
+                        async,
+                        user,
+                        chatTarget,
+                        chatEvent.channel(),
+                        userMessage,
+                        false
+                    ).message();
                 }
                 continue;
             }
@@ -204,20 +142,12 @@ public final class MessageProcessor {
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
                 user.player(),
-                chatUserTarget.player(),
-                personalMentionProcessResult.getValue()
+                mentionResult.message()
             );
 
             target.sendMessage(component);
-            if (user.canSee(target)) {
+            if (mentionResult.playSound()) {
                 target.playSound(mentions.sound());
-                userMessage = MentionUtils.processPersonalMentions(
-                    mentions.prefix(),
-                    mentions.personalFormat(),
-                    user,
-                    chatUserTarget,
-                    userMessage
-                ).getValue();
             }
         }
 
@@ -226,84 +156,27 @@ public final class MessageProcessor {
             return true;
         }
 
-        final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-            mentions.prefix(),
-            mentions.channelFormat(),
-            user,
-            user,
-            userMessage
-        );
-
-        final var channelMentionEvent = new MentionEvent(
+        final var mentionResult = plugin.mentionsManager().processMentions(
             async,
             user,
             user,
             chatEvent.channel(),
-            MentionType.CHANNEL
+            parsedMessage,
+            true
         );
-
-        if (channelMentionProcessResult.getKey()) {
-            plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
-        }
-
-        final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-            mentions.prefix(),
-            mentions.personalFormat(),
-            user,
-            user,
-            !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
-                ? userMessage
-                : channelMentionProcessResult.getValue()
-        );
-
-        final var personalMentionEvent = new MentionEvent(
-            async,
-            user,
-            user,
-            chatEvent.channel(),
-            MentionType.PERSONAL
-        );
-
-        if (personalMentionProcessResult.getKey()) {
-            plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
-        }
-
-        if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
-            if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                final var component = FormatUtils.parseFormat(
-                    chatEvent.format(),
-                    user.player(),
-                    user.player(),
-                    userMessage
-                );
-
-                user.sendMessage(component);
-                user.channel(oldChannel);
-                return true;
-            }
-
-            final var component = FormatUtils.parseFormat(
-                chatEvent.format(),
-                user.player(),
-                user.player(),
-                channelMentionProcessResult.getValue()
-            );
-
-            user.playSound(mentions.sound());
-            user.sendMessage(component);
-            user.channel(oldChannel);
-            return true;
-        }
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
             user.player(),
             user.player(),
-            personalMentionProcessResult.getValue()
+            mentionResult.message()
         );
 
-        user.playSound(mentions.sound());
         user.sendMessage(component);
+        if (mentionResult.playSound()) {
+            user.playSound(mentions.sound());
+        }
+
         user.channel(oldChannel);
         return true;
     }

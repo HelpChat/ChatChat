@@ -23,6 +23,7 @@ import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
+import at.helpch.chatchat.mention.MentionsManagerImpl;
 import at.helpch.chatchat.placeholder.ChatPlaceholders;
 import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
@@ -63,6 +64,8 @@ public final class ChatChatPlugin extends JavaPlugin {
     final HookManagerImpl hookManager = new HookManagerImpl(this);
     private @NotNull
     final RuleManagerImpl ruleManager = new RuleManagerImpl(this);
+    private @NotNull
+    final MentionsManagerImpl mentionsManager = new MentionsManagerImpl(this);
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -165,6 +168,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull RuleManagerImpl ruleManager() {
         return ruleManager;
+    }
+
+    public @NotNull MentionsManagerImpl mentionsManager() {
+        return mentionsManager;
     }
 
     public @NotNull ChatChatAPIImpl api() {

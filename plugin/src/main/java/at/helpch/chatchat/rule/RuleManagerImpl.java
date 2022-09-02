@@ -6,6 +6,7 @@ import at.helpch.chatchat.api.rule.RuleManager;
 import at.helpch.chatchat.api.user.ChatUser;
 import com.google.common.collect.Sets;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,12 +39,12 @@ public class RuleManagerImpl implements RuleManager {
 
     @Override
     public @NotNull Set<Rule> publicChatRules() {
-        return publicChatRules;
+        return Collections.unmodifiableSet(publicChatRules);
     }
 
     @Override
     public @NotNull Set<Rule> privateChatRules() {
-        return privateChatRules;
+        return Collections.unmodifiableSet(privateChatRules);
     }
 
     public Optional<Component> isAllowedPublicChat(@NotNull final ChatUser sender, @NotNull final String message) {
