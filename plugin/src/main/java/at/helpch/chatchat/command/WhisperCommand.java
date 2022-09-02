@@ -98,7 +98,7 @@ public final class WhisperCommand extends BaseCommand {
             senderFormat,
             recipientFormat,
             Component.text(message),
-            false
+            reply
         );
 
         plugin.getServer().getPluginManager().callEvent(pmSendEvent);
