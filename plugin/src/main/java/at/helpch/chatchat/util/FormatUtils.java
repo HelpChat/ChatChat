@@ -9,10 +9,7 @@ import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,21 +124,7 @@ public final class FormatUtils {
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
             PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
-            recipientTagResolver(recipient)
+            PapiTagUtils.createRecipientTag(recipient)
         );
-    }
-
-    private static @NotNull TagResolver recipientTagResolver(@NotNull final Player player) {
-        return TagResolver.builder()
-            // Could make the name a set of strings if we want more alternative namings.
-            .tag("recipient", (queue, context) -> queue.hasNext()
-                // Parse <recipient:PLACEHOLDERS>
-                ? Tag.selfClosingInserting(
-                    LegacyComponentSerializer.legacySection()
-                        .deserialize(PlaceholderAPI.setPlaceholders(player, '%' + queue.pop().value() + '%')))
-
-                // Parse <recipient>
-                : Tag.selfClosingInserting(Component.text(player.getName()))
-            ).build();
     }
 }

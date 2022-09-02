@@ -6,11 +6,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Locale;
-
-import org.jetbrains.annotations.Nullable;
 
 public final class PapiTagUtils {
 
@@ -19,7 +18,14 @@ public final class PapiTagUtils {
     }
 
     public static @NotNull TagResolver createPlaceholderAPITag(final @Nullable OfflinePlayer player) {
-        return TagResolver.resolver("papi", (argumentQueue, context) -> {
+        return createPlaceholderAPITag("papi", player);
+    }
+
+    public static @NotNull TagResolver createPlaceholderAPITag(
+        final @NotNull String name,
+        final @Nullable OfflinePlayer player
+    ) {
+        return TagResolver.resolver(name, (argumentQueue, context) -> {
             if (!argumentQueue.hasNext()) {
                 return null;
             }
@@ -115,5 +121,9 @@ public final class PapiTagUtils {
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });
+    }
+
+    public static @NotNull TagResolver createRecipientTag(@NotNull final Player player) {
+        return createPlaceholderAPITag("recipient", player);
     }
 }

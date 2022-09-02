@@ -24,7 +24,7 @@ import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
 import at.helpch.chatchat.mention.MentionsManagerImpl;
-import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.placeholder.PAPIPlaceholders;
 import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
@@ -107,7 +107,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
-        new ChatPlaceholders(this).register();
+        new PAPIPlaceholders(this).register();
 
         cacheDuration = configManager().settings().lastMessagedCacheDuration();
         dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
