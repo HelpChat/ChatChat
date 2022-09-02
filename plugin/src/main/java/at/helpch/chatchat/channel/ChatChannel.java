@@ -52,8 +52,8 @@ public final class ChatChannel extends AbstractChannel {
     @Override
     public Set<User> targets(final @NotNull User source) {
 
-        final Predicate<User> filterIgnores = user -> !user.ignoredUsers().contains(source.uuid()) ||
-            source instanceof ChatUser && source.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION);
+        final Predicate<User> filterIgnores = user -> user instanceof ChatUser &&
+            (!user.ignoredUsers().contains(source.uuid()) || source.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
 
         if (plugin.configManager().channels().defaultChannel().equals(this.name()))
             return plugin.usersHolder().users().stream()
