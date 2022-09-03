@@ -7,28 +7,27 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 
-@Command("ignore")
-public class IgnoreCommand extends BaseCommand {
+@Command("unignore")
+public class UnignoreCommand extends BaseCommand {
 
     private final ChatChatPlugin plugin;
     private final static String IGNORE_PERMISSION = "chatchat.ignore";
-    public static final String IGNORE_BYPASS_PERMISSION = IGNORE_PERMISSION + ".bypass";
 
-    public IgnoreCommand(final ChatChatPlugin plugin) {
+    public UnignoreCommand(final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Permission(IGNORE_PERMISSION)
     @Default
-    public void ignore(ChatUser sender, ChatUser target) {
-        if (sender.ignoredUsers().contains(target.uuid())) {
-            sender.sendMessage(plugin.configManager().messages().alreadyIgnored()
+    public void unignore(ChatUser sender, ChatUser target) {
+        if (!sender.ignoredUsers().contains(target.uuid())) {
+            sender.sendMessage(plugin.configManager().messages().notIgnored()
                 .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
             return;
         }
 
-        sender.ignoreUser(target);
-        sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
+        sender.unignoreUser(target);
+        sender.sendMessage(plugin.configManager().messages().unignoredPlayer()
             .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
     }
 }
