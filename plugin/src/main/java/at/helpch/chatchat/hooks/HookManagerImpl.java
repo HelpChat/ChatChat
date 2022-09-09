@@ -86,7 +86,7 @@ public final class HookManagerImpl implements HookManager {
             plugin.getLogger().log(
                 Level.WARNING,
                 "Failed to register hook: " + hook.name() + ", from plugin: " + hook.plugin().getName()
-                    + "because it has an invalid name. Please report this to the Hook authors: "
+                    + " because it has an invalid name. Please report this to the Hook authors: "
                     + String.join(", ", hook.plugin().getDescription().getAuthors())
             );
             return false;
