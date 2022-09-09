@@ -1,6 +1,6 @@
 package at.helpch.chatchat.hooks.dsrv;
 
-import at.helpch.chatchat.ChatChatAPIImpl;
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.user.ConsoleUser;
 import github.scarsz.discordsrv.DiscordSRV;
@@ -14,22 +14,22 @@ import org.jetbrains.annotations.NotNull;
 
 public final class DsrvListener implements ChatHook {
 
-    private final ChatChatAPIImpl api;
+    private final ChatChatPlugin plugin;
 
-    public DsrvListener(@NotNull final ChatChatAPIImpl api) {
-        this.api = api;
+    public DsrvListener(@NotNull final ChatChatPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     public Plugin getPlugin() {
-        return api.plugin();
+        return plugin;
     }
 
     @Override
     public void broadcastMessageToChannel(final String channelName, final Component component) {
-        final var channel = api.plugin().configManager().channels().channels().get(channelName);
+        final var channel = plugin.configManager().channels().channels().get(channelName);
         if (channel == null) {
-            api.plugin().getLogger().info("Couldn't find channel " + channelName);
+            plugin.getLogger().info("Couldn't find channel " + channelName);
             return;
         }
         // gotta love shading

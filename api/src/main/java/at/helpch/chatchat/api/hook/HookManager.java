@@ -19,8 +19,8 @@ public interface HookManager {
      * with the same name is already registered, if the hook throws an unhandled exception during registration or if the
      * hook returns false from {@link Hook#register()}.
      *
-     * @param constructor A static method that takes in a {@link ChatChatAPI} and returns a {@link Hook}. Preferably
-     *                   a constructor.
+     * @param constructor A method, lambda or a constructor that takes in a {@link ChatChatAPI} parameter and returns
+     *                    a {@link Hook}.
      *
      * @return False if the registration failed, true otherwise.
      */

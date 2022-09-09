@@ -6,11 +6,6 @@ import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.hook.HookManager;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.utils.Validators;
-import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
-import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
-import at.helpch.chatchat.hooks.vanish.EssentialsVanishHook;
-import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
-import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -20,21 +15,23 @@ import java.util.function.Function;
 import java.util.logging.Level;
 
 public final class HookManagerImpl implements HookManager {
-    private static final Set<Function<ChatChatAPI, ? extends Hook>> constructors = Set.of(
-        ChatChatDsrvHook::new,
-        ChatChatTownyHook::new,
-        VanillaVanishHook::new,
-        EssentialsVanishHook::new,
-        SuperVanishHook::new
-    );
 
     private final ChatChatPlugin plugin;
-    private final Set<Hook> hooks = new HashSet<>();
+
+    private final Set<Function<ChatChatAPI, ? extends Hook>> constructors = new HashSet<>();
     private final Set<VanishHook> vanishHooks = new HashSet<>();
+    private final Set<Hook> hooks = new HashSet<>();
+
     private boolean hasBeenInitialized = false;
 
     public HookManagerImpl(final @NotNull ChatChatPlugin plugin) {
         this.plugin = plugin;
+        HookCreator hookCreator = new HookCreator(plugin);
+        constructors.add(hookCreator::createDsrvHook);
+        constructors.add(hookCreator::chatChatTownyHook);
+        constructors.add(hookCreator::vanillaVanishHook);
+        constructors.add(hookCreator::essentialsVanishHook);
+        constructors.add(hookCreator::superVanishHook);
     }
 
     public void init() {
@@ -88,8 +85,9 @@ public final class HookManagerImpl implements HookManager {
         if (!Validators.isValidHookName(hook.name())) {
             plugin.getLogger().log(
                 Level.WARNING,
-                "Failed to register hook: " + hook.name() + " because it has an invalid name. Please report this" +
-                    " to the Hook author."
+                "Failed to register hook: " + hook.name() + ", from plugin: " + hook.plugin().getName()
+                    + "because it has an invalid name. Please report this to the Hook authors: "
+                    + String.join(", ", hook.plugin().getDescription().getAuthors())
             );
             return false;
         }
@@ -100,8 +98,9 @@ public final class HookManagerImpl implements HookManager {
             if (hooks.stream().map(Hook::name).anyMatch(name -> name.equals(hook.name()))) {
                 plugin.getLogger().log(
                     Level.WARNING,
-                    "There was an attempt to register a duplicate hook: " + hook.name() +
-                        ". Please report this to the Hook author."
+                    hook.plugin().getName() + " attempted to register a hook with the name " + hook.name()
+                        + " but a hook with that name is already registered. Please report this to the Hook authors: "
+                        + String.join(", ", hook.plugin().getDescription().getAuthors())
                 );
                 return false;
             }
@@ -115,15 +114,17 @@ public final class HookManagerImpl implements HookManager {
                 result = hooks.add(hook);
             }
 
-            plugin.getLogger().info("Enabled the " + hook.name() + " hook.");
+            plugin.getLogger().info("Enabled the " + hook.name() + " hook provided by: " + hook.plugin().getName()
+                + ".");
             return result;
         } catch (final Throwable exception) { // Catching Throwable is a necessary evil to stop other hooks that don't
             // manage their own exceptions and just end up taking down our entire hook manager. This is a very common
             // issue with PlaceholderAPI.
             plugin.getLogger().log(
                 Level.WARNING,
-                "Failed to register hook " + hook.name() + "  because it threw an unhandled exception during" +
-                    " registration. Please report this to the Hook author.",
+                "Failed to register hook: " + hook.name() + ", from plugin: " + hook.plugin().getName()
+                    + " because it threw an unhandled exception during registration. Please report this to the Hook authors: "
+                    + String.join(", ", hook.plugin().getDescription().getAuthors()),
                 exception
             );
             return false;

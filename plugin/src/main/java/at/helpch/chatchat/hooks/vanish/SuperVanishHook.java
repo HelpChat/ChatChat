@@ -1,13 +1,13 @@
 package at.helpch.chatchat.hooks.vanish;
 
-import at.helpch.chatchat.ChatChatAPIImpl;
-import at.helpch.chatchat.api.ChatChatAPI;
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.SuperVanishListener;
 import de.myzelyam.api.vanish.VanishAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,14 +24,15 @@ public class SuperVanishHook extends VanishHook {
     private static final String SUPER_VANISH = "SuperVanish";
     private static final String PREMIUM_VANISH = "PremiumVanish";
 
-    private final ChatChatAPIImpl api;
+    private final ChatChatPlugin plugin;
 
-    public SuperVanishHook(@NotNull final ChatChatAPI api) {
-        if (!(api instanceof ChatChatAPIImpl)) {
-            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
-        }
+    public SuperVanishHook(@NotNull final ChatChatPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-        this.api = (ChatChatAPIImpl) api;
+    @Override
+    public @NotNull Plugin plugin() {
+        return plugin;
     }
 
     @Override
@@ -42,14 +43,12 @@ public class SuperVanishHook extends VanishHook {
 
     @Override
     public @NotNull String name() {
-        return "ChatChat:" +
-            (Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH) ? PREMIUM_VANISH : SUPER_VANISH) +
-            "Hook";
+        return (Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH) ? PREMIUM_VANISH : SUPER_VANISH) + "Hook";
     }
 
     @Override
     public void enable() {
-        api.plugin().getServer().getPluginManager().registerEvents(new SuperVanishListener(api), api.plugin());
+        plugin.getServer().getPluginManager().registerEvents(new SuperVanishListener(plugin), plugin);
     }
 
     @Override

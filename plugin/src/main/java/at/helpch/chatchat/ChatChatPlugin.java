@@ -81,9 +81,12 @@ public final class ChatChatPlugin extends JavaPlugin {
     private static long cacheDuration;
 
     @Override
-    public void onEnable() {
-        getServer().getServicesManager().register(ChatChatAPI.class, api, this, ServicePriority.Normal);
+    public void onLoad() {
+        getServer().getServicesManager().register(ChatChatAPI.class, api, this, ServicePriority.Highest);
+    }
 
+    @Override
+    public void onEnable() {
         audiences = BukkitAudiences.create(this);
 
         commandManager = BukkitCommandManager.create(this,

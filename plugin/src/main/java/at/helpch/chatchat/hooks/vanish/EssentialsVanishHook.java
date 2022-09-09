@@ -1,11 +1,11 @@
 package at.helpch.chatchat.hooks.vanish;
 
-import at.helpch.chatchat.ChatChatAPIImpl;
-import at.helpch.chatchat.api.ChatChatAPI;
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.EssentialsVanishListener;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,14 +21,15 @@ public class EssentialsVanishHook extends VanishHook {
 
     private static final String ESSENTIALS = "Essentials";
 
-    private final ChatChatAPIImpl api;
+    private final ChatChatPlugin plugin;
 
-    public EssentialsVanishHook(@NotNull final ChatChatAPI api) {
-        if (!(api instanceof ChatChatAPIImpl)) {
-            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
-        }
+    public EssentialsVanishHook(@NotNull final ChatChatPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-        this.api = (ChatChatAPIImpl) api;
+    @Override
+    public @NotNull Plugin plugin() {
+        return plugin;
     }
 
     @Override
@@ -38,12 +39,12 @@ public class EssentialsVanishHook extends VanishHook {
 
     @Override
     public @NotNull String name() {
-        return "ChatChat:" + ESSENTIALS + "Hook";
+        return ESSENTIALS + "Hook";
     }
 
     @Override
     public void enable() {
-        api.plugin().getServer().getPluginManager().registerEvents(new EssentialsVanishListener(api), api.plugin());
+        plugin.getServer().getPluginManager().registerEvents(new EssentialsVanishListener(plugin), plugin);
     }
 
     @Override

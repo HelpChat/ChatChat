@@ -1,7 +1,8 @@
 # Set the default format. This will be used when players do not have any other format permissions
 default-format: 'default'
-# Set the console format. This is the format that will be seen from the console. You will have to use %s to specify
-# the player name and the message location instead of <message>
+# Set the console format. This is the format is very limited on SpigotMC and will not support some tags like: keybind,
+# translation, fonts, selector, etc. This format can also break if it contains any extra percent signs (`%`). This is
+# not going to be a problem on PaperMC servers.
 console-format:
   parts:
     channel:
@@ -12,7 +13,6 @@ console-format:
       - <white>%player_name%
     message:
       - ' <gray>» <white><message>'
-
 
 formats:
   default: # this is the default format as set by default-format. No permission is needed.

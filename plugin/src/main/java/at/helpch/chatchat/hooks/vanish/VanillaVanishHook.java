@@ -1,7 +1,6 @@
 package at.helpch.chatchat.hooks.vanish;
 
-import at.helpch.chatchat.ChatChatAPIImpl;
-import at.helpch.chatchat.api.ChatChatAPI;
+import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.listener.VanillaVanishListener;
@@ -21,14 +20,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VanillaVanishHook extends VanishHook {
 
-    private final ChatChatAPIImpl api;
+    private final ChatChatPlugin plugin;
 
-    public VanillaVanishHook(@NotNull final ChatChatAPI api) {
-        if (!(api instanceof ChatChatAPIImpl)) {
-            throw new IllegalArgumentException("api must be an instance of ChatChatAPIImpl");
-        }
+    public VanillaVanishHook(@NotNull final ChatChatPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-        this.api = (ChatChatAPIImpl) api;
+    @Override
+    public @NotNull Plugin plugin() {
+        return plugin;
     }
 
     @Override
@@ -38,12 +38,12 @@ public class VanillaVanishHook extends VanishHook {
 
     @Override
     public @NotNull String name() {
-        return "ChatChat:VanillaVanishHook";
+        return "VanillaVanishHook";
     }
 
     @Override
     public void enable() {
-        api.plugin().getServer().getPluginManager().registerEvents(new VanillaVanishListener(api), api.plugin());
+        plugin.getServer().getPluginManager().registerEvents(new VanillaVanishListener(plugin), plugin);
     }
 
     @Override

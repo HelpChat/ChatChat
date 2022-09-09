@@ -22,19 +22,16 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":api"))
+    implementation(projects.api)
 
     implementation(libs.triumph.cmds)
-    implementation(libs.adventure.bukkit)
-    implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
     implementation(libs.bstats)
-    compileOnly(libs.essentials)
-    implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
     compileOnly(libs.towny)
+    compileOnly(libs.essentials)
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
 }
@@ -191,8 +188,6 @@ bukkit {
 
 tasks {
     withType<ShadowJar> {
-        minimize()
-
         listOf("net.kyori",
             "dev.triumphteam",
             "org.spongepowered",
