@@ -5,14 +5,13 @@ import at.helpch.chatchat.api.rule.Rule;
 import at.helpch.chatchat.api.rule.RuleManager;
 import at.helpch.chatchat.api.user.ChatUser;
 import com.google.common.collect.Sets;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
 
 public class RuleManagerImpl implements RuleManager {
 
@@ -23,8 +22,8 @@ public class RuleManagerImpl implements RuleManager {
 
     public RuleManagerImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
-        publicChatRules.add(new InvalidCharsRule(plugin));
-        privateChatRules.add(new InvalidCharsRule(plugin));
+        addPublicChatRule(new InvalidCharsRule(plugin));
+        addPrivateChatRule(new InvalidCharsRule(plugin));
     }
 
     @Override
@@ -69,7 +68,7 @@ public class RuleManagerImpl implements RuleManager {
         @NotNull final ChatUser recipient,
         @NotNull final String message
     ) {
-        final var unfulfilledRules = publicChatRules()
+        final var unfulfilledRules = privateChatRules()
             .stream()
             .filter(rule -> !rule.isAllowedPrivate(sender, recipient, message))
             .collect(Collectors.toList());
