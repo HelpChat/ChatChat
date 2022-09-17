@@ -15,7 +15,7 @@ public interface Rule {
     /**
      * This method is called when a {@link ChatUser} sends a public message. The rule should check if the message is
      * allowed or not. If the message is not allowed, the message event will be cancelled and the user will be notified
-     * either with the message given by {@link #deniedMessage()} or the invalid-message from ChatChat.
+     * either with the message given by {@link #publicDeniedMessage()} or the invalid-message from ChatChat.
      *
      * @param sender The sender of the message.
      * @param message The message the user sent.
@@ -27,7 +27,7 @@ public interface Rule {
     /**
      * This method is called when a {@link ChatUser} sends a private message. The rule should check if the message is
      * allowed or not. If the message is not allowed, the message event will be cancelled and the user will be notified
-     * either with the message given by {@link #deniedMessage()} or the invalid-message from ChatChat.
+     * either with the message given by {@link #privateDeniedMessage()} or the invalid-message from ChatChat.
      *
      * @param sender The sender of the message.
      * @param recipient The recipient of the message.
@@ -38,7 +38,16 @@ public interface Rule {
     boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User recipient, @NotNull String message);
 
     /**
-     * @return the message that should be sent to the player if the message they sent is not allowed.
+     * @return the message that should be sent to the player if the public message they sent did not respect this rule.
      */
-    @NotNull Optional<@NotNull Component> deniedMessage();
+    @NotNull default Optional<@NotNull Component> publicDeniedMessage() {
+        return Optional.empty();
+    }
+
+    /**
+     * @return the message that should be sent to the player if the private message they sent did not respect this rule.
+     */
+    @NotNull default Optional<@NotNull Component> privateDeniedMessage() {
+        return Optional.empty();
+    }
 }

@@ -28,7 +28,11 @@ public class InvalidCharsRule implements Rule {
         return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.player().hasPermission(UTF_PERMISSION);
     }
 
-    public @NotNull Optional<@NotNull Component> deniedMessage() {
+    public @NotNull Optional<@NotNull Component> publicDeniedMessage() {
+        return Optional.of(plugin.configManager().messages().specialCharactersNoPermission());
+    }
+
+    public @NotNull Optional<@NotNull Component> privateDeniedMessage() {
         return Optional.of(plugin.configManager().messages().specialCharactersNoPermission());
     }
 }

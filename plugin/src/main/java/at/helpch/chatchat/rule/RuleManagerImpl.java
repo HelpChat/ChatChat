@@ -58,7 +58,7 @@ public class RuleManagerImpl implements RuleManager {
         }
 
         return unfulfilledRules.stream()
-            .map(Rule::deniedMessage)
+            .map(Rule::publicDeniedMessage)
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.of(plugin.configManager().messages().invalidMessage()));
@@ -79,7 +79,7 @@ public class RuleManagerImpl implements RuleManager {
         }
 
         return unfulfilledRules.stream()
-            .map(Rule::deniedMessage)
+            .map(Rule::privateDeniedMessage)
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.of(plugin.configManager().messages().invalidMessage()));
