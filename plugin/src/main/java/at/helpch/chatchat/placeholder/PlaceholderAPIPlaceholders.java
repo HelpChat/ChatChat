@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public final class PAPIPlaceholders extends PlaceholderExpansion {
+public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     private final ChatChatPlugin plugin;
 
-    public PAPIPlaceholders(@NotNull final ChatChatPlugin plugin) {
+    public PlaceholderAPIPlaceholders(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 

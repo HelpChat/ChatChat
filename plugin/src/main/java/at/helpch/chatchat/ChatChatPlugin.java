@@ -24,9 +24,9 @@ import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
-import at.helpch.chatchat.mention.MentionsManagerImpl;
-import at.helpch.chatchat.placeholder.MiniPlaceholdersManagerImpl;
-import at.helpch.chatchat.placeholder.PAPIPlaceholders;
+import at.helpch.chatchat.mention.MentionManagerImpl;
+import at.helpch.chatchat.placeholder.MiniPlaceholderManagerImpl;
+import at.helpch.chatchat.placeholder.PlaceholderAPIPlaceholders;
 import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
@@ -67,9 +67,9 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final RuleManagerImpl ruleManager = new RuleManagerImpl(this);
     private @NotNull
-    final MentionsManagerImpl mentionsManager = new MentionsManagerImpl(this);
+    final MentionManagerImpl mentionsManager = new MentionManagerImpl(this);
     private @NotNull
-    final MiniPlaceholdersManagerImpl miniPlaceholdersManager = new MiniPlaceholdersManagerImpl();
+    final MiniPlaceholderManagerImpl miniPlaceholdersManager = new MiniPlaceholderManagerImpl();
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -114,7 +114,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
-        new PAPIPlaceholders(this).register();
+        new PlaceholderAPIPlaceholders(this).register();
 
         cacheDuration = configManager().settings().lastMessagedCacheDuration();
         dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
@@ -180,11 +180,11 @@ public final class ChatChatPlugin extends JavaPlugin {
         return ruleManager;
     }
 
-    public @NotNull MentionsManagerImpl mentionsManager() {
+    public @NotNull MentionManagerImpl mentionsManager() {
         return mentionsManager;
     }
 
-    public @NotNull MiniPlaceholdersManagerImpl miniPlaceholdersManager() {
+    public @NotNull MiniPlaceholderManagerImpl miniPlaceholdersManager() {
         return miniPlaceholdersManager;
     }
 

@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * A manager for mentions. This class is used to add and register new mention types.
  */
-public interface MentionsManager {
+public interface MentionManager {
 
     /**
      * Adds and registers a new {@link Mention} with the manager.

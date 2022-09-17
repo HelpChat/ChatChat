@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * A manager for . This class is used to add and register new mention types.
  */
-public interface MiniPlaceholdersManager {
+public interface MiniPlaceholderManager {
     /**
      * Adds and registers a new {@link MiniPlaceholder} with the manager.
      *

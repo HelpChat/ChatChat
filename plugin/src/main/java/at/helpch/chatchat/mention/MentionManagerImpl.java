@@ -3,7 +3,7 @@ package at.helpch.chatchat.mention;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.mention.Mention;
-import at.helpch.chatchat.api.mention.MentionsManager;
+import at.helpch.chatchat.api.mention.MentionManager;
 import at.helpch.chatchat.api.user.User;
 import com.google.common.collect.Sets;
 
@@ -16,11 +16,11 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
-public class MentionsManagerImpl implements MentionsManager {
+public class MentionManagerImpl implements MentionManager {
 
     private final Set<Mention> mentions = Sets.newHashSet();
 
-    public MentionsManagerImpl(@NotNull final ChatChatPlugin plugin) {
+    public MentionManagerImpl(@NotNull final ChatChatPlugin plugin) {
         mentions.add(new PersonalMention(plugin));
         mentions.add(new ChannelMention(plugin));
     }

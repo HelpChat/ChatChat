@@ -1,7 +1,7 @@
 package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.api.placeholder.MiniPlaceholder;
-import at.helpch.chatchat.api.placeholder.MiniPlaceholdersManager;
+import at.helpch.chatchat.api.placeholder.MiniPlaceholderManager;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import com.google.common.collect.Sets;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.Set;
 
-public class MiniPlaceholdersManagerImpl implements MiniPlaceholdersManager {
+public class MiniPlaceholderManagerImpl implements MiniPlaceholderManager {
 
     final Set<MiniPlaceholder> miniPlaceholders = Sets.newHashSet();
 

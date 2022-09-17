@@ -2,8 +2,8 @@ package at.helpch.chatchat.api;
 
 import at.helpch.chatchat.api.channel.ChannelTypeRegistry;
 import at.helpch.chatchat.api.hook.HookManager;
-import at.helpch.chatchat.api.mention.MentionsManager;
-import at.helpch.chatchat.api.placeholder.MiniPlaceholdersManager;
+import at.helpch.chatchat.api.mention.MentionManager;
+import at.helpch.chatchat.api.placeholder.MiniPlaceholderManager;
 import at.helpch.chatchat.api.rule.RuleManager;
 import at.helpch.chatchat.api.user.UsersHolder;
 import org.jetbrains.annotations.NotNull;
@@ -39,16 +39,16 @@ public interface ChatChatAPI {
     @NotNull RuleManager ruleManager();
 
     /**
-     * Get the {@link MentionsManager}
+     * Get the {@link MentionManager}
      *
-     * @return The {@link MentionsManager}
+     * @return The {@link MentionManager}
      */
-    @NotNull MentionsManager mentionsManager();
+    @NotNull MentionManager mentionsManager();
 
     /**
-     * Get the {@link MiniPlaceholdersManager}
+     * Get the {@link MiniPlaceholderManager}
      *
-     * @return The {@link MiniPlaceholdersManager}
+     * @return The {@link MiniPlaceholderManager}
      */
-    @NotNull MiniPlaceholdersManager miniPlaceholdersManager();
+    @NotNull MiniPlaceholderManager miniPlaceholdersManager();
 }
