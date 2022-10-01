@@ -74,24 +74,30 @@ public final class PapiTagUtils {
                 return null;
             }
 
-            final String next = argumentQueue.pop().value().toLowerCase(Locale.ROOT);
-            if (!argumentQueue.hasNext()) {
-                return null;
-            }
+            final String next = argumentQueue.pop().value();
 
             final boolean inserting;
-            switch (next) {
+            final boolean append;
+            switch (next.toLowerCase(Locale.ROOT)) {
                 case "closing":
                     inserting = false;
+                    append = false;
                     break;
                 case "inserting":
                     inserting = true;
+                    append = false;
                     break;
                 default:
-                    return null;
+                    inserting = false;
+                    append = true;
+                    break;
             }
 
             final var arguments = new ArrayList<String>();
+            if (append) {
+                arguments.add(next);
+            }
+
             while (argumentQueue.hasNext()) {
                 arguments.add(argumentQueue.pop().value());
             }
@@ -107,6 +113,10 @@ public final class PapiTagUtils {
                 target,
                 '%' + placeholder + '%'
             );
+            if (parsedPlaceholder.equals("%" + placeholder + '%')) {
+                return null;
+            }
+
             final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
             final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
 
