@@ -20,14 +20,11 @@ public final class PapiTagUtils {
                 return null;
             }
 
-            final String next = argumentQueue.pop().value().toLowerCase(Locale.ROOT);
-            if (!argumentQueue.hasNext()) {
-                return null;
-            }
+            final String next = argumentQueue.pop().value();
 
             final boolean inserting;
             final boolean append;
-            switch (next) {
+            switch (next.toLowerCase(Locale.ROOT)) {
                 case "closing":
                     inserting = false;
                     append = false;
@@ -57,6 +54,10 @@ public final class PapiTagUtils {
             }
 
             final var parsedPlaceholder = PlaceholderAPI.setPlaceholders(player, '%' + placeholder + '%');
+            if (parsedPlaceholder.equals("%" + placeholder + '%')) {
+                return null;
+            }
+
             final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
             final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
 
