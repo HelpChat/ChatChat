@@ -21,9 +21,14 @@ public class IgnoreCommand extends BaseCommand {
     @Permission(IGNORE_PERMISSION)
     @Default
     public void ignore(ChatUser sender, ChatUser target) {
-        final var ignored = sender.ignoredUsers().contains(target.uuid());
-
         final var messageHolder = plugin.configManager().messages();
+
+        if (sender.uuid().equals(target.uuid())) {
+            sender.sendMessage(messageHolder.cantIgnoreYourself());
+            return;
+        }
+
+        final var ignored = sender.ignoredUsers().contains(target.uuid());
         final var message = ignored ? messageHolder.unignoredPlayer() : messageHolder.ignoredPlayer();
 
         if (ignored) {

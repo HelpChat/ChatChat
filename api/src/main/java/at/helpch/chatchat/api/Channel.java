@@ -19,5 +19,5 @@ public interface Channel {
 
     Set<User> targets(@NotNull final User source);
 
-    boolean isUseableBy(@NotNull final ChatUser user);
+    boolean isUsableBy(@NotNull final ChatUser user);
 }

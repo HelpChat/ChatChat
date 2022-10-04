@@ -33,6 +33,7 @@ public final class MessagesHolder {
     private Component socialSpyDisabled = text("Social spy disabled", RED);
     private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
     private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
+    private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
     private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
     private Component cantMessageGeneral = text("You cannot message this player.", RED);
 
@@ -153,6 +154,10 @@ public final class MessagesHolder {
 
     public @NotNull Component unignoredPlayer() {
         return unignoredPlayer;
+    }
+
+    public @NotNull Component cantIgnoreYourself() {
+        return cantIgnoreYourself;
     }
 
     public @NotNull Component personalMentionsEnabled() {
