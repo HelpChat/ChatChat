@@ -45,11 +45,11 @@ public final class ChatListener implements Listener {
                 List.copyOf(plugin.configManager().channels().channels().values()),
                 event.getMessage());
 
-        final var message = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
+        final var message = channelByPrefix.isEmpty() || !channelByPrefix.get().isUsableBy(user)
             ? event.getMessage()
             : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUseableBy(user)
+        final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUsableBy(user)
             ? user.channel()
             : channelByPrefix.get();
 
