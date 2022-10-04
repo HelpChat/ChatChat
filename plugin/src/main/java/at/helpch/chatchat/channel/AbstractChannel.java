@@ -59,7 +59,7 @@ public abstract class AbstractChannel implements Channel {
 
     @Override
     public boolean isUsableBy(@NotNull final ChatUser user) {
-        if (name.equals("default")) {
+        if (ChatChannel.defaultChannel().equals(this)) {
             return true;
         }
 

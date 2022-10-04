@@ -24,7 +24,7 @@ public class IgnoreCommand extends BaseCommand {
         final var messageHolder = plugin.configManager().messages();
 
         if (sender.uuid().equals(target.uuid())) {
-            sender.sendMessage(messageHolder.cannotIgnoreYourself());
+            sender.sendMessage(messageHolder.cantIgnoreYourself());
             return;
         }
 
