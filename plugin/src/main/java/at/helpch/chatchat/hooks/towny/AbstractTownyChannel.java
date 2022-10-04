@@ -34,8 +34,8 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
     }
 
     @Override
-    public boolean isUseableBy(@NotNull final ChatUser user) {
-        return super.isUseableBy(user) && residentList(user.uuid()).isPresent();
+    public boolean isUsableBy(@NotNull final ChatUser user) {
+        return super.isUsableBy(user) && residentList(user.uuid()).isPresent();
     }
 
     protected abstract @Nullable ResidentList residentList(@NotNull final Resident resident);

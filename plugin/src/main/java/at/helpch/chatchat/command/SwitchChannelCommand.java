@@ -45,7 +45,7 @@ public final class SwitchChannelCommand extends BaseCommand {
             }
         }
 
-        if (!channel.isUseableBy(user)) {
+        if (!channel.isUsableBy(user)) {
             user.sendMessage(plugin.configManager().messages().channelNoPermission());
             return;
         }
