@@ -2,6 +2,7 @@ package at.helpch.chatchat.data.impl.gson;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.user.ChatUserImpl;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
@@ -138,7 +139,13 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         } catch (final IllegalArgumentException exception) {
             throw new JsonParseException("The UUID is invalid!", exception);
         }
-        user.channel(channel);
+
+        if (channel.isUsableBy(user))
+            user.channel(channel);
+        else {
+            user.channel(ChatChannel.defaultChannel());
+        }
+
         user.privateMessages(privateMessages);
         user.personalMentions(personalMentions);
         user.channelMentions(channelMentions);
