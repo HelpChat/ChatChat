@@ -54,12 +54,6 @@ public final class ChatListener implements Listener {
             ? user.channel()
             : channelByPrefix.get();
 
-        // Ensure the user still has the channel permission, if not reset them back to the default channel
-        if (!channel.isUsableBy(user)) {
-            channel = ChatChannel.defaultChannel();
-            user.channel(channel);
-        }
-
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
 
         event.setMessage(LegacyComponentSerializer.legacySection().serialize(
@@ -86,6 +80,11 @@ public final class ChatListener implements Listener {
         // Cancel the event if the message doesn't end up being sent
         // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
         event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
+
+        // Ensure the user still has the channel permission, if not reset them back to the default channel
+        if (!channel.isUsableBy(user)) {
+            user.channel(channel);
+        }
     }
 
     private static String cleanseMessage(@NotNull final String message) {
