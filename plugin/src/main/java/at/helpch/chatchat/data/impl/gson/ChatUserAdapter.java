@@ -137,7 +137,13 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         } catch (final IllegalArgumentException exception) {
             throw new JsonParseException("The UUID is invalid!", exception);
         }
-        user.channel(channel);
+
+        if (channel.isUsableBy(user))
+            user.channel(channel);
+        else {
+            user.channel(ChatChannel.defaultChannel());
+        }
+
         user.privateMessages(privateMessages);
         user.personalMentions(personalMentions);
         user.channelMentions(channelMentions);

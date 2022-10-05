@@ -3,6 +3,7 @@ package at.helpch.chatchat.listener;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.user.ConsoleUser;
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
@@ -50,9 +51,15 @@ public final class ChatListener implements Listener {
             ? event.getMessage()
             : event.getMessage().replaceFirst(Pattern.quote(channelByPrefix.get().messagePrefix()), "");
 
-        final var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUsableBy(user)
+        var channel = channelByPrefix.isEmpty() || !channelByPrefix.get().isUsableBy(user)
             ? user.channel()
             : channelByPrefix.get();
+
+        // Ensure the user still has the channel permission, if not reset them back to the default channel
+        if (!channel.isUsableBy(user)) {
+            channel = ChatChannel.defaultChannel();
+            user.channel(channel);
+        }
 
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
 

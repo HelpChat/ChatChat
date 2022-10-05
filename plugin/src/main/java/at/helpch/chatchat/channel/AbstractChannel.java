@@ -68,10 +68,13 @@ public abstract class AbstractChannel implements Channel {
         return radius;
     }
 
-
     @Override
     public boolean isUsableBy(@NotNull final ChatUser user) {
-        return user.player().hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
+        if (ChatChannel.defaultChannel().equals(this)) {
+            return true;
+        }
+
+        return user.hasPermission(ChannelUtils.USE_CHANNEL_PERMISSION + name());
     }
 
     @Override
