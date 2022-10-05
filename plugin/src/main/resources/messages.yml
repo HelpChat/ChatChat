@@ -3,7 +3,8 @@
 console-only: <red>Only the console can do this!
 players-only: <red>Only players can do this!
 user-offline: <red>The user is not online!
-user-no-town-found: <red>You are not in a town!
+user-not-in-town: <red>You are not in a town!
+
 no-replies: <red>You have no one to reply to!
 replies-disabled: You can't send private messages while they're disabled!
 target-replies-disabled: <red>This user has their private messages disabled!
@@ -14,11 +15,27 @@ empty-message: <red>You can't send an empty message!
 special-characters-no-permission: <red>You do not have permission to use special characters!
 social-spy-enabled: <green>Social spy enabled
 social-spy-disabled: <red>Social spy disabled
+ignored-player: <green>Successfully ignored <player>.
+unignored-player: <green>Successfully un-ignored <player>.
+already-ignored: <red>You are already ignoring <player>.
+not-ignored: <red>You are not ignoring <player>.
+cant-message-ignored-player: <red>You cannot message a player who you ignore.
+cant-message-general: <red>You cannot message this player.
+
 channel-no-permission: <red>You do not have permission to use this channel!
-dump-fail: <red>Failed to create dump!
-dump-success: '<green>Dump created successfully! You can find it at: <url>'
 channel-switched: <green>You have switched to the <channel> channel!
+
 command-unknown-command: <red>Unknown Command.
 command-invalid-usage: <red>Invalid usage.
 command-invalid-argument: <red>Invalid argument.
 command-no-permission: <red>No Permission.
+
+dump-fail: <red>Failed to create dump!
+dump-success: '<green>Dump created successfully! You can find it at: <url>'
+
+personal-mentions-enabled: "<green>Successfully enabled personal mentions!"
+personal-mentions-disabled: "<green>Successfully disabled personal mentions!"
+channel-mentions-enabled: "<green>Successfully enabled channel mentions!"
+channel-mentions-disabled: "<green>Successfully disabled channel mentions!"
+
+invalid-format: "<red>Invalid format!"
