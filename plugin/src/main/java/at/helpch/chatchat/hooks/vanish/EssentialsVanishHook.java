@@ -1,11 +1,10 @@
 package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.hooks.AbstractInternalVanishHook;
 import at.helpch.chatchat.listener.EssentialsVanishListener;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,19 +16,15 @@ import org.jetbrains.annotations.NotNull;
  *     Some plugins that this is known to work with: EssentialsX
  * </p>
  */
-public class EssentialsVanishHook extends VanishHook {
+public class EssentialsVanishHook extends AbstractInternalVanishHook {
 
     private static final String ESSENTIALS = "Essentials";
 
     private final ChatChatPlugin plugin;
 
     public EssentialsVanishHook(@NotNull final ChatChatPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
-    }
-
-    @Override
-    public @NotNull Plugin plugin() {
-        return plugin;
     }
 
     @Override

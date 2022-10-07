@@ -1,8 +1,8 @@
 package at.helpch.chatchat.hooks.vanish;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.hooks.AbstractInternalVanishHook;
 import at.helpch.chatchat.listener.VanillaVanishListener;
 import at.helpch.chatchat.util.VersionHelper;
 import org.bukkit.entity.Player;
@@ -18,17 +18,13 @@ import org.jetbrains.annotations.NotNull;
  *     Some plugins that this is known to work with: EssentialsX.
  * </p>
  */
-public class VanillaVanishHook extends VanishHook {
+public class VanillaVanishHook extends AbstractInternalVanishHook {
 
     private final ChatChatPlugin plugin;
 
     public VanillaVanishHook(@NotNull final ChatChatPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
-    }
-
-    @Override
-    public @NotNull Plugin plugin() {
-        return plugin;
     }
 
     @Override

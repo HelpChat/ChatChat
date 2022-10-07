@@ -2,23 +2,20 @@ package at.helpch.chatchat.hooks.towny;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.Hook;
+import at.helpch.chatchat.hooks.AbstractInternalHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class ChatChatTownyHook implements Hook {
+public class ChatChatTownyHook extends AbstractInternalHook {
 
     private static final String TOWNY = "Towny";
 
     private final ChatChatPlugin plugin;
 
     public ChatChatTownyHook(@NotNull final ChatChatPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
-    }
-
-    @Override
-    public @NotNull Plugin plugin() {
-        return plugin;
     }
 
     @Override
