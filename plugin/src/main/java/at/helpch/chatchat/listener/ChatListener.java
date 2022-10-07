@@ -56,8 +56,12 @@ public final class ChatListener implements Listener {
 
         // Ensure the user still has the channel permission, if not reset them back to the default channel
         if (!channel.isUsableBy(user)) {
-            channel = ChatChannel.defaultChannel();
-            user.channel(channel);
+            event.setCancelled(true);
+
+            user.channel(ChatChannel.defaultChannel());
+            user.sendMessage(plugin.configManager().messages().channelNoPermissionSwitch()
+                .replaceText(builder -> builder.matchLiteral("<default>").replacement(ChatChannel.defaultChannel().name())));
+            return;
         }
 
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
