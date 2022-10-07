@@ -42,6 +42,7 @@ public final class MessagesHolder {
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
+    private Component channelNoPermissionSwitch = text("You no longer have permission to use this channel so it has been switched to the <default> channel. ", RED);
     private Component channelSwitched = text("You have switched to the <channel> channel", GREEN);
 
     // command related
@@ -126,6 +127,8 @@ public final class MessagesHolder {
     public @NotNull Component channelNoPermission() {
         return channelNoPermission;
     }
+
+    public @NotNull Component channelNoPermissionSwitch() { return channelNoPermissionSwitch; }
 
     public @NotNull Component channelSwitched() {
         return channelSwitched;
