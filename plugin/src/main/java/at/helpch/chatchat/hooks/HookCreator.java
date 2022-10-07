@@ -9,7 +9,7 @@ import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
 import at.helpch.chatchat.hooks.vanish.VanillaVanishHook;
 import org.jetbrains.annotations.NotNull;
 
-public final class HookCreator {
+final class HookCreator {
 
     private final ChatChatPlugin plugin;
 
