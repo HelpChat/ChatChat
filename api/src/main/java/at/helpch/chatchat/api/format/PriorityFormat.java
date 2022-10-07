@@ -21,6 +21,6 @@ public interface PriorityFormat extends Format {
      * @param priority
      * @return
      */
-    @NotNull Format priority(final int priority);
+    @NotNull PriorityFormat priority(final int priority);
 
 }

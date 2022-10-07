@@ -1,11 +1,11 @@
 package at.helpch.chatchat.api.holder;
 
-import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This is used to store the name of the default format, a {@link BasicFormat} that is used
+ * This is used to store the name of the default format, a {@link Format} that is used
  * for console, and a list of {@link PriorityFormat}s.
  */
 public interface GlobalFormatsHolder extends FormatsHolder {
@@ -24,5 +24,5 @@ public interface GlobalFormatsHolder extends FormatsHolder {
      *
      * @return The console format.
      */
-    @NotNull BasicFormat consoleFormat();
+    @NotNull Format consoleFormat();
 }

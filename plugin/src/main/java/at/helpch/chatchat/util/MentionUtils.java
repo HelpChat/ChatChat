@@ -1,6 +1,5 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.format.BasicFormat;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
@@ -72,7 +71,7 @@ public final class MentionUtils {
         @RegExp @NotNull final String username,
         @NotNull final User user,
         @NotNull final Component component,
-        @NotNull final BasicFormat format) {
+        @NotNull final Format format) {
         return replaceMention(username, component, (r) -> user instanceof ChatUser
             ? FormatUtils.parseFormat(format, ((ChatUser) user).player(), component)
             : FormatUtils.parseFormat(format, component));
@@ -91,7 +90,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final BasicFormat channelMentionFormat,
+        @NotNull final Format channelMentionFormat,
         @NotNull final ChatUser user,
         @NotNull final User target,
         @NotNull final Component message
@@ -119,7 +118,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processPersonalMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final BasicFormat mentionFormat,
+        @NotNull final Format mentionFormat,
         @NotNull final ChatUser user,
         @NotNull final ChatUser target,
         @NotNull final Component message

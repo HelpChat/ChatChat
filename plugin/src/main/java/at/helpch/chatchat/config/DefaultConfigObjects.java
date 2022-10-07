@@ -1,11 +1,11 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.FormatsHolderImpl;
-import at.helpch.chatchat.format.BasicFormatImpl;
+import at.helpch.chatchat.format.SimpleFormat;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -29,14 +29,14 @@ public final class DefaultConfigObjects {
             List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
 
-    public static @NotNull BasicFormat createDefaultConsoleFormat() {
+    public static @NotNull Format createDefaultConsoleFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
         map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
         map.put("name", List.of("<white>%player_name%"));
         map.put("message", List.of(" <gray>» <white><message>"));
-        return new BasicFormatImpl("console-format", map);
+        return new SimpleFormat("console-format", map);
     }
 
     public static @NotNull PriorityFormat createDefaultChannelFormat() {
@@ -84,7 +84,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("other", 1, map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageSenderFormat() {
+    public static @NotNull Format createPrivateMessageSenderFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>you"));
@@ -92,10 +92,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormatImpl("sender", map);
+        return new SimpleFormat("sender", map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageRecipientFormat() {
+    public static @NotNull Format createPrivateMessageRecipientFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>%player_name%"));
@@ -103,10 +103,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray>you"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormatImpl("recipient", map);
+        return new SimpleFormat("recipient", map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageSocialSpyFormat() {
+    public static @NotNull Format createPrivateMessageSocialSpyFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>(spy) "));
@@ -115,10 +115,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormatImpl("socialspy", map);
+        return new SimpleFormat("socialspy", map);
     }
 
-    public static @NotNull BasicFormat createPersonalMentionFormat() {
+    public static @NotNull Format createPersonalMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -130,10 +130,10 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new BasicFormatImpl("personal-mention", map);
+        return new SimpleFormat("personal-mention", map);
     }
 
-    public static @NotNull BasicFormat createChannelMentionFormat() {
+    public static @NotNull Format createChannelMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -145,7 +145,7 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new BasicFormatImpl("channel-mention", map);
+        return new SimpleFormat("channel-mention", map);
     }
 
     public static @NotNull Sound createMentionSound() {

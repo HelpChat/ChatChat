@@ -1,6 +1,6 @@
 package at.helpch.chatchat.config.holder;
 
-import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.config.DefaultConfigObjects;
@@ -16,7 +16,7 @@ public final class GlobalFormatsHolderImpl implements GlobalFormatsHolder {
 
     private String defaultFormat = "default";
 
-    private BasicFormat consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
+    private Format consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
 
     private Map<String, PriorityFormat> formats = Map.of(
         "other", DefaultConfigObjects.createOtherFormat(),
@@ -26,7 +26,7 @@ public final class GlobalFormatsHolderImpl implements GlobalFormatsHolder {
         return defaultFormat;
     }
 
-    public @NotNull BasicFormat consoleFormat() {
+    public @NotNull Format consoleFormat() {
         return consoleFormat;
     }
 

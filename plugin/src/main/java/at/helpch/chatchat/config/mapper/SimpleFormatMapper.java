@@ -1,7 +1,7 @@
 package at.helpch.chatchat.config.mapper;
 
-import at.helpch.chatchat.api.format.BasicFormat;
-import at.helpch.chatchat.format.BasicFormatImpl;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.format.SimpleFormat;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public final class BasicFormatMapper implements TypeSerializer<BasicFormat> {
+public final class SimpleFormatMapper implements TypeSerializer<Format> {
 
     private static final TypeToken<Map<String, List<String>>> mapTypeToken = new TypeToken<>() {};
     private static final String PARTS = "parts";
@@ -26,7 +26,7 @@ public final class BasicFormatMapper implements TypeSerializer<BasicFormat> {
     }
 
     @Override
-    public BasicFormat deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public Format deserialize(Type type, ConfigurationNode node) throws SerializationException {
         final var keyNode = node.key();
         if (keyNode == null) {
             throw new SerializationException("A config key cannot be null!");
@@ -38,11 +38,11 @@ public final class BasicFormatMapper implements TypeSerializer<BasicFormat> {
             throw new SerializationException("Parts list of node: " + key + " cannot be null!");
         }
 
-        return new BasicFormatImpl(key, parts);
+        return new SimpleFormat(key, parts);
     }
 
     @Override
-    public void serialize(Type type, @Nullable BasicFormat format, ConfigurationNode target) throws SerializationException {
+    public void serialize(Type type, @Nullable Format format, ConfigurationNode target) throws SerializationException {
         if (format == null) {
             target.raw(null);
             return;

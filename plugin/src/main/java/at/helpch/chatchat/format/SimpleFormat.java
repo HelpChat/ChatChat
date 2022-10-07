@@ -1,6 +1,6 @@
 package at.helpch.chatchat.format;
 
-import at.helpch.chatchat.api.format.BasicFormat;
+import at.helpch.chatchat.api.format.Format;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 @ConfigSerializable
-public final class BasicFormatImpl implements BasicFormat {
+public final class SimpleFormat implements Format {
 
     private final String name;
     private final Map<String, List<String>> parts;
 
-    public BasicFormatImpl(@NotNull final String name, @NotNull final Map<String, List<String>> parts) {
+    public SimpleFormat(@NotNull final String name, @NotNull final Map<String, List<String>> parts) {
         this.name = name;
         this.parts = Collections.unmodifiableMap(parts);
     }
@@ -25,8 +25,8 @@ public final class BasicFormatImpl implements BasicFormat {
     }
 
     @Override
-    public @NotNull BasicFormatImpl name(@NotNull String name) {
-        return new BasicFormatImpl(name, parts);
+    public @NotNull SimpleFormat name(@NotNull String name) {
+        return new SimpleFormat(name, parts);
     }
 
     @Override
@@ -35,13 +35,13 @@ public final class BasicFormatImpl implements BasicFormat {
     }
 
     @Override
-    public @NotNull BasicFormatImpl parts(@NotNull final Map<String, List<String>> parts) {
-        return new BasicFormatImpl(name, parts);
+    public @NotNull SimpleFormat parts(@NotNull final Map<String, List<String>> parts) {
+        return new SimpleFormat(name, parts);
     }
 
     @Override
     public String toString() {
-        return "BasicFormat{" +
+        return "SimpleFormat{" +
             "name=" + name +
             ", parts=" + parts +
             '}';
