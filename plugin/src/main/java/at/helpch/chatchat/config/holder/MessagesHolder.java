@@ -1,12 +1,12 @@
-package at.helpch.chatchat.config.holders;
-
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
+package at.helpch.chatchat.config.holder;
 
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
+import static net.kyori.adventure.text.format.NamedTextColor.RED;
 
 // configurate requires non-final fields
 @SuppressWarnings("FieldMayBeFinal")
@@ -27,12 +27,21 @@ public final class MessagesHolder {
     private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
     private Component cantMessageYourself = text("You can't message yourself!", RED);
     private Component emptyMessage = text("You can't send an empty message!", RED);
-    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!", RED);
+    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!",
+        RED);
     private Component socialSpyEnabled = text("Social spy enabled", GREEN);
     private Component socialSpyDisabled = text("Social spy disabled", RED);
+    private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
+    private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
+    private Component alreadyIgnored = text("You are already ignoring <player>.", RED);
+    private Component notIgnored = text("You are not ignoring <player>.", RED);
+    private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
+    private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
+    private Component cantMessageGeneral = text("You cannot message this player.", RED);
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
+    private Component channelNoPermissionSwitch = text("You no longer have permission to use this channel so it has been switched to the <default> channel. ", RED);
     private Component channelSwitched = text("You have switched to the <channel> channel", GREEN);
 
     // command related
@@ -40,6 +49,19 @@ public final class MessagesHolder {
     private Component commandInvalidUsage = text("Invalid usage.", RED);
     private Component commandInvalidArgument = text("Invalid argument.", RED);
     private Component commandNoPermission = text("No Permission.", RED);
+
+    // dump reloated
+    private Component dumpFailed = text("Failed to create dump!", RED);
+    private Component dumpSuccess = text("Dump created successfully! You can find it at: <url>", GREEN);
+
+    // mention related
+    private Component personalMentionsEnabled = text("Successfully enabled personal mentions!", GREEN);
+    private Component personalMentionsDisabled = text("Successfully disabled personal mentions!", GREEN);
+    private Component channelMentionsEnabled = text("Successfully enabled channel mentions!", GREEN);
+    private Component channelMentionsDisabled = text("Successfully disabled channel mentions!", GREEN);
+
+    // format related
+    private Component invalidFormat = text("Invalid format.", RED);
 
     public @NotNull Component consoleOnly() {
         return consoleOnly;
@@ -101,6 +123,8 @@ public final class MessagesHolder {
         return channelNoPermission;
     }
 
+    public @NotNull Component channelNoPermissionSwitch() { return channelNoPermissionSwitch; }
+
     public @NotNull Component channelSwitched() {
         return channelSwitched;
     }
@@ -120,4 +144,61 @@ public final class MessagesHolder {
     public @NotNull Component noPermission() {
         return commandNoPermission;
     }
+
+    public @NotNull Component dumpFailed() {
+        return dumpFailed;
+    }
+
+    public @NotNull Component dumpSuccess() {
+        return dumpSuccess;
+    }
+
+    public @NotNull Component ignoredPlayer() {
+        return ignoredPlayer;
+    }
+
+    public @NotNull Component unignoredPlayer() {
+        return unignoredPlayer;
+    }
+
+    public @NotNull Component alreadyIgnored() {
+        return alreadyIgnored;
+    }
+
+    public @NotNull Component notIgnored() {
+        return notIgnored;
+    }
+
+    public @NotNull Component cantIgnoreYourself() {
+        return cantIgnoreYourself;
+    }
+
+    public @NotNull Component personalMentionsEnabled() {
+        return personalMentionsEnabled;
+    }
+
+    public @NotNull Component personalMentionsDisabled() {
+        return personalMentionsDisabled;
+    }
+
+    public @NotNull Component channelMentionsEnabled() {
+        return channelMentionsEnabled;
+    }
+
+    public @NotNull Component channelMentionsDisabled() {
+        return channelMentionsDisabled;
+    }
+
+    public @NotNull Component invalidFormat() {
+        return invalidFormat;
+    }
+
+    public @NotNull Component cantMessageIgnoredPlayer() {
+        return cantMessageIgnoredPlayer;
+    }
+
+    public @NotNull Component cantMessageGeneral() {
+        return cantMessageGeneral;
+    }
+
 }

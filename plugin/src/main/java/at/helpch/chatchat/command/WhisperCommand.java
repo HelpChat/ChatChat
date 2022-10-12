@@ -15,7 +15,9 @@ import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import java.util.Map;
+
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 @Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
 public final class WhisperCommand extends BaseCommand {
@@ -37,6 +39,10 @@ public final class WhisperCommand extends BaseCommand {
         @Suggestion(value = "recipients") final ChatUser recipient,
         @Join final String message
     ) {
+        if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
+            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            return;
+        }
 
         if (!user.privateMessages()) {
             user.sendMessage(plugin.configManager().messages().repliesDisabled());
@@ -58,21 +64,33 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
+        if (recipient.ignoredUsers().contains(user.uuid()) &&
+            !user.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
+            user.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+            return;
+        }
+
+        if (user.ignoredUsers().contains(recipient.uuid()) &&
+            !recipient.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
+            user.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
+            return;
+        }
+
         if (message.isBlank()) {
             user.sendMessage(plugin.configManager().messages().emptyMessage());
             return;
         }
 
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+        if (StringUtils.containsIllegalChars(message) && !user.hasPermission(UTF_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
             return;
         }
 
         final var settingsConfig = plugin.configManager().settings();
 
-        final var senderFormat = settingsConfig.senderFormat();
-        final var recipientFormat = settingsConfig.recipientFormat();
-        final var socialSpyFormat = settingsConfig.socialSpyFormat();
+        final var senderFormat = settingsConfig.privateMessagesSettings().formats().senderFormat();
+        final var recipientFormat = settingsConfig.privateMessagesSettings().formats().recipientFormat();
+        final var socialSpyFormat = settingsConfig.privateMessagesSettings().formats().socialSpyFormat();
 
         final var pmSendEvent = new PMSendEvent(
             user,
@@ -80,7 +98,7 @@ public final class WhisperCommand extends BaseCommand {
             senderFormat,
             recipientFormat,
             Component.text(message),
-            false
+            reply
         );
 
         plugin.getServer().getPluginManager().callEvent(pmSendEvent);
@@ -89,16 +107,25 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        Map.of(
-                user, pmSendEvent.senderFormat(),
-                recipient, pmSendEvent.recipientFormat(),
-                Audience.audience(plugin.usersHolder().socialSpies()), socialSpyFormat
-        ).forEach((Audience audience, Format format) ->
+        final var formats = new LinkedHashMap<Audience, Format>();
+        formats.put(user, pmSendEvent.senderFormat());
+        formats.put(recipient, pmSendEvent.recipientFormat());
+        formats.put(
+            Audience.audience(
+                plugin.usersHolder().users()
+                    .stream()
+                    .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
+                    .collect(Collectors.toUnmodifiableList())
+            ),
+            socialSpyFormat
+        );
+
+        formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
-                    format,
-                    user.player(),
-                    recipient.player(),
-                    pmSendEvent.message()
+                format,
+                user.player(),
+                recipient.player(),
+                pmSendEvent.message()
             ))
         );
 
@@ -109,4 +136,5 @@ public final class WhisperCommand extends BaseCommand {
         user.lastMessagedUser(recipient);
         recipient.lastMessagedUser(user);
     }
+
 }

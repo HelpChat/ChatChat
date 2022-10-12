@@ -8,7 +8,7 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import org.jetbrains.annotations.NotNull;
 
-@Command(value = "togglemsg", alias = { "toggledms", "toglepms" })
+@Command(value = "togglemsg", alias = { "toggledms", "togglepms" })
 public class WhisperToggleCommand extends BaseCommand {
 
     private static final String MESSAGE_TOGGLE_PERMISSION = "chatchat.pm.toggle";

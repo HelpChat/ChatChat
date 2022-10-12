@@ -17,6 +17,8 @@ repositories {
     maven("https://nexus.scarsz.me/content/groups/public")
     // supervanish
     maven("https://jitpack.io")
+    // essentialsx
+    maven("https://repo.essentialsx.net/releases/")
 }
 
 dependencies {
@@ -27,6 +29,7 @@ dependencies {
     implementation(libs.adventure.minimessage)
     implementation(libs.configurate)
     implementation(libs.bstats)
+    compileOnly(libs.essentials)
     implementation(libs.adventure.configurate)
 
     compileOnly(libs.spigot)
@@ -53,9 +56,27 @@ bukkit {
             description = "Spy on private messages"
             default = "op"
         }
+        permission("chatchat.test.format") {
+            description = "Test formats"
+            default = "op"
+        }
 
         permission("chatchat.pm") {
             description = "Send or reply to private messages"
+            default = "op"
+        }
+        permission("chatchat.pm.toggle") {
+            description = "Toggle private messages"
+            default = "op"
+        }
+
+        permission("chatchat.ignore") {
+            description = "Permission to use /ignore to toggle ignoring a user"
+            default = "op"
+        }
+
+        permission("chatchat.ignore.bypass") {
+            description = "Bypass being ignored."
             default = "op"
         }
 
@@ -66,6 +87,10 @@ bukkit {
         permission("chatchat.url") {
             description = "Send clickable URLs in chat"
             default = "false"
+        }
+        permission("chatchat.channel.bypass-radius") {
+            description = "Bypass the channel radius"
+            default = "op"
         }
 
         permission("chatchat.mention.personal") {

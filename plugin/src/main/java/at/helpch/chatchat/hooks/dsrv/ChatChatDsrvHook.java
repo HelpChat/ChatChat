@@ -3,12 +3,11 @@ package at.helpch.chatchat.hooks.dsrv;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.hook.Hook;
 import github.scarsz.discordsrv.DiscordSRV;
-import java.util.List;
-import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChatChatDsrvHook implements Hook {
+    private static final String DISCORD_SRV = "DiscordSRV";
 
     private final ChatChatPlugin plugin;
 
@@ -17,8 +16,13 @@ public final class ChatChatDsrvHook implements Hook {
     }
 
     @Override
-    public @NotNull Optional<@NotNull List<String>> dependency() {
-        return Optional.of(List.of("DiscordSRV"));
+    public boolean register() {
+        return Bukkit.getPluginManager().isPluginEnabled(DISCORD_SRV);
+    }
+
+    @Override
+    public @NotNull String name() {
+        return "ChatChat:" + DISCORD_SRV + "Hook";
     }
 
     @Override
@@ -27,5 +31,4 @@ public final class ChatChatDsrvHook implements Hook {
         DiscordSRV.getPlugin().getPluginHooks().add(hook);
         Bukkit.getPluginManager().registerEvents(hook, plugin);
     }
-
 }

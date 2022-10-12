@@ -2,14 +2,12 @@ package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.config.holders.ChannelsHolder;
-import at.helpch.chatchat.config.holders.FormatsHolder;
-import at.helpch.chatchat.config.holders.MessagesHolder;
-import at.helpch.chatchat.config.holders.SettingsHolder;
+import at.helpch.chatchat.config.holder.ChannelsHolder;
+import at.helpch.chatchat.config.holder.FormatsHolder;
+import at.helpch.chatchat.config.holder.MessagesHolder;
+import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
-import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
-import dev.triumphteam.cmd.core.message.MessageKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -35,7 +33,6 @@ public final class ConfigManager {
         settings = null;
 
         messages();
-        reloadCommandMessages();
 
         channels();
         var defaultChannel = channels.channels().get(channels.defaultChannel());
@@ -75,15 +72,5 @@ public final class ConfigManager {
             this.messages = factory.messages();
         }
         return this.messages;
-    }
-
-    private void reloadCommandMessages() {
-        final var manager = plugin.commandManager();
-        manager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendMessage(messages.noPermission()));
-
-        manager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> sender.sendMessage(messages.unknownCommand()));
-        manager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> sender.sendMessage(messages.invalidArgument()));
-        manager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
-        manager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) -> sender.sendMessage(messages.invalidUsage()));
     }
 }

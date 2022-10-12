@@ -6,8 +6,8 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.MentionType;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.event.MentionEvent;
-import java.util.Map;
-import java.util.regex.Pattern;
+import at.helpch.chatchat.user.ConsoleUser;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -16,7 +16,12 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public final class MessageProcessor {
+
+    private static final MiniMessage USER_MESSAGE_MINI_MESSAGE = MiniMessage.builder().tags(TagResolver.empty()).build();
     private static final Pattern DEFAULT_URL_PATTERN = Pattern.compile("(?:(https?)://)?([-\\w_.]+\\.\\w{2,})(/\\S*)?");
     private static final Pattern URL_SCHEME_PATTERN = Pattern.compile("^[a-z][a-z\\d+\\-.]*:");
 
@@ -54,65 +59,31 @@ public final class MessageProcessor {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static void process(
+    public static boolean process(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,
         @NotNull final Channel channel,
         @NotNull final String message,
         final boolean async
     ) {
-        if (StringUtils.containsIllegalChars(message) && !user.player().hasPermission(UTF_PERMISSION)) {
+        if (StringUtils.containsIllegalChars(message) && !user.hasPermission(UTF_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
-            return;
+            return false;
         }
-
-        final var resolver = TagResolver.builder();
-
-        for (final var entry : PERMISSION_TAGS.entrySet()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
-                continue;
-            }
-
-            resolver.resolver(entry.getValue());
-        }
-
-        for (final var tag : TextDecoration.values()) {
-            if (!user.player().hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
-                continue;
-            }
-
-            resolver.resolver(StandardTags.decorations(tag));
-        }
-
-        if (user.player().hasPermission(ITEM_TAG_PERMISSION)) {
-            resolver.resolver(
-                ItemUtils.createItemPlaceholder(
-                    plugin.configManager().settings().itemFormat(),
-                    plugin.configManager().settings().itemFormatInfo(),
-                    user.player().getInventory().getItemInMainHand()
-                )
-            );
-        }
-
-        final var miniMessage = MiniMessage.builder().tags(resolver.build()).build();
-        final var deserializedMessage = !user.player().hasPermission(URL_PERMISSION)
-            ? miniMessage.deserialize(message)
-            : miniMessage.deserialize(message).replaceText(URL_REPLACER_CONFIG);
-
-        final var format = FormatUtils.findFormat(user.player(), plugin.configManager().formats());
 
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            format,
-            deserializedMessage,
-            channel
+            FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
+            MessageProcessor.processMessage(plugin, user, message),
+            channel,
+            channel.targets(user)
         );
 
         plugin.getServer().getPluginManager().callEvent(chatEvent);
 
         if (chatEvent.isCancelled()) {
-            return;
+            return false;
         }
 
         final var oldChannel = user.channel();
@@ -128,11 +99,13 @@ public final class MessageProcessor {
         var userMessage = parsedMessage;
         var userIsTarget = false;
 
-        for (final var target : channel.targets(user)) {
+        for (final var target : chatEvent.recipients()) {
             if (target.uuid() == user.uuid()) {
                 userIsTarget = true;
                 continue;
             }
+
+            if (target instanceof ConsoleUser) continue;
 
             final var channelMentionProcessResult = MentionUtils.processChannelMentions(
                 mentionPrefix,
@@ -180,11 +153,13 @@ public final class MessageProcessor {
                 continue;
             }
 
+            final var chatUserTarget = (ChatUser) target;
+
             final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
                 mentionPrefix,
                 personalMentionFormat,
                 user,
-                (ChatUser) target,
+                chatUserTarget,
                 !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
                     ? parsedMessage
                     : channelMentionProcessResult.getValue()
@@ -207,6 +182,7 @@ public final class MessageProcessor {
                     final var component = FormatUtils.parseFormat(
                         chatEvent.format(),
                         user.player(),
+                        chatUserTarget.player(),
                         parsedMessage
                     );
 
@@ -217,6 +193,7 @@ public final class MessageProcessor {
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
+                    chatUserTarget.player(),
                     channelMentionProcessResult.getValue()
                 );
 
@@ -230,6 +207,7 @@ public final class MessageProcessor {
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
                 user.player(),
+                chatUserTarget.player(),
                 personalMentionProcessResult.getValue()
             );
 
@@ -240,7 +218,7 @@ public final class MessageProcessor {
                     mentionPrefix,
                     personalMentionFormat,
                     user,
-                    (ChatUser) target,
+                    chatUserTarget,
                     userMessage
                 ).getValue();
             }
@@ -248,7 +226,7 @@ public final class MessageProcessor {
 
         if (!userIsTarget) {
             user.channel(oldChannel);
-            return;
+            return true;
         }
 
         final var channelMentionProcessResult = MentionUtils.processChannelMentions(
@@ -298,16 +276,18 @@ public final class MessageProcessor {
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
+                    user.player(),
                     userMessage
                 );
 
                 user.sendMessage(component);
                 user.channel(oldChannel);
-                return;
+                return true;
             }
 
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
+                user.player(),
                 user.player(),
                 channelMentionProcessResult.getValue()
             );
@@ -315,11 +295,12 @@ public final class MessageProcessor {
             user.playSound(mentionSound);
             user.sendMessage(component);
             user.channel(oldChannel);
-            return;
+            return true;
         }
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
+            user.player(),
             user.player(),
             personalMentionProcessResult.getValue()
         );
@@ -327,5 +308,45 @@ public final class MessageProcessor {
         user.playSound(mentionSound);
         user.sendMessage(component);
         user.channel(oldChannel);
+        return true;
     }
+
+    public static @NotNull Component processMessage(
+        @NotNull final ChatChatPlugin plugin,
+        @NotNull final ChatUser user,
+        @NotNull final String message) {
+
+        final var resolver = TagResolver.builder();
+
+        for (final var entry : PERMISSION_TAGS.entrySet()) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
+                continue;
+            }
+
+            resolver.resolver(entry.getValue());
+        }
+
+        for (final var tag : TextDecoration.values()) {
+            if (!user.hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
+                continue;
+            }
+
+            resolver.resolver(StandardTags.decorations(tag));
+        }
+
+        if (user.hasPermission(ITEM_TAG_PERMISSION)) {
+            resolver.resolver(
+                ItemUtils.createItemPlaceholder(
+                    plugin.configManager().settings().itemFormat(),
+                    plugin.configManager().settings().itemFormatInfo(),
+                    user.player().getInventory().getItemInMainHand()
+                )
+            );
+        }
+
+        return !user.hasPermission(URL_PERMISSION)
+            ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
+            : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
+    }
+
 }

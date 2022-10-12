@@ -25,10 +25,11 @@ public final class ChannelTypeRegistry {
     }
 
     public void add(final @NotNull String name, final @NotNull Builder<?> builder) {
-        if (builders.containsKey(name)) {
+        final String lowercase = name.toLowerCase();
+        if (builders.containsKey(lowercase)) {
             throw new IllegalStateException("Attempted to register duplicate channel type " + name);
         }
-        builders.put(name, builder);
+        builders.put(lowercase, builder);
     }
 
     public @NotNull Map<String, Builder<?>> builders() {

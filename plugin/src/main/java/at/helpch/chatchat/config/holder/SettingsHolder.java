@@ -1,7 +1,7 @@
-package at.helpch.chatchat.config.holders;
+package at.helpch.chatchat.config.holder;
 
 import at.helpch.chatchat.config.DefaultConfigObjects;
-import at.helpch.chatchat.format.PMFormat;
+import at.helpch.chatchat.format.BasicFormat;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -11,30 +11,20 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public final class SettingsHolder {
 
-    private PMFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
-
-    private PMFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
-    private PMFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
+    private PMSettingsHolder privateMessages = new PMSettingsHolder();
 
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
 
     private String mentionPrefix = "@";
-    private PMFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
+    private BasicFormat mentionFormat = DefaultConfigObjects.createMentionFormat();
     private String channelMentionFormat = "<yellow>";
     private Sound mentionSound = DefaultConfigObjects.createMentionSound();
     private boolean mentionOnMessage = true;
+    private long lastMessagedCacheDuration = 300;
 
-    public @NotNull PMFormat senderFormat() {
-        return senderFormat;
-    }
-
-    public @NotNull PMFormat recipientFormat() {
-        return recipientFormat;
-    }
-
-    public @NotNull PMFormat socialSpyFormat() {
-        return socialSpyFormat;
+    public @NotNull PMSettingsHolder privateMessagesSettings() {
+        return privateMessages;
     }
 
     public @NotNull String itemFormat() {
@@ -49,7 +39,7 @@ public final class SettingsHolder {
         return mentionPrefix;
     }
 
-    public @NotNull PMFormat mentionFormat() {
+    public @NotNull BasicFormat mentionFormat() {
         return mentionFormat;
     }
 
@@ -63,5 +53,9 @@ public final class SettingsHolder {
 
     public boolean mentionOnMessage() {
         return mentionOnMessage;
+    }
+
+    public long lastMessagedCacheDuration() {
+        return lastMessagedCacheDuration;
     }
 }

@@ -6,8 +6,11 @@ import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.Format;
 import at.helpch.chatchat.api.User;
 import at.helpch.chatchat.cache.ExpiringCache;
+
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.audience.Audience;
@@ -24,12 +27,18 @@ public final class ChatUserImpl implements ChatUser {
         this.uuid = uuid;
     }
 
-    private final ExpiringCache<ChatUser> lastMessagedUser = new ExpiringCache<>(5, TimeUnit.MINUTES);
+    private final ExpiringCache<ChatUser> lastMessagedUser =
+        new ExpiringCache<>(ChatChatPlugin.cacheDuration(), TimeUnit.SECONDS);
 
     private final UUID uuid;
     private Channel channel;
+    // TODO: 8/9/22 Remove unused field!
     private Format format;
     private boolean privateMessages = true;
+    private boolean personalMentions = true;
+    private boolean channelMentions = true;
+    private boolean socialSpy = false;
+    private Set<UUID> ignoredUsers = new HashSet<>();
 
     @Override
     public @NotNull Channel channel() {
@@ -57,6 +66,11 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
+    public boolean hasPermission(@NotNull final String node) {
+        return player().hasPermission(node);
+    }
+
+    @Override
     public @NotNull Optional<ChatUser> lastMessagedUser() {
         return lastMessagedUser.get();
     }
@@ -74,6 +88,55 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void privateMessages(final boolean enabled) {
         this.privateMessages = enabled;
+    }
+
+    @Override
+    public boolean personalMentions() {
+        return personalMentions;
+    }
+
+    @Override
+    public void personalMentions(boolean receivesPersonalMentions) {
+        this.personalMentions = receivesPersonalMentions;
+    }
+
+    @Override
+    public boolean channelMentions() {
+        return channelMentions;
+    }
+
+    @Override
+    public void channelMentions(boolean receivesChannelMentions) {
+        this.channelMentions = receivesChannelMentions;
+    }
+
+    public void socialSpy(final boolean enabled) {
+        socialSpy = enabled;
+    }
+
+    @Override
+    public boolean socialSpy() {
+        return socialSpy;
+    }
+
+    @Override
+    public @NotNull Set<UUID> ignoredUsers() {
+        return ignoredUsers;
+    }
+
+    @Override
+    public void ignoredUsers(@NotNull Set<UUID> users) {
+        this.ignoredUsers = users;
+    }
+
+    @Override
+    public void ignoreUser(@NotNull User user) {
+        ignoredUsers.add(user.uuid());
+    }
+
+    @Override
+    public void unignoreUser(@NotNull User user) {
+        ignoredUsers.remove(user.uuid());
     }
 
     @Override

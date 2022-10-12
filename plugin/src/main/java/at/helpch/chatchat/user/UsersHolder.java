@@ -1,14 +1,12 @@
 package at.helpch.chatchat.user;
 
+import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.api.ChatUser;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -19,16 +17,17 @@ public final class UsersHolder {
 
     public static final User CONSOLE = ConsoleUser.INSTANCE;
 
+    private final ChatChatPlugin plugin;
+
     private @NotNull final Map<UUID, User> users = new HashMap<>();
 
-    private @NotNull final Set<UUID> socialSpyUsers = new HashSet<>();
-
-    public UsersHolder() {
+    public UsersHolder(@NotNull final ChatChatPlugin plugin) {
+        this.plugin = plugin;
         users.put(CONSOLE.uuid(), CONSOLE);
     }
 
     public @NotNull User getUser(@NotNull final UUID uuid) {
-        return users.computeIfAbsent(uuid, ChatUserImpl::new);
+        return users.computeIfAbsent(uuid, ignored -> plugin.database().loadChatUser(uuid));
     }
 
     public @NotNull User getUser(@NotNull final CommandSender user) {
@@ -40,41 +39,25 @@ public final class UsersHolder {
     }
 
     public void removeUser(@NotNull final UUID uuid) {
+        if (!users.containsKey(uuid)) {
+            return;
+        }
+
+        final var user = users.get(uuid);
         users.remove(uuid);
-        socialSpyUsers.remove(uuid);
+
+        if (!(user instanceof ChatUser)) {
+            return;
+        }
+
+        plugin.database().saveChatUser((ChatUser) user);
     }
 
     public void removeUser(@NotNull final Player player) {
         removeUser(player.getUniqueId());
     }
 
-    public @NotNull ChatUser addUser(@NotNull final UUID uuid) {
-        final var user = new ChatUserImpl(uuid);
-        users.put(uuid, user);
-        return user;
-    }
-
-    public @NotNull ChatUser addUser(@NotNull final Player player) {
-        return addUser(player.getUniqueId());
-    }
-
     public @NotNull Collection<User> users() {
         return users.values();
-    }
-
-    public @NotNull Collection<User> socialSpies() {
-        return socialSpyUsers.stream().map(this::getUser).collect(Collectors.toUnmodifiableSet());
-    }
-
-    public void setSocialSpy(@NotNull final UUID uuid, final boolean enabled) {
-        if (enabled) {
-            socialSpyUsers.add(uuid);
-        } else {
-            socialSpyUsers.remove(uuid);
-        }
-    }
-
-    public boolean isSocialSpy(@NotNull final UUID uuid) {
-        return socialSpyUsers.contains(uuid);
     }
 }

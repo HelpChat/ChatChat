@@ -1,0 +1,24 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+charset = utf-8
+
+[*.java]
+ij_java_align_multiline_parameters = true
+ij_java_blank_lines_after_class_header = 1 # add blank line after class name
+ij_java_blank_lines_after_imports = 1
+ij_java_blank_lines_after_package = 1
+ij_java_blank_lines_around_initializer = 1
+ij_java_blank_lines_around_method = 1
+ij_java_blank_lines_before_class_end = 1
+ij_java_class_count_to_use_import_on_demand = 100 # 100 classes before 'import some.package.*'
+ij_java_imports_layout = *,|,java.**,|,$*
+ij_java_layout_static_imports_separately = true # place static imports at the end
+ij_java_names_count_to_use_import_on_demand = 20 # 20 names before 'static import  some.package.Class.*'
+
+[*.yml]
+indent_size = 2

@@ -4,8 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatUser;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.listener.VanillaVanishListener;
-import java.util.List;
-import java.util.Optional;
+import at.helpch.chatchat.util.VersionHelper;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +27,13 @@ public class VanillaVanishHook extends VanishHook {
     }
 
     @Override
-    public @NotNull Optional<@NotNull List<String>> dependency() {
-        return Optional.empty();
+    public boolean register() {
+        return VersionHelper.CURRENT_VERSION >= VersionHelper.V1_19_0;
+    }
+
+    @Override
+    public @NotNull String name() {
+        return "ChatChat:VanillaVanishHook";
     }
 
     @Override

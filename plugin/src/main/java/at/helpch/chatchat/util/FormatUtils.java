@@ -1,7 +1,7 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.config.holders.FormatsHolder;
+import at.helpch.chatchat.config.holder.FormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -41,6 +41,21 @@ public final class FormatUtils {
         return formatOptional.orElse(ChatFormat.defaultFormat());
     }
 
+    public static @NotNull Component parseConsoleFormat(
+        @NotNull final Format format,
+        @NotNull final Player player) {
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(
+                player,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ).replace("<message>", "%2$s")
+        );
+    }
+
     public static @NotNull Component parseFormat(
             @NotNull final Format format,
             @NotNull final Player player,
@@ -54,7 +69,8 @@ public final class FormatUtils {
                     .map(part -> String.join("", part))
                     .collect(Collectors.joining())
             ),
-            Placeholder.component("message", message)
+            Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(player)
         );
     }
 
@@ -77,6 +93,8 @@ public final class FormatUtils {
                 )
             ),
             Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(player),
+            PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
             recipientTagResolver(recipient)
         );
     }
