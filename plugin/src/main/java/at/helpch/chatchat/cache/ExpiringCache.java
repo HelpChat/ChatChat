@@ -1,8 +1,9 @@
 package at.helpch.chatchat.cache;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * An expiring cache.

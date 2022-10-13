@@ -1,8 +1,9 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.format.ChatFormat;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -24,7 +25,7 @@ public class FormatTestCommand extends ChatChatCommand {
     @Permission(FORMAT_TEST_PERMISSION)
     public void testFormat(
         @NotNull final ChatUser sender,
-        @NotNull final ChatFormat format,
+        @NotNull final PriorityFormat format,
         @Join @NotNull final String message
     ) {
         if (message.isBlank()) {
@@ -37,7 +38,8 @@ public class FormatTestCommand extends ChatChatCommand {
                 format,
                 sender.player(),
                 sender.player(),
-                MessageProcessor.processMessage(plugin, sender, message)
+                MessageProcessor.processMessage(plugin, sender, ConsoleUser.INSTANCE, message),
+                plugin.miniPlaceholdersManager().compileTags(false, sender, sender)
             )
         );
     }

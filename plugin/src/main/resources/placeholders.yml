@@ -1,0 +1,26 @@
+# Represents a list of Mini placeholders.
+placeholders:
+    # The name of the placeholder. The placeholder can be used by putting <name> inside the format.
+    # Tags will also work in the actual message sent by a user as long as they have the correct permission.
+    # Permission for tag will be chatchat.tag.placeholder.<name>
+    # The name must match this pattern: [!?#]?[a-z0-9_-]*
+  - name: "name"
+    # If this is set to true, the placeholder message will support recipient and relational tags as well.
+    requires-recipient: false
+    # If this is set to true, MiniMessage tags will be parsed within the placeholder message.
+    parse-mini: false
+    # This determines if PlaceholderAPI placeholders should be parsed within the placeholder message. To note is that
+    # %placeholder% placeholders won't work. Instead, you will have to use the <papi>, <papi-rel> and <recipient> tags.
+    parse-papi: true
+    # This determines if the formatting of the placeholder message will bleed out in the containing message. Set to
+    # false for bleeding effect, true for no bleeding effect. This will be considered true if parse-mini is set to false.
+    closing: true
+    # The message that the placeholder will be replaced with.
+    message: 'Hello World!'
+
+  - name: "parsing"
+    requires-recipient: false
+    parse-mini: true
+    parse-papi: true
+    closing: true
+    message: '<yellow>Hello World!'

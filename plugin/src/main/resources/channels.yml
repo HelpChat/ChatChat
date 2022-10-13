@@ -13,6 +13,21 @@ channels:
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
     # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
     channel-prefix: '[global]'
+    formats: # Channel formats have priority over global formats declared in formats.yml
+      default-channel: # user needs 'chatchat.channel.format.global.default-channel' permission
+        priority: 1 # lower number = higher priority
+        parts:
+          channel:
+            - "<hover:show_text:'<aqua>This is a default channel format!'>"
+            - "%chatchat_channel_prefix%",
+            - "</hover>"
+          prefix:
+            - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
+          name:
+            - "<white>%player_name%"
+          message:
+            - " <gray>» <white><message>"
+
     # radius from sender other players need to be in to see sender's message. -1 for no radius
     radius: -1
   staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
@@ -20,6 +35,19 @@ channels:
       - 'staffchat'
     message-prefix: '#'
     channel-prefix: '[STAFF]'
+    default-channel: # user needs 'chatchat.channel.format.staff.default-channel' permission
+      priority: 1 # lower number = higher priority
+      parts:
+        channel:
+          - "<hover:show_text:'<aqua>This is a default channel format!'>"
+          - "%chatchat_channel_prefix%",
+          - "</hover>"
+        prefix:
+          - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
+        name:
+          - "<white>%player_name%"
+        message:
+          - " <gray>» <white><message>"
     radius: -1
 
 #  # this one's for towny, uncomment this section if you have towny installed

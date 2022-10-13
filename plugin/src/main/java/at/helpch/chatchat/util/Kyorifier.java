@@ -1,11 +1,12 @@
 package at.helpch.chatchat.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 
 public final class Kyorifier {
     private static final ImmutableMap<Character, String> COLOURS = new ImmutableMap.Builder<Character, String>()

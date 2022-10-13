@@ -1,7 +1,11 @@
 package at.helpch.chatchat.config;
 
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.channel.ChatChannel;
-import at.helpch.chatchat.format.BasicFormat;
+import at.helpch.chatchat.config.holder.FormatsHolderImpl;
+import at.helpch.chatchat.format.SimpleFormat;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -15,27 +19,43 @@ import java.util.List;
  */
 public final class DefaultConfigObjects {
 
-    public static @NotNull ChatChannel createDefaultChannel() {
-        return new ChatChannel("default",
-            "", List.of("global"), "<gray>[<blue>Global<gray>]", -1);
+    public static @NotNull Channel createDefaultChannel() {
+        return new ChatChannel("default", "",
+            List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), -1);
     }
 
-    public static @NotNull ChatChannel createStaffChannel() {
-        return new ChatChannel("staff",
-            "@", List.of("staffchat"), "<gray>[<green>Staff<gray>]", -1);
+    public static @NotNull Channel createStaffChannel() {
+        return new ChatChannel("staff", "@",
+            List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
 
-    public static @NotNull BasicFormat createDefaultConsoleFormat() {
+    public static @NotNull Format createDefaultConsoleFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
         map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
         map.put("name", List.of("<white>%player_name%"));
         map.put("message", List.of(" <gray>» <white><message>"));
-        return new BasicFormat("console-format", map);
+        return new SimpleFormat("console-format", map);
     }
 
-    public static @NotNull ChatFormat createDefaultFormat() {
+    public static @NotNull PriorityFormat createDefaultChannelFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put("channel", List.of(
+            "<hover:show_text:'<aqua>This is a default channel format!'>",
+            "%chatchat_channel_prefix%",
+            "</hover>"
+        ));
+        map.put("prefix", List.of(" <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
+        map.put("name", List.of("<white>%player_name%"));
+        map.put("message", List.of(" <gray>» <white><message>"));
+
+        return new ChatFormat("default-channel", 1, map);
+    }
+
+
+    public static @NotNull PriorityFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
@@ -46,7 +66,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("default", 2, map);
     }
 
-    public static @NotNull ChatFormat createOtherFormat() {
+    public static @NotNull PriorityFormat createOtherFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
@@ -64,7 +84,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("other", 1, map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageSenderFormat() {
+    public static @NotNull Format createPrivateMessageSenderFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>you"));
@@ -72,10 +92,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("sender", map);
+        return new SimpleFormat("sender", map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageRecipientFormat() {
+    public static @NotNull Format createPrivateMessageRecipientFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>%player_name%"));
@@ -83,10 +103,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray>you"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("recipient", map);
+        return new SimpleFormat("recipient", map);
     }
 
-    public static @NotNull BasicFormat createPrivateMessageSocialSpyFormat() {
+    public static @NotNull Format createPrivateMessageSocialSpyFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>(spy) "));
@@ -95,10 +115,10 @@ public final class DefaultConfigObjects {
         map.put("recipient", List.of("<gray><recipient:player_name>"));
         map.put("message", List.of(" <#e81cff>» <white><message>"));
 
-        return new BasicFormat("socialspy", map);
+        return new SimpleFormat("socialspy", map);
     }
 
-    public static @NotNull BasicFormat createMentionFormat() {
+    public static @NotNull Format createPersonalMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -110,7 +130,22 @@ public final class DefaultConfigObjects {
             )
         );
 
-        return new BasicFormat("mention", map);
+        return new SimpleFormat("personal-mention", map);
+    }
+
+    public static @NotNull Format createChannelMentionFormat() {
+        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
+
+        map.put(
+            "name",
+            List.of(
+                "<hover:show_text:\"<gold>This is a mention!\">",
+                "<yellow>@everyone",
+                "</hover>"
+            )
+        );
+
+        return new SimpleFormat("channel-mention", map);
     }
 
     public static @NotNull Sound createMentionSound() {

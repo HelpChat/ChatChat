@@ -1,21 +1,35 @@
 package at.helpch.chatchat;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.ChatChatAPI;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
+import at.helpch.chatchat.command.DumpCommand;
+import at.helpch.chatchat.command.FormatTestCommand;
+import at.helpch.chatchat.command.IgnoreCommand;
+import at.helpch.chatchat.command.MainCommand;
+import at.helpch.chatchat.command.MentionToggleCommand;
+import at.helpch.chatchat.command.ReloadCommand;
+import at.helpch.chatchat.command.ReplyCommand;
+import at.helpch.chatchat.command.SocialSpyCommand;
+import at.helpch.chatchat.command.SwitchChannelCommand;
+import at.helpch.chatchat.command.WhisperCommand;
+import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.api.hook.Hook;
-import at.helpch.chatchat.channel.ChannelTypeRegistry;
-import at.helpch.chatchat.command.*;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
-import at.helpch.chatchat.format.ChatFormat;
-import at.helpch.chatchat.hooks.HookManager;
+import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
-import at.helpch.chatchat.placeholder.ChatPlaceholders;
+import at.helpch.chatchat.mention.MentionManagerImpl;
+import at.helpch.chatchat.placeholder.MiniPlaceholderManagerImpl;
+import at.helpch.chatchat.placeholder.PlaceholderAPIPlaceholders;
+import at.helpch.chatchat.rule.RuleManagerImpl;
 import at.helpch.chatchat.user.UserSenderValidator;
-import at.helpch.chatchat.user.UsersHolder;
+import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -27,6 +41,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -44,17 +59,31 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final Database database = new GsonDatabase(this);
     private @NotNull
-    final UsersHolder usersHolder = new UsersHolder(this);
+    final UsersHolderImpl usersHolder = new UsersHolderImpl(this);
     private @NotNull
-    final ChannelTypeRegistry channelTypeRegistry = new ChannelTypeRegistry();
+    final ChannelTypeRegistryImpl channelTypeRegistryImpl = new ChannelTypeRegistryImpl();
     private @NotNull
-    final HookManager hookManager = new HookManager(this);
+    final HookManagerImpl hookManager = new HookManagerImpl(this);
+    private @NotNull
+    final RuleManagerImpl ruleManager = new RuleManagerImpl(this);
+    private @NotNull
+    final MentionManagerImpl mentionsManager = new MentionManagerImpl(this);
+    private @NotNull
+    final MiniPlaceholderManagerImpl miniPlaceholdersManager = new MiniPlaceholderManagerImpl();
+    private @NotNull
+    final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
+
+
     private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
-
     private BukkitTask dataSaveTask;
 
     private static long cacheDuration;
+
+    @Override
+    public void onLoad() {
+        getServer().getServicesManager().register(ChatChatAPI.class, api, this, ServicePriority.Highest);
+    }
 
     @Override
     public void onEnable() {
@@ -85,7 +114,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
-        new ChatPlaceholders(this).register();
+        new PlaceholderAPIPlaceholders(this).register();
 
         cacheDuration = configManager().settings().lastMessagedCacheDuration();
         dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
@@ -103,6 +132,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onDisable() {
         hookManager().hooks().forEach(Hook::disable);
         hookManager().vanishHooks().forEach(Hook::disable);
+        getServer().getServicesManager().unregisterAll(this);
 
         audiences.close();
         if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
@@ -122,7 +152,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         return configManager;
     }
 
-    public @NotNull UsersHolder usersHolder() {
+    public @NotNull UsersHolderImpl usersHolder() {
         return usersHolder;
     }
 
@@ -130,8 +160,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         return database;
     }
 
-    public @NotNull ChannelTypeRegistry channelTypeRegistry() {
-        return channelTypeRegistry;
+    public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
+        return channelTypeRegistryImpl;
     }
 
     public static @NotNull BukkitAudiences audiences() {
@@ -142,12 +172,28 @@ public final class ChatChatPlugin extends JavaPlugin {
         return commandManager;
     }
 
-    public @NotNull HookManager hookManager() {
+    public @NotNull HookManagerImpl hookManager() {
         return hookManager;
     }
 
+    public @NotNull RuleManagerImpl ruleManager() {
+        return ruleManager;
+    }
+
+    public @NotNull MentionManagerImpl mentionsManager() {
+        return mentionsManager;
+    }
+
+    public @NotNull MiniPlaceholderManagerImpl miniPlaceholdersManager() {
+        return miniPlaceholdersManager;
+    }
+
+    public @NotNull ChatChatAPIImpl api() {
+        return api;
+    }
+
     private void registerArguments() {
-        commandManager.registerArgument(ChatFormat.class, (sender, argument) ->
+        commandManager.registerArgument(PriorityFormat.class, (sender, argument) ->
             configManager().formats().formats().get(argument));
 
         commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
@@ -175,7 +221,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             .map(Player::getName)
             .collect(Collectors.toList())));
 
-        commandManager.registerSuggestion(ChatFormat.class, ((sender, context) ->
+        commandManager.registerSuggestion(PriorityFormat.class, ((sender, context) ->
             new ArrayList<>(configManager.formats().formats().keySet())
         ));
     }
@@ -187,7 +233,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
             sender.sendMessage(configManager.messages().unknownCommand()));
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
-            if (context.getArgumentType() == ChatFormat.class) {
+            if (context.getArgumentType() == PriorityFormat.class) {
                 sender.sendMessage(configManager.messages().invalidFormat());
                 return;
             }

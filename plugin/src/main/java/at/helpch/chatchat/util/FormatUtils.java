@@ -1,15 +1,15 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.config.holder.FormatsHolder;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,23 +20,35 @@ import java.util.stream.Collectors;
 
 public final class FormatUtils {
     private static final String FORMAT_PERMISSION = "chatchat.format.";
+    private static final String CHANNEL_FORMAT_PERMISSION = "chatchat.channel.format.";
 
     private FormatUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull Optional<ChatFormat> findPermissionFormat(
-            @NotNull final Player player,
-            @NotNull final Map<String, ChatFormat> formats) {
+    public static @NotNull Optional<PriorityFormat> findPermissionFormat(
+        @NotNull final Player player,
+        @NotNull final Channel channel,
+        @NotNull final Map<String, PriorityFormat> formats) {
+        final var channelFormat = channel.formats().formats().values().stream()
+            .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
+            .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
+
+        // Channel formats take precedent.
+        if (channelFormat.isPresent()) {
+            return channelFormat;
+        }
+
         return formats.values().stream()
-                .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
-                .min(Comparator.comparingInt(ChatFormat::priority)); // lower number = higher priority
+            .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
+            .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
     }
 
-    public static @NotNull ChatFormat findFormat(
-            @NotNull final Player player,
-            @NotNull final FormatsHolder formats) {
-        final var formatOptional = findPermissionFormat(player, formats.formats());
+    public static @NotNull PriorityFormat findFormat(
+        @NotNull final Player player,
+        @NotNull final Channel channel,
+        @NotNull final GlobalFormatsHolder formats) {
+        final var formatOptional = findPermissionFormat(player, channel, formats.formats());
 
         return formatOptional.orElse(ChatFormat.defaultFormat());
     }
@@ -57,9 +69,17 @@ public final class FormatUtils {
     }
 
     public static @NotNull Component parseFormat(
-            @NotNull final Format format,
-            @NotNull final Player player,
-            @NotNull final ComponentLike message) {
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final ComponentLike message) {
+        return parseFormat(format, player, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 player,
@@ -70,7 +90,33 @@ public final class FormatUtils {
                     .collect(Collectors.joining())
             ),
             Placeholder.component("message", message),
-            PapiTagUtils.createPlaceholderAPITag(player)
+            PapiTagUtils.createPlaceholderAPITag(player),
+            miniPlaceholders
+        );
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final ComponentLike message) {
+        return parseFormat(format, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
+        return MessageUtils.parseToMiniMessage(
+            PlaceholderAPI.setPlaceholders(
+                null,
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining())
+            ),
+            Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(null),
+            miniPlaceholders
         );
     }
 
@@ -79,6 +125,15 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final Player recipient,
         @NotNull final ComponentLike message) {
+        return parseFormat(format, player, recipient, message, TagResolver.empty());
+    }
+
+    public static @NotNull Component parseFormat(
+        @NotNull final Format format,
+        @NotNull final Player player,
+        @NotNull final Player recipient,
+        @NotNull final ComponentLike message,
+        @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setRelationalPlaceholders(
                 player,
@@ -95,21 +150,8 @@ public final class FormatUtils {
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
             PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
-            recipientTagResolver(recipient)
+            PapiTagUtils.createRecipientTag(recipient),
+            miniPlaceholders
         );
-    }
-
-    private static @NotNull TagResolver recipientTagResolver(@NotNull final Player player) {
-        return TagResolver.builder()
-            // Could make the name a set of strings if we want more alternative namings.
-            .tag("recipient", (queue, context) -> queue.hasNext()
-                // Parse <recipient:PLACEHOLDERS>
-                ? Tag.selfClosingInserting(
-                    LegacyComponentSerializer.legacySection()
-                        .deserialize(PlaceholderAPI.setPlaceholders(player, '%' + queue.pop().value() + '%')))
-
-                // Parse <recipient>
-                : Tag.selfClosingInserting(Component.text(player.getName()))
-            ).build();
     }
 }
