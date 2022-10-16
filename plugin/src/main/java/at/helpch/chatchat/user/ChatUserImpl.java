@@ -2,7 +2,7 @@ package at.helpch.chatchat.user;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.cache.ExpiringCache;
@@ -33,7 +33,7 @@ public final class ChatUserImpl implements ChatUser {
     private final UUID uuid;
     private Channel channel;
     // TODO: 8/9/22 Remove unused field!
-    private Format format;
+    private PriorityFormat format;
     private boolean privateMessages = true;
     private boolean personalMentions = true;
     private boolean channelMentions = true;
@@ -51,12 +51,12 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public @NotNull Format format() {
+    public @NotNull PriorityFormat format() {
         return format;
     }
 
     @Override
-    public void format(@NotNull final Format format) {
+    public void format(@NotNull final PriorityFormat format) {
         this.format = format;
     }
 

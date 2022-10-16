@@ -1,7 +1,7 @@
 package at.helpch.chatchat.api.event;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
@@ -23,7 +23,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
     private @NotNull final ChatUser user;
-    private @NotNull Format format;
+    private @NotNull PriorityFormat format;
     private @NotNull Component message;
     private @NotNull final Channel channel;
     private @NotNull final Set<User> recipients;
@@ -35,7 +35,7 @@ public class ChatChatEvent extends Event implements Cancellable {
     public ChatChatEvent(
         final boolean async,
         @NotNull final ChatUser user,
-        @NotNull final Format format,
+        @NotNull final PriorityFormat format,
         @NotNull final Component message,
         @NotNull final Channel channel,
         @NotNull Set<User> recipients) {
@@ -76,7 +76,7 @@ public class ChatChatEvent extends Event implements Cancellable {
      *
      * @return The format that will be used.
      */
-    public @NotNull Format format() {
+    public @NotNull PriorityFormat format() {
         return format;
     }
 
@@ -85,7 +85,7 @@ public class ChatChatEvent extends Event implements Cancellable {
      *
      * @param format The format that will be used.
      */
-    public void format(@NotNull final Format format) {
+    public void format(@NotNull final PriorityFormat format) {
         this.format = format;
     }
 

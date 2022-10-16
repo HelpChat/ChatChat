@@ -1,6 +1,6 @@
 package at.helpch.chatchat.api.event;
 
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.SimpleFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Cancellable;
@@ -18,8 +18,8 @@ public class PMSendEvent extends Event implements Cancellable {
 
     private @NotNull final ChatUser sender;
     private @NotNull final ChatUser recipient;
-    private @NotNull Format senderFormat;
-    private @NotNull Format recipientFormat;
+    private @NotNull SimpleFormat senderFormat;
+    private @NotNull SimpleFormat recipientFormat;
     private @NotNull Component message;
     private final boolean reply;
     
@@ -30,8 +30,8 @@ public class PMSendEvent extends Event implements Cancellable {
     public PMSendEvent(
         @NotNull final ChatUser sender,
         @NotNull final ChatUser recipient,
-        @NotNull final Format senderFormat,
-        @NotNull final Format recipientFormat,
+        @NotNull final SimpleFormat senderFormat,
+        @NotNull final SimpleFormat recipientFormat,
         @NotNull final Component message,
         final boolean reply
     ) {
@@ -77,38 +77,38 @@ public class PMSendEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the {@link Format} that will be used to format the message that the sender sees.
+     * Get the {@link SimpleFormat} that will be used to format the message that the sender sees.
      *
-     * @return the {@link Format} that will be used to format the message that the sender sees.
+     * @return the {@link SimpleFormat} that will be used to format the message that the sender sees.
      */
-    public @NotNull Format senderFormat() {
+    public @NotNull SimpleFormat senderFormat() {
         return senderFormat;
     }
 
     /**
-     * Change the {@link Format} that will be used to format the message that the sender sees.
+     * Change the {@link SimpleFormat} that will be used to format the message that the sender sees.
      *
-     * @param format the new {@link Format} that will be used to format the message that the sender sees.
+     * @param format the new {@link SimpleFormat} that will be used to format the message that the sender sees.
      */
-    public void senderFormat(@NotNull final Format format) {
+    public void senderFormat(@NotNull final SimpleFormat format) {
         this.senderFormat = format;
     }
 
     /**
-     * Get the {@link Format} that will be used to format the message that the recipient sees.
+     * Get the {@link SimpleFormat} that will be used to format the message that the recipient sees.
      *
-     * @return the {@link Format} that will be used to format the message that the recipient sees.
+     * @return the {@link SimpleFormat} that will be used to format the message that the recipient sees.
      */
-    public @NotNull Format recipientFormat() {
+    public @NotNull SimpleFormat recipientFormat() {
         return recipientFormat;
     }
 
     /**
-     * Change the {@link Format} that will be used to format the message that the recipient sees.
+     * Change the {@link SimpleFormat} that will be used to format the message that the recipient sees.
      *
-     * @param format the new {@link Format} that will be used to format the message that the recipient sees.
+     * @param format the new {@link SimpleFormat} that will be used to format the message that the recipient sees.
      */
-    public void recipientFormat(@NotNull final Format format) {
+    public void recipientFormat(@NotNull final SimpleFormat format) {
         this.recipientFormat = format;
     }
 

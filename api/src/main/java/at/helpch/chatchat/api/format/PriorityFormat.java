@@ -3,7 +3,7 @@ package at.helpch.chatchat.api.format;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a basic {@link Format} that has a priority. These are usually used for player formats.
+ * Represents a simple {@link Format} that has a priority. These are usually used for player formats.
  */
 public interface PriorityFormat extends Format {
 

@@ -2,7 +2,7 @@ package at.helpch.chatchat.user;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
@@ -30,12 +30,12 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public @NotNull Format format() {
+    public @NotNull PriorityFormat format() {
         return ChatFormat.defaultFormat();
     }
 
     @Override
-    public void format(@NotNull final Format format) {
+    public void format(@NotNull final PriorityFormat format) {
     }
 
     @Override

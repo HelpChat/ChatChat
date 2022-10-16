@@ -1,8 +1,8 @@
 package at.helpch.chatchat.config;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.format.SimpleFormat;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
@@ -14,7 +14,7 @@ import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
 import at.helpch.chatchat.config.mapper.MiniPlaceholderMapper;
 import at.helpch.chatchat.config.mapper.PriorityFormatMapper;
-import at.helpch.chatchat.format.SimpleFormat;
+import at.helpch.chatchat.format.SimpleFormatImpl;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.placeholder.MiniPlaceholderImpl;
 import io.leangen.geantyref.TypeToken;
@@ -98,8 +98,8 @@ public final class ConfigFactory {
                 .serializers(build -> build
                     .register(Component.class, new MiniMessageComponentMapper())
 
+                    .register(SimpleFormatImpl.class, new SimpleFormatMapper())
                     .register(SimpleFormat.class, new SimpleFormatMapper())
-                    .register(Format.class, new SimpleFormatMapper())
 
                     .register(PriorityFormat.class, new PriorityFormatMapper())
                     .register(ChatFormat.class, new PriorityFormatMapper())

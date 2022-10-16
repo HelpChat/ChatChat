@@ -3,6 +3,7 @@ package at.helpch.chatchat.util;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.format.SimpleFormat;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -54,7 +55,7 @@ public final class FormatUtils {
     }
 
     public static @NotNull Component parseConsoleFormat(
-        @NotNull final Format format,
+        @NotNull final SimpleFormat format,
         @NotNull final Player player) {
         return MessageUtils.parseToMiniMessage(
             PlaceholderAPI.setPlaceholders(

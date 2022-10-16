@@ -1,7 +1,7 @@
 package at.helpch.chatchat.api.user;
 
 import at.helpch.chatchat.api.channel.Channel;
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.PriorityFormat;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.identity.Identified;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +34,14 @@ public interface User extends ForwardingAudience.Single, Identified {
      * @return The user's chat format.
      * @WARNING This is currently not used by ChatChat at all!
      */
-    @NotNull Format format();
+    @NotNull PriorityFormat format();
 
     /**
      * Change the user's chat format.
      *
      * @param format The new chat format.
      */
-    void format(@NotNull final Format format);
+    void format(@NotNull final PriorityFormat format);
 
     /**
      * Get the user's unique identifier.

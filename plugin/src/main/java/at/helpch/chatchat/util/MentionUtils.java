@@ -1,6 +1,6 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.format.SimpleFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
@@ -71,7 +71,7 @@ public final class MentionUtils {
         @RegExp @NotNull final String username,
         @NotNull final User user,
         @NotNull final Component component,
-        @NotNull final Format format) {
+        @NotNull final SimpleFormat format) {
         return replaceMention(username, component, (r) -> user instanceof ChatUser
             ? FormatUtils.parseFormat(format, ((ChatUser) user).player(), component)
             : FormatUtils.parseFormat(format, component));
@@ -82,7 +82,7 @@ public final class MentionUtils {
         @NotNull final ChatUser user,
         @NotNull final String prefix,
         @NotNull final Component component,
-        @NotNull final Format format
+        @NotNull final SimpleFormat format
     ) {
         return replaceMention(prefix + user.player().getName(), component,
             r -> FormatUtils.parseFormat(format, user.player(), component));
@@ -90,7 +90,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final Format channelMentionFormat,
+        @NotNull final SimpleFormat channelMentionFormat,
         @NotNull final ChatUser user,
         @NotNull final User target,
         @NotNull final Component message
@@ -118,7 +118,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processPersonalMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final Format mentionFormat,
+        @NotNull final SimpleFormat mentionFormat,
         @NotNull final ChatUser user,
         @NotNull final ChatUser target,
         @NotNull final Component message

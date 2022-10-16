@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This is a simple format.
- */
 public interface Format {
 
     /**
