@@ -29,7 +29,7 @@ public final class DefaultConfigObjects {
             List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
 
-    public static @NotNull Format createDefaultConsoleFormat() {
+    public static @NotNull SimpleFormat createDefaultConsoleFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("channel", List.of("%chatchat_channel_prefix% "));
@@ -84,7 +84,7 @@ public final class DefaultConfigObjects {
         return new ChatFormat("other", 1, map);
     }
 
-    public static @NotNull Format createPrivateMessageSenderFormat() {
+    public static @NotNull SimpleFormat createPrivateMessageSenderFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>you"));
@@ -95,7 +95,7 @@ public final class DefaultConfigObjects {
         return new SimpleFormat("sender", map);
     }
 
-    public static @NotNull Format createPrivateMessageRecipientFormat() {
+    public static @NotNull SimpleFormat createPrivateMessageRecipientFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("sender", List.of("<gray>%player_name%"));
@@ -106,7 +106,7 @@ public final class DefaultConfigObjects {
         return new SimpleFormat("recipient", map);
     }
 
-    public static @NotNull Format createPrivateMessageSocialSpyFormat() {
+    public static @NotNull SimpleFormat createPrivateMessageSocialSpyFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>(spy) "));
@@ -118,7 +118,7 @@ public final class DefaultConfigObjects {
         return new SimpleFormat("socialspy", map);
     }
 
-    public static @NotNull Format createPersonalMentionFormat() {
+    public static @NotNull SimpleFormat createPersonalMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(
@@ -133,7 +133,7 @@ public final class DefaultConfigObjects {
         return new SimpleFormat("personal-mention", map);
     }
 
-    public static @NotNull Format createChannelMentionFormat() {
+    public static @NotNull SimpleFormat createChannelMentionFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put(

@@ -99,7 +99,6 @@ public final class ConfigFactory {
                     .register(Component.class, new MiniMessageComponentMapper())
 
                     .register(SimpleFormat.class, new SimpleFormatMapper())
-                    .register(Format.class, new SimpleFormatMapper())
 
                     .register(PriorityFormat.class, new PriorityFormatMapper())
                     .register(ChatFormat.class, new PriorityFormatMapper())
