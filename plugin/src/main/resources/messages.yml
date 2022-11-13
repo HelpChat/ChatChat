@@ -30,7 +30,7 @@ command-invalid-usage: <red>Invalid usage.
 command-invalid-argument: <red>Invalid argument.
 command-no-permission: <red>No Permission.
 
-dump-fail: <red>Failed to create dump!
+dump-failed: <red>Failed to create dump!
 dump-success: '<green>Dump created successfully! You can find it at: <url>'
 
 personal-mentions-enabled: "<green>Successfully enabled personal mentions!"

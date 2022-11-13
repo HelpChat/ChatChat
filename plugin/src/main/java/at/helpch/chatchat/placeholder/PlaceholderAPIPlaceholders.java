@@ -1,8 +1,7 @@
 package at.helpch.chatchat.placeholder;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import java.util.List;
+import at.helpch.chatchat.api.user.ChatUser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -10,10 +9,12 @@ import net.kyori.adventure.identity.Identity;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-public final class ChatPlaceholders extends PlaceholderExpansion {
+import java.util.List;
+
+public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     private final ChatChatPlugin plugin;
 
-    public ChatPlaceholders(@NotNull final ChatChatPlugin plugin) {
+    public PlaceholderAPIPlaceholders(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 

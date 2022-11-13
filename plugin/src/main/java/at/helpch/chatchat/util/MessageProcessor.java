@@ -1,11 +1,10 @@
 package at.helpch.chatchat.util;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.MentionType;
+import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
-import at.helpch.chatchat.api.event.MentionEvent;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.user.ConsoleUser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -37,8 +36,7 @@ public final class MessageProcessor {
         .build();
 
     private static final String URL_PERMISSION = "chatchat.url";
-    private static final String UTF_PERMISSION = "chatchat.utf";
-    private static final String TAG_BASE_PERMISSION = "chatchat.tag.";
+    public static final String TAG_BASE_PERMISSION = "chatchat.tag.";
     private static final String ITEM_TAG_PERMISSION = TAG_BASE_PERMISSION + "item";
 
     private static final Map<String, TagResolver> PERMISSION_TAGS = Map.ofEntries(
@@ -66,16 +64,19 @@ public final class MessageProcessor {
         @NotNull final String message,
         final boolean async
     ) {
-        if (StringUtils.containsIllegalChars(message) && !user.hasPermission(UTF_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().specialCharactersNoPermission());
+        final var rulesResult = plugin.ruleManager().isAllowedPublicChat(user, message);
+        if (rulesResult.isPresent()) {
+            user.sendMessage(rulesResult.get());
             return false;
         }
 
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            FormatUtils.findFormat(user.player(), plugin.configManager().formats()),
-            MessageProcessor.processMessage(plugin, user, message),
+            FormatUtils.findFormat(user.player(), channel, plugin.configManager().formats()),
+            // TODO: 9/2/22 Process message for each recipient to add rel support inside the message itself.
+            //  Possibly even pass the minimessage string here instead of the processed component.
+            MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message),
             channel,
             channel.targets(user)
         );
@@ -90,11 +91,7 @@ public final class MessageProcessor {
         user.channel(channel);
 
         final var parsedMessage = chatEvent.message().compact();
-
-        final var mentionPrefix = plugin.configManager().settings().mentionPrefix();
-        final var mentionSound = plugin.configManager().settings().mentionSound();
-        final var personalMentionFormat = plugin.configManager().settings().mentionFormat();
-        final var channelMentionFormat = plugin.configManager().settings().channelMentionFormat();
+        final var mentions = plugin.configManager().settings().mentions();
 
         var userMessage = parsedMessage;
         var userIsTarget = false;
@@ -105,101 +102,43 @@ public final class MessageProcessor {
                 continue;
             }
 
+            // Console Users have their own format we set in ChatListener.java
             if (target instanceof ConsoleUser) continue;
 
-            final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-                mentionPrefix,
-                channelMentionFormat,
-                user,
-                target,
-                parsedMessage
-            );
-
-            final var channelMentionEvent = new MentionEvent(
+            // Process mentions and get the result.
+            final var mentionResult = plugin.mentionsManager().processMentions(
                 async,
                 user,
                 target,
                 chatEvent.channel(),
-                MentionType.CHANNEL
+                parsedMessage,
+                true
             );
 
-            if (channelMentionProcessResult.getKey()) {
-                plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
-            }
-
-            // Personal mentions can only be used towards ChatUsers.
-            if (!(target instanceof ChatUser)) {
-                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                    final var component = FormatUtils.parseFormat(
-                        chatEvent.format(),
-                        user.player(),
-                        parsedMessage
-                    );
-
-                    target.sendMessage(component);
-                    continue;
-                }
+            if (target instanceof ChatUser) {
+                final var chatTarget = (ChatUser) target;
 
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
                     user.player(),
-                    channelMentionProcessResult.getValue()
+                    chatTarget.player(),
+                    mentionResult.message(),
+                    plugin.miniPlaceholdersManager().compileTags(false, user, target)
                 );
 
                 target.sendMessage(component);
-                if (user.canSee(target)) {
-                    target.playSound(mentionSound);
+                if (mentionResult.playSound()) {
+                    target.playSound(mentions.sound());
                 }
-                continue;
-            }
-
-            final var chatUserTarget = (ChatUser) target;
-
-            final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-                mentionPrefix,
-                personalMentionFormat,
-                user,
-                chatUserTarget,
-                !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
-                    ? parsedMessage
-                    : channelMentionProcessResult.getValue()
-            );
-
-            final var personalMentionEvent = new MentionEvent(
-                async,
-                user,
-                target,
-                chatEvent.channel(),
-                MentionType.PERSONAL
-            );
-
-            if (personalMentionProcessResult.getKey()) {
-                plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
-            }
-
-            if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
-                if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                    final var component = FormatUtils.parseFormat(
-                        chatEvent.format(),
-                        user.player(),
-                        chatUserTarget.player(),
-                        parsedMessage
-                    );
-
-                    target.sendMessage(component);
-                    continue;
-                }
-
-                final var component = FormatUtils.parseFormat(
-                    chatEvent.format(),
-                    user.player(),
-                    chatUserTarget.player(),
-                    channelMentionProcessResult.getValue()
-                );
-
-                target.sendMessage(component);
-                if (user.canSee(target)) {
-                    target.playSound(mentionSound);
+                if (user.canSee(chatTarget)) {
+                    userMessage = plugin.mentionsManager().processMentions(
+                        async,
+                        user,
+                        chatTarget,
+                        chatEvent.channel(),
+                        userMessage,
+                        false
+                    ).message();
                 }
                 continue;
             }
@@ -207,20 +146,13 @@ public final class MessageProcessor {
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
                 user.player(),
-                chatUserTarget.player(),
-                personalMentionProcessResult.getValue()
+                mentionResult.message(),
+                plugin.miniPlaceholdersManager().compileTags(false, user, target)
             );
 
             target.sendMessage(component);
-            if (user.canSee(target)) {
-                target.playSound(mentionSound);
-                userMessage = MentionUtils.processPersonalMentions(
-                    mentionPrefix,
-                    personalMentionFormat,
-                    user,
-                    chatUserTarget,
-                    userMessage
-                ).getValue();
+            if (mentionResult.playSound()) {
+                target.playSound(mentions.sound());
             }
         }
 
@@ -229,84 +161,28 @@ public final class MessageProcessor {
             return true;
         }
 
-        final var channelMentionProcessResult = MentionUtils.processChannelMentions(
-            mentionPrefix,
-            channelMentionFormat,
-            user,
-            user,
-            userMessage
-        );
-
-        final var channelMentionEvent = new MentionEvent(
+        final var mentionResult = plugin.mentionsManager().processMentions(
             async,
             user,
             user,
             chatEvent.channel(),
-            MentionType.CHANNEL
+            parsedMessage,
+            true
         );
-
-        if (channelMentionProcessResult.getKey()) {
-            plugin.getServer().getPluginManager().callEvent(channelMentionEvent);
-        }
-
-        final var personalMentionProcessResult = MentionUtils.processPersonalMentions(
-            mentionPrefix,
-            personalMentionFormat,
-            user,
-            user,
-            !channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()
-                ? userMessage
-                : channelMentionProcessResult.getValue()
-        );
-
-        final var personalMentionEvent = new MentionEvent(
-            async,
-            user,
-            user,
-            chatEvent.channel(),
-            MentionType.PERSONAL
-        );
-
-        if (personalMentionProcessResult.getKey()) {
-            plugin.getServer().getPluginManager().callEvent(personalMentionEvent);
-        }
-
-        if (!personalMentionProcessResult.getKey() || personalMentionEvent.isCancelled()) {
-            if (!channelMentionProcessResult.getKey() || channelMentionEvent.isCancelled()) {
-                final var component = FormatUtils.parseFormat(
-                    chatEvent.format(),
-                    user.player(),
-                    user.player(),
-                    userMessage
-                );
-
-                user.sendMessage(component);
-                user.channel(oldChannel);
-                return true;
-            }
-
-            final var component = FormatUtils.parseFormat(
-                chatEvent.format(),
-                user.player(),
-                user.player(),
-                channelMentionProcessResult.getValue()
-            );
-
-            user.playSound(mentionSound);
-            user.sendMessage(component);
-            user.channel(oldChannel);
-            return true;
-        }
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
             user.player(),
             user.player(),
-            personalMentionProcessResult.getValue()
+            mentionResult.message(),
+            plugin.miniPlaceholdersManager().compileTags(false, user, user)
         );
 
-        user.playSound(mentionSound);
         user.sendMessage(component);
+        if (mentionResult.playSound()) {
+            user.playSound(mentions.sound());
+        }
+
         user.channel(oldChannel);
         return true;
     }
@@ -314,8 +190,9 @@ public final class MessageProcessor {
     public static @NotNull Component processMessage(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,
-        @NotNull final String message) {
-
+        @NotNull final User recipient,
+        @NotNull final String message
+    ) {
         final var resolver = TagResolver.builder();
 
         for (final var entry : PERMISSION_TAGS.entrySet()) {
@@ -343,6 +220,8 @@ public final class MessageProcessor {
                 )
             );
         }
+
+        resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(true, user, recipient));
 
         return !user.hasPermission(URL_PERMISSION)
             ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())

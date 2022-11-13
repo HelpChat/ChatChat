@@ -1,14 +1,13 @@
-package at.helpch.chatchat.util;
+package at.helpch.chatchat.api.utils;
 
 import at.helpch.chatchat.api.hook.Hook;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
 public final class Validators {
 
-    private final static Pattern HOOK_NAME_PATTERN = Pattern.compile("(?<pluginname>\\w+):(?<hookname>\\w+)");
+    private final static Pattern HOOK_NAME_PATTERN = Pattern.compile("(?<name>\\w+)");
 
     private Validators() {
         throw new AssertionError("Util classes are not to be instantiated!");
@@ -26,19 +25,9 @@ public final class Validators {
             return false;
         }
 
-        final var pluginName = matcher.group("pluginname");
-        final var hookName = matcher.group("hookname");
+        final var hookName = matcher.group("name");
 
-        if (pluginName == null || hookName == null) {
-            return false;
-        }
-
-        final var plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        if (plugin == null || !plugin.isEnabled()) { // Not simplifying this in case we want to add extra checks in the future.
-            return false;
-        }
-
-        return true;
+        return hookName != null;
     }
 
 }

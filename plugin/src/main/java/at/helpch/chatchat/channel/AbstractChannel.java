@@ -1,7 +1,8 @@
 package at.helpch.chatchat.channel;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.holder.FormatsHolder;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,18 +18,23 @@ public abstract class AbstractChannel implements Channel {
 
     private final String channelPrefix;
 
+    private final FormatsHolder formats;
+
     private final int radius;
 
     protected AbstractChannel(
-            @NotNull final String name,
-            @NotNull final String messagePrefix,
-            @NotNull final List<String> toggleCommands,
-            @NotNull final String channelPrefix,
-            final int radius) {
+        @NotNull final String name,
+        @NotNull final String messagePrefix,
+        @NotNull final List<String> toggleCommands,
+        @NotNull final String channelPrefix,
+        @NotNull final FormatsHolder formats,
+        final int radius
+    ) {
         this.name = name;
         this.messagePrefix = messagePrefix;
         this.toggleCommands = toggleCommands;
         this.channelPrefix = channelPrefix;
+        this.formats = formats;
         this.radius = radius;
     }
 
@@ -53,6 +59,11 @@ public abstract class AbstractChannel implements Channel {
     }
 
     @Override
+    public @NotNull FormatsHolder formats() {
+        return formats;
+    }
+
+    @Override
     public int radius() {
         return radius;
     }
@@ -70,9 +81,11 @@ public abstract class AbstractChannel implements Channel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChatChannel that = (ChatChannel) o;
-        return messagePrefix.equals(that.messagePrefix()) &&
-                toggleCommands.equals(that.commandNames()) &&
-                channelPrefix.equals(that.channelPrefix());
+        AbstractChannel that = (AbstractChannel) o;
+        return name.equals(that.name()) &&
+            messagePrefix.equals(that.messagePrefix()) &&
+            toggleCommands.equals(that.commandNames()) &&
+            channelPrefix.equals(that.channelPrefix()) &&
+            radius == that.radius();
     }
 }

@@ -1,8 +1,8 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.Channel;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChatChannel;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

@@ -1,12 +1,15 @@
 package at.helpch.chatchat.util;
 
-import java.util.ArrayList;
-import java.util.Locale;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public final class PapiTagUtils {
 
@@ -14,8 +17,15 @@ public final class PapiTagUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull TagResolver createPlaceholderAPITag(final @NotNull Player player) {
-        return TagResolver.resolver("papi", (argumentQueue, context) -> {
+    public static @NotNull TagResolver createPlaceholderAPITag(final @Nullable OfflinePlayer player) {
+        return createPlaceholderAPITag("papi", player);
+    }
+
+    public static @NotNull TagResolver createPlaceholderAPITag(
+        final @NotNull String name,
+        final @Nullable OfflinePlayer player
+    ) {
+        return TagResolver.resolver(name, (argumentQueue, context) -> {
             if (!argumentQueue.hasNext()) {
                 return null;
             }
@@ -122,5 +132,9 @@ public final class PapiTagUtils {
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });
+    }
+
+    public static @NotNull TagResolver createRecipientTag(@NotNull final Player player) {
+        return createPlaceholderAPITag("recipient", player);
     }
 }

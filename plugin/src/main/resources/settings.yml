@@ -48,32 +48,34 @@ item-format: '<gray>[</gray><item><gray> x <amount>]'
 # Set to empty string '' if you want to disable it from ever showing.
 item-format-info: '<dark_gray><item> x <amount>'
 
-# The prefix to use for mentioning players
-mention-prefix: '@'
-
-# The format to use for individual player mentions
-mention-format:
-  parts:
-    name:
-      - '<hover:show_text:"<gold>This is a mention!">'
-      - '<yellow>@%player_name%'
-      - '</hover>'
-
-# The format to use for @channel/@here/@everyone
-channel-mention-format: '<yellow>'
-
-# The sound to play when a player is mentioned
-# The sounds use the format of adventure sounds, which in turn use the original minecraft names, NOT spigot's.
-# Name - Set the sound to play: names of all sounds can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
-# Source - set where the source can be played through, the list of all sources can also be found on the above website.
-mention-sound:
-  name: entity.experience_orb.pickup
-  source: master
-  pitch: 1
-  volume: 1
-
-# Whether to play the mention sound when a user receives a private message
-mention-on-message: true
+mentions:
+  # The prefix to use for mentioning players in chat. Set to empty string '' if you want to disable mentions.
+  prefix: '@'
+  # Whether to play the mention sound when a user receives a private message
+  private-message: true
+  # The sound to play when a player is mentioned
+  # The sounds use the format of adventure sounds, which in turn use the original minecraft names, NOT spigot's.
+  # Name - Set the sound to play: names of all sounds can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
+  # Source - set where the source can be played through, the list of all sources can also be found on the above website.
+  sound:
+    name: entity.experience_orb.pickup
+    source: master
+    pitch: 1
+    volume: 1
+  # The format to use for individual player mentions.
+  personal-format:
+    parts:
+      name:
+        - '<hover:show_text:"<gold>This is a mention!">'
+        - '<yellow>@%player_name%'
+        - '</hover>'
+    # The format to use for @channel/@here/@everyone mentions.
+  channel-format:
+    parts:
+      name:
+        - '<hover:show_text:"<gold>This is a channel mention!">'
+        - '<yellow>@everyone'
+        - '</hover>'
 
 # After how many seconds should the last messaged user be cleared. Set to below 0 to disable expiration.
 last-messaged-cache-duration: 300

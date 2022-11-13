@@ -1,9 +1,8 @@
 package at.helpch.chatchat.util;
 
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.Format;
-import at.helpch.chatchat.api.User;
-import at.helpch.chatchat.format.BasicFormat;
+import at.helpch.chatchat.api.format.Format;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.Contract;
@@ -67,12 +66,15 @@ public final class MentionUtils {
         return new MentionReplaceResult(hasBeenReplaced.get(), replaced);
     }
 
-    @Contract(value = "_, _, _ -> new", pure = true)
+    @Contract(value = "_, _, _, _ -> new", pure = true)
     public static MentionReplaceResult replaceMention(
         @RegExp @NotNull final String username,
+        @NotNull final User user,
         @NotNull final Component component,
-        @NotNull final String format) {
-        return replaceMention(username, component, (r) -> MessageUtils.parseToMiniMessage(format + r.group()));
+        @NotNull final Format format) {
+        return replaceMention(username, component, (r) -> user instanceof ChatUser
+            ? FormatUtils.parseFormat(format, ((ChatUser) user).player(), component)
+            : FormatUtils.parseFormat(format, component));
     }
 
     @Contract(value = "_, _, _, _ -> new", pure = true)
@@ -88,7 +90,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final String channelMentionFormat,
+        @NotNull final Format channelMentionFormat,
         @NotNull final ChatUser user,
         @NotNull final User target,
         @NotNull final Component message
@@ -107,6 +109,7 @@ public final class MentionUtils {
 
         final var replaced = MentionUtils.replaceMention(
             mentionPrefix + "(everyone|here|channel)",
+            target,
             message,
             channelMentionFormat);
 
@@ -115,7 +118,7 @@ public final class MentionUtils {
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processPersonalMentions(
         @NotNull final String mentionPrefix,
-        @NotNull final BasicFormat mentionFormat,
+        @NotNull final Format mentionFormat,
         @NotNull final ChatUser user,
         @NotNull final ChatUser target,
         @NotNull final Component message

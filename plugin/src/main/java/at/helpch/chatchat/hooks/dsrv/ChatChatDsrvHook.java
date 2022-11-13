@@ -1,17 +1,19 @@
 package at.helpch.chatchat.hooks.dsrv;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.hook.Hook;
+import at.helpch.chatchat.hooks.AbstractInternalHook;
 import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class ChatChatDsrvHook implements Hook {
+public final class ChatChatDsrvHook extends AbstractInternalHook {
     private static final String DISCORD_SRV = "DiscordSRV";
 
     private final ChatChatPlugin plugin;
 
     public ChatChatDsrvHook(@NotNull final ChatChatPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
     }
 
@@ -22,7 +24,7 @@ public final class ChatChatDsrvHook implements Hook {
 
     @Override
     public @NotNull String name() {
-        return "ChatChat:" + DISCORD_SRV + "Hook";
+        return DISCORD_SRV + "Hook";
     }
 
     @Override

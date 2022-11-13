@@ -1,19 +1,20 @@
 package at.helpch.chatchat.user;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.api.user.UsersHolder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public final class UsersHolder {
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public final class UsersHolderImpl implements UsersHolder {
 
     public static final User CONSOLE = ConsoleUser.INSTANCE;
 
@@ -21,7 +22,7 @@ public final class UsersHolder {
 
     private @NotNull final Map<UUID, User> users = new HashMap<>();
 
-    public UsersHolder(@NotNull final ChatChatPlugin plugin) {
+    public UsersHolderImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
         users.put(CONSOLE.uuid(), CONSOLE);
     }

@@ -1,8 +1,10 @@
 package at.helpch.chatchat.channel;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
-import at.helpch.chatchat.api.User;
+import at.helpch.chatchat.api.channel.Channel;
+import at.helpch.chatchat.api.holder.FormatsHolder;
+import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.config.DefaultConfigObjects;
 import at.helpch.chatchat.util.ChannelUtils;
@@ -17,22 +19,24 @@ import java.util.stream.Collectors;
 @ConfigSerializable
 public final class ChatChannel extends AbstractChannel {
 
-    private static ChatChannel defaultChannel = DefaultConfigObjects.createDefaultChannel();
+    private static Channel defaultChannel = DefaultConfigObjects.createDefaultChannel();
 
     public ChatChannel(
         @NotNull final String name,
         @NotNull final String messagePrefix,
         @NotNull final List<String> toggleCommands,
         @NotNull final String channelPrefix,
-        final int radius) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, radius);
+        @NotNull final FormatsHolder formats,
+        final int radius
+    ) {
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
     }
 
-    public static @NotNull ChatChannel defaultChannel() {
+    public static @NotNull Channel defaultChannel() {
         return defaultChannel;
     }
 
-    public static void defaultChannel(@NotNull final ChatChannel toSet) {
+    public static void defaultChannel(@NotNull final Channel toSet) {
         defaultChannel = toSet;
     }
 
@@ -55,11 +59,12 @@ public final class ChatChannel extends AbstractChannel {
         final Predicate<User> filterIgnores = user -> user instanceof ChatUser &&
             (!user.ignoredUsers().contains(source.uuid()) || source.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
 
-        if (plugin.configManager().channels().defaultChannel().equals(this.name()))
+        if (ChatChannel.defaultChannel().equals(this)) {
             return plugin.usersHolder().users().stream()
                 .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
                 .filter(filterIgnores)
                 .collect(Collectors.toSet());
+        }
 
         return plugin.usersHolder().users().stream().filter(user ->
                 user.hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))

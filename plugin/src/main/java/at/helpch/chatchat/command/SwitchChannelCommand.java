@@ -1,7 +1,7 @@
 package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
-import at.helpch.chatchat.api.ChatUser;
+import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.hooks.towny.AbstractTownyChannel;
 import at.helpch.chatchat.util.MessageProcessor;
 import com.palmergames.bukkit.towny.TownyUniverse;
