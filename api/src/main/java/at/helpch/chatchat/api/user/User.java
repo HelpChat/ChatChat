@@ -31,8 +31,9 @@ public interface User extends ForwardingAudience.Single, Identified {
     /**
      * Get the user's chat format.
      *
+     * <p>WARNING This is currently not used by ChatChat at all!</p>
+     *
      * @return The user's chat format.
-     * @WARNING This is currently not used by ChatChat at all!
      */
     @NotNull Format format();
 
