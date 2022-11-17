@@ -1,5 +1,4 @@
 import dev.triumphteam.helper.*
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("chatchat.base-conventions")
@@ -187,7 +186,7 @@ bukkit {
 }
 
 tasks {
-    withType<ShadowJar> {
+    shadowJar {
         listOf("net.kyori",
             "dev.triumphteam",
             "org.spongepowered",
@@ -197,5 +196,8 @@ tasks {
         ).forEach { relocate(it, "at.helpch.chatchat.libs.$it") }
 
         archiveFileName.set("ChatChat-${project.version}.jar")
+    }
+    assemble {
+        dependsOn(shadowJar)
     }
 }
