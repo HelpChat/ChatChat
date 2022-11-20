@@ -3,8 +3,6 @@ package at.helpch.chatchat.util;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -70,8 +68,8 @@ public final class PapiTagUtils {
                 return null;
             }
 
-            final var componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(
-                ChatColor.translateAlternateColorCodes('&', parsedPlaceholder));
+            final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
+            final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });
@@ -129,8 +127,8 @@ public final class PapiTagUtils {
                 return null;
             }
 
-            final var componentPlaceholder = LegacyComponentSerializer.legacySection().deserialize(
-                ChatColor.translateAlternateColorCodes('&', parsedPlaceholder));
+            final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
+            final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });

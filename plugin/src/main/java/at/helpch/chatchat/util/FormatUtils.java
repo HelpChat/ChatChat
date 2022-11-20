@@ -10,7 +10,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,11 +57,8 @@ public final class FormatUtils {
     public static @NotNull Component parseConsoleFormat(
         @NotNull final Format format,
         @NotNull final Player player) {
-        final Pair<String, TagResolver> pair = PAPIMiniMessageProcessor.process(player, flattenFormat(format));
         return MessageUtils.parseToMiniMessage(
-            pair.getLeft().replace("<message>", "%2$s"),
-            pair.getRight()
-        );
+            PAPIMiniMessageProcessor.process(player, flattenFormat(format)).replace("<message>", "%2$s"));
     }
 
     public static @NotNull Component parseFormat(
@@ -77,13 +73,11 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        final Pair<String, TagResolver> pair = PAPIMiniMessageProcessor.process(player, flattenFormat(format));
         return MessageUtils.parseToMiniMessage(
-            pair.getLeft(),
+            PAPIMiniMessageProcessor.process(player, flattenFormat(format)),
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
-            miniPlaceholders,
-            pair.getRight()
+            miniPlaceholders
         );
     }
 
@@ -97,13 +91,11 @@ public final class FormatUtils {
         @NotNull final Format format,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        final Pair<String, TagResolver> pair = PAPIMiniMessageProcessor.process(flattenFormat(format));
         return MessageUtils.parseToMiniMessage(
-            pair.getLeft(),
+            PAPIMiniMessageProcessor.process(flattenFormat(format)),
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(null),
-            miniPlaceholders,
-            pair.getRight()
+            miniPlaceholders
         );
     }
 
@@ -121,23 +113,21 @@ public final class FormatUtils {
         @NotNull final Player recipient,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        final Pair<String, TagResolver> pair = PAPIMiniMessageProcessor.process(
-            PlaceholderAPI.getPlaceholderPattern(), // Standard placeholder pattern also matches relative
-            s -> PlaceholderAPI.setRelationalPlaceholders(
-                player,
-                recipient,
-                PlaceholderAPI.setPlaceholders(player, s)
-            ),
-            flattenFormat(format)
-        );
         return MessageUtils.parseToMiniMessage(
-            pair.getLeft(),
+            PAPIMiniMessageProcessor.process(
+                PlaceholderAPI.getPlaceholderPattern(), // Standard placeholder pattern also matches relative
+                s -> PlaceholderAPI.setRelationalPlaceholders(
+                    player,
+                    recipient,
+                    PlaceholderAPI.setPlaceholders(player, s)
+                ),
+                flattenFormat(format)
+            ),
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
             PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
             PapiTagUtils.createRecipientTag(recipient),
-            miniPlaceholders,
-            pair.getRight()
+            miniPlaceholders
         );
     }
 
