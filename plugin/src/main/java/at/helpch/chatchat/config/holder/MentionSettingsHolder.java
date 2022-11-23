@@ -2,6 +2,7 @@ package at.helpch.chatchat.config.holder;
 
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.config.DefaultConfigObjects;
+import at.helpch.chatchat.format.SimpleFormat;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -14,8 +15,8 @@ public final class MentionSettingsHolder {
     private String prefix = "@";
     private Sound sound = DefaultConfigObjects.createMentionSound();
     private boolean privateMessage = true;
-    private Format personalFormat = DefaultConfigObjects.createPersonalMentionFormat();
-    private Format channelFormat = DefaultConfigObjects.createChannelMentionFormat();
+    private SimpleFormat personalFormat = DefaultConfigObjects.createPersonalMentionFormat();
+    private SimpleFormat channelFormat = DefaultConfigObjects.createChannelMentionFormat();
 
     public @NotNull String prefix() {
         return prefix;

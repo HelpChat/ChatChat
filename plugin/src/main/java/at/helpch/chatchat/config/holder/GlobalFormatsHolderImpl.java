@@ -4,6 +4,7 @@ import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.config.DefaultConfigObjects;
+import at.helpch.chatchat.format.SimpleFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -16,7 +17,7 @@ public final class GlobalFormatsHolderImpl implements GlobalFormatsHolder {
 
     private String defaultFormat = "default";
 
-    private Format consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
+    private SimpleFormat consoleFormat = DefaultConfigObjects.createDefaultConsoleFormat();
 
     private Map<String, PriorityFormat> formats = Map.of(
         "other", DefaultConfigObjects.createOtherFormat(),

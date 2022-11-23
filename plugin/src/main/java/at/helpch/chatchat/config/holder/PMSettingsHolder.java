@@ -2,6 +2,7 @@ package at.helpch.chatchat.config.holder;
 
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.config.DefaultConfigObjects;
+import at.helpch.chatchat.format.SimpleFormat;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -26,9 +27,9 @@ public final class PMSettingsHolder {
     @SuppressWarnings("FieldMayBeFinal")
     @ConfigSerializable
     public static final class PMFormats {
-        private Format senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
-        private Format recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
-        private Format socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
+        private SimpleFormat senderFormat = DefaultConfigObjects.createPrivateMessageSenderFormat();
+        private SimpleFormat recipientFormat = DefaultConfigObjects.createPrivateMessageRecipientFormat();
+        private SimpleFormat socialSpyFormat = DefaultConfigObjects.createPrivateMessageSocialSpyFormat();
 
         public @NotNull Format senderFormat() {
             return senderFormat;
