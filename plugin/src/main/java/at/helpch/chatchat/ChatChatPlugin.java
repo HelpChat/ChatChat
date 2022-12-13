@@ -15,6 +15,7 @@ import at.helpch.chatchat.command.ReloadCommand;
 import at.helpch.chatchat.command.ReplyCommand;
 import at.helpch.chatchat.command.SocialSpyCommand;
 import at.helpch.chatchat.command.SwitchChannelCommand;
+import at.helpch.chatchat.command.UnignoreCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.api.hook.Hook;
@@ -255,6 +256,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         List.of(
             new MainCommand(),
             new IgnoreCommand(this),
+            new UnignoreCommand(this),
             new ReloadCommand(this),
             new MentionToggleCommand(this),
             new FormatTestCommand(this),
