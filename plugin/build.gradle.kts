@@ -1,5 +1,6 @@
 import dev.triumphteam.helper.*
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonPointer.compile
 
 plugins {
     id("chatchat.base-conventions")
@@ -34,6 +35,7 @@ dependencies {
     compileOnly(libs.essentials)
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
+    compileOnly(libs.griefprevention)
 }
 
 bukkit {
@@ -41,7 +43,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish")
+    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish", "GriefPrevention")
     loadbefore = listOf("Essentials")
     apiVersion = "1.13"
     permissions {

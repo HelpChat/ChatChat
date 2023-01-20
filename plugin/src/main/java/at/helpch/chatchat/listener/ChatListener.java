@@ -15,6 +15,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UnknownFormatConversionException;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,17 @@ public final class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
+        final var player = event.getPlayer();
+        final var user = (ChatUser) plugin.usersHolder().getUser(player);
+
+        if (plugin.hookManager()
+            .muteHooks()
+            .stream()
+            .filter(Objects::nonNull)
+            .anyMatch(hook -> hook.isMuted(user))) {
+            return;
+        }
+
         try {
             event.getRecipients().clear();
         } catch (UnsupportedOperationException ignored) {
@@ -38,9 +50,6 @@ public final class ChatListener implements Listener {
         }
 
         event.setMessage(cleanseMessage(event.getMessage()));
-
-        final var player = event.getPlayer();
-        final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
         final var channelByPrefix =
             ChannelUtils.findChannelByPrefix(
