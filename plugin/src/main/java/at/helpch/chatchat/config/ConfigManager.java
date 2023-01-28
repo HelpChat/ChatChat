@@ -39,11 +39,15 @@ public final class ConfigManager {
 
         channels();
         final var defaultChannel = channels.channels().get(channels.defaultChannel());
-        ChatChannel.defaultChannel(
-            defaultChannel instanceof ChatChannel
-                ? defaultChannel
-                : DefaultConfigObjects.createDefaultChannel()
-        );
+        if (defaultChannel instanceof ChatChannel) {
+            ChatChannel.defaultChannel(defaultChannel);
+        } else {
+            plugin.getLogger().warning(
+                "Could not find a channel named " + channels.defaultChannel() + "." + System.lineSeparator() +
+                    "Using an internal channel as the default channel."
+            );
+            ChatChannel.defaultChannel(DefaultConfigObjects.createDefaultChannel());
+        }
 
         settings();
 
