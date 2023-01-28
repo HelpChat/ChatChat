@@ -33,55 +33,55 @@ public final class WhisperCommand extends BaseCommand {
     @Default
     @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(
-        final ChatUser user,
+        final ChatUser sender,
         @Suggestion(value = "recipients") final ChatUser recipient,
         @Join final String message
     ) {
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
-            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            sender.sendMessage(plugin.configManager().messages().unknownCommand());
             return;
         }
 
-        if (!user.privateMessages()) {
-            user.sendMessage(plugin.configManager().messages().repliesDisabled());
+        if (!sender.privateMessages()) {
+            sender.sendMessage(plugin.configManager().messages().repliesDisabled());
             return;
         }
 
-        if (user.equals(recipient)) {
-            user.sendMessage(plugin.configManager().messages().cantMessageYourself());
+        if (sender.equals(recipient)) {
+            sender.sendMessage(plugin.configManager().messages().cantMessageYourself());
             return;
         }
 
-        if (!user.canSee(recipient) && !reply) {
-            user.sendMessage(plugin.configManager().messages().userOffline());
+        if (!sender.canSee(recipient) && !reply) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
             return;
         }
 
         if (!recipient.privateMessages()) {
-            user.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
+            sender.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
             return;
         }
 
-        if (recipient.ignoredUsers().contains(user.uuid()) &&
-            !user.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+        if (recipient.ignoredUsers().contains(sender.uuid()) &&
+            !sender.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
+            sender.sendMessage(plugin.configManager().messages().cantMessageGeneral());
             return;
         }
 
-        if (user.ignoredUsers().contains(recipient.uuid()) &&
+        if (sender.ignoredUsers().contains(recipient.uuid()) &&
             !recipient.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
+            sender.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
             return;
         }
 
         if (message.isBlank()) {
-            user.sendMessage(plugin.configManager().messages().emptyMessage());
+            sender.sendMessage(plugin.configManager().messages().emptyMessage());
             return;
         }
 
-        final var rulesResult = plugin.ruleManager().isAllowedPrivateChat(user, recipient, message);
+        final var rulesResult = plugin.ruleManager().isAllowedPrivateChat(sender, recipient, message);
         if (rulesResult.isPresent()) {
-            user.sendMessage(rulesResult.get());
+            sender.sendMessage(rulesResult.get());
             return;
         }
 
@@ -92,7 +92,7 @@ public final class WhisperCommand extends BaseCommand {
         final var socialSpyFormat = settingsConfig.privateMessagesSettings().formats().socialSpyFormat();
 
         final var pmSendEvent = new PMSendEvent(
-            user,
+            sender,
             recipient,
             senderFormat,
             recipientFormat,
@@ -107,13 +107,14 @@ public final class WhisperCommand extends BaseCommand {
         }
 
         final var formats = new LinkedHashMap<Audience, Format>();
-        formats.put(user, pmSendEvent.senderFormat());
+        formats.put(sender, pmSendEvent.senderFormat());
         formats.put(recipient, pmSendEvent.recipientFormat());
         formats.put(
             Audience.audience(
                 plugin.usersHolder().users()
                     .stream()
                     .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
+                    .filter(spyUser -> spyUser.uuid() != sender.uuid() && spyUser.uuid() != recipient.uuid())
                     .collect(Collectors.toUnmodifiableList())
             ),
             socialSpyFormat
@@ -122,7 +123,7 @@ public final class WhisperCommand extends BaseCommand {
         formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                 format,
-                user.player(),
+                sender.player(),
                 recipient.player(),
                 pmSendEvent.message()
             ))
@@ -132,8 +133,8 @@ public final class WhisperCommand extends BaseCommand {
             recipient.playSound(settingsConfig.mentions().sound());
         }
 
-        user.lastMessagedUser(recipient);
-        recipient.lastMessagedUser(user);
+        sender.lastMessagedUser(recipient);
+        recipient.lastMessagedUser(sender);
     }
 
 }
