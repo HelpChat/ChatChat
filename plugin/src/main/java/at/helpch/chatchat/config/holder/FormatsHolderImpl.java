@@ -12,6 +12,13 @@ import java.util.Map;
 @ConfigSerializable
 public class FormatsHolderImpl implements FormatsHolder {
 
+    public FormatsHolderImpl() {
+    }
+
+    public FormatsHolderImpl(Map<String, PriorityFormat> formats) {
+        this.formats = formats;
+    }
+
     private Map<String, PriorityFormat> formats = Map.of();
 
     public @NotNull Map<String, PriorityFormat> formats() {
