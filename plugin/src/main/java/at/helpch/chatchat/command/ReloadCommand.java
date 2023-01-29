@@ -33,9 +33,9 @@ public final class ReloadCommand extends ChatChatCommand {
                 .append(text(" Reloaded Successfully!", NamedTextColor.GREEN))
                 .append(Component.newline())
                 .append(text(formats, NamedTextColor.WHITE))
-                .append(text(formats == 1 ? " format" : " formats" + " loaded!", NamedTextColor.GREEN))
+                .append(text((formats == 1 ? " format" : " formats") + " loaded!", NamedTextColor.GREEN))
                 .append(Component.newline())
                 .append(text(channels, NamedTextColor.WHITE))
-                .append(text(channels == 1 ? " channel" : " channels" + " loaded!", NamedTextColor.GREEN)));
+                .append(text((channels == 1 ? " channel" : " channels") + " loaded!", NamedTextColor.GREEN)));
     }
 }
