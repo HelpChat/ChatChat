@@ -27,6 +27,9 @@ public final class ReloadCommand extends ChatChatCommand {
 
         final int formats = plugin.configManager().formats().formats().size();
         final int channels = plugin.configManager().channels().channels().size();
+        final int channelFormats = plugin.configManager().channels().channels().values().stream()
+            .mapToInt(channel -> channel.formats().formats().size())
+            .sum();
 
         sender.sendMessage(text("Chat", TextColor.fromCSSHexString("#40c9ff"))
                 .append(text("Chat", TextColor.fromCSSHexString("#e81cff")))
@@ -36,6 +39,10 @@ public final class ReloadCommand extends ChatChatCommand {
                 .append(text((formats == 1 ? " format" : " formats") + " loaded!", NamedTextColor.GREEN))
                 .append(Component.newline())
                 .append(text(channels, NamedTextColor.WHITE))
-                .append(text((channels == 1 ? " channel" : " channels") + " loaded!", NamedTextColor.GREEN)));
+                .append(text((channels == 1 ? " channel" : " channels") + " loaded!", NamedTextColor.GREEN))
+                .append(Component.newline())
+                .append(text(channelFormats, NamedTextColor.WHITE))
+                .append(text(" channel " + (channelFormats == 1 ? "format" : "formats") + " loaded!", NamedTextColor.GREEN))
+        );
     }
 }
