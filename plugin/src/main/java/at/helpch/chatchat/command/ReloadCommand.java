@@ -42,7 +42,7 @@ public final class ReloadCommand extends ChatChatCommand {
                 .append(text((channels == 1 ? " channel" : " channels") + " loaded!", NamedTextColor.GREEN))
                 .append(Component.newline())
                 .append(text(channelFormats, NamedTextColor.WHITE))
-                .append(text(" channel " + (channelFormats == 1 ? "format" : "formats") + " loaded!", NamedTextColor.GREEN))
+                .append(text((channelFormats == 1 ? " channel format" : " channel formats") + " loaded!", NamedTextColor.GREEN))
         );
     }
 }
