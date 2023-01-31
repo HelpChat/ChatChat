@@ -78,7 +78,7 @@ bukkit {
         }
 
         permission("chatchat.ignoreList") {
-            description = "See who have you blocked."
+            description = "See your ignore-list."
             default = "op"
         }
 
