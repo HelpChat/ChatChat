@@ -9,6 +9,7 @@ import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
 import at.helpch.chatchat.command.DumpCommand;
 import at.helpch.chatchat.command.FormatTestCommand;
 import at.helpch.chatchat.command.IgnoreCommand;
+import at.helpch.chatchat.command.IgnoreListCommand;
 import at.helpch.chatchat.command.MainCommand;
 import at.helpch.chatchat.command.MentionToggleCommand;
 import at.helpch.chatchat.command.ReloadCommand;
@@ -257,6 +258,7 @@ public final class ChatChatPlugin extends JavaPlugin {
             new MainCommand(),
             new IgnoreCommand(this),
             new UnignoreCommand(this),
+            new IgnoreListCommand(this),
             new ReloadCommand(this),
             new MentionToggleCommand(this),
             new FormatTestCommand(this),

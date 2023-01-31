@@ -77,6 +77,11 @@ bukkit {
             default = "op"
         }
 
+        permission("chatchat.ignoreList") {
+            description = "See who have you blocked."
+            default = "op"
+        }
+
         permission("chatchat.utf") {
             description = "Send any char in chat"
             default = "op"
