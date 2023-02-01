@@ -38,7 +38,7 @@ public final class MessagesHolder {
     private Component alreadyIgnored = text("You are already ignoring <player>.", RED);
     private Component notIgnored = text("You are not ignoring <player>.", RED);
     private Component notIgnoringAnyone = text("You are not ignoring anyone.", RED);
-    private Component ignoredPlayerList = text("You are ignoring following players: <ignoredPlayers>.", YELLOW);
+    private Component ignoredPlayersList = text("You are ignoring following players: <white><ignored_players>.", YELLOW);
     private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
     private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
     private Component cantMessageGeneral = text("You cannot message this player.", RED);
@@ -181,8 +181,8 @@ public final class MessagesHolder {
         return notIgnoringAnyone;
     }
 
-    public @NotNull Component ignoredPlayerList() {
-        return ignoredPlayerList;
+    public @NotNull Component ignoredPlayersList() {
+        return ignoredPlayersList;
     }
 
     public @NotNull Component cantIgnoreYourself() {

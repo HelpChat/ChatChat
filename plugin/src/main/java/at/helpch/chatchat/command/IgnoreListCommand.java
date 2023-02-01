@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 @Command("ignorelist")
 public class IgnoreListCommand extends BaseCommand {
     private final ChatChatPlugin plugin;
-    private final static String IGNORELIST_PERMISSION = "chatchat.ignoreList";
+    private final static String IGNORELIST_PERMISSION = "chatchat.ignorelist";
 
     public IgnoreListCommand(final ChatChatPlugin plugin) {
         this.plugin = plugin;
     }
 
-    @Permission(IGNORELIST_PERMISSION)
     @Default
+    @Permission(IGNORELIST_PERMISSION)
     public void ignore(ChatUser sender) {
         if (sender.ignoredUsers().isEmpty()) {
             sender.sendMessage(plugin.configManager().messages().notIgnoringAnyone());
@@ -34,7 +34,7 @@ public class IgnoreListCommand extends BaseCommand {
             .map(OfflinePlayer::getName)
             .collect(Collectors.joining(", "));
 
-        sender.sendMessage(plugin.configManager().messages().ignoredPlayerList()
-            .replaceText(builder -> builder.matchLiteral("<ignoredPlayers>").replacement(ignoredPlayers)));
+        sender.sendMessage(plugin.configManager().messages().ignoredPlayersList()
+            .replaceText(builder -> builder.matchLiteral("<ignored_players>").replacement(ignoredPlayers)));
     }
 }

@@ -77,8 +77,8 @@ bukkit {
             default = "op"
         }
 
-        permission("chatchat.ignoreList") {
-            description = "See your ignore-list."
+        permission("chatchat.ignorelist") {
+            description = "List all the players that you are ignoring."
             default = "op"
         }
 
