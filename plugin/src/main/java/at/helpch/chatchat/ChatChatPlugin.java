@@ -127,7 +127,16 @@ public final class ChatChatPlugin extends JavaPlugin {
             20 * 60 * 5L // Run the user save task every 5 minutes.
         );
 
+        final int formats = configManager.formats().formats().size();
+        final int channels = configManager.channels().channels().size();
+        final int channelFormats = configManager.channels().channels().values().stream()
+            .mapToInt(channel -> channel.formats().formats().size())
+            .sum();
+
         getLogger().info("Plugin enabled successfully!");
+        getLogger().info(formats + (formats == 1 ? " format" : " formats") + " loaded!");
+        getLogger().info(channels + (channels == 1 ? " channel" : " channels") + " loaded!");
+        getLogger().info(channelFormats + (channelFormats == 1 ? " channel format" : " channel formats") + " loaded!");
     }
 
     @Override

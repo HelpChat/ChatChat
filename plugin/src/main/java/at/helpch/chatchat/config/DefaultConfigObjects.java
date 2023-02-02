@@ -39,21 +39,6 @@ public final class DefaultConfigObjects {
         return new SimpleFormat("console-format", map);
     }
 
-    public static @NotNull PriorityFormat createDefaultChannelFormat() {
-        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
-
-        map.put("channel", List.of(
-            "<hover:show_text:'<aqua>This is a default channel format!'>",
-            "%chatchat_channel_prefix%",
-            "</hover>"
-        ));
-        map.put("prefix", List.of(" <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
-        map.put("name", List.of("<white>%player_name%"));
-        map.put("message", List.of(" <gray>» <white><message>"));
-
-        return new ChatFormat("default-channel", 1, map);
-    }
-
 
     public static @NotNull PriorityFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
