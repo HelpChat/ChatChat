@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
+import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 
 // configurate requires non-final fields
@@ -38,7 +39,9 @@ public final class MessagesHolder {
     private Component alreadyIgnored = text("You are already ignoring <player>.", RED);
     private Component notIgnored = text("You are not ignoring <player>.", RED);
     private Component notIgnoringAnyone = text("You are not ignoring anyone.", RED);
-    private Component ignoredPlayersList = text("You are ignoring following players: <white><ignored_players>.", YELLOW);
+    private Component ignoredPlayersList = text("You are ignoring following players:", YELLOW)
+        .append(text("<ignored_players>", WHITE))
+        .append(text(".", YELLOW));
     private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
     private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
     private Component cantMessageGeneral = text("You cannot message this player.", RED);
