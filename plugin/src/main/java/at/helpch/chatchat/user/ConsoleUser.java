@@ -49,7 +49,7 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public boolean canSee(@NotNull User target) {
+    public boolean canSee(@NotNull final User target) {
         return true;
     }
 
@@ -59,15 +59,24 @@ public final class ConsoleUser implements User {
     }
 
     @Override
-    public void ignoredUsers(@NotNull Set<UUID> users) {
+    public void ignoredUsers(@NotNull final Set<UUID> users) {
     }
 
     @Override
-    public void ignoreUser(@NotNull User user) {
+    public void ignoreUser(@NotNull final User user) {
     }
 
     @Override
-    public void unignoreUser(@NotNull User user) {
+    public void unignoreUser(@NotNull final User user) {
+    }
+
+    @Override
+    public boolean chatEnabled() {
+        return true;
+    }
+
+    @Override
+    public void chatState(final boolean enabled) {
     }
 
     @Override

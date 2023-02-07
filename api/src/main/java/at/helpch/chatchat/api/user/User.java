@@ -93,4 +93,18 @@ public interface User extends ForwardingAudience.Single, Identified {
      * @param user The user to unignore.
      */
     void unignoreUser(@NotNull final User user);
+
+    /**
+     * Checks if the user has their chat enabled or not.
+     *
+     * @return True if the user has their chat enabled, false otherwise.
+     */
+    boolean chatEnabled();
+
+    /**
+     * Changes the state of the user's chat.
+     *
+     * @param toggle True to enable chat, false to disable.
+     */
+    void chatState(boolean toggle);
 }

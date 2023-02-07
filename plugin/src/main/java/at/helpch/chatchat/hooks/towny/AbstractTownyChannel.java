@@ -51,6 +51,7 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
         return list.get().getResidents().stream()
                 .map(Resident::getUUID)
                 .map(plugin.usersHolder()::getUser)
+                .filter(User::chatEnabled) // Make sure the user has their chat enabled
                 .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
                 .collect(Collectors.toSet());
     }

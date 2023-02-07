@@ -45,6 +45,9 @@ public final class MessagesHolder {
     private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
     private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
     private Component cantMessageGeneral = text("You cannot message this player.", RED);
+    private Component chatEnabledSuccessfully = text("Your chat has been enabled successfully!", GREEN);
+    private Component chatDisabledSuccessfully = text("Your chat has been disabled successfully!", RED);
+    private Component chatDisabled = text("Your chat is disabled! You can not send or receive messages until you enable it.", RED);
 
     // channel related
     private Component channelNoPermission = text("You do not have permission to use this channel", RED);
@@ -134,7 +137,9 @@ public final class MessagesHolder {
         return channelNoPermission;
     }
 
-    public @NotNull Component channelNoPermissionSwitch() { return channelNoPermissionSwitch; }
+    public @NotNull Component channelNoPermissionSwitch() {
+        return channelNoPermissionSwitch;
+    }
 
     public @NotNull Component channelSwitched() {
         return channelSwitched;
@@ -218,6 +223,18 @@ public final class MessagesHolder {
 
     public @NotNull Component cantMessageGeneral() {
         return cantMessageGeneral;
+    }
+
+    public @NotNull Component chatEnabledSuccessfully() {
+        return chatEnabledSuccessfully;
+    }
+
+    public @NotNull Component chatDisabledSuccessfully() {
+        return chatDisabledSuccessfully;
+    }
+
+    public @NotNull Component chatDisabled() {
+        return chatDisabled;
     }
 
 }

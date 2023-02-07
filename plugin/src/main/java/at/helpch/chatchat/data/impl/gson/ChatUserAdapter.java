@@ -37,6 +37,8 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         out.value(value.channelMentions());
         out.name("social-spy");
         out.value(value.socialSpy());
+        out.name("chat-enabled");
+        out.value(value.chatEnabled());
         out.name("ignored-users");
         out.beginArray();
         for (UUID uuid : value.ignoredUsers()) {
@@ -111,6 +113,14 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
 
         if (!in.hasNext()) {
             in.close();
+            throw new JsonParseException("Expected JSON object to have property 'chat-enabled'");
+        }
+
+        in.nextName();
+        final var chatEnabled = in.nextBoolean();
+
+        if (!in.hasNext()) {
+            in.close();
             throw new JsonParseException("Expected JSON object to have property 'ignored-users'");
         }
 
@@ -148,6 +158,7 @@ public final class ChatUserAdapter extends TypeAdapter<ChatUser> {
         user.personalMentions(personalMentions);
         user.channelMentions(channelMentions);
         user.socialSpy(socialSpy);
+        user.chatState(chatEnabled);
         user.ignoredUsers(ignoredUsers);
 
         return user;
