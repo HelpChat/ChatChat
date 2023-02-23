@@ -23,5 +23,7 @@ tasks {
         listOf("net.kyori",
             "io.leangen",
         ).forEach { relocate(it, "at.helpch.chatchat.libs.$it") }
+
+        archiveFileName.set("ChatChat-API-${project.version}.jar")
     }
 }
