@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
+import at.helpch.chatchat.config.holder.ExtensionsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
@@ -20,6 +21,7 @@ public final class ConfigManager {
     private GlobalFormatsHolder formats;
     private SettingsHolder settings;
     private MessagesHolder messages;
+    private ExtensionsHolder extensions;
     private MiniPlaceholdersHolder miniPlaceholders;
     private final ConfigFactory factory;
 
@@ -33,9 +35,11 @@ public final class ConfigManager {
         channels = null;
         formats = null;
         settings = null;
+        extensions = null;
         miniPlaceholders = null;
 
         messages();
+        extensions();
 
         channels();
         final var defaultChannel = channels.channels().get(channels.defaultChannel());
@@ -85,6 +89,13 @@ public final class ConfigManager {
             this.messages = factory.messages();
         }
         return this.messages;
+    }
+
+    public @NotNull ExtensionsHolder extensions() {
+        if (extensions == null) {
+            this.extensions = factory.extensions();
+        }
+        return this.extensions;
     }
 
     public @NotNull MiniPlaceholdersHolder miniPlaceholders() {

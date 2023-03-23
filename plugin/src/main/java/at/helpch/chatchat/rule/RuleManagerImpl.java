@@ -22,8 +22,12 @@ public class RuleManagerImpl implements RuleManager {
 
     public RuleManagerImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
-        addPublicChatRule(new InvalidCharsRule(plugin));
-        addPrivateChatRule(new InvalidCharsRule(plugin));
+        if (plugin.configManager().extensions().addons().deluxeChatUnicodePermissionPublicChat()) {
+            addPublicChatRule(new InvalidCharsRule(plugin));
+        }
+        if (plugin.configManager().extensions().addons().deluxeChatUnicodePermissionPrivateChat()) {
+            addPrivateChatRule(new InvalidCharsRule(plugin));
+        }
     }
 
     @Override
