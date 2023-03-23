@@ -15,7 +15,7 @@ repositories {
     // dsrv + dependencies
     maven("https://m2.dv8tion.net/releases")
     maven("https://nexus.scarsz.me/content/groups/public")
-    // supervanish
+    // supervanish, griefprevention
     maven("https://jitpack.io")
     // essentialsx
     maven("https://repo.essentialsx.net/releases/")
@@ -34,6 +34,7 @@ dependencies {
     compileOnly(libs.essentials)
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
+    compileOnly(libs.griefprevention)
 }
 
 bukkit {
@@ -41,7 +42,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish")
+    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish", "GriefPrevention")
     loadbefore = listOf("Essentials")
     apiVersion = "1.13"
     permissions {

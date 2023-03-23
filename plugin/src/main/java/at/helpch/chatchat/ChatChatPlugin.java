@@ -143,6 +143,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     public void onDisable() {
         hookManager().hooks().forEach(Hook::disable);
         hookManager().vanishHooks().forEach(Hook::disable);
+        hookManager().muteHooks().forEach(Hook::disable);
         getServer().getServicesManager().unregisterAll(this);
 
         audiences.close();
