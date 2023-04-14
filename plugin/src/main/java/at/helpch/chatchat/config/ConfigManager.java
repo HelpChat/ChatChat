@@ -40,6 +40,7 @@ public final class ConfigManager {
 
         messages();
         extensions();
+        plugin.getLogger().info("Whenever making changes to extensions.yml, restart the server to make sure all changes are applied.");
 
         channels();
         final var defaultChannel = channels.channels().get(channels.defaultChannel());
