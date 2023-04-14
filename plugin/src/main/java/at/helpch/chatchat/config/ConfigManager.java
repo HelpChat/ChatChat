@@ -56,8 +56,16 @@ public final class ConfigManager {
         settings();
 
         formats();
-        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), DefaultFormatFactory.createDefaultFormat());
-        ChatFormat.defaultFormat(defaultFormat);
+        final var defaultFormat = formats.formats().get(formats.defaultFormat());
+        if (defaultFormat instanceof ChatFormat) {
+            ChatFormat.defaultFormat(defaultFormat);
+        } else {
+            ChatFormat.defaultFormat(DefaultFormatFactory.createDefaultFormat());
+            plugin.getLogger().warning(
+                "Could not find a format named " + formats.defaultFormat() + "." + System.lineSeparator() +
+                    "Using an internal format as the default format."
+            );
+        }
 
         miniPlaceholders();
         miniPlaceholders.placeholders().forEach(placeholder -> plugin.miniPlaceholdersManager().addPlaceholder(placeholder));

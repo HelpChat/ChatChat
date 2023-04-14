@@ -28,18 +28,10 @@ public final class HookManagerImpl implements HookManager {
         this.plugin = plugin;
         HookCreator hookCreator = new HookCreator(plugin);
         constructors.add(hookCreator::vanillaVanishHook);
-        if (plugin.configManager().extensions().addons().discordSrvChannelsBridging()) {
-            constructors.add(hookCreator::createDsrvHook);
-        }
-        if (plugin.configManager().extensions().addons().townyChannels()) {
-            constructors.add(hookCreator::chatChatTownyHook);
-        }
-        if (plugin.configManager().extensions().addons().essentialsVanish()) {
-            constructors.add(hookCreator::essentialsVanishHook);
-        }
-        if (plugin.configManager().extensions().addons().superVanishVanish()) {
-            constructors.add(hookCreator::superVanishHook);
-        }
+        constructors.add(hookCreator::createDsrvHook);
+        constructors.add(hookCreator::chatChatTownyHook);
+        constructors.add(hookCreator::essentialsVanishHook);
+        constructors.add(hookCreator::superVanishHook);
     }
 
     public void init() {
