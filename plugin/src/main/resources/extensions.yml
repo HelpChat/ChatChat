@@ -2,7 +2,7 @@
 addons:
   deluxechat:
     # If enabled, lower numbers mean higher priority just like in DeluxeChat.
-    inverse_priorities: true
+    inverse_priorities: false
     # Enable or disable the Unicode Characters rule. This rule only allows people to use non ascii characters if they
     # have the permission "chatchat.utf" just like in DeluxeChat.
     unicode_permission:

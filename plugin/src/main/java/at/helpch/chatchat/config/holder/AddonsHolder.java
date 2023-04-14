@@ -7,7 +7,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 public class AddonsHolder {
 
     // DeluxeChat features
-    private boolean DELUXECHAT_INVERSE_PRIORITIES = true;
+    private boolean DELUXECHAT_INVERSE_PRIORITIES = false;
     private boolean DELUXECHAT_UNICODE_PERMISSION_PUBLIC_CHAT = true;
     private boolean DELUXECHAT_UNICODE_PERMISSION_PRIVATE_CHAT = true;
 
