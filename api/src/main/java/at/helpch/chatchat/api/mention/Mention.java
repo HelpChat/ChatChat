@@ -15,7 +15,9 @@ public interface Mention {
      * @param async true if call was done async, false otherwise
      * @param sender the sender of the message
      * @param target the target of the message
+     * @param channel the channel the message was sent in
      * @param message the message to process mentions in
+     * @param data additional data that can be used to process the message
      * @return a mention result
      */
     @NotNull MentionResult processMention(
