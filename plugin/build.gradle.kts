@@ -7,6 +7,8 @@ plugins {
     id("me.mattstudios.triumph") version "0.2.8"
 }
 
+version = "${rootProject.version}-${System.getenv("BUILD_NUMBER")}"
+
 repositories {
     papi()
     triumphSnapshots()

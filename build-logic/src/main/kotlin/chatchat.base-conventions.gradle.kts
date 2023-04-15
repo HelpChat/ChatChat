@@ -2,8 +2,6 @@ plugins {
     `java-library`
 }
 
-version = "1.0-SNAPSHOT-${System.getenv("BUILD_NUMBER")}"
-
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
