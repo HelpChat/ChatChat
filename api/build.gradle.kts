@@ -27,3 +27,21 @@ tasks {
         archiveFileName.set("ChatChat-API-${project.version}.jar")
     }
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "helpchat"
+            url = uri("https://repo.helpch.at/snapshots")
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
