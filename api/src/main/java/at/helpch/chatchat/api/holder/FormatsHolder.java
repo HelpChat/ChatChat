@@ -11,9 +11,9 @@ import java.util.Map;
 public interface FormatsHolder {
 
     /**
-     * A map of all formats. The map should be of type Name -> Format.
+     * A map of all formats. The map should be of type Name to Format.
      *
-     * @return
+     * @return The map of formats.
      */
     @NotNull Map<String, PriorityFormat> formats();
 }
