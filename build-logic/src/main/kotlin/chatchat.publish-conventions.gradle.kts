@@ -8,7 +8,10 @@ publishing {
         maven {
             name = "helpchat"
             url = uri("https://repo.helpch.at/snapshots")
-            credentials(PasswordCredentials::class)
+            credentials {
+                username = System.getenv("REPO_USER")
+                password = System.getenv("REPO_PASS")
+            }
             authentication {
                 create<BasicAuthentication>("basic")
             }
