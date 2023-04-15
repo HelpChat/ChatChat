@@ -69,7 +69,7 @@ public final class PapiTagUtils {
             }
 
             final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
-            final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
+            final var componentPlaceholder = MessageUtils.parseFromMiniMessage(kyorifiedPlaceholder);
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });
@@ -128,7 +128,7 @@ public final class PapiTagUtils {
             }
 
             final var kyorifiedPlaceholder = Kyorifier.kyorify(parsedPlaceholder);
-            final var componentPlaceholder = MessageUtils.parseToMiniMessage(kyorifiedPlaceholder);
+            final var componentPlaceholder = MessageUtils.parseFromMiniMessage(kyorifiedPlaceholder);
 
             return inserting ? Tag.inserting(componentPlaceholder) : Tag.selfClosingInserting(componentPlaceholder);
         });

@@ -2,11 +2,12 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.processor.MessageProcessor;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
-import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.processor.LocalToLocalMessageProcessor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,7 +69,7 @@ public final class ChatListener implements Listener {
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
 
         event.setMessage(LegacyComponentSerializer.legacySection().serialize(
-            MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message)
+            LocalToLocalMessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message)
         ));
 
         try {
@@ -89,8 +90,8 @@ public final class ChatListener implements Listener {
         }
 
         // Cancel the event if the message doesn't end up being sent
-        // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
-        event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
+        // This happens if rules are not respected or if ChatChatEvent is canceled.
+        event.setCancelled(!MessageProcessor.processEvent(plugin, user, channel, message, event.isAsynchronous()));
     }
 
     private static String cleanseMessage(@NotNull final String message) {

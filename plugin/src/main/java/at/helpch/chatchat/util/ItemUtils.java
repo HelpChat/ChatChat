@@ -40,13 +40,13 @@ public final class ItemUtils {
         final var amountPlaceholder = Placeholder.component("amount", Component.text(item.getAmount()));
 
         final var hoverInfoComponent = !itemFormatInfo.isBlank()
-                ? MessageUtils.parseToMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
+                ? MessageUtils.parseFromMiniMessage(itemFormatInfo, itemPlaceholder, amountPlaceholder)
                 : null;
 
         if (item.getType().isAir() || !item.hasItemMeta()) {
             return Placeholder.component(
                     "item",
-                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
+                    MessageUtils.parseFromMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
             );
         }
 
@@ -56,7 +56,7 @@ public final class ItemUtils {
         if (meta == null) {
             return Placeholder.component(
                     "item",
-                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
+                    MessageUtils.parseFromMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
             );
         }
 
@@ -97,7 +97,7 @@ public final class ItemUtils {
 
         return Placeholder.component(
                 "item",
-                MessageUtils.parseToMiniMessage(itemFormat, newItemPlaceholder, amountPlaceholder).hoverEvent(
+                MessageUtils.parseFromMiniMessage(itemFormat, newItemPlaceholder, amountPlaceholder).hoverEvent(
                         Component.join(JoinConfiguration.newlines(), hoverComponents)
                 )
         );

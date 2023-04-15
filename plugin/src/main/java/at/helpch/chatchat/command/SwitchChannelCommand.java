@@ -3,7 +3,8 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.hooks.towny.AbstractTownyChannel;
-import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.processor.LocalToLocalMessageProcessor;
+import at.helpch.chatchat.processor.MessageProcessor;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import dev.triumphteam.cmd.core.BaseCommand;
@@ -57,6 +58,6 @@ public final class SwitchChannelCommand extends BaseCommand {
             return;
         }
 
-        MessageProcessor.process(plugin, user, channel, message, false);
+        MessageProcessor.processEvent(plugin, user, channel, message, false);
     }
 }

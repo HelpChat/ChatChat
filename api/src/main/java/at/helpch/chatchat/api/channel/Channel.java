@@ -58,6 +58,13 @@ public interface Channel {
     int radius();
 
     /**
+     * Check if this channel is cross server.
+     *
+     * @return True if this channel is cross server, false otherwise.
+     */
+    boolean crossServer();
+
+    /**
      * Get a set of {@link ChatUser}s that can see this channel.
      *
      * @param source The {@link User} that is requesting the list.
