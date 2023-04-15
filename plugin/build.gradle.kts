@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation(projects.api)
+    implementation(projects.chatChatApi)
 
     implementation(libs.triumph.cmds)
     implementation(libs.configurate)
