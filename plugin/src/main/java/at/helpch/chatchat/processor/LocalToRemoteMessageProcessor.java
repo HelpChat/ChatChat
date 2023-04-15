@@ -30,7 +30,6 @@ public final class LocalToRemoteMessageProcessor {
             plugin.miniPlaceholdersManager().compileTags(false, sender, ConsoleUser.INSTANCE)
         );
 
-        // TODO: Pass the message to the RemoteMessageSender
-        return RemoteMessageSender.send(plugin, channel.name(), MessageUtils.parseToMiniMessage(component));
+       return plugin.remoteMessageSender().send(channel.name(), MessageUtils.parseToMiniMessage(component));
     }
 }
