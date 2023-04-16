@@ -68,14 +68,6 @@ public final class FormatUtils {
         );
     }
 
-    public static @NotNull Component parseRemoteFormat(@NotNull final String message, @NotNull final Player recipient) {
-        return MessageUtils.parseFromMiniMessage(message, PapiTagUtils.createRecipientTag(recipient));
-    }
-
-    public static @NotNull Component parseRemoteFormat(@NotNull final String message) {
-        return MessageUtils.parseFromMiniMessage(message);
-    }
-
     public static @NotNull Component parseFormat(
         @NotNull final Format format,
         @NotNull final Player player,

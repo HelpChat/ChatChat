@@ -50,8 +50,6 @@ public class BungeeMessageReceiver implements RemoteMessageReceiver {
             final String channelName = messageIn.readUTF();
             final String messageContent = messageIn.readUTF();
 
-            plugin.getLogger().info("Received cross server message. Type: " + messageType + "Channel: " + channelName + ", Message: " + messageContent);
-
             RemoteToLocalMessageProcessor.processRemoteMessageEvent(plugin, channelName, messageContent);
 
         } catch (final IOException exception) {

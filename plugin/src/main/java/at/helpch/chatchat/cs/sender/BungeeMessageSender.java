@@ -24,8 +24,6 @@ public class BungeeMessageSender implements RemoteMessageSender {
 
     @Override
     public boolean send(String channel, String message) {
-        plugin.getLogger().info("SENDING MESSAGE TO BUNGEE. Channel: " + channel + ", Message: " + message);
-
         final ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("Forward");
@@ -48,7 +46,6 @@ public class BungeeMessageSender implements RemoteMessageSender {
         out.write(messageBytes.toByteArray());
 
         Bukkit.getServer().sendPluginMessage(plugin, BUNGEE_CROSS_SERVER_CHANNEL, out.toByteArray());
-        plugin.getLogger().info("SENT MESSAGE TO BUNGEE");
         return true;
     }
 }

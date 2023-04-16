@@ -21,6 +21,10 @@ public final class LocalToRemoteMessageProcessor {
         @NotNull final ChatUser sender,
         @NotNull final Channel channel
     ) {
+        if (!channel.crossServer()) {
+            return false;
+        }
+
         final var parsedMessage = chatEvent.message().compact();
 
         final var component = FormatUtils.parseFormat(
@@ -30,6 +34,6 @@ public final class LocalToRemoteMessageProcessor {
             plugin.miniPlaceholdersManager().compileTags(false, sender, ConsoleUser.INSTANCE)
         );
 
-       return plugin.remoteMessageSender().send(channel.name(), MessageUtils.parseToMiniMessage(component));
+       return plugin.remoteMessageSender().send(channel.name(), MessageUtils.parseToGson(component));
     }
 }

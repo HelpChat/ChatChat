@@ -22,7 +22,7 @@ public final class MessageProcessor {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static boolean processEvent(
+    public static boolean processMessageEvent(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser sender,
         @NotNull final Channel channel,
@@ -52,10 +52,6 @@ public final class MessageProcessor {
 
         if (!localResult) {
             return false;
-        }
-
-        if (!channel.crossServer()) {
-            return true;
         }
 
         LocalToRemoteMessageProcessor.processLocalMessageEvent(plugin, chatEvent, sender, channel);

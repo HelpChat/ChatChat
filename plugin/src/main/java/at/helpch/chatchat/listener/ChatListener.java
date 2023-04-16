@@ -91,7 +91,7 @@ public final class ChatListener implements Listener {
 
         // Cancel the event if the message doesn't end up being sent
         // This happens if rules are not respected or if ChatChatEvent is canceled.
-        event.setCancelled(!MessageProcessor.processEvent(plugin, user, channel, message, event.isAsynchronous()));
+        event.setCancelled(!MessageProcessor.processMessageEvent(plugin, user, channel, message, event.isAsynchronous()));
     }
 
     private static String cleanseMessage(@NotNull final String message) {

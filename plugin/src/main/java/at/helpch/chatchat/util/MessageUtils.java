@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,8 +16,12 @@ public final class MessageUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    public static @NotNull String parseToMiniMessage(@NotNull final ComponentLike component) {
-        return miniMessage.serialize(component.asComponent());
+    public static @NotNull Component parseFromGson(@NotNull final String formatPart) {
+        return GsonComponentSerializer.gson().deserialize(formatPart);
+    }
+
+    public static @NotNull String parseToGson(@NotNull final ComponentLike component) {
+        return GsonComponentSerializer.gson().serialize(component.asComponent());
     }
 
     public static @NotNull Component parseFromMiniMessage(@NotNull final String formatPart) {
