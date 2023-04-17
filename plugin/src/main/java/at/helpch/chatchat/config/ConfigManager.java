@@ -56,6 +56,7 @@ public final class ConfigManager {
         ChatFormat.defaultFormat(defaultFormat);
 
         miniPlaceholders();
+        plugin.miniPlaceholdersManager().clear();
         miniPlaceholders.placeholders().forEach(placeholder -> plugin.miniPlaceholdersManager().addPlaceholder(placeholder));
     }
 

@@ -34,4 +34,9 @@ public interface MiniPlaceholderManager {
      * @return An unmodifiable {@link Set} of all registered {@link MiniPlaceholder}s.
      */
     @NotNull Set<@NotNull MiniPlaceholder> placeholders();
+
+    /**
+     * Clears all placeholders.
+     */
+    public void clear();
 }
