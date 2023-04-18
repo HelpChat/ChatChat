@@ -26,7 +26,7 @@ public class GsonDatabase implements Database {
 
     public GsonDatabase(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
-        final var chatUserAdapter = new ChatUserAdapter(plugin);
+        final var chatUserAdapter = new ChatUserSerializer(plugin);
         this.gson = new GsonBuilder()
             .registerTypeAdapter(ChatUser.class, chatUserAdapter)
             .registerTypeAdapter(ChatUserImpl.class, chatUserAdapter)
