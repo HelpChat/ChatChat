@@ -96,8 +96,8 @@ public final class ChatChatPlugin extends JavaPlugin {
             usersHolder::getUser,
             new UserSenderValidator(this));
 
-        configManager.reload();
         hookManager.init();
+        configManager.reload();
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
