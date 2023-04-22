@@ -48,6 +48,7 @@ public final class ConfigManager {
             );
             ChatChannel.defaultChannel(DefaultConfigObjects.createDefaultChannel());
         }
+        plugin.usersHolder().users().forEach(user -> user.channel(channels().channels().getOrDefault(user.channel().name(), ChatChannel.defaultChannel())));
 
         settings();
 
@@ -56,6 +57,7 @@ public final class ConfigManager {
         ChatFormat.defaultFormat(defaultFormat);
 
         miniPlaceholders();
+        plugin.miniPlaceholdersManager().clear();
         miniPlaceholders.placeholders().forEach(placeholder -> plugin.miniPlaceholdersManager().addPlaceholder(placeholder));
     }
 
