@@ -42,6 +42,12 @@ public final class ChatListener implements Listener {
         final var player = event.getPlayer();
         final var user = (ChatUser) plugin.usersHolder().getUser(player);
 
+        if (!user.chatEnabled()) {
+            event.setCancelled(true);
+            user.sendMessage(plugin.configManager().messages().chatDisabled());
+            return;
+        }
+
         final var channelByPrefix =
             ChannelUtils.findChannelByPrefix(
                 List.copyOf(plugin.configManager().channels().channels().values()),

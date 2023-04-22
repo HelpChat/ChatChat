@@ -61,15 +61,17 @@ public final class ChatChannel extends AbstractChannel {
 
         if (ChatChannel.defaultChannel().equals(this)) {
             return plugin.usersHolder().users().stream()
-                .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
+                .filter(User::chatEnabled) // Make sure the user has their chat enabled
                 .filter(filterIgnores)
+                .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
                 .collect(Collectors.toSet());
         }
 
         return plugin.usersHolder().users().stream().filter(user ->
                 user.hasPermission(ChannelUtils.SEE_CHANNEL_PERMISSION + name()))
-            .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
+            .filter(User::chatEnabled) // Make sure the user has their chat enabled
             .filter(filterIgnores)
+            .filter(user -> ChannelUtils.isTargetWithinRadius(source, user, radius()))
             .collect(Collectors.toSet());
     }
 

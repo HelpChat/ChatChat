@@ -54,10 +54,8 @@ public class ChatUserSerializer implements JsonSerializer<ChatUser>, JsonDeseria
             throw new JsonParseException("The UUID is invalid!", exception);
         }
 
-        if (!jsonObject.has("channel")) {
-            throw new JsonParseException("Expected JSON object to have property 'channel'");
-        }
-        final var channelName = jsonObject.get("channel").getAsString();
+        // default value is default channel name
+        final var channelName =  jsonObject.has("channel") ? jsonObject.get("channel").getAsString() : ChatChannel.defaultChannel().name();
         final var contains = plugin.configManager().channels().channels().containsKey(channelName);
 
         final var channel = contains
@@ -68,39 +66,34 @@ public class ChatUserSerializer implements JsonSerializer<ChatUser>, JsonDeseria
             throw new JsonParseException("Channel '" + channelName + "' not found!");
         }
 
-        if (!jsonObject.has("private-messages")) {
-            throw new JsonParseException("Expected JSON object to have property 'private-messages'");
-        }
-        final var privateMessages = jsonObject.get("private-messages").getAsBoolean();
+        // default value is true
+        final var privateMessages = !jsonObject.has("private-messages") || jsonObject.get("private-messages").getAsBoolean();
 
-        if (!jsonObject.has("personal-mentions")) {
-            throw new JsonParseException("Expected JSON object to have property 'personal-mentions'");
-        }
-        final var personalMentions = jsonObject.get("personal-mentions").getAsBoolean();
+        // default value is true
+        final var personalMentions = !jsonObject.has("personal-mentions") || jsonObject.get("personal-mentions").getAsBoolean();
 
-        if (!jsonObject.has("channel-mentions")) {
-            throw new JsonParseException("Expected JSON object to have property 'channel-mentions'");
-        }
-        final var channelMentions = jsonObject.get("channel-mentions").getAsBoolean();
+        // default value is true
+        final var channelMentions = !jsonObject.has("channel-mentions") || jsonObject.get("channel-mentions").getAsBoolean();
 
-        if (!jsonObject.has("social-spy")) {
-            throw new JsonParseException("Expected JSON object to have property 'social-spy'");
-        }
-        final var socialSpy = jsonObject.get("social-spy").getAsBoolean();
+        // default value is false
+        final var socialSpy = jsonObject.has("social-spy") && jsonObject.get("social-spy").getAsBoolean();
 
-        if (!jsonObject.has("ignored-users")) {
-            throw new JsonParseException("Expected JSON object to have property 'ignored-users'");
-        }
+        // default value is true
+        final var chatEnabled = !jsonObject.has("chat-enabled") || jsonObject.get("chat-enabled").getAsBoolean();
+
+        // default value is empty set
         final var ignoredUsers = new HashSet<UUID>();
-        for (final JsonElement element : jsonObject.get("ignored-users").getAsJsonArray()) {
-            final var uuidString = element.getAsString();
-            final UUID uuidFromString;
-            try {
-                uuidFromString = UUID.fromString(uuidString);
-            } catch (final IllegalArgumentException exception) {
-                throw new JsonParseException("Ignored User UUID (" + uuidString + ") is invalid!", exception);
+        if (jsonObject.has("ignored-users")) {
+            for (final JsonElement element : jsonObject.get("ignored-users").getAsJsonArray()) {
+                final var uuidString = element.getAsString();
+                final UUID uuidFromString;
+                try {
+                    uuidFromString = UUID.fromString(uuidString);
+                } catch (final IllegalArgumentException exception) {
+                    throw new JsonParseException("Ignored User UUID (" + uuidString + ") is invalid!", exception);
+                }
+                ignoredUsers.add(uuidFromString);
             }
-            ignoredUsers.add(uuidFromString);
         }
 
         final ChatUser user = new ChatUserImpl(uuid);
@@ -114,6 +107,7 @@ public class ChatUserSerializer implements JsonSerializer<ChatUser>, JsonDeseria
         user.personalMentions(personalMentions);
         user.channelMentions(channelMentions);
         user.socialSpy(socialSpy);
+        user.chatState(chatEnabled);
         user.ignoredUsers(ignoredUsers);
 
         return user;
@@ -131,6 +125,7 @@ public class ChatUserSerializer implements JsonSerializer<ChatUser>, JsonDeseria
         jsonObject.addProperty("personal-mentions", src.personalMentions());
         jsonObject.addProperty("channel-mentions", src.channelMentions());
         jsonObject.addProperty("social-spy", src.socialSpy());
+        jsonObject.addProperty("chat-enabled", src.chatEnabled());
 
         final var ignoredUsers = new JsonArray();
         for (UUID uuid : src.ignoredUsers()) {
