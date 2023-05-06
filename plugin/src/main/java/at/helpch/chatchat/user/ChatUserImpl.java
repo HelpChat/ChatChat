@@ -38,6 +38,7 @@ public final class ChatUserImpl implements ChatUser {
     private boolean personalMentions = true;
     private boolean channelMentions = true;
     private boolean socialSpy = false;
+    private boolean chatEnabled = true;
     private Set<UUID> ignoredUsers = new HashSet<>();
 
     @Override
@@ -137,6 +138,16 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public void unignoreUser(@NotNull User user) {
         ignoredUsers.remove(user.uuid());
+    }
+
+    @Override
+    public void chatState(final boolean enabled) {
+        this.chatEnabled = enabled;
+    }
+
+    @Override
+    public boolean chatEnabled() {
+        return this.chatEnabled;
     }
 
     @Override

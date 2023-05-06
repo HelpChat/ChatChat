@@ -4,11 +4,14 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
+import at.helpch.chatchat.config.holder.AddonsHolder;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
+import at.helpch.chatchat.config.holder.ExtensionsHolder;
 import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
+import at.helpch.chatchat.config.mapper.AddonsMapper;
 import at.helpch.chatchat.config.mapper.SimpleFormatMapper;
 import at.helpch.chatchat.config.mapper.ChannelMapMapper;
 import at.helpch.chatchat.config.mapper.MiniMessageComponentMapper;
@@ -60,6 +63,11 @@ public final class ConfigFactory {
         return Objects.requireNonNullElseGet(config, MessagesHolder::new);
     }
 
+    public @NotNull ExtensionsHolder extensions() {
+        final var config = create(ExtensionsHolder.class, "extensions.yml");
+        return Objects.requireNonNullElseGet(config, ExtensionsHolder::new);
+    }
+
     public @NotNull MiniPlaceholdersHolder miniPlaceholders() {
         final var config = create(MiniPlaceholdersHolder.class, "placeholders.yml");
         return Objects.requireNonNullElseGet(config, MiniPlaceholdersHolder::new);
@@ -104,6 +112,8 @@ public final class ConfigFactory {
                     .register(ChatFormat.class, new PriorityFormatMapper())
 
                     .register(MiniPlaceholderImpl.class, new MiniPlaceholderMapper())
+
+                    .register(AddonsHolder.class, new AddonsMapper())
 
                     .register(new TypeToken<>() {}, new ChannelMapMapper(plugin))
                     .registerAll(ConfigurateComponentSerializer.configurate().serializers())))

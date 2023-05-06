@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
+import at.helpch.chatchat.config.holder.ExtensionsHolder;
 import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
@@ -20,6 +21,7 @@ public final class ConfigManager {
     private GlobalFormatsHolder formats;
     private SettingsHolder settings;
     private MessagesHolder messages;
+    private ExtensionsHolder extensions;
     private MiniPlaceholdersHolder miniPlaceholders;
     private final ConfigFactory factory;
 
@@ -33,9 +35,12 @@ public final class ConfigManager {
         channels = null;
         formats = null;
         settings = null;
+        extensions = null;
         miniPlaceholders = null;
 
         messages();
+        extensions();
+        plugin.getLogger().info("Whenever making changes to extensions.yml, restart the server to make sure all changes are applied.");
 
         channels();
         final var defaultChannel = channels.channels().get(channels.defaultChannel());
@@ -48,14 +53,24 @@ public final class ConfigManager {
             );
             ChatChannel.defaultChannel(DefaultConfigObjects.createDefaultChannel());
         }
+        plugin.usersHolder().users().forEach(user -> user.channel(channels().channels().getOrDefault(user.channel().name(), ChatChannel.defaultChannel())));
 
         settings();
 
         formats();
-        final var defaultFormat = formats.formats().getOrDefault(formats.defaultFormat(), DefaultFormatFactory.createDefaultFormat());
-        ChatFormat.defaultFormat(defaultFormat);
+        final var defaultFormat = formats.formats().get(formats.defaultFormat());
+        if (defaultFormat instanceof ChatFormat) {
+            ChatFormat.defaultFormat(defaultFormat);
+        } else {
+            ChatFormat.defaultFormat(DefaultFormatFactory.createDefaultFormat());
+            plugin.getLogger().warning(
+                "Could not find a format named " + formats.defaultFormat() + "." + System.lineSeparator() +
+                    "Using an internal format as the default format."
+            );
+        }
 
         miniPlaceholders();
+        plugin.miniPlaceholdersManager().clear();
         miniPlaceholders.placeholders().forEach(placeholder -> plugin.miniPlaceholdersManager().addPlaceholder(placeholder));
     }
 
@@ -85,6 +100,13 @@ public final class ConfigManager {
             this.messages = factory.messages();
         }
         return this.messages;
+    }
+
+    public @NotNull ExtensionsHolder extensions() {
+        if (extensions == null) {
+            this.extensions = factory.extensions();
+        }
+        return this.extensions;
     }
 
     public @NotNull MiniPlaceholdersHolder miniPlaceholders() {

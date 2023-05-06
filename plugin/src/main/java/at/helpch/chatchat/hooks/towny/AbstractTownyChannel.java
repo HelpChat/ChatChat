@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class AbstractTownyChannel extends AbstractChannel {
@@ -46,12 +47,14 @@ public abstract class AbstractTownyChannel extends AbstractChannel {
 
     @Override
     public Set<User> targets(final @NotNull User source) {
-        final var list = residentList(source.uuid());
-        if (list.isEmpty()) return Set.of();
-        return list.get().getResidents().stream()
-                .map(Resident::getUUID)
-                .map(plugin.usersHolder()::getUser)
-                .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
-                .collect(Collectors.toSet());
+        return residentList(source.uuid()).map(residentList -> residentList.getResidents().stream()
+            .filter(Predicate.not(Resident::isNPC))
+            .filter(Resident::isOnline)
+            .map(Resident::getUUID)
+            .map(plugin.usersHolder()::getUser)
+            .filter(User::chatEnabled) // Make sure the user has their chat enabled
+            .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
+            .collect(Collectors.toSet())).orElseGet(Set::of);
+
     }
 }

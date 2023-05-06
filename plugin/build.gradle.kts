@@ -7,6 +7,8 @@ plugins {
     id("me.mattstudios.triumph") version "0.2.8"
 }
 
+version = "${rootProject.version}-${System.getenv("BUILD_NUMBER")}"
+
 repositories {
     papi()
     triumphSnapshots()
@@ -22,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation(projects.api)
+    implementation(projects.chatChatApi)
 
     implementation(libs.triumph.cmds)
     implementation(libs.configurate)

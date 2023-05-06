@@ -36,7 +36,7 @@ public class MiniPlaceholderManagerImpl implements MiniPlaceholderManager {
         return Collections.unmodifiableSet(miniPlaceholders);
     }
 
-    private void clear() {
+    public void clear() {
         miniPlaceholders.clear();
     }
 }

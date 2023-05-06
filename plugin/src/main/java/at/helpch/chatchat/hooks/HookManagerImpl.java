@@ -29,9 +29,9 @@ public final class HookManagerImpl implements HookManager {
     public HookManagerImpl(final @NotNull ChatChatPlugin plugin) {
         this.plugin = plugin;
         HookCreator hookCreator = new HookCreator(plugin);
+        constructors.add(hookCreator::vanillaVanishHook);
         constructors.add(hookCreator::createDsrvHook);
         constructors.add(hookCreator::chatChatTownyHook);
-        constructors.add(hookCreator::vanillaVanishHook);
         constructors.add(hookCreator::essentialsVanishHook);
         constructors.add(hookCreator::superVanishHook);
         constructors.add(hookCreator::griefPreventionSoftMuteHook);
