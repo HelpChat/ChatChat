@@ -32,8 +32,8 @@ public class SuperVanishHook extends AbstractInternalVanishHook {
 
     @Override
     public boolean register() {
-        return Bukkit.getPluginManager().isPluginEnabled(SUPER_VANISH) ||
-            Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH);
+        return plugin.configManager().extensions().addons().superVanishVanish() &&
+            (Bukkit.getPluginManager().isPluginEnabled(SUPER_VANISH) || Bukkit.getPluginManager().isPluginEnabled(PREMIUM_VANISH));
     }
 
     @Override

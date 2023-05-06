@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class FormatUtils {
@@ -29,26 +30,38 @@ public final class FormatUtils {
     public static @NotNull Optional<PriorityFormat> findPermissionFormat(
         @NotNull final Player player,
         @NotNull final Channel channel,
-        @NotNull final Map<String, PriorityFormat> formats) {
-        final var channelFormat = channel.formats().formats().values().stream()
-            .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
-            .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
+        @NotNull final Map<String, PriorityFormat> formats,
+        final boolean inversePriorities) {
+        // If priorities are inverted, lower number = higher priority.
+        final var channelFormat = inversePriorities ?
+            channel.formats().formats().values().stream()
+                .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
+                .min(Comparator.comparingInt(PriorityFormat::priority)) :
+            channel.formats().formats().values().stream()
+                .filter(format -> player.hasPermission(CHANNEL_FORMAT_PERMISSION + channel.name() + "." + format.name()))
+                .max(Comparator.comparingInt(PriorityFormat::priority)) ;
 
-        // Channel formats take precedent.
+        // Channel formats have priority.
         if (channelFormat.isPresent()) {
             return channelFormat;
         }
 
-        return formats.values().stream()
-            .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
-            .min(Comparator.comparingInt(PriorityFormat::priority)); // lower number = higher priority
+        // If priorities are inverted, lower number = higher priority.
+        return inversePriorities ?
+            formats.values().stream()
+                .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
+                .min(Comparator.comparingInt(PriorityFormat::priority)) :
+            formats.values().stream()
+                .filter(value -> player.hasPermission(FORMAT_PERMISSION + value.name()))
+                .max(Comparator.comparingInt(PriorityFormat::priority));
     }
 
     public static @NotNull PriorityFormat findFormat(
         @NotNull final Player player,
         @NotNull final Channel channel,
-        @NotNull final GlobalFormatsHolder formats) {
-        final var formatOptional = findPermissionFormat(player, channel, formats.formats());
+        @NotNull final GlobalFormatsHolder formats,
+        final boolean inversePriorities) {
+        final var formatOptional = findPermissionFormat(player, channel, formats.formats(), inversePriorities);
 
         return formatOptional.orElse(ChatFormat.defaultFormat());
     }

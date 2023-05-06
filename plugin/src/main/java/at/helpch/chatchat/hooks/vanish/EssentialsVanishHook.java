@@ -29,7 +29,8 @@ public class EssentialsVanishHook extends AbstractInternalVanishHook {
 
     @Override
     public boolean register() {
-        return Bukkit.getPluginManager().isPluginEnabled(ESSENTIALS);
+        return plugin.configManager().extensions().addons().essentialsVanish() &&
+            Bukkit.getPluginManager().isPluginEnabled(ESSENTIALS);
     }
 
     @Override

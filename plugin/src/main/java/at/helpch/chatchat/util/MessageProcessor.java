@@ -73,7 +73,11 @@ public final class MessageProcessor {
         final var chatEvent = new ChatChatEvent(
             async,
             user,
-            FormatUtils.findFormat(user.player(), channel, plugin.configManager().formats()),
+            FormatUtils.findFormat(
+                user.player(),
+                channel,
+                plugin.configManager().formats(),
+                plugin.configManager().extensions().addons().deluxeChatInversePriorities()),
             // TODO: 9/2/22 Process message for each recipient to add rel support inside the message itself.
             //  Possibly even pass the minimessage string here instead of the processed component.
             MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message),
