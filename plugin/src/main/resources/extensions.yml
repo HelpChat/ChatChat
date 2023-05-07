@@ -25,3 +25,6 @@ addons:
   supervanish:
     # Enable or disable support for SuperVanish's vanish system.
     vanish: false
+  griefprevention:
+    # Enable or disable support for GriefPrevention's soft mute system.
+    soft_mute: false

@@ -22,6 +22,8 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
 
     private static final Object[] SUPERVANISH_VANISH = new Object[] {"supervanish", "vanish"};
 
+    private static final Object[] GRIEFPREVENTION_SOFT_MUTE = new Object[] {"supervanish", "soft_mute"};
+
     @Override
     public AddonsHolder deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
         final AddonsHolder holder = new AddonsHolder();
@@ -37,6 +39,8 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
         holder.essentialsVanish(node.node(ESSENTIALS_VANISH).getBoolean(true));
 
         holder.superVanishVanish(node.node(SUPERVANISH_VANISH).getBoolean(false));
+
+        holder.griefPreventionSoftMute(node.node(GRIEFPREVENTION_SOFT_MUTE).getBoolean(false));
 
         return holder;
     }
@@ -58,6 +62,8 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
         target.node(ESSENTIALS_VANISH).set(obj.essentialsVanish());
 
         target.node(SUPERVANISH_VANISH).set(obj.superVanishVanish());
+
+        target.node(GRIEFPREVENTION_SOFT_MUTE).set(obj.griefPreventionSoftMute());
     }
 
 }

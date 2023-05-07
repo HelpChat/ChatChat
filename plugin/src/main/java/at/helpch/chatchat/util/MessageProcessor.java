@@ -16,6 +16,7 @@ import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public final class MessageProcessor {
@@ -64,6 +65,16 @@ public final class MessageProcessor {
         @NotNull final String message,
         final boolean async
     ) {
+        final var isMuted = plugin.hookManager()
+            .muteHooks()
+            .stream()
+            .filter(Objects::nonNull)
+            .anyMatch(hook -> hook.isMuted(user));
+
+        if (isMuted) {
+            return false;
+        }
+
         final var rulesResult = plugin.ruleManager().isAllowedPublicChat(user, message);
         if (rulesResult.isPresent()) {
             user.sendMessage(rulesResult.get());
