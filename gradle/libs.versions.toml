@@ -3,8 +3,8 @@
 spigot = "1.19.3-R0.1-SNAPSHOT"
 
 # Adventure
-minimessage = "4.11.0"
-adventure-platform = "4.2.0"
+minimessage = "4.13.1"
+adventure-platform = "4.3.0"
 
 # Other
 configurate = "4.1.2"
