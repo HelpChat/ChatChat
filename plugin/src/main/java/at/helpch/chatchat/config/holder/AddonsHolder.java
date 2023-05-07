@@ -23,6 +23,9 @@ public class AddonsHolder {
     // SuperVanish features
     private boolean SUPERVANISH_VANISH = false;
 
+    // GriefPrevention features
+    private boolean GRIEFPREVENTION_SOFT_MUTE = true;
+
     public boolean deluxeChatInversePriorities() {
         return DELUXECHAT_INVERSE_PRIORITIES;
     }
@@ -77,5 +80,13 @@ public class AddonsHolder {
 
     public void superVanishVanish(final boolean value) {
         SUPERVANISH_VANISH = value;
+    }
+
+    public boolean griefPreventionSoftMute() {
+        return GRIEFPREVENTION_SOFT_MUTE;
+    }
+
+    public void griefPreventionSoftMute(final boolean value) {
+        GRIEFPREVENTION_SOFT_MUTE = value;
     }
 }

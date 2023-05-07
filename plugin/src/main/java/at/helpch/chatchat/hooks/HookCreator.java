@@ -3,7 +3,7 @@ package at.helpch.chatchat.hooks;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
-import at.helpch.chatchat.hooks.mute.GriefPreventionSoftMuteHook;
+import at.helpch.chatchat.hooks.gp.GriefPreventionSoftMuteHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.hooks.vanish.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.SuperVanishHook;

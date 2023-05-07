@@ -15,7 +15,7 @@ discordsrv = "1.25.1"
 supervanish = "6.2.6-4"
 bstats = "3.0.0"
 essentials = "2.19.4"
-griefprevention = "16.18"
+griefprevention = "16.18.1"
 
 [libraries]
 # Minecraft
