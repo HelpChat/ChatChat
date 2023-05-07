@@ -12,6 +12,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.util.Optional;
+
 // configurate requires non-final fields
 @SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable
@@ -42,12 +44,8 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
         this.message = message;
     }
 
-    public @NotNull TagResolver toTagResolver(
-        final boolean inMessage,
-        @NotNull final ChatUser sender,
-        @NotNull User recipient
-    ) {
-        if (inMessage && !sender.player().hasPermission(MINI_PLACEHOLDER_PERMISSION + name)) {
+    public @NotNull TagResolver toTagResolver(final @NotNull Context context) {
+        if (context.inMessage() && context.sender().isPresent() && !context.sender().get().player().hasPermission(MINI_PLACEHOLDER_PERMISSION + name)) {
             return TagResolver.empty();
         }
 
@@ -55,20 +53,30 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
             return Placeholder.unparsed(name, message);
         }
 
-        final TagResolver papiTag;
-        if (parsePapi) {
-            if (requiresRecipient && recipient instanceof ChatUser) {
-                papiTag = TagResolver.resolver(
-                    PapiTagUtils.createPlaceholderAPITag(sender.player()),
-                    PapiTagUtils.createRelPlaceholderAPITag(sender.player(), ((ChatUser) recipient).player()),
-                    PapiTagUtils.createRecipientTag(((ChatUser) recipient).player())
-                );
-            } else {
-                papiTag = PapiTagUtils.createPlaceholderAPITag(sender.player());
-            }
-        } else {
-            papiTag = TagResolver.empty();
+        final Optional<ChatUser> sender = context.sender();
+        final Optional<User> recipient = context.recipient();
+
+        if (sender.isEmpty()) {
+            return TagResolver.empty();
         }
+
+        if (parsePapi && requiresRecipient && recipient.isEmpty()) {
+            return TagResolver.empty();
+        }
+
+        if (!parsePapi) {
+            return closing
+                ? Placeholder.component(name, MessageUtils.parseToMiniMessage(message))
+                : TagResolver.resolver(name, Tag.inserting(MessageUtils.parseToMiniMessage(message)));
+        }
+
+        final TagResolver papiTag = !requiresRecipient || !(recipient.get() instanceof ChatUser)
+            ? PapiTagUtils.createPlaceholderAPITag(sender.get().player())
+            : TagResolver.resolver(
+                PapiTagUtils.createPlaceholderAPITag(sender.get().player()),
+                PapiTagUtils.createRelPlaceholderAPITag(sender.get().player(), ((ChatUser) recipient.get()).player()),
+                PapiTagUtils.createRecipientTag(((ChatUser) recipient.get()).player())
+            );
 
         return closing
             ? Placeholder.component(name, MessageUtils.parseToMiniMessage(message, papiTag))

@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -138,7 +139,7 @@ public final class MessageProcessor {
                     user.player(),
                     chatTarget.player(),
                     mentionResult.message(),
-                    plugin.miniPlaceholdersManager().compileTags(false, user, target)
+                    plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
                 );
 
                 target.sendMessage(component);
@@ -162,7 +163,7 @@ public final class MessageProcessor {
                 chatEvent.format(),
                 user.player(),
                 mentionResult.message(),
-                plugin.miniPlaceholdersManager().compileTags(false, user, target)
+                plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
             );
 
             target.sendMessage(component);
@@ -190,7 +191,7 @@ public final class MessageProcessor {
             user.player(),
             user.player(),
             mentionResult.message(),
-            plugin.miniPlaceholdersManager().compileTags(false, user, user)
+            plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(user).build())
         );
 
         user.sendMessage(component);
@@ -236,7 +237,7 @@ public final class MessageProcessor {
             );
         }
 
-        resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(true, user, recipient));
+        resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(true).sender(user).recipient(recipient).build()));
 
         return !user.hasPermission(URL_PERMISSION)
             ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())

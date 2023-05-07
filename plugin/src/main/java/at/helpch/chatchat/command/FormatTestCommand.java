@@ -3,6 +3,7 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
@@ -39,7 +40,7 @@ public class FormatTestCommand extends ChatChatCommand {
                 sender.player(),
                 sender.player(),
                 MessageProcessor.processMessage(plugin, sender, ConsoleUser.INSTANCE, message),
-                plugin.miniPlaceholdersManager().compileTags(false, sender, sender)
+                plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(sender).build())
             )
         );
     }
