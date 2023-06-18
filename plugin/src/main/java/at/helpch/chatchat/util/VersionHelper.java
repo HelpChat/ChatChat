@@ -28,6 +28,10 @@ public final class VersionHelper {
     public static final int V1_18_2 = 1182;
     public static final int V1_19_0 = 1190;
 
+    public static final int V1_20_0 = 1200;
+
+    public static boolean HAS_SMITHING_TEMPLATE = CURRENT_VERSION >= V1_20_0;
+
     /**
      * Check if the server has access to the Paper API
      * Taken from <a href="https://github.com/PaperMC/PaperLib">PaperLib</a>
