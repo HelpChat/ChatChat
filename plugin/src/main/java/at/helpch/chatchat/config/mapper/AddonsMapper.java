@@ -22,7 +22,7 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
 
     private static final Object[] SUPERVANISH_VANISH = new Object[] {"supervanish", "vanish"};
 
-    private static final Object[] GRIEFPREVENTION_SOFT_MUTE = new Object[] {"supervanish", "soft_mute"};
+    private static final Object[] GRIEFPREVENTION_SOFT_MUTE = new Object[] {"griefprevention", "soft_mute"};
 
     @Override
     public AddonsHolder deserialize(final Type type, final ConfigurationNode node) throws SerializationException {
