@@ -11,6 +11,9 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
+
+import java.util.Optional;
 
 // configurate requires non-final fields
 @SuppressWarnings("FieldMayBeFinal")
@@ -19,80 +22,94 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
 
     private static final String MINI_PLACEHOLDER_PERMISSION = MessageProcessor.TAG_BASE_PERMISSION + "placeholder.";
 
-    private final String name;
-    private final boolean requiresRecipient;
-    private final boolean parseMini;
-    private final boolean parsePapi;
-    private final boolean closing;
+    @Setting("name")
+    private final String tagName;
+    @Setting("requires-recipient")
+    private final boolean isRelationalTag;
+    @Setting("parse-mini")
+    private final boolean shouldParseMiniMessageTags;
+    @Setting("parse-papi")
+    private final boolean shouldParsePlaceholderAPIPlaceholders;
+    @Setting("closing")
+    private final boolean shouldAutoCloseTags;
+    @Setting("message")
     private final String message;
 
     public MiniPlaceholderImpl(
-        @NotNull final String name,
-        final boolean requiresRecipient,
-        final boolean parseMini,
-        final boolean parsePapi,
-        final boolean closing,
+        @NotNull final String tagName,
+        final boolean isRelationalTag,
+        final boolean shouldParseMiniMessageTags,
+        final boolean shouldParsePlaceholderAPIPlaceholders,
+        final boolean shouldAutoCloseTags,
         @NotNull final String message
     ) {
-        this.name = name;
-        this.requiresRecipient = requiresRecipient;
-        this.parseMini = parseMini;
-        this.parsePapi = parsePapi;
-        this.closing = closing;
+        this.tagName = tagName;
+        this.isRelationalTag = isRelationalTag;
+        this.shouldParseMiniMessageTags = shouldParseMiniMessageTags;
+        this.shouldParsePlaceholderAPIPlaceholders = shouldParsePlaceholderAPIPlaceholders;
+        this.shouldAutoCloseTags = shouldAutoCloseTags;
         this.message = message;
     }
 
-    public @NotNull TagResolver toTagResolver(
-        final boolean inMessage,
-        @NotNull final ChatUser sender,
-        @NotNull User recipient
-    ) {
-        if (inMessage && !sender.player().hasPermission(MINI_PLACEHOLDER_PERMISSION + name)) {
+    public @NotNull TagResolver toTagResolver(final @NotNull Context context) {
+        final Optional<ChatUser> sender = context.sender();
+        final Optional<User> recipient = context.recipient();
+
+        if (sender.isEmpty()) {
             return TagResolver.empty();
         }
 
-        if (!parseMini) {
-            return Placeholder.unparsed(name, message);
+        if (context.inMessage() && !sender.get().player().hasPermission(MINI_PLACEHOLDER_PERMISSION + tagName)) {
+            return TagResolver.empty();
         }
 
-        final TagResolver papiTag;
-        if (parsePapi) {
-            if (requiresRecipient && recipient instanceof ChatUser) {
-                papiTag = TagResolver.resolver(
-                    PapiTagUtils.createPlaceholderAPITag(sender.player()),
-                    PapiTagUtils.createRelPlaceholderAPITag(sender.player(), ((ChatUser) recipient).player()),
-                    PapiTagUtils.createRecipientTag(((ChatUser) recipient).player())
-                );
-            } else {
-                papiTag = PapiTagUtils.createPlaceholderAPITag(sender.player());
-            }
-        } else {
-            papiTag = TagResolver.empty();
+        if (!shouldParseMiniMessageTags) {
+            return Placeholder.unparsed(tagName, message);
         }
 
-        return closing
-            ? Placeholder.component(name, MessageUtils.parseToMiniMessage(message, papiTag))
-            : TagResolver.resolver(name, Tag.inserting(MessageUtils.parseToMiniMessage(message, papiTag)));
+        if (!shouldParsePlaceholderAPIPlaceholders) {
+            return shouldAutoCloseTags
+                ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message))
+                : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseToMiniMessage(message)));
+        }
+
+        if (isRelationalTag && recipient.isEmpty()) {
+            return TagResolver.empty();
+        }
+
+        final boolean recipientIsChatUser = recipient.isPresent() && recipient.get() instanceof ChatUser;
+
+        final TagResolver papiTag = isRelationalTag && recipientIsChatUser
+            ? TagResolver.resolver(
+                PapiTagUtils.createPlaceholderAPITag(sender.get().player()),
+                PapiTagUtils.createRelPlaceholderAPITag(sender.get().player(), ((ChatUser) recipient.get()).player()),
+                PapiTagUtils.createRecipientTag(((ChatUser) recipient.get()).player())
+            )
+            : PapiTagUtils.createPlaceholderAPITag(sender.get().player());
+
+        return shouldAutoCloseTags
+            ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message, papiTag))
+            : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseToMiniMessage(message, papiTag)));
     }
 
     public @NotNull String name() {
-        return name;
+        return tagName;
     }
 
     public boolean requiresRecipient() {
-        return requiresRecipient;
+        return isRelationalTag;
     }
 
     public boolean parseMini() {
-        return parseMini;
+        return shouldParseMiniMessageTags;
     }
 
     public boolean parsePapi() {
-        return parsePapi;
+        return shouldParsePlaceholderAPIPlaceholders;
     }
 
     public boolean closing() {
-        return closing;
+        return shouldAutoCloseTags;
     }
 
     public @NotNull String message() {
