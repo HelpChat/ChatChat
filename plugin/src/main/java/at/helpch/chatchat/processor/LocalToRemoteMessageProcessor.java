@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageUtils;
@@ -31,7 +32,7 @@ public final class LocalToRemoteMessageProcessor {
             chatEvent.format(),
             sender.player(),
             parsedMessage,
-            plugin.miniPlaceholdersManager().compileTags(false, sender, ConsoleUser.INSTANCE)
+            plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).build())
         );
 
        return plugin.remoteMessageSender().send(channel.name(), MessageUtils.parseToGson(component));

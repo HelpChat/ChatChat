@@ -69,8 +69,8 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
 
         if (!shouldParsePlaceholderAPIPlaceholders) {
             return shouldAutoCloseTags
-                ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message))
-                : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseToMiniMessage(message)));
+                ? Placeholder.component(tagName, MessageUtils.parseFromMiniMessage(message))
+                : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseFromMiniMessage(message)));
         }
 
         if (isRelationalTag && recipient.isEmpty()) {

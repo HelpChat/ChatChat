@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.ItemUtils;
@@ -63,7 +64,7 @@ public final class LocalToLocalMessageProcessor {
                     sender.player(),
                     chatTarget.player(),
                     mentionResult.message(),
-                    plugin.miniPlaceholdersManager().compileTags(false, sender, target)
+                    plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(target).build())
                 );
 
                 target.sendMessage(component);
@@ -87,7 +88,7 @@ public final class LocalToLocalMessageProcessor {
                 chatEvent.format(),
                 sender.player(),
                 mentionResult.message(),
-                plugin.miniPlaceholdersManager().compileTags(false, sender, target)
+                plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(target).build())
             );
 
             target.sendMessage(component);
@@ -115,7 +116,7 @@ public final class LocalToLocalMessageProcessor {
             sender.player(),
             sender.player(),
             mentionResult.message(),
-            plugin.miniPlaceholdersManager().compileTags(false, sender, sender)
+            plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(sender).build())
         );
 
         sender.sendMessage(component);
@@ -161,7 +162,7 @@ public final class LocalToLocalMessageProcessor {
             );
         }
 
-        resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(true, sender, recipient));
+        resolver.resolvers(plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(true).sender(sender).recipient(recipient).build()));
 
         return !sender.hasPermission(MessageProcessor.Constants.URL_PERMISSION)
             ? MessageProcessor.Constants.USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
