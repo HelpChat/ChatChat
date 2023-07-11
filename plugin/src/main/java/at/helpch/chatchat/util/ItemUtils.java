@@ -14,20 +14,68 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class ItemUtils {
+
     private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
+    private static Method translationKeyMethod;
+    private static final Map<Predicate<Material>, Function<Material, String>> translations = new LinkedHashMap<>();
+
+    static {
+        if (VersionHelper.IS_PAPER) {
+            try {
+                //noinspection JavaReflectionMemberAccess
+                ItemUtils.translationKeyMethod = Material.class.getMethod("translationKey"); // paper method
+            } catch (NoSuchMethodException ignored) {
+            }
+        }
+
+        translations.put(
+            __ -> VersionHelper.IS_PAPER && translationKeyMethod != null,
+            material -> {
+                try {
+                    return (String) translationKeyMethod.invoke(material);
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    e.printStackTrace();
+                    return "null." + material.getKey().getKey();
+                }
+            }
+        );
+        translations.put(
+            material -> VersionHelper.HAS_SMITHING_TEMPLATE && material.name().endsWith("SMITHING_TEMPLATE"),
+            __ -> "item.minecraft.smithing_template"
+        );
+        translations.put(
+            Material::isItem,
+            material -> "item.minecraft." + material.getKey().getKey()
+        );
+        translations.put(
+            Material::isBlock,
+            material -> "block.minecraft." + material.getKey().getKey()
+        );
+    }
 
     private ItemUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
     private static @NotNull Component getTranslation(@NotNull final Material material) {
-        final var type = material.isBlock() ? "block" : "item";
-        return Component.translatable(String.format("%s.minecraft.%s", type, material.getKey().getKey()));
+        for (final var entry : translations.entrySet()) {
+            if (entry.getKey().test(material)) {
+                return Component.translatable(entry.getValue().apply(material));
+            }
+        }
+
+        return Component.translatable("null." + material.getKey().getKey());
     }
 
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(

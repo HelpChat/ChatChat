@@ -4,10 +4,10 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.hooks.AbstractInternalHook;
 import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChatChatDsrvHook extends AbstractInternalHook {
+
     private static final String DISCORD_SRV = "DiscordSRV";
 
     private final ChatChatPlugin plugin;
@@ -19,7 +19,8 @@ public final class ChatChatDsrvHook extends AbstractInternalHook {
 
     @Override
     public boolean register() {
-        return Bukkit.getPluginManager().isPluginEnabled(DISCORD_SRV);
+        return plugin.configManager().extensions().addons().discordSrvChannelsBridging() &&
+            Bukkit.getPluginManager().isPluginEnabled(DISCORD_SRV);
     }
 
     @Override
@@ -33,4 +34,5 @@ public final class ChatChatDsrvHook extends AbstractInternalHook {
         DiscordSRV.getPlugin().getPluginHooks().add(hook);
         Bukkit.getPluginManager().registerEvents(hook, plugin);
     }
+
 }

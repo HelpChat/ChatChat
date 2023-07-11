@@ -1,7 +1,5 @@
 package at.helpch.chatchat.api.placeholder;
 
-import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,14 +17,12 @@ public interface MiniPlaceholderManager {
     void addPlaceholder(@NotNull MiniPlaceholder placeholder);
 
     /**
-     * Compiles all {@link MiniPlaceholder}s into a {@link TagResolver}.
+     * Compiles all {@link MiniPlaceholder}s into a single {@link TagResolver}.
      *
-     * @param inMessage whether the tag resolver is used in a message or in a format
-     * @param sender the sender of the message
-     * @param recipient the recipient of the message
+     * @param context The context in which the placeholder is used.
      * @return the compiled tags
      */
-    @NotNull TagResolver compileTags(boolean inMessage, @NotNull ChatUser sender, @NotNull User recipient);
+    @NotNull TagResolver compileTags(@NotNull MiniPlaceholder.Context context);
 
     /**
      * Get all placeholders.

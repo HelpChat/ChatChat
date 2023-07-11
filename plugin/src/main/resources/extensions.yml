@@ -1,0 +1,30 @@
+# Any changes made to the addons require a server restart to take effect.
+addons:
+  deluxechat:
+    # If enabled, lower numbers mean higher priority just like in DeluxeChat.
+    inverse_priorities: false
+    # Enable or disable the Unicode Characters rule. This rule only allows people to use non ascii characters if they
+    # have the permission "chatchat.utf" just like in DeluxeChat.
+    unicode_permission:
+      # Enable the rule for public messages.
+      public_chat: true
+      # Enable the rule for private messages.
+      private_chat: true
+  towny:
+    # Enable or disable the towny town and nation channel types. If enabled, TOWNY_TOWN and TOWNY_NATION can be used as channel type.
+    channels: false
+  discordsrv:
+    # Enable or disable DiscordSRV support. If enabled, ChatChat channels and DiscordSRV channels that have the same
+    # name will be bridged.
+    # NOTE: DiscordSRV channel names are not the same as Discord channel names! They are the names set in the DiscordSRV
+    # config.
+    channels_bridging: false
+  essentials:
+    # Enable or disable support for Essentials' vanish system.
+    vanish: true
+  supervanish:
+    # Enable or disable support for SuperVanish's vanish system.
+    vanish: false
+  griefprevention:
+    # Enable or disable support for GriefPrevention's soft mute system.
+    soft_mute: false

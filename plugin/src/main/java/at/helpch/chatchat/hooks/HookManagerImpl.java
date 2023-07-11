@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.hook.HookManager;
+import at.helpch.chatchat.api.hook.MuteHook;
 import at.helpch.chatchat.api.hook.VanishHook;
 import at.helpch.chatchat.api.utils.Validators;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ public final class HookManagerImpl implements HookManager {
 
     private final Set<Function<ChatChatAPI, ? extends Hook>> constructors = new HashSet<>();
     private final Set<VanishHook> vanishHooks = new HashSet<>();
+    private final Set<MuteHook> muteHooks = new HashSet<>();
     private final Set<Hook> hooks = new HashSet<>();
 
     private boolean hasBeenInitialized = false;
@@ -27,11 +29,12 @@ public final class HookManagerImpl implements HookManager {
     public HookManagerImpl(final @NotNull ChatChatPlugin plugin) {
         this.plugin = plugin;
         HookCreator hookCreator = new HookCreator(plugin);
+        constructors.add(hookCreator::vanillaVanishHook);
         constructors.add(hookCreator::createDsrvHook);
         constructors.add(hookCreator::chatChatTownyHook);
-        constructors.add(hookCreator::vanillaVanishHook);
         constructors.add(hookCreator::essentialsVanishHook);
         constructors.add(hookCreator::superVanishHook);
+        constructors.add(hookCreator::griefPreventionSoftMuteHook);
     }
 
     public void init() {
@@ -55,6 +58,10 @@ public final class HookManagerImpl implements HookManager {
 
     public @NotNull Set<VanishHook> vanishHooks() {
         return Collections.unmodifiableSet(vanishHooks);
+    }
+
+    public @NotNull Set<MuteHook> muteHooks() {
+        return Collections.unmodifiableSet(muteHooks);
     }
 
     private boolean registerHook(@NotNull final Function<ChatChatAPI, ? extends Hook> constructor) {
@@ -108,7 +115,9 @@ public final class HookManagerImpl implements HookManager {
             hook.enable();
 
             final boolean result;
-            if (hook instanceof VanishHook) {
+            if (hook instanceof MuteHook) {
+                result = muteHooks.add((MuteHook) hook);
+            } else if (hook instanceof VanishHook) {
                 result = vanishHooks.add((VanishHook) hook);
             } else {
                 result = hooks.add(hook);
