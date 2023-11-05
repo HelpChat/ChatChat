@@ -6,6 +6,11 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+repositories {
+    // adventure snapshot repo
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+}
+
 dependencies {
     api(libs.adventure.bukkit)
     api(libs.adventure.minimessage)
