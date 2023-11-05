@@ -12,6 +12,8 @@ version = "${rootProject.version}-${System.getenv("BUILD_NUMBER")}"
 repositories {
     papi()
     triumphSnapshots()
+    // adventure snapshot repo
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     // towny
     maven("https://repo.glaremasters.me/repository/towny/")
     // dsrv + dependencies
