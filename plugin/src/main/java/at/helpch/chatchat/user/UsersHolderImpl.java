@@ -40,12 +40,7 @@ public final class UsersHolderImpl implements UsersHolder {
     }
 
     public void removeUser(@NotNull final UUID uuid) {
-        if (!users.containsKey(uuid)) {
-            return;
-        }
-
-        final var user = users.get(uuid);
-        users.remove(uuid);
+        final var user = users.remove(uuid);
 
         if (!(user instanceof ChatUser)) {
             return;
