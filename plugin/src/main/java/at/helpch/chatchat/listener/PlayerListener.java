@@ -2,6 +2,7 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -18,7 +19,7 @@ public final class PlayerListener implements Listener {
 
     @EventHandler
     private void onJoin(final PlayerJoinEvent event) {
-        plugin.usersHolder().getUser(event.getPlayer());
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> plugin.usersHolder().getUser(event.getPlayer()));
     }
 
     @EventHandler
@@ -32,6 +33,6 @@ public final class PlayerListener implements Listener {
                 .filter(user -> user.lastMessagedUser().get().player().equals(event.getPlayer()))
                 .forEach(user -> user.lastMessagedUser(null));
 
-        plugin.usersHolder().removeUser(event.getPlayer());
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> plugin.usersHolder().removeUser(event.getPlayer().getUniqueId()));
     }
 }

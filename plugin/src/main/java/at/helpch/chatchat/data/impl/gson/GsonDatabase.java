@@ -11,11 +11,10 @@ import com.google.gson.JsonParseException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -43,6 +42,7 @@ public class GsonDatabase implements Database {
     @Override
     public @NotNull ChatUser loadChatUser(@NotNull final UUID uuid) {
         final var userFile = new File(usersDirectory, uuid + ".json");
+
         if (!userFile.exists()) {
             final var user = new ChatUserImpl(uuid);
             final var channel = ChatChannel.defaultChannel();
@@ -54,11 +54,12 @@ public class GsonDatabase implements Database {
         try(final var reader = new FileReader(userFile)) {
             return gson.fromJson(reader, ChatUser.class);
         } catch (final JsonParseException exception) { // Handles invalid JSON
-            plugin.getLogger().warning(
-                "Something went wrong while trying to load user " + uuid + "!" + System.lineSeparator()
-                + "Creating backup at " + uuid + "-backup.json."
-            );
-            exception.printStackTrace();
+            plugin.getLogger()
+                    .log(
+                        Level.WARNING,
+                        String.format("Something went wrong while trying to load user %s!. Creating backup at %1$s-backup.json", uuid),
+                        exception
+                    );
 
             final var backupFile = new File(usersDirectory, uuid + "-backup.json");
 
@@ -87,7 +88,7 @@ public class GsonDatabase implements Database {
 
             // copy contents of userFile to backupFile
             try {
-                copyFileContents(userFile, backupFile);
+                Files.copy(userFile.toPath(), backupFile.toPath());
             } catch (IOException ioException) {
                 plugin.getLogger().log(
                     Level.WARNING,
@@ -148,17 +149,4 @@ public class GsonDatabase implements Database {
         }
     }
 
-    private static void copyFileContents(
-        @NotNull final File source,
-        @NotNull final File destination
-    ) throws IOException {
-        try (final var inStream = new FileInputStream(source); final var outStream = new FileOutputStream(destination)) {
-            final byte[] buffer = new byte[1024];
-
-            int length;
-            while ((length = inStream.read(buffer)) > 0){
-                outStream.write(buffer, 0, length);
-            }
-        }
-    }
 }
