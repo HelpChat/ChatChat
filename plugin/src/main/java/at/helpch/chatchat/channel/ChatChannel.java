@@ -27,9 +27,10 @@ public final class ChatChannel extends AbstractChannel {
         @NotNull final List<String> toggleCommands,
         @NotNull final String channelPrefix,
         @NotNull final FormatsHolder formats,
-        final int radius
+        final int radius,
+        final boolean crossServer
     ) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius, crossServer);
     }
 
     public static @NotNull Channel defaultChannel() {

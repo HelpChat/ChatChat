@@ -69,7 +69,7 @@ public final class FormatUtils {
     public static @NotNull Component parseConsoleFormat(
         @NotNull final Format format,
         @NotNull final Player player) {
-        return MessageUtils.parseToMiniMessage(
+        return MessageUtils.parseFromMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 player,
                 format.parts()
@@ -93,7 +93,7 @@ public final class FormatUtils {
         @NotNull final Player player,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        return MessageUtils.parseToMiniMessage(
+        return MessageUtils.parseFromMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 player,
                 format.parts()
@@ -118,7 +118,7 @@ public final class FormatUtils {
         @NotNull final Format format,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        return MessageUtils.parseToMiniMessage(
+        return MessageUtils.parseFromMiniMessage(
             PlaceholderAPI.setPlaceholders(
                 null,
                 format.parts()
@@ -147,7 +147,7 @@ public final class FormatUtils {
         @NotNull final Player recipient,
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
-        return MessageUtils.parseToMiniMessage(
+        return MessageUtils.parseFromMiniMessage(
             PlaceholderAPI.setRelationalPlaceholders(
                 player,
                 recipient,
