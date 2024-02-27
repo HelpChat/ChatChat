@@ -58,7 +58,7 @@ public final class ChannelUtils {
             final World sourceWorld = sourceLocation.getWorld();
             final World targetWorld = targetLocation.getWorld();
 
-            if(sourceWorld != null && targetWorld != null && !sourceWorld.getName().equals(targetWorld.getName())) {
+            if(sourceWorld != null && targetWorld != null && !sourceWorld.getUID().equals(targetWorld.getUID())) {
                 return false;
             }
 
