@@ -113,6 +113,7 @@ public final class MessageProcessor {
             return false;
         }
 
+        final var oldChannel = user.channel();
         user.channel(channel);
 
         final var parsedMessage = chatEvent.message().compact();
@@ -182,6 +183,7 @@ public final class MessageProcessor {
         }
 
         if (!userIsTarget) {
+            user.channel(oldChannel);
             return true;
         }
 
@@ -207,6 +209,7 @@ public final class MessageProcessor {
             user.playSound(mentions.sound());
         }
 
+        user.channel(oldChannel);
         return true;
     }
 
