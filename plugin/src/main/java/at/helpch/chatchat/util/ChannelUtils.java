@@ -51,7 +51,7 @@ public final class ChannelUtils {
             return true;
         }
 
-        if (radius != -1 && source instanceof ChatUser ) {
+        if (radius != -1 && source instanceof ChatUser) {
             final Location sourceLocation = ((ChatUser) source).player().getLocation();
             final Location targetLocation = ((ChatUser) target).player().getLocation();
 
