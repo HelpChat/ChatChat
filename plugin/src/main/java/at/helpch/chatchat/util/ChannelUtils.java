@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChatChannel;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,10 +54,15 @@ public final class ChannelUtils {
         }
 
         if (radius != -1 && source instanceof ChatUser) {
-            final Location sourceLocation = ((ChatUser) source).player().getLocation();
             final Location targetLocation = targetChatUser.player().getLocation();
-            final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
-            final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
+            final Location targetLocation = ((ChatUser) target).player().getLocation();
+
+            final World sourceWorld = sourceLocation.getWorld();
+            final World targetWorld = targetLocation.getWorld();
+
+            if(sourceWorld != null && targetWorld != null && !sourceWorld.getUID().equals(targetWorld.getUID())) {
+                return false;
+            }
 
             return relativeX*relativeX + relativeZ*relativeZ <= radius*radius;
         }

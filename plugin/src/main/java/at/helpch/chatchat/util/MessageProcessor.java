@@ -59,6 +59,16 @@ public final class MessageProcessor {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
+    /**
+     * Process a message for a user and send it to the recipients.
+     * @param plugin The plugin instance.
+     * @param user The user sending the message.
+     * @param channel The channel the user is sending the message to.
+     * @param message The message to send.
+     * @param async Whether to process the message asynchronously.
+     *
+     * @return Whether the message was sent successfully.
+     */
     public static boolean process(
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,

@@ -73,6 +73,11 @@ public final class ChatListener implements Listener {
 
         final var consoleFormat = plugin.configManager().formats().consoleFormat();
 
+        final var oldChannel = user.channel();
+
+        // We switch the user to the channel here so that the console can parse the correct channel prefix
+        user.channel(channel);
+
         event.setMessage(LegacyComponentSerializer.legacySection().serialize(
             MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message)
         ));
@@ -97,6 +102,7 @@ public final class ChatListener implements Listener {
         // Cancel the event if the message doesn't end up being sent
         // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
         event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
+        user.channel(oldChannel);
     }
 
     private static String cleanseMessage(@NotNull final String message) {
