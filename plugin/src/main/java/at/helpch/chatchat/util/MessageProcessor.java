@@ -64,8 +64,6 @@ public final class MessageProcessor {
      * @param plugin The plugin instance.
      * @param user The user sending the message.
      * @param channel The channel the user is sending the message to.
-     * @param previousChannel The previous channel the user was in. Used to switch back to after sending the message.
-     *                        Used to switch back when sending a message to a channel with a prefix.
      * @param message The message to send.
      * @param async Whether to process the message asynchronously.
      *
@@ -75,7 +73,6 @@ public final class MessageProcessor {
         @NotNull final ChatChatPlugin plugin,
         @NotNull final ChatUser user,
         @NotNull final Channel channel,
-        @NotNull final Channel previousChannel,
         @NotNull final String message,
         final boolean async
     ) {
@@ -116,6 +113,7 @@ public final class MessageProcessor {
             return false;
         }
 
+        final var oldChannel = user.channel();
         user.channel(channel);
 
         final var parsedMessage = chatEvent.message().compact();
@@ -185,7 +183,7 @@ public final class MessageProcessor {
         }
 
         if (!userIsTarget) {
-            user.channel(previousChannel);
+            user.channel(oldChannel);
             return true;
         }
 
@@ -211,7 +209,7 @@ public final class MessageProcessor {
             user.playSound(mentions.sound());
         }
 
-        user.channel(previousChannel);
+        user.channel(oldChannel);
         return true;
     }
 
