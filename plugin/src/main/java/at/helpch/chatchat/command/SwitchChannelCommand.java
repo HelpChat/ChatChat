@@ -57,6 +57,6 @@ public final class SwitchChannelCommand extends BaseCommand {
             return;
         }
 
-        MessageProcessor.process(plugin, user, channel, user.channel(), message, false);
+        MessageProcessor.process(plugin, user, channel, message, false);
     }
 }
