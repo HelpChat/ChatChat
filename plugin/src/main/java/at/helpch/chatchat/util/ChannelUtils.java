@@ -54,7 +54,7 @@ public final class ChannelUtils {
         }
 
         if (radius != -1 && source instanceof ChatUser) {
-            final Location targetLocation = targetChatUser.player().getLocation();
+            final Location sourceLocation = targetChatUser.player().getLocation();
             final Location targetLocation = ((ChatUser) target).player().getLocation();
 
             final World sourceWorld = sourceLocation.getWorld();
@@ -63,6 +63,9 @@ public final class ChannelUtils {
             if(sourceWorld != null && targetWorld != null && !sourceWorld.getUID().equals(targetWorld.getUID())) {
                 return false;
             }
+
+            final int relativeX = targetLocation.getBlockX() - sourceLocation.getBlockX();
+            final int relativeZ = targetLocation.getBlockZ() - sourceLocation.getBlockZ();
 
             return relativeX*relativeX + relativeZ*relativeZ <= radius*radius;
         }
