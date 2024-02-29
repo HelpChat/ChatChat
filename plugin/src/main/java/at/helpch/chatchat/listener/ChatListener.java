@@ -101,14 +101,8 @@ public final class ChatListener implements Listener {
 
         // Cancel the event if the message doesn't end up being sent
         // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
-        boolean cancelled = MessageProcessor.process(plugin, user, channel, oldChannel, message, event.isAsynchronous());
-
-        event.setCancelled(!cancelled);
-
-        // If the event was cancelled, we need to reset the user back to their old channel
-        if(cancelled) {
-            user.channel(oldChannel);
-        }
+        event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
+        user.channel(oldChannel);
     }
 
     private static String cleanseMessage(@NotNull final String message) {
