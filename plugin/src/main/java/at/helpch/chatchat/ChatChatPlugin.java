@@ -13,6 +13,7 @@ import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.command.IgnoreListCommand;
 import at.helpch.chatchat.command.MainCommand;
 import at.helpch.chatchat.command.MentionToggleCommand;
+import at.helpch.chatchat.command.RangedChatCommand;
 import at.helpch.chatchat.command.ReloadCommand;
 import at.helpch.chatchat.command.ReplyCommand;
 import at.helpch.chatchat.command.SocialSpyCommand;
@@ -274,7 +275,8 @@ public final class ChatChatPlugin extends JavaPlugin {
             new MentionToggleCommand(this),
             new FormatTestCommand(this),
             new DumpCommand(this),
-            new ChatToggleCommand(this)
+            new ChatToggleCommand(this),
+            new RangedChatCommand(this)
         ).forEach(commandManager::registerCommand);
 
         if (configManager.settings().privateMessagesSettings().enabled()) {

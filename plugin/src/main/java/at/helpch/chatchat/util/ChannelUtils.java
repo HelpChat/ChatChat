@@ -47,13 +47,15 @@ public final class ChannelUtils {
             return true;
         }
 
-        if (target.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION)) {
+        final ChatUser targetChatUser = (ChatUser) target;
+
+        if (target.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION) && !targetChatUser.rangedChat()) {
             return true;
         }
 
         if (radius != -1 && source instanceof ChatUser) {
             final Location sourceLocation = ((ChatUser) source).player().getLocation();
-            final Location targetLocation = ((ChatUser) target).player().getLocation();
+            final Location targetLocation = targetChatUser.player().getLocation();
 
             final World sourceWorld = sourceLocation.getWorld();
             final World targetWorld = targetLocation.getWorld();
