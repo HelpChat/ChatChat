@@ -46,7 +46,7 @@ public final class DsrvListener implements ChatHook {
         final var message = github.scarsz.discordsrv.dependencies.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(
                 GsonComponentSerializer.gson().serialize(event.message())
         );
-        DiscordSRV.getPlugin().processChatMessage(event.user().player(), message,
+        DiscordSRV.getPlugin().processChatMessage(event.user().playerNotNull(), message,
                 event.channel().name(), event.isCancelled());
     }
 }

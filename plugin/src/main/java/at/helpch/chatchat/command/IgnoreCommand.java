@@ -28,12 +28,12 @@ public class IgnoreCommand extends BaseCommand {
 
         if (sender.ignoredUsers().contains(target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().alreadyIgnored()
-                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.playerNotNull().getDisplayName())));
             return;
         }
 
         sender.ignoreUser(target);
         sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
-            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.playerNotNull().getDisplayName())));
     }
 }

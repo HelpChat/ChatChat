@@ -51,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @BukkitMain
@@ -225,8 +226,8 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .filter(ChatUser.class::isInstance)
                 .map(ChatUser.class::cast)
                 .filter(sender::canSee)
-                .map(ChatUser::player)
-                .map(Player::getName)
+                .map(user -> user.player().map(Player::getName).orElse(null))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toUnmodifiableList())
         );
         commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.FILES);

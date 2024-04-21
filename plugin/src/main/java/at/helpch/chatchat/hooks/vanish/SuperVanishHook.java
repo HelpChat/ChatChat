@@ -48,6 +48,6 @@ public class SuperVanishHook extends AbstractInternalVanishHook {
 
     @Override
     public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
-        return VanishAPI.canSee(user.player(), target.player());
+        return VanishAPI.canSee(user.playerNotNull(), target.playerNotNull());
     }
 }

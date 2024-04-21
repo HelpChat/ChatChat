@@ -16,7 +16,15 @@ public interface ChatUser extends User {
      *
      * @return The player that this user is backed by.
      */
-    @NotNull Player player();
+    @NotNull Optional<Player> player();
+
+    /**
+     * Gets the player that this user is backed by. If the player is not present, an exception is thrown.
+     *
+     * @return The player that this user is backed by.
+     * @throws NullPointerException If the player is not present.
+     */
+    @NotNull Player playerNotNull() throws NullPointerException;
 
     /**
      * Gets the user that this user has last sent a private message to.

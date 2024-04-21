@@ -44,6 +44,6 @@ public class VanillaVanishHook extends AbstractInternalVanishHook {
 
     @Override
     public boolean canSee(@NotNull final ChatUser user, @NotNull final ChatUser target) {
-        return user.player().canSee(target.player());
+        return user.playerNotNull().canSee(target.playerNotNull());
     }
 }

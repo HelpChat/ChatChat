@@ -85,7 +85,7 @@ public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
             case "private_messages_enabled":
                 return formatBoolean(chatUser.privateMessages());
             case "private_messages_recipient":
-                return chatUser.lastMessagedUser().map(value -> value.player().getName()).orElse("");
+                return chatUser.lastMessagedUser().map(value -> value.playerNotNull().getName()).orElse("");
         }
 
         return null;
