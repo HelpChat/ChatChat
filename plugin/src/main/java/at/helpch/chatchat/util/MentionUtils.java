@@ -84,8 +84,9 @@ public final class MentionUtils {
         @NotNull final Component component,
         @NotNull final Format format
     ) {
-        return replaceMention(prefix + user.playerNotNull(), component,
-            r -> FormatUtils.parseFormat(format, user.playerNotNull(), component));
+        return user.player()
+            .map(value -> replaceMention(prefix + value.getName(), component, r -> FormatUtils.parseFormat(format, value, component)))
+            .orElseGet(() -> new MentionReplaceResult(false, component));
     }
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(

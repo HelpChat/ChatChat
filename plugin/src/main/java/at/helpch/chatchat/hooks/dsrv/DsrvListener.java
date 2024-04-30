@@ -43,10 +43,14 @@ public final class DsrvListener implements ChatHook {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(ChatChatEvent event) {
+        var player = event.user().player();
+        if (player.isEmpty()) {
+            return;
+        }
+
         final var message = github.scarsz.discordsrv.dependencies.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(
                 GsonComponentSerializer.gson().serialize(event.message())
         );
-        DiscordSRV.getPlugin().processChatMessage(event.user().playerNotNull(), message,
-                event.channel().name(), event.isCancelled());
+        DiscordSRV.getPlugin().processChatMessage(player.get(), message, event.channel().name(), event.isCancelled());
     }
 }

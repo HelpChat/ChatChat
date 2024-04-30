@@ -39,3 +39,5 @@ channel-mentions-enabled: "<green>Successfully enabled channel mentions!"
 channel-mentions-disabled: "<green>Successfully disabled channel mentions!"
 
 invalid-format: "<red>Invalid format!"
+
+generic-error: "<red>An unexpected error occurred!"

@@ -14,7 +14,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -77,6 +76,11 @@ public final class MessageProcessor {
         @NotNull final String message,
         final boolean async
     ) {
+        final var player = user.player();
+        if (player.isEmpty()) {
+            return false;
+        }
+
         final var isMuted = plugin.hookManager()
             .muteHooks()
             .stream()
@@ -97,7 +101,7 @@ public final class MessageProcessor {
             async,
             user,
             FormatUtils.findFormat(
-                user.playerNotNull(),
+                player.get(),
                 channel,
                 plugin.configManager().formats(),
                 plugin.configManager().extensions().addons().deluxeChatInversePriorities()),
@@ -130,7 +134,9 @@ public final class MessageProcessor {
             }
 
             // Console Users have their own format we set in ChatListener.java
-            if (target instanceof ConsoleUser) continue;
+            if (target instanceof ConsoleUser) {
+                continue;
+            }
 
             // Process mentions and get the result.
             final var mentionResult = plugin.mentionsManager().processMentions(
@@ -144,11 +150,16 @@ public final class MessageProcessor {
 
             if (target instanceof ChatUser) {
                 final var chatTarget = (ChatUser) target;
+                final var playerTarget = chatTarget.player();
+
+                if (playerTarget.isEmpty()) {
+                    continue;
+                }
 
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
-                    user.playerNotNull(),
-                    chatTarget.playerNotNull(),
+                    player.get(),
+                    playerTarget.get(),
                     mentionResult.message(),
                     plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
                 );
@@ -172,7 +183,7 @@ public final class MessageProcessor {
 
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
-                user.playerNotNull(),
+                player.get(),
                 mentionResult.message(),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
             );
@@ -199,8 +210,8 @@ public final class MessageProcessor {
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
-            user.playerNotNull(),
-            user.playerNotNull(),
+            player.get(),
+            player.get(),
             mentionResult.message(),
             plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(user).build())
         );
