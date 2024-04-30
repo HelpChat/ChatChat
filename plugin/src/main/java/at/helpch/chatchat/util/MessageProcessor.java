@@ -14,6 +14,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -96,7 +97,7 @@ public final class MessageProcessor {
             async,
             user,
             FormatUtils.findFormat(
-                user.player(),
+                user.playerNotNull(),
                 channel,
                 plugin.configManager().formats(),
                 plugin.configManager().extensions().addons().deluxeChatInversePriorities()),
@@ -146,8 +147,8 @@ public final class MessageProcessor {
 
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
-                    user.player(),
-                    chatTarget.player(),
+                    user.playerNotNull(),
+                    chatTarget.playerNotNull(),
                     mentionResult.message(),
                     plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
                 );
@@ -171,7 +172,7 @@ public final class MessageProcessor {
 
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
-                user.player(),
+                user.playerNotNull(),
                 mentionResult.message(),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
             );
@@ -198,8 +199,8 @@ public final class MessageProcessor {
 
         final var component = FormatUtils.parseFormat(
             chatEvent.format(),
-            user.player(),
-            user.player(),
+            user.playerNotNull(),
+            user.playerNotNull(),
             mentionResult.message(),
             plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(user).build())
         );
@@ -238,11 +239,13 @@ public final class MessageProcessor {
         }
 
         if (user.hasPermission(ITEM_TAG_PERMISSION)) {
-            resolver.resolver(
-                ItemUtils.createItemPlaceholder(
-                    plugin.configManager().settings().itemFormat(),
-                    plugin.configManager().settings().itemFormatInfo(),
-                    user.player().getInventory().getItemInMainHand()
+            user.player().ifPresent( player ->
+                resolver.resolver(
+                    ItemUtils.createItemPlaceholder(
+                        plugin.configManager().settings().itemFormat(),
+                        plugin.configManager().settings().itemFormatInfo(),
+                        player.getInventory().getItemInMainHand()
+                    )
                 )
             );
         }

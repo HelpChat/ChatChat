@@ -68,7 +68,7 @@ public final class ChatUserImpl implements ChatUser {
 
     @Override
     public boolean hasPermission(@NotNull final String node) {
-        return player().hasPermission(node);
+        return player().map(value -> value.hasPermission(node)).orElse(false);
     }
 
     @Override
@@ -168,13 +168,20 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public @NotNull Player player() {
-        return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
+    public @NotNull Optional<Player> player() {
+        return Optional.ofNullable(Bukkit.getPlayer(uuid));
+    }
+
+    @Override
+    public @NotNull Player playerNotNull() throws NullPointerException {
+        return player().orElseThrow(() -> new NullPointerException("Player is not present!"));
     }
 
     @Override
     public @NotNull Audience audience() {
-        return ChatChatPlugin.audiences().player(uuid);
+        try (var audiences = ChatChatPlugin.audiences()) {
+            return audiences.player(uuid);
+        }
     }
 
     @Override

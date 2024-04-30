@@ -77,7 +77,7 @@ public final class PapiTagUtils {
 
     public static @NotNull TagResolver createRelPlaceholderAPITag(
         final @NotNull Player player,
-        final @NotNull Player target
+        final @Nullable Player target
     ) {
         return TagResolver.resolver("papi-rel", (argumentQueue, context) -> {
             if (!argumentQueue.hasNext()) {
@@ -118,6 +118,10 @@ public final class PapiTagUtils {
                 return null;
             }
 
+            if (target == null) {
+                return null;
+            }
+
             final var parsedPlaceholder = PlaceholderAPI.setRelationalPlaceholders(
                 player,
                 target,
@@ -134,7 +138,11 @@ public final class PapiTagUtils {
         });
     }
 
-    public static @NotNull TagResolver createRecipientTag(@NotNull final Player player) {
+    public static @NotNull TagResolver createRecipientTag(@Nullable final Player player) {
+        if (player == null) {
+            return TagResolver.empty();
+        }
+
         return createPlaceholderAPITag("recipient", player);
     }
 }

@@ -123,8 +123,8 @@ public final class WhisperCommand extends BaseCommand {
         formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                 format,
-                sender.player(),
-                recipient.player(),
+                sender.playerNotNull(),
+                recipient.playerNotNull(),
                 pmSendEvent.message()
             ))
         );

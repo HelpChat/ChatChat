@@ -37,8 +37,8 @@ public class FormatTestCommand extends ChatChatCommand {
         sender.sendMessage(
             FormatUtils.parseFormat(
                 format,
-                sender.player(),
-                sender.player(),
+                sender.playerNotNull(),
+                sender.playerNotNull(),
                 MessageProcessor.processMessage(plugin, sender, ConsoleUser.INSTANCE, message),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(sender).build())
             )

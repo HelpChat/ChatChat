@@ -22,12 +22,12 @@ public class UnignoreCommand extends BaseCommand {
     public void unignore(ChatUser sender, ChatUser target) {
         if (!sender.ignoredUsers().contains(target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().notIgnored()
-                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.playerNotNull().getDisplayName())));
             return;
         }
 
         sender.unignoreUser(target);
         sender.sendMessage(plugin.configManager().messages().unignoredPlayer()
-            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.playerNotNull().getDisplayName())));
     }
 }
