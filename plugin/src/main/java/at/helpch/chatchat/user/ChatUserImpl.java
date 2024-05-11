@@ -173,15 +173,8 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public @NotNull Player playerNotNull() throws NullPointerException {
-        return player().orElseThrow(() -> new NullPointerException("Player is not present!"));
-    }
-
-    @Override
     public @NotNull Audience audience() {
-        try (var audiences = ChatChatPlugin.audiences()) {
-            return audiences.player(uuid);
-        }
+        return ChatChatPlugin.audiences().player(uuid);
     }
 
     @Override
