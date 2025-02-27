@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public final class
-PlaceholderAPIPlaceholders extends PlaceholderExpansion {
+public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     private final ChatChatPlugin plugin;
 
     public PlaceholderAPIPlaceholders(@NotNull final ChatChatPlugin plugin) {
