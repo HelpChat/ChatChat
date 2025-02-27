@@ -54,6 +54,9 @@ public final class MessagesHolder {
     private Component channelNoPermissionSwitch = text("You no longer have permission to use this channel so it has been switched to the <default> channel. ", RED);
     private Component channelSwitched = text("You have switched to the <channel> channel", GREEN);
 
+    private Component rangedChatEnabledSuccessfully = text("Your ranged chat has been enabled successfully!", GREEN);
+    private Component rangedChatDisabledSuccessfully = text("Your ranged chat has been disabled successfully!", RED);
+
     // command related
     private Component commandUnknownCommand = text("Unknown Command.", RED);
     private Component commandInvalidUsage = text("Invalid usage.", RED);
@@ -240,8 +243,16 @@ public final class MessagesHolder {
         return chatDisabled;
     }
 
+
+    public @NotNull Component rangedChatEnabledSuccessfully() {
+        return rangedChatEnabledSuccessfully;
+    }
+
+    public @NotNull Component rangedChatDisabledSuccessfully() {
+        return rangedChatDisabledSuccessfully;
+    }
+
     public @NotNull Component genericError() {
         return genericError;
     }
-
 }

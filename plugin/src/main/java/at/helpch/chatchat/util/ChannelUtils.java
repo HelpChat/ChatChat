@@ -47,13 +47,15 @@ public final class ChannelUtils {
             return true;
         }
 
-        if (target.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION)) {
+        final ChatUser targetChatUser = (ChatUser) target;
+
+        if (target.hasPermission(BYPASS_RADIUS_CHANNEL_PERMISSION) && !targetChatUser.rangedChat()) {
             return true;
         }
 
         if (radius != -1 && source instanceof ChatUser) {
             var sourcePlayer = ((ChatUser) source).player();
-            var targetPlayer = ((ChatUser) target).player();
+            var targetPlayer = targetChatUser.player();
 
             if (sourcePlayer.isEmpty() || targetPlayer.isEmpty()) {
                 return false;

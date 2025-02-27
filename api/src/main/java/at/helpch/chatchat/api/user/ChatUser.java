@@ -90,4 +90,20 @@ public interface ChatUser extends User {
      * @param enable True to enable social spy, false to disable.
      */
     void socialSpy(final boolean enable);
+
+    /**
+     * Checks if the user has ranged chat enabled.
+     * If it is enabled, they will only see messages from players within a certain range.
+     * Only applies to the players that have bypass ChannelUtils.BYPASS_RADIUS_CHANNEL_PERMISSION.
+     *
+     * @return True if the user has ranged chat enabled, false otherwise.
+     */
+    boolean rangedChat();
+
+    /**
+     * Changes the state of the user's ranged chat.
+     *
+     * @param enable True to enable ranged chat, false to disable.
+     */
+    void rangedChat(final boolean enable);
 }

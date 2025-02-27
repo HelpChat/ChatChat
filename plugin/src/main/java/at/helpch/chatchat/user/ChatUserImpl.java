@@ -39,6 +39,7 @@ public final class ChatUserImpl implements ChatUser {
     private boolean channelMentions = true;
     private boolean socialSpy = false;
     private boolean chatEnabled = true;
+    private boolean rangedChat = false;
     private Set<UUID> ignoredUsers = new HashSet<>();
 
     @Override
@@ -148,6 +149,16 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public boolean chatEnabled() {
         return this.chatEnabled;
+    }
+
+    @Override
+    public boolean rangedChat() {
+        return rangedChat;
+    }
+
+    @Override
+    public void rangedChat(final boolean enabled) {
+        this.rangedChat = enabled;
     }
 
     @Override

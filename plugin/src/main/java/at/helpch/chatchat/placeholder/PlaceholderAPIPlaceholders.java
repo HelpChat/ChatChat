@@ -43,7 +43,8 @@ public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
             "%chatchat_channel_message_prefix%",
             "%chatchat_social_spy_enabled%",
             "%chatchat_private_messages_enabled%",
-            "%chatchat_private_messages_recipient%"
+            "%chatchat_private_messages_recipient%",
+            "%chatchat_ranged_chat_enabled%"
         );
     }
 
@@ -86,6 +87,8 @@ public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
                 return formatBoolean(chatUser.socialSpy());
             case "private_messages_enabled":
                 return formatBoolean(chatUser.privateMessages());
+            case "ranged_chat_enabled":
+                return formatBoolean(chatUser.rangedChat());
             case "private_messages_recipient":
                 return chatUser.lastMessagedUser().map(value -> value.player().map(Player::getName).orElse("")).orElse("");
         }
