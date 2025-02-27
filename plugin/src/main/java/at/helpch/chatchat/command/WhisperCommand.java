@@ -37,6 +37,13 @@ public final class WhisperCommand extends BaseCommand {
         @Suggestion(value = "recipients") final ChatUser recipient,
         @Join final String message
     ) {
+        var senderPlayer = sender.player();
+        var recipientPlayer = recipient.player();
+        if (senderPlayer.isEmpty() || recipientPlayer.isEmpty()) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
             sender.sendMessage(plugin.configManager().messages().unknownCommand());
             return;
@@ -123,8 +130,8 @@ public final class WhisperCommand extends BaseCommand {
         formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                 format,
-                sender.player(),
-                recipient.player(),
+                senderPlayer.get(),
+                recipientPlayer.get(),
                 pmSendEvent.message()
             ))
         );

@@ -26,14 +26,20 @@ public class IgnoreCommand extends BaseCommand {
             return;
         }
 
+        var targetPlayer = target.player();
+        if (targetPlayer.isEmpty()) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
         if (sender.ignoredUsers().contains(target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().alreadyIgnored()
-                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+                .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
             return;
         }
 
         sender.ignoreUser(target);
         sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
-            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+            .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
     }
 }

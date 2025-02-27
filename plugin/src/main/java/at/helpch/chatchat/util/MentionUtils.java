@@ -73,7 +73,7 @@ public final class MentionUtils {
         @NotNull final Component component,
         @NotNull final Format format) {
         return replaceMention(username, component, (r) -> user instanceof ChatUser
-            ? FormatUtils.parseFormat(format, ((ChatUser) user).player(), component)
+            ? FormatUtils.parseFormat(format, ((ChatUser) user).player().get(), component)
             : FormatUtils.parseFormat(format, component));
     }
 
@@ -84,8 +84,9 @@ public final class MentionUtils {
         @NotNull final Component component,
         @NotNull final Format format
     ) {
-        return replaceMention(prefix + user.player().getName(), component,
-            r -> FormatUtils.parseFormat(format, user.player(), component));
+        return user.player()
+            .map(value -> replaceMention(prefix + value.getName(), component, r -> FormatUtils.parseFormat(format, value, component)))
+            .orElseGet(() -> new MentionReplaceResult(false, component));
     }
 
     public static @NotNull Map.Entry<@NotNull Boolean, @NotNull Component> processChannelMentions(

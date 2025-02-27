@@ -29,6 +29,12 @@ public class FormatTestCommand extends ChatChatCommand {
         @NotNull final PriorityFormat format,
         @Join @NotNull final String message
     ) {
+        var player = sender.player();
+        if (player.isEmpty()) {
+            sender.sendMessage(plugin.configManager().messages().genericError());
+            return;
+        }
+
         if (message.isBlank()) {
             sender.sendMessage(plugin.configManager().messages().emptyMessage());
             return;
@@ -37,8 +43,8 @@ public class FormatTestCommand extends ChatChatCommand {
         sender.sendMessage(
             FormatUtils.parseFormat(
                 format,
-                sender.player(),
-                sender.player(),
+                player.get(),
+                player.get(),
                 MessageProcessor.processMessage(plugin, sender, ConsoleUser.INSTANCE, message),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(sender).build())
             )

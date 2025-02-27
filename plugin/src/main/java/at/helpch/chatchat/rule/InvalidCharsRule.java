@@ -21,11 +21,11 @@ public class InvalidCharsRule implements Rule {
     }
 
     public boolean isAllowedPublic(@NotNull final ChatUser sender, @NotNull final String message) {
-        return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.player().hasPermission(UTF_PERMISSION);
+        return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.hasPermission(UTF_PERMISSION);
     }
 
     public boolean isAllowedPrivate(@NotNull ChatUser sender, @NotNull User recipient, @NotNull String message) {
-        return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.player().hasPermission(UTF_PERMISSION);
+        return message.chars().noneMatch(it -> it > 127 && it != 248) || sender.hasPermission(UTF_PERMISSION);
     }
 
     public @NotNull Optional<@NotNull Component> publicDeniedMessage() {

@@ -9,6 +9,7 @@ import at.helpch.chatchat.util.PapiTagUtils;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
@@ -59,7 +60,7 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
             return TagResolver.empty();
         }
 
-        if (context.inMessage() && !sender.get().player().hasPermission(MINI_PLACEHOLDER_PERMISSION + tagName)) {
+        if (context.inMessage() && !sender.get().hasPermission(MINI_PLACEHOLDER_PERMISSION + tagName)) {
             return TagResolver.empty();
         }
 
@@ -78,14 +79,20 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
         }
 
         final boolean recipientIsChatUser = recipient.isPresent() && recipient.get() instanceof ChatUser;
+        final Player senderPlayer = sender.get().player().orElse(null);
+        final Player recipientPlayer = recipientIsChatUser ? ((ChatUser) recipient.get()).player().orElse(null) : null;
+
+        if (senderPlayer == null) {
+            return TagResolver.empty();
+        }
 
         final TagResolver papiTag = isRelationalTag && recipientIsChatUser
             ? TagResolver.resolver(
-                PapiTagUtils.createPlaceholderAPITag(sender.get().player()),
-                PapiTagUtils.createRelPlaceholderAPITag(sender.get().player(), ((ChatUser) recipient.get()).player()),
-                PapiTagUtils.createRecipientTag(((ChatUser) recipient.get()).player())
+                PapiTagUtils.createPlaceholderAPITag(senderPlayer),
+                PapiTagUtils.createRelPlaceholderAPITag(senderPlayer, recipientPlayer),
+                PapiTagUtils.createRecipientTag(recipientPlayer)
             )
-            : PapiTagUtils.createPlaceholderAPITag(sender.get().player());
+            : PapiTagUtils.createPlaceholderAPITag(senderPlayer);
 
         return shouldAutoCloseTags
             ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message, papiTag))

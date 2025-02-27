@@ -69,7 +69,7 @@ public final class ChatUserImpl implements ChatUser {
 
     @Override
     public boolean hasPermission(@NotNull final String node) {
-        return player().hasPermission(node);
+        return player().map(value -> value.hasPermission(node)).orElse(false);
     }
 
     @Override
@@ -179,8 +179,8 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public @NotNull Player player() {
-        return Objects.requireNonNull(Bukkit.getPlayer(uuid)); // this will never be null
+    public @NotNull Optional<Player> player() {
+        return Optional.ofNullable(Bukkit.getPlayer(uuid));
     }
 
     @Override

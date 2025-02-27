@@ -7,9 +7,11 @@ import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     private final ChatChatPlugin plugin;
@@ -89,6 +91,8 @@ public final class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
                 return chatUser.lastMessagedUser().map(value -> value.player().getName()).orElse("");
             case "ranged_chat_enabled":
                 return formatBoolean(chatUser.rangedChat());
+            case "private_messages_recipient":
+                return chatUser.lastMessagedUser().map(value -> value.player().map(Player::getName).orElse("")).orElse("");
         }
 
         return null;

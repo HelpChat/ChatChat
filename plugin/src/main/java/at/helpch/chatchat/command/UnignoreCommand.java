@@ -20,14 +20,20 @@ public class UnignoreCommand extends BaseCommand {
     @Permission(IGNORE_PERMISSION)
     @Default
     public void unignore(ChatUser sender, ChatUser target) {
+        var targetPlayer = target.player();
+        if (targetPlayer.isEmpty()) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
         if (!sender.ignoredUsers().contains(target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().notIgnored()
-                .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+                .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
             return;
         }
 
         sender.unignoreUser(target);
         sender.sendMessage(plugin.configManager().messages().unignoredPlayer()
-            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+            .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
     }
 }

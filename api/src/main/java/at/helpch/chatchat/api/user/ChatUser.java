@@ -16,7 +16,7 @@ public interface ChatUser extends User {
      *
      * @return The player that this user is backed by.
      */
-    @NotNull Player player();
+    @NotNull Optional<Player> player();
 
     /**
      * Gets the user that this user has last sent a private message to.

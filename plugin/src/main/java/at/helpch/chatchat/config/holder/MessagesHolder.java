@@ -76,6 +76,9 @@ public final class MessagesHolder {
     // format related
     private Component invalidFormat = text("Invalid format.", RED);
 
+    // generic
+    private Component genericError = text("An unexpected error occurred!", RED);
+
     public @NotNull Component consoleOnly() {
         return consoleOnly;
     }
@@ -240,12 +243,15 @@ public final class MessagesHolder {
         return chatDisabled;
     }
 
+
     public @NotNull Component rangedChatEnabledSuccessfully() {
         return rangedChatEnabledSuccessfully;
     }
 
     public @NotNull Component rangedChatDisabledSuccessfully() {
         return rangedChatDisabledSuccessfully;
-    }
 
+    public @NotNull Component genericError() {
+        return genericError;
+    }
 }
