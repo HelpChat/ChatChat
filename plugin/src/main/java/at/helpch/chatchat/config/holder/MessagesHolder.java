@@ -250,6 +250,7 @@ public final class MessagesHolder {
 
     public @NotNull Component rangedChatDisabledSuccessfully() {
         return rangedChatDisabledSuccessfully;
+    }
 
     public @NotNull Component genericError() {
         return genericError;
