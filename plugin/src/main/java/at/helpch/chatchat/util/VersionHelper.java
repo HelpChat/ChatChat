@@ -18,34 +18,7 @@ public final class VersionHelper {
 
     public static final int CURRENT_VERSION = getCurrentVersion();
 
-    public static final boolean IS_PAPER = checkPaper();
-
-    public static final int V1_13_2 = 1132;
-    public static final int V1_14_4 = 1144;
-    public static final int V1_15_2 = 1152;
-    public static final int V1_16_5 = 1165;
-    public static final int V1_17_1 = 1171;
-    public static final int V1_18_2 = 1182;
     public static final int V1_19_0 = 1190;
-
-    public static final int V1_20_0 = 1200;
-
-    public static boolean HAS_SMITHING_TEMPLATE = CURRENT_VERSION >= V1_20_0;
-
-    /**
-     * Check if the server has access to the Paper API
-     * Taken from <a href="https://github.com/PaperMC/PaperLib">PaperLib</a>
-     *
-     * @return True if on Paper server (or forks), false anything else
-     */
-    private static boolean checkPaper() {
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
 
     /**
      * Gets the current server version
