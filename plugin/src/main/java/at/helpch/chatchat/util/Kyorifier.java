@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Kyorifier {
-
     private static final ImmutableMap<Character, String> COLOURS = new ImmutableMap.Builder<Character, String>()
         .put('0', NamedTextColor.BLACK.toString())
         .put('1', NamedTextColor.DARK_BLUE.toString())
@@ -41,7 +40,7 @@ public final class Kyorifier {
         .build();
 
     private static final Pattern LEGACY_HEX_COLORS_PATTERN = Pattern.compile(
-        "&(?<code>[\\da-fk-or])?",
+        "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[a-f\\d]){6})[}\\]>]?",
         Pattern.CASE_INSENSITIVE // Turns out colors are not case-sensitive.
     );
 
@@ -57,10 +56,16 @@ public final class Kyorifier {
         final Stack<String> activeFormatters = new Stack<>();
         return LEGACY_HEX_COLORS_PATTERN.matcher(input.replace("§", "&")).replaceAll(result -> {
             final Matcher matcher = (Matcher) result;
-
+            final var hex = matcher.group("hex");
             final var code = matcher.group("code");
 
-            final var colour = COLOURS.get(Character.toLowerCase(code.charAt(0)));
+            if(code == null) {
+                return matcher.group();
+            }
+
+            final var colour = hex == null
+                ? COLOURS.get(Character.toLowerCase(code.charAt(0)))
+                : "#" + hex.replace("&", "");
 
             if (colour == null) {
                 final var formatter = FORMATTERS.get(Character.toLowerCase(code.charAt(0)));
@@ -76,5 +81,4 @@ public final class Kyorifier {
             return out.toString();
         });
     }
-
 }

@@ -115,7 +115,7 @@ public final class WhisperCommand extends BaseCommand {
                     .stream()
                     .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
                     .filter(spyUser -> spyUser.uuid() != sender.uuid() && spyUser.uuid() != recipient.uuid())
-                    .collect(Collectors.toUnmodifiableList())
+                    .toList()
             ),
             socialSpyFormat
         );

@@ -46,13 +46,11 @@ public final class PlayerListener implements Listener {
 
     @EventHandler
     private void onLeave(final PlayerQuitEvent event) {
-
-        // find everyone who last messaged the person leaving, and remove their reference
         Player player = event.getPlayer();
 
         plugin.usersHolder().users().stream()
-            .filter(user -> user instanceof ChatUser)
-            .map(user -> (ChatUser) user)
+            .filter(ChatUser.class::isInstance)
+            .map(ChatUser.class::cast)
             .filter(user -> user.lastMessagedUser().isPresent())
             .filter(user -> user.lastMessagedUser().get().player().equals(player))
             .forEach(user -> user.lastMessagedUser(null));

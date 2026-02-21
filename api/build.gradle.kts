@@ -14,11 +14,7 @@ repositories {
 }
 
 dependencies {
-    api(libs.adventure.bukkit)
-    api(libs.adventure.minimessage)
-    api(libs.adventure.configurate)
-
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly(libs.paper)
 }
 
 tasks {

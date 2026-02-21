@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -14,68 +13,16 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class ItemUtils {
 
     private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
-    private static Method translationKeyMethod;
-    private static final Map<Predicate<Material>, Function<Material, String>> translations = new LinkedHashMap<>();
-
-    static {
-        if (VersionHelper.IS_PAPER) {
-            try {
-                //noinspection JavaReflectionMemberAccess
-                ItemUtils.translationKeyMethod = Material.class.getMethod("translationKey"); // paper method
-            } catch (NoSuchMethodException ignored) {
-            }
-        }
-
-        translations.put(
-            __ -> VersionHelper.IS_PAPER && translationKeyMethod != null,
-            material -> {
-                try {
-                    return (String) translationKeyMethod.invoke(material);
-                } catch (InvocationTargetException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return "null." + material.getKey().getKey();
-                }
-            }
-        );
-        translations.put(
-            material -> VersionHelper.HAS_SMITHING_TEMPLATE && material.name().endsWith("SMITHING_TEMPLATE"),
-            __ -> "item.minecraft.smithing_template"
-        );
-        translations.put(
-            Material::isItem,
-            material -> "item.minecraft." + material.getKey().getKey()
-        );
-        translations.put(
-            Material::isBlock,
-            material -> "block.minecraft." + material.getKey().getKey()
-        );
-    }
 
     private ItemUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
-    }
-
-    private static @NotNull Component getTranslation(@NotNull final Material material) {
-        for (final var entry : translations.entrySet()) {
-            if (entry.getKey().test(material)) {
-                return Component.translatable(entry.getValue().apply(material));
-            }
-        }
-
-        return Component.translatable("null." + material.getKey().getKey());
     }
 
     public static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
@@ -83,7 +30,7 @@ public final class ItemUtils {
             @NotNull final String itemFormatInfo,
             @NotNull final ItemStack item
     ) {
-        final var materialName = getTranslation(item.getType());
+        final var materialName = Component.translatable(item.getType().translationKey());
         final var itemPlaceholder = Placeholder.component("item", materialName);
         final var amountPlaceholder = Placeholder.component("amount", Component.text(item.getAmount()));
 
@@ -118,7 +65,7 @@ public final class ItemUtils {
             enchants = meta.getEnchants().entrySet()
                 .stream()
                 .map(entry -> formattedEnchantment(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+                .toList();
         }
 
         var lore = Collections.<Component>emptyList();
@@ -172,27 +119,19 @@ public final class ItemUtils {
             return enchantmentName.append(Component.text(" I"));
         }
 
-        @NotNull final String roman;
-        switch (level) {
-            case 1:
-                roman = "I";
-                break;
-            case 2:
-                roman = "II";
-                break;
-            case 3:
-                roman = "III";
-                break;
-            case 4:
-                roman = "IV";
-                break;
-            case 5:
-                roman = "V";
-                break;
-            default:
-                roman = level.toString();
-                break;
-        }
+        @NotNull final String roman = switch (level) {
+            case 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            case 6 -> "VI";
+            case 7 -> "VII";
+            case 8 -> "VIII";
+            case 9 -> "IX";
+            case 10 -> "X";
+            default -> level.toString();
+        };
 
         return enchantmentName.append(Component.space()).append(Component.text(roman));
     }

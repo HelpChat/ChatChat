@@ -10,7 +10,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 listOf(
     "api",
     "plugin",
-    "test-module",
+//    "test-module",
 ).forEach(::includeProject)
 
 fun includeProject(name: String) {

@@ -3,6 +3,7 @@ package at.helpch.chatchat;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
+import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
@@ -22,7 +23,6 @@ import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.UnignoreCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
-import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
@@ -41,7 +41,6 @@ import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
@@ -88,7 +87,6 @@ public final class ChatChatPlugin extends JavaPlugin {
         instance = this;
     }
 
-    private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
     private BukkitTask dataSaveTask;
 
@@ -101,8 +99,6 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        audiences = BukkitAudiences.create(this);
-
         commandManager = BukkitCommandManager.create(this,
             usersHolder::getUser,
             new UserSenderValidator(this));
@@ -158,8 +154,9 @@ public final class ChatChatPlugin extends JavaPlugin {
         hookManager().muteHooks().forEach(Hook::disable);
         getServer().getServicesManager().unregisterAll(this);
 
-        audiences.close();
-        if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
+        if (!dataSaveTask.isCancelled()) {
+            dataSaveTask.cancel();
+        }
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             usersHolder.removeUser(player);
@@ -186,10 +183,6 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
         return channelTypeRegistryImpl;
-    }
-
-    public static @NotNull BukkitAudiences audiences() {
-        return audiences;
     }
 
     public @NotNull BukkitCommandManager<User> commandManager() {
@@ -306,4 +299,5 @@ public final class ChatChatPlugin extends JavaPlugin {
             .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
             .forEach(commandManager::registerCommand);
     }
+
 }

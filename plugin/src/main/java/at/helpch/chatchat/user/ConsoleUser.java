@@ -1,6 +1,5 @@
 package at.helpch.chatchat.user;
 
-import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.User;
@@ -8,6 +7,7 @@ import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.format.ChatFormat;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -81,7 +81,7 @@ public final class ConsoleUser implements User {
 
     @Override
     public @NotNull Audience audience() {
-        return ChatChatPlugin.audiences().console();
+        return Bukkit.getConsoleSender();
     }
 
     @Override

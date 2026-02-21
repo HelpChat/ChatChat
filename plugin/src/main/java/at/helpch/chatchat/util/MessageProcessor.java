@@ -7,6 +7,7 @@ import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
+import fr.xephi.authme.api.v3.AuthMeApi;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -47,13 +48,18 @@ public final class MessageProcessor {
         Map.entry("color", StandardTags.color()),
         Map.entry("font", StandardTags.font()),
         Map.entry("gradient", StandardTags.gradient()),
+        Map.entry("shadow", StandardTags.shadowColor()),
         Map.entry("hover", StandardTags.hoverEvent()),
         Map.entry("insertion", StandardTags.insertion()),
         Map.entry("keybind", StandardTags.keybind()),
         Map.entry("newline", StandardTags.newline()),
         Map.entry("rainbow", StandardTags.rainbow()),
         Map.entry("reset", StandardTags.reset()),
-        Map.entry("translatable", StandardTags.translatable())
+        Map.entry("translatable", StandardTags.translatable()),
+        Map.entry("pride", StandardTags.pride()),
+        Map.entry("nbt", StandardTags.nbt()),
+        Map.entry("score", StandardTags.score()),
+        Map.entry("selector", StandardTags.selector())
     );
 
     private MessageProcessor() {
@@ -153,6 +159,9 @@ public final class MessageProcessor {
                 if(chatTarget.hiddenChannels().contains(channel)) {
                     continue;
                 }
+                if(!AuthMeApi.getInstance().isAuthenticated(chatTarget.player())) {
+                    continue;
+                }
 
                 final var component = FormatUtils.parseFormat(
                     chatEvent.format(),
@@ -183,7 +192,10 @@ public final class MessageProcessor {
                 chatEvent.format(),
                 user.player(),
                 mentionResult.message(),
-                plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
+                plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder()
+                    .inMessage(false)
+                    .sender(user)
+                    .recipient(target).build())
             );
 
             target.sendMessage(component);
