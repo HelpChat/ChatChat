@@ -2,12 +2,16 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.cache.RemoteReplyCache;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 @Command(value = "reply", alias = "r")
 public final class ReplyCommand extends BaseCommand {
@@ -30,12 +34,21 @@ public final class ReplyCommand extends BaseCommand {
         }
 
         final var lastMessaged = user.lastMessagedUser();
+        final var lastMessagedName = lastMessaged.flatMap(target ->
+            Optional.ofNullable(target.player()).map(Player::getName)
+        );
 
-        if (lastMessaged.isEmpty()) {
-            user.sendMessage(plugin.configManager().messages().noReplies());
+        if (lastMessagedName.isPresent()) {
+            whisperCommand.whisperCommand(user, lastMessagedName.get(), message);
             return;
         }
 
-        whisperCommand.whisperCommand(user, lastMessaged.get(), message);
+        final var remoteTarget = RemoteReplyCache.lastTarget(user.uuid());
+        if (remoteTarget.isPresent()) {
+            whisperCommand.whisperCommand(user, remoteTarget.get(), message);
+            return;
+        }
+
+        user.sendMessage(plugin.configManager().messages().noReplies());
     }
 }

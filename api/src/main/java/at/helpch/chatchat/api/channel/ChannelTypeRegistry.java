@@ -23,7 +23,8 @@ public interface ChannelTypeRegistry {
                          @NotNull final String channelPrefix,
                          @NotNull final FormatsHolder formats,
                          @NotNull final List<String> worlds,
-                         final int radius);
+                         final int radius,
+                         final boolean crossServer);
     }
 
     /**

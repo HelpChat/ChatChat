@@ -24,6 +24,8 @@ public abstract class AbstractChannel implements Channel {
 
     private final int radius;
 
+    private final boolean crossServer;
+
     protected AbstractChannel(
         @NotNull final String name,
         @NotNull final String messagePrefix,
@@ -31,7 +33,8 @@ public abstract class AbstractChannel implements Channel {
         @NotNull final String channelPrefix,
         @NotNull final FormatsHolder formats,
         @NotNull final List<String> worlds,
-        final int radius
+        final int radius,
+        final boolean crossServer
     ) {
         this.name = name;
         this.messagePrefix = messagePrefix;
@@ -40,6 +43,7 @@ public abstract class AbstractChannel implements Channel {
         this.formats = formats;
         this.worlds = worlds;
         this.radius = radius;
+        this.crossServer = crossServer;
     }
 
     @Override
@@ -70,6 +74,11 @@ public abstract class AbstractChannel implements Channel {
     @Override
     public int radius() {
         return radius;
+    }
+
+    @Override
+    public boolean crossServer() {
+        return crossServer;
     }
 
     @Override

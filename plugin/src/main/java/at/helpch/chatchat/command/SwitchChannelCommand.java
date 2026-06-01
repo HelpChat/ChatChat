@@ -3,7 +3,7 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.processor.MessageProcessor;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Join;
@@ -45,7 +45,7 @@ public final class SwitchChannelCommand extends BaseCommand {
             user.channel(channel);
 
             if (!message.isEmpty() && user.hasPermission("chatchat.channel-switch-send")) {
-                MessageProcessor.process(plugin, user, channel, message, false);
+                MessageProcessor.processMessageEvent(plugin, user, channel, message, false);
 
                 if(!currentChannel.equals(channel)) {
                     user.channel(currentChannel);

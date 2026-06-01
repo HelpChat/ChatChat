@@ -3,7 +3,7 @@ package at.helpch.chatchat.placeholder;
 import at.helpch.chatchat.api.placeholder.MiniPlaceholder;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
-import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.processor.MessageProcessor;
 import at.helpch.chatchat.util.MessageUtils;
 import at.helpch.chatchat.util.PapiTagUtils;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @ConfigSerializable
 public class MiniPlaceholderImpl implements MiniPlaceholder {
 
-    private static final String MINI_PLACEHOLDER_PERMISSION = MessageProcessor.TAG_BASE_PERMISSION + "placeholder.";
+    private static final String MINI_PLACEHOLDER_PERMISSION = MessageProcessor.Constants.TAG_BASE_PERMISSION + "placeholder.";
 
     @Setting("name")
     private final String tagName;
@@ -69,8 +69,8 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
 
         if (!shouldParsePlaceholderAPIPlaceholders) {
             return shouldAutoCloseTags
-                ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message))
-                : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseToMiniMessage(message)));
+                ? Placeholder.component(tagName, MessageUtils.parseFromMiniMessage(message))
+                : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseFromMiniMessage(message)));
         }
 
         if (isRelationalTag && recipient.isEmpty()) {
@@ -88,8 +88,8 @@ public class MiniPlaceholderImpl implements MiniPlaceholder {
             : PapiTagUtils.createPlaceholderAPITag(sender.get().player());
 
         return shouldAutoCloseTags
-            ? Placeholder.component(tagName, MessageUtils.parseToMiniMessage(message, papiTag))
-            : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseToMiniMessage(message, papiTag)));
+            ? Placeholder.component(tagName, MessageUtils.parseFromMiniMessage(message, papiTag))
+            : TagResolver.resolver(tagName, Tag.inserting(MessageUtils.parseFromMiniMessage(message, papiTag)));
     }
 
     public @NotNull String name() {

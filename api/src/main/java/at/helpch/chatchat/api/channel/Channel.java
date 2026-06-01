@@ -58,6 +58,13 @@ public interface Channel {
     int radius();
 
     /**
+     * Check if this channel is cross server.
+     *
+     * @return True if this channel is cross server, false otherwise.
+     */
+    boolean crossServer();
+
+    /**
      * Get a list of worlds that share the same channel. All worlds are included by default.
      *
      * @return The commands that can be used to switch to this channel.

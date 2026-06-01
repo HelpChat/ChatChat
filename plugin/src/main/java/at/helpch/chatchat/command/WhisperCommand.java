@@ -4,7 +4,11 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.cache.RemoteReplyCache;
+import at.helpch.chatchat.cs.CrossServerPrivateMessageTracker;
+import at.helpch.chatchat.cs.sender.RemoteMessageSender;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.util.MessageUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -13,10 +17,15 @@ import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Command(value = "whisper", alias = {"tell", "w", "msg", "message", "pm"})
 public final class WhisperCommand extends BaseCommand {
@@ -34,7 +43,7 @@ public final class WhisperCommand extends BaseCommand {
     @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(
         final ChatUser sender,
-        @Suggestion(value = "recipients") final ChatUser recipient,
+        @Suggestion(value = "recipients") final String recipientName,
         @Join final String message
     ) {
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
@@ -44,6 +53,17 @@ public final class WhisperCommand extends BaseCommand {
 
         if (!sender.privateMessages()) {
             sender.sendMessage(plugin.configManager().messages().repliesDisabled());
+            return;
+        }
+
+        if (message.isBlank()) {
+            sender.sendMessage(plugin.configManager().messages().emptyMessage());
+            return;
+        }
+
+        final var recipient = findLocalRecipient(recipientName);
+        if (recipient == null) {
+            sendCrossServerPrivateMessage(sender, recipientName, message);
             return;
         }
 
@@ -74,11 +94,6 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
-        if (message.isBlank()) {
-            sender.sendMessage(plugin.configManager().messages().emptyMessage());
-            return;
-        }
-
         final var rulesResult = plugin.ruleManager().isAllowedPrivateChat(sender, recipient, message);
         if (rulesResult.isPresent()) {
             sender.sendMessage(rulesResult.get());
@@ -106,6 +121,13 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
+        final var senderPlayer = sender.player();
+        final var recipientPlayer = recipient.player();
+        if (senderPlayer == null || recipientPlayer == null) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
         final var formats = new LinkedHashMap<Audience, Format>();
         formats.put(sender, pmSendEvent.senderFormat());
         formats.put(recipient, pmSendEvent.recipientFormat());
@@ -113,8 +135,8 @@ public final class WhisperCommand extends BaseCommand {
             Audience.audience(
                 plugin.usersHolder().users()
                     .stream()
-                    .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
-                    .filter(spyUser -> spyUser.uuid() != sender.uuid() && spyUser.uuid() != recipient.uuid())
+                    .filter(spyUser -> !(spyUser instanceof ChatUser chatUser) || chatUser.socialSpy())
+                    .filter(spyUser -> !spyUser.uuid().equals(sender.uuid()) && !spyUser.uuid().equals(recipient.uuid()))
                     .toList()
             ),
             socialSpyFormat
@@ -123,8 +145,8 @@ public final class WhisperCommand extends BaseCommand {
         formats.forEach((Audience audience, Format format) ->
             audience.sendMessage(FormatUtils.parseFormat(
                 format,
-                sender.player(),
-                recipient.player(),
+                senderPlayer,
+                recipientPlayer,
                 pmSendEvent.message()
             ))
         );
@@ -135,6 +157,123 @@ public final class WhisperCommand extends BaseCommand {
 
         sender.lastMessagedUser(recipient);
         recipient.lastMessagedUser(sender);
+        RemoteReplyCache.remember(sender.uuid(), recipientPlayer.getName());
+    }
+
+    private void sendCrossServerPrivateMessage(
+        @NotNull final ChatUser sender,
+        @NotNull final String recipientName,
+        @NotNull final String message
+    ) {
+        final var settingsConfig = plugin.configManager().settings();
+        final var formats = settingsConfig.privateMessagesSettings().formats();
+        final var rawMessage = Component.text(message);
+
+        final var senderPlayer = sender.player();
+        if (senderPlayer == null) {
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+            return;
+        }
+
+        final var senderMessage = formatMessage(
+            formats.senderFormat(),
+            senderPlayer,
+            senderPlayer.getName(),
+            recipientName,
+            rawMessage
+        );
+
+        final var recipientMessage = formatMessage(
+            formats.recipientFormat(),
+            senderPlayer,
+            senderPlayer.getName(),
+            recipientName,
+            rawMessage
+        );
+
+        final var socialSpyMessage = formatMessage(
+            formats.socialSpyFormat(),
+            senderPlayer,
+            senderPlayer.getName(),
+            recipientName,
+            rawMessage
+        );
+
+        final var requestId = UUID.randomUUID();
+        CrossServerPrivateMessageTracker.registerPending(
+            plugin,
+            requestId,
+            sender.uuid(),
+            recipientName,
+            MessageUtils.parseToGson(senderMessage),
+            MessageUtils.parseToGson(socialSpyMessage)
+        );
+
+        final boolean sent = plugin.remoteMessageSender().sendPrivateMessage(new RemoteMessageSender.PrivateMessagePayload(
+            requestId.toString(),
+            sender.uuid().toString(),
+            senderPlayer.getName(),
+            recipientName,
+            message,
+            reply,
+            sender.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION),
+            MessageUtils.parseToGson(recipientMessage),
+            MessageUtils.parseToGson(socialSpyMessage)
+        ));
+
+        if (!sent) {
+            CrossServerPrivateMessageTracker.cancelPending(requestId);
+            sender.sendMessage(plugin.configManager().messages().userOffline());
+        }
+    }
+
+    private @Nullable ChatUser findLocalRecipient(@NotNull final String recipientName) {
+        return plugin.usersHolder().users()
+            .stream()
+            .filter(ChatUser.class::isInstance)
+            .map(ChatUser.class::cast)
+            .filter(user -> {
+                final var player = user.player();
+                return player != null && player.getName().equalsIgnoreCase(recipientName);
+            })
+            .findFirst()
+            .orElse(null);
+    }
+
+    private @NotNull Component formatMessage(
+        @NotNull final Format format,
+        @Nullable final Player sender,
+        @NotNull final String senderName,
+        @NotNull final String recipientName,
+        @NotNull final Component message
+    ) {
+
+        final var patchedFormat = patchNames(format, senderName, recipientName);
+        if (sender != null) {
+            return FormatUtils.parseFormat(patchedFormat, sender, message);
+        }
+
+        return FormatUtils.parseFormat(patchedFormat, message);
+    }
+
+    private @NotNull Format patchNames(
+        @NotNull final Format format,
+        @NotNull final String senderName,
+        @NotNull final String recipientName
+    ) {
+        final Map<String, List<String>> parts = new LinkedHashMap<>();
+
+        format.parts().forEach((key, value) -> {
+            final var patchedEntries = new ArrayList<String>(value.size());
+            value.forEach(entry -> patchedEntries.add(
+                entry
+                    .replace("%player_name%", senderName)
+                    .replace("<recipient:player_name>", recipientName)
+            ));
+            parts.put(key, patchedEntries);
+        });
+
+        return format.parts(parts);
     }
 
 }

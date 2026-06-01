@@ -2,6 +2,7 @@ package at.helpch.chatchat.listener;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.cache.RemoteReplyCache;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import fr.xephi.authme.events.LoginEvent;
 import net.kyori.adventure.text.Component;
@@ -12,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public final class PlayerListener implements Listener {
 
@@ -48,11 +51,15 @@ public final class PlayerListener implements Listener {
     private void onLeave(final PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
+        RemoteReplyCache.clear(player.getUniqueId());
+
         plugin.usersHolder().users().stream()
             .filter(ChatUser.class::isInstance)
             .map(ChatUser.class::cast)
-            .filter(user -> user.lastMessagedUser().isPresent())
-            .filter(user -> user.lastMessagedUser().get().player().equals(player))
+            .filter(user -> user.lastMessagedUser()
+                .flatMap(lastMessaged -> Optional.ofNullable(lastMessaged.player()))
+                .filter(player::equals)
+                .isPresent())
             .forEach(user -> user.lastMessagedUser(null));
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> plugin.usersHolder().removeUser(player.getUniqueId()));

@@ -24,6 +24,10 @@ import at.helpch.chatchat.command.UnignoreCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.config.ConfigManager;
+import at.helpch.chatchat.cs.receiver.BungeeMessageReceiver;
+import at.helpch.chatchat.cs.receiver.RemoteMessageReceiver;
+import at.helpch.chatchat.cs.sender.BungeeMessageSender;
+import at.helpch.chatchat.cs.sender.RemoteMessageSender;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManagerImpl;
@@ -54,6 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static at.helpch.chatchat.util.Constants.BUNGEE_CROSS_SERVER_CHANNEL;
+
 @BukkitMain
 public final class ChatChatPlugin extends JavaPlugin {
 
@@ -83,6 +89,9 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
+    private RemoteMessageSender remoteMessageSender;
+    private RemoteMessageReceiver remoteMessageReceiver;
+
     public ChatChatPlugin() {
         instance = this;
     }
@@ -105,6 +114,11 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         hookManager.init();
         configManager.reload();
+
+        remoteMessageSender = new BungeeMessageSender(this);
+        remoteMessageReceiver = new BungeeMessageReceiver(this);
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, BUNGEE_CROSS_SERVER_CHANNEL);
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, BUNGEE_CROSS_SERVER_CHANNEL, remoteMessageReceiver);
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
@@ -149,6 +163,9 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+        this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
+
         hookManager().hooks().forEach(Hook::disable);
         hookManager().vanishHooks().forEach(Hook::disable);
         hookManager().muteHooks().forEach(Hook::disable);
@@ -207,6 +224,14 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull ChatChatAPIImpl api() {
         return api;
+    }
+
+    public @NotNull RemoteMessageSender remoteMessageSender() {
+        return remoteMessageSender;
+    }
+
+    public @NotNull RemoteMessageReceiver remoteMessageReceiver() {
+        return remoteMessageReceiver;
     }
 
     private void registerArguments() {

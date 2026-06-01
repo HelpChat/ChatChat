@@ -24,6 +24,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
     private static final String RADIUS = "radius";
     private static final String WORLDS = "shared-worlds";
     private static final String TYPE = "type";
+    private static final String CROSS_SERVER = "cross-server";
     private static final TypeToken<Map<String, PriorityFormat>> FORMATS_MAP_TYPE = new TypeToken<>() {};
 
     private final ChannelTypeRegistryImpl registry;
@@ -58,6 +59,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         final var formats = new FormatsHolderImpl(formatsMap);
         final var worlds = node.node(WORLDS).getList(String.class, List.of());
         final var radius = node.node(RADIUS).getInt(-1);
+        final var crossServer = node.node(CROSS_SERVER).getBoolean(false);
 
         final var channelType = node.node(TYPE).getString("default").toLowerCase();
 
@@ -66,7 +68,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
             throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", " +
                     "ignoring.");
         }
-        return builder.build(key, messagePrefix, commandName, channelPrefix, formats, worlds, radius);
+        return builder.build(key, messagePrefix, commandName, channelPrefix, formats, worlds, radius, crossServer);
     }
 
     @Override
@@ -81,6 +83,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         target.node(CHANNEL_PREFIX).set(channel.channelPrefix());
         target.node(FORMATS).set(channel.formats().formats());
         target.node(RADIUS).set(channel.radius());
+        target.node(CROSS_SERVER).set(channel.crossServer());
         target.node(WORLDS).set(channel.worlds());
     }
 }

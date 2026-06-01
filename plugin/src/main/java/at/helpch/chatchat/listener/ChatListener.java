@@ -4,10 +4,11 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.channel.ChatChannel;
+import at.helpch.chatchat.processor.LocalToLocalMessageProcessor;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
-import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.processor.MessageProcessor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
@@ -97,7 +98,7 @@ public final class ChatListener implements Listener {
         // We switch the user to the channel here so that the console can parse the correct channel prefix
         user.channel(channel);
 
-        Component processedMessage = MessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message);
+        Component processedMessage = LocalToLocalMessageProcessor.processMessage(plugin, user, ConsoleUser.INSTANCE, message);
 
         if (channel.name().equalsIgnoreCase("shout")) {
             if (pendingToConfirm.containsKey(player.getUniqueId())) {
@@ -159,7 +160,7 @@ public final class ChatListener implements Listener {
         // Cancel the event if the message doesn't end up being sent
         // This only happens if the message contains illegal characters or if the ChatChatEvent is canceled.
         try {
-            event.setCancelled(!MessageProcessor.process(plugin, user, channel, message, event.isAsynchronous()));
+            event.setCancelled(!MessageProcessor.processMessageEvent(plugin, user, channel, message, event.isAsynchronous()));
         } catch (Exception e) {
             plugin.getLogger().severe("An error occurred while processing a message from " + player.getName() + ":");
             plugin.getLogger().severe("Message: " + event.getMessage());

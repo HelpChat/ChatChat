@@ -16,8 +16,9 @@ public final class TownyTownChannel extends AbstractTownyChannel {
                             @NotNull final String channelPrefix,
                             @NotNull final FormatsHolder formats,
                             @NotNull final List<String> worlds,
-                            final int radius) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, formats, worlds, radius);
+                            final int radius,
+                            final boolean crossServer) {
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, worlds, radius, crossServer);
     }
 
     @Override

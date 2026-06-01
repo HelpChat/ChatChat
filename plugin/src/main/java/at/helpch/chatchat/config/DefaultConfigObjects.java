@@ -20,12 +20,12 @@ public final class DefaultConfigObjects {
 
     public static @NotNull Channel createDefaultChannel() {
         return new ChatChannel("default", "",
-            List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), List.of("world", "world_nether", "world_the_end"), -1);
+            List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), List.of("world", "world_nether", "world_the_end"), -1, false);
     }
 
     public static @NotNull Channel createStaffChannel() {
         return new ChatChannel("staff", "@",
-            List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), List.of("world", "world_nether", "world_the_end"), -1);
+            List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), List.of("world", "world_nether", "world_the_end"), -1, true);
     }
 
     public static @NotNull SimpleFormat createDefaultConsoleFormat() {

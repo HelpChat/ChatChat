@@ -30,9 +30,10 @@ public final class ChatChannel extends AbstractChannel {
         @NotNull final String channelPrefix,
         @NotNull final FormatsHolder formats,
         @NotNull final List<String> worlds,
-        final int radius
+        final int radius,
+        final boolean crossServer
     ) {
-        super(name, messagePrefix, toggleCommands, channelPrefix, formats, worlds, radius);
+        super(name, messagePrefix, toggleCommands, channelPrefix, formats, worlds, radius, crossServer);
     }
 
     public static @NotNull Channel defaultChannel() {
