@@ -12,17 +12,12 @@ repositories {
 }
 
 dependencies {
-    api(libs.adventure.bukkit)
-    api(libs.adventure.minimessage)
-    api(libs.adventure.configurate)
-
-    compileOnly(libs.spigot)
+    compileOnly(libs.paper)
 }
 
 tasks {
     withType<ShadowJar> {
         listOf(
-            "net.kyori",
             "io.leangen",
         ).forEach { relocate(it, "at.helpch.chatchat.libs.$it") }
 

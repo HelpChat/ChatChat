@@ -40,7 +40,6 @@ import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
@@ -78,8 +77,6 @@ public final class ChatChatPlugin extends JavaPlugin {
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
-
-    private static BukkitAudiences audiences;
     private BukkitCommandManager<User> commandManager;
     private BukkitTask dataSaveTask;
 
@@ -92,7 +89,6 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        audiences = BukkitAudiences.create(this);
 
         commandManager = BukkitCommandManager.create(this,
             usersHolder::getUser,
@@ -149,7 +145,6 @@ public final class ChatChatPlugin extends JavaPlugin {
         hookManager().muteHooks().forEach(Hook::disable);
         getServer().getServicesManager().unregisterAll(this);
 
-        audiences.close();
         if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
@@ -177,10 +172,6 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
         return channelTypeRegistryImpl;
-    }
-
-    public static @NotNull BukkitAudiences audiences() {
-        return audiences;
     }
 
     public @NotNull BukkitCommandManager<User> commandManager() {

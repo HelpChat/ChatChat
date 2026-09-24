@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import dev.triumphteam.helper.implementation
 import dev.triumphteam.helper.papi
 import dev.triumphteam.helper.triumphSnapshots
 import xyz.jpenilla.resourcefactory.bukkit.Permission
@@ -33,13 +34,16 @@ dependencies {
     implementation(projects.chatChatApi)
 
     implementation(libs.triumph.cmds)
+    implementation(libs.adventure.configurate)
     implementation(libs.configurate)
     implementation(libs.bstats)
 
-    compileOnly(libs.spigot)
+    compileOnly(libs.paper)
     compileOnly(libs.papi)
     compileOnly(libs.towny)
-    compileOnly(libs.essentials)
+    compileOnly(libs.essentials) {
+        exclude("org.spigotmc")
+    }
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
     compileOnly(libs.griefprevention)
@@ -215,7 +219,6 @@ sourceSets.main {
 tasks {
     withType<ShadowJar> {
         listOf(
-            "net.kyori",
             "dev.triumphteam",
             "org.spongepowered",
             "io.leangen",
