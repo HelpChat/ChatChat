@@ -26,6 +26,12 @@ public class UnignoreCommand extends BaseCommand {
             return;
         }
 
+        if (plugin.separationManager().isSeparated(sender.uuid(), target.uuid())) {
+            sender.sendMessage(plugin.configManager().messages().separationLocked()
+                .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
+            return;
+        }
+
         if (!sender.ignoredUsers().contains(target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().notIgnored()
                 .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));

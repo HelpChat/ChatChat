@@ -59,6 +59,11 @@ public final class WhisperCommand extends BaseCommand {
             return;
         }
 
+        if (plugin.separationManager().isSeparated(sender.uuid(), recipient.uuid())) {
+            sender.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+            return;
+        }
+
         if (!sender.canSee(recipient) && !reply) {
             sender.sendMessage(plugin.configManager().messages().userOffline());
             return;

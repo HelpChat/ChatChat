@@ -32,7 +32,8 @@ public class IgnoreCommand extends BaseCommand {
             return;
         }
 
-        if (sender.ignoredUsers().contains(target.uuid())) {
+        if (sender.ignoredUsers().contains(target.uuid()) ||
+            plugin.separationManager().isSeparated(sender.uuid(), target.uuid())) {
             sender.sendMessage(plugin.configManager().messages().alreadyIgnored()
                 .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
             return;

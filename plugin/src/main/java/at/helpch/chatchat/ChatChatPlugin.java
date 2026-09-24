@@ -15,9 +15,11 @@ import at.helpch.chatchat.command.MentionToggleCommand;
 import at.helpch.chatchat.command.RangedChatCommand;
 import at.helpch.chatchat.command.ReloadCommand;
 import at.helpch.chatchat.command.ReplyCommand;
+import at.helpch.chatchat.command.SeparateCommand;
 import at.helpch.chatchat.command.SocialSpyCommand;
 import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.UnignoreCommand;
+import at.helpch.chatchat.command.UnseparateCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.api.hook.Hook;
@@ -31,6 +33,7 @@ import at.helpch.chatchat.mention.MentionManagerImpl;
 import at.helpch.chatchat.placeholder.MiniPlaceholderManagerImpl;
 import at.helpch.chatchat.placeholder.PlaceholderAPIPlaceholders;
 import at.helpch.chatchat.rule.RuleManagerImpl;
+import at.helpch.chatchat.separation.SeparationManager;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
@@ -51,6 +54,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -80,6 +84,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     final MentionManagerImpl mentionsManager = new MentionManagerImpl(this);
     private @NotNull
     final MiniPlaceholderManagerImpl miniPlaceholdersManager = new MiniPlaceholderManagerImpl();
+    private SeparationManager separationManager;
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
@@ -96,6 +101,14 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        try {
+            separationManager = new SeparationManager(getDataFolder().toPath());
+        } catch (final IOException exception) {
+            getLogger().log(Level.SEVERE, "Could not load player separations", exception);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         commandManager = BukkitCommandManager.create(this,
             usersHolder::getUser,
@@ -152,7 +165,7 @@ public final class ChatChatPlugin extends JavaPlugin {
         hookManager().muteHooks().forEach(Hook::disable);
         getServer().getServicesManager().unregisterAll(this);
 
-        if (!dataSaveTask.isCancelled()) dataSaveTask.cancel();
+        if (dataSaveTask != null && !dataSaveTask.isCancelled()) dataSaveTask.cancel();
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             usersHolder.removeUser(player);
@@ -197,6 +210,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull Database database() {
         return database;
+    }
+
+    public @NotNull SeparationManager separationManager() {
+        return Objects.requireNonNull(separationManager, "Separation manager has not been initialized");
     }
 
     public @NotNull ChannelTypeRegistryImpl channelTypeRegistry() {
@@ -252,6 +269,9 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .collect(Collectors.toUnmodifiableList())
         );
         commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.FILES);
+        commandManager.registerSuggestion(SuggestionKey.of("players"), (sender, context) -> Bukkit.getOnlinePlayers().stream()
+            .map(Player::getName)
+            .collect(Collectors.toList()));
         commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
             .map(Player::getName)
             .collect(Collectors.toList())));
@@ -292,6 +312,8 @@ public final class ChatChatPlugin extends JavaPlugin {
             new IgnoreCommand(this),
             new UnignoreCommand(this),
             new IgnoreListCommand(this),
+            new SeparateCommand(this),
+            new UnseparateCommand(this),
             new ReloadCommand(this),
             new MentionToggleCommand(this),
             new FormatTestCommand(this),

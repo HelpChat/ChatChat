@@ -3,6 +3,7 @@
 console-only: <red>Only the console can do this!
 players-only: <red>Only players can do this!
 user-offline: <red>The user is not online!
+player-not-found: <red>That player has not joined this server!
 user-not-in-town: <red>You are not in a town!
 
 no-replies: <red>You have no one to reply to!
@@ -19,6 +20,12 @@ ignored-player: <green>Successfully ignored <player>.
 unignored-player: <green>Successfully un-ignored <player>.
 already-ignored: <red>You are already ignoring <player>.
 not-ignored: <red>You are not ignoring <player>.
+cant-separate-self: <red>You cannot separate a player from themselves!
+separated-players: <green>Separated <player1> and <player2>.
+unseparated-players: <green>Removed the separation between <player1> and <player2>.
+already-separated: <red>These players are already separated.
+not-separated: <red>These players are not separated.
+separation-locked: <red>A staff-enforced separation prevents you from unignoring <player>.
 cant-message-ignored-player: <red>You cannot message a player who you ignore.
 cant-message-general: <red>You cannot message this player.
 

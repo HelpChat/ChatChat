@@ -112,6 +112,14 @@ val yaml = bukkitPluginYaml {
             description = "List all the players that you are ignoring."
             default = Permission.Default.OP
         }
+        create("chatchat.separate") {
+            description = "Force two players to ignore each other with /separate"
+            default = Permission.Default.OP
+        }
+        create("chatchat.unseparate") {
+            description = "Remove a staff-enforced separation with /unseparate"
+            default = Permission.Default.OP
+        }
 
         create("chatchat.utf") {
             description = "Send any char in chat"

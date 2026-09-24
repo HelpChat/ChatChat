@@ -57,6 +57,7 @@ public final class ChatChannel extends AbstractChannel {
     public Set<User> targets(final @NotNull User source) {
 
         final Predicate<User> filterIgnores = user -> user instanceof ChatUser &&
+            !plugin.separationManager().isSeparated(source.uuid(), user.uuid()) &&
             (!user.ignoredUsers().contains(source.uuid()) || source.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
 
         if (ChatChannel.defaultChannel().equals(this)) {

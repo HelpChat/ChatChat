@@ -19,6 +19,7 @@ public final class MessagesHolder {
     private Component consoleOnly = text("Only the console can do this!", RED);
     private Component playersOnly = text("Only players can do this!", RED);
     private Component userOffline = text("The user is not online!", RED);
+    private Component playerNotFound = text("That player has not joined this server!", RED);
     private Component userNotInTown = text("You are not in a town!", RED);
 
     // messaging related
@@ -43,6 +44,12 @@ public final class MessagesHolder {
         .append(text("<ignored_players>", WHITE))
         .append(text(".", YELLOW));
     private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
+    private Component cantSeparateSelf = text("You cannot separate a player from themselves!", RED);
+    private Component separatedPlayers = text("Separated <player1> and <player2>.", GREEN);
+    private Component unseparatedPlayers = text("Removed the separation between <player1> and <player2>.", GREEN);
+    private Component alreadySeparated = text("These players are already separated.", RED);
+    private Component notSeparated = text("These players are not separated.", RED);
+    private Component separationLocked = text("A staff-enforced separation prevents you from unignoring <player>.", RED);
     private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
     private Component cantMessageGeneral = text("You cannot message this player.", RED);
     private Component chatEnabledSuccessfully = text("Your chat has been enabled successfully!", GREEN);
@@ -89,6 +96,10 @@ public final class MessagesHolder {
 
     public @NotNull Component userOffline() {
         return userOffline;
+    }
+
+    public @NotNull Component playerNotFound() {
+        return playerNotFound;
     }
 
     public @NotNull Component userNotInTown() {
@@ -201,6 +212,30 @@ public final class MessagesHolder {
 
     public @NotNull Component cantIgnoreYourself() {
         return cantIgnoreYourself;
+    }
+
+    public @NotNull Component cantSeparateSelf() {
+        return cantSeparateSelf;
+    }
+
+    public @NotNull Component separatedPlayers() {
+        return separatedPlayers;
+    }
+
+    public @NotNull Component unseparatedPlayers() {
+        return unseparatedPlayers;
+    }
+
+    public @NotNull Component alreadySeparated() {
+        return alreadySeparated;
+    }
+
+    public @NotNull Component notSeparated() {
+        return notSeparated;
+    }
+
+    public @NotNull Component separationLocked() {
+        return separationLocked;
     }
 
     public @NotNull Component personalMentionsEnabled() {
