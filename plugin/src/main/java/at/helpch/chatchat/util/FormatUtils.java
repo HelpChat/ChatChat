@@ -17,14 +17,33 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class FormatUtils {
     private static final String FORMAT_PERMISSION = "chatchat.format.";
     private static final String CHANNEL_FORMAT_PERMISSION = "chatchat.channel.format.";
+    // Pass complete placeholders to PlaceholderAPI so a literal % cannot consume the next opening %.
+    private static final Pattern PAPI_PLACEHOLDER = Pattern.compile("%[a-zA-Z0-9]+_[^%]+%");
 
     private FormatUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
+    }
+
+    private static @NotNull String parsePlaceholders(
+        @NotNull final String text,
+        @NotNull final Function<String, String> replacement
+    ) {
+        final var matcher = PAPI_PLACEHOLDER.matcher(text);
+        final var parsed = new StringBuilder();
+
+        while (matcher.find()) {
+            matcher.appendReplacement(parsed, Matcher.quoteReplacement(replacement.apply(matcher.group())));
+        }
+
+        matcher.appendTail(parsed);
+        return parsed.toString();
     }
 
     public static @NotNull Optional<PriorityFormat> findPermissionFormat(
@@ -70,13 +89,13 @@ public final class FormatUtils {
         @NotNull final Format format,
         @NotNull final Player player) {
         return MessageUtils.parseToMiniMessage(
-            PlaceholderAPI.setPlaceholders(
-                player,
+            parsePlaceholders(
                 format.parts()
                     .values()
                     .stream()
                     .map(part -> String.join("", part))
-                    .collect(Collectors.joining())
+                    .collect(Collectors.joining()),
+                placeholder -> PlaceholderAPI.setPlaceholders(player, placeholder)
             ).replace("<message>", "%2$s")
         );
     }
@@ -94,13 +113,13 @@ public final class FormatUtils {
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
-            PlaceholderAPI.setPlaceholders(
-                player,
+            parsePlaceholders(
                 format.parts()
                     .values()
                     .stream()
                     .map(part -> String.join("", part))
-                    .collect(Collectors.joining())
+                    .collect(Collectors.joining()),
+                placeholder -> PlaceholderAPI.setPlaceholders(player, placeholder)
             ),
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(player),
@@ -119,13 +138,13 @@ public final class FormatUtils {
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
-            PlaceholderAPI.setPlaceholders(
-                null,
+            parsePlaceholders(
                 format.parts()
                     .values()
                     .stream()
                     .map(part -> String.join("", part))
-                    .collect(Collectors.joining())
+                    .collect(Collectors.joining()),
+                placeholder -> PlaceholderAPI.setPlaceholders(null, placeholder)
             ),
             Placeholder.component("message", message),
             PapiTagUtils.createPlaceholderAPITag(null),
@@ -148,16 +167,16 @@ public final class FormatUtils {
         @NotNull final ComponentLike message,
         @NotNull final TagResolver miniPlaceholders) {
         return MessageUtils.parseToMiniMessage(
-            PlaceholderAPI.setRelationalPlaceholders(
-                player,
-                recipient,
-                PlaceholderAPI.setPlaceholders(
+            parsePlaceholders(
+                format.parts()
+                    .values()
+                    .stream()
+                    .map(part -> String.join("", part))
+                    .collect(Collectors.joining()),
+                placeholder -> PlaceholderAPI.setRelationalPlaceholders(
                     player,
-                    format.parts()
-                        .values()
-                        .stream()
-                        .map(part -> String.join("", part))
-                        .collect(Collectors.joining())
+                    recipient,
+                    PlaceholderAPI.setPlaceholders(player, placeholder)
                 )
             ),
             Placeholder.component("message", message),
