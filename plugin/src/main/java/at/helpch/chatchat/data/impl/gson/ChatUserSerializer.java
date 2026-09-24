@@ -35,8 +35,8 @@ public class ChatUserSerializer implements JsonSerializer<ChatUser>, JsonDeseria
         final JsonObject jsonObject;
         try {
             jsonObject = json.getAsJsonObject();
-        } catch (final IllegalAccessError exception) {
-            throw new JsonParseException("Invalid JSON object was found!");
+        } catch (final IllegalStateException exception) {
+            throw new JsonParseException("Invalid JSON object was found!", exception);
         }
 
         if (jsonObject == null) {

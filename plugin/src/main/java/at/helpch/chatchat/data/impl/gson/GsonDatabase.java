@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -52,47 +54,20 @@ public class GsonDatabase implements Database {
         }
 
         try(final var reader = new FileReader(userFile)) {
-            return gson.fromJson(reader, ChatUser.class);
-        } catch (final JsonParseException exception) { // Handles invalid JSON
-            plugin.getLogger()
-                    .log(
-                        Level.WARNING,
-                        String.format("Something went wrong while trying to load user %s!. Creating backup at %1$s-backup.json", uuid),
-                        exception
-                    );
-
-            final var backupFile = new File(usersDirectory, uuid + "-backup.json");
-
-            // Create the backup file if it does not exist.
-            if (!backupFile.exists()) {
-                try {
-                    if (!backupFile.createNewFile()) {
-                        plugin.getLogger().log(
-                            Level.WARNING,
-                            "Something went wrong while creating backup file. Shutting plugin down!"
-                        );
-
-                        plugin.getServer().getPluginManager().disablePlugin(plugin);
-                    }
-
-                } catch (final IOException ioEx) {
-                    plugin.getLogger().log(
-                        Level.WARNING,
-                        "Something went wrong while creating backup file. Shutting plugin down!",
-                        ioEx
-                    );
-
-                    plugin.getServer().getPluginManager().disablePlugin(plugin);
-                }
+            final var user = gson.fromJson(reader, ChatUser.class);
+            if (user == null) {
+                throw new JsonParseException("User file contained null");
             }
-
-            // copy contents of userFile to backupFile
+            return user;
+        } catch (final JsonParseException exception) { // Handles invalid JSON
+            plugin.getLogger().log(Level.WARNING, "Could not load user " + uuid + " from " + userFile, exception);
             try {
-                Files.copy(userFile.toPath(), backupFile.toPath());
-            } catch (IOException ioException) {
+                final var backupFile = backupInvalidUserFile(userFile.toPath(), uuid);
+                plugin.getLogger().warning("Saved invalid user data to " + backupFile);
+            } catch (final IOException ioException) {
                 plugin.getLogger().log(
-                    Level.WARNING,
-                    "Something went wrong while creating backup file. Shutting plugin down!",
+                    Level.SEVERE,
+                    "Could not back up invalid user data for " + uuid + ". Disabling ChatChat to avoid overwriting it.",
                     ioException
                 );
 
@@ -111,6 +86,18 @@ public class GsonDatabase implements Database {
 
             user.channel(channel);
             return user;
+        }
+    }
+
+    static @NotNull Path backupInvalidUserFile(@NotNull final Path userFile, @NotNull final UUID uuid) throws IOException {
+        for (int index = 0; ; index++) {
+            final var backupName = uuid + "-backup" + (index == 0 ? "" : "-" + index) + ".json";
+            final var backupFile = userFile.resolveSibling(backupName);
+            try {
+                return Files.copy(userFile, backupFile);
+            } catch (final FileAlreadyExistsException ignored) {
+                // Keep previous backups and try the next available name.
+            }
         }
     }
 
