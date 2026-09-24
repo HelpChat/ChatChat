@@ -24,13 +24,15 @@ public final class PlayerListener implements Listener {
 
     @EventHandler
     private void onLeave(final PlayerQuitEvent event) {
+        final var leavingPlayerId = event.getPlayer().getUniqueId();
 
         // find everyone who last messaged the person leaving, and remove their reference
         plugin.usersHolder().users().stream()
                 .filter(user -> user instanceof ChatUser)
                 .map(user -> (ChatUser) user)
-                .filter(user -> user.lastMessagedUser().isPresent())
-                .filter(user -> user.lastMessagedUser().get().player().equals(event.getPlayer()))
+                .filter(user -> user.lastMessagedUser()
+                        .filter(lastMessaged -> lastMessaged.uuid().equals(leavingPlayerId))
+                        .isPresent())
                 .forEach(user -> user.lastMessagedUser(null));
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> plugin.usersHolder().removeUser(event.getPlayer().getUniqueId()));
