@@ -50,7 +50,7 @@ public class ChannelMention implements Mention {
 
         final var result = MentionUtils.processChannelMentions(
             plugin.configManager().settings().mentions().prefix(),
-            plugin.configManager().settings().mentions().personalFormat(),
+            plugin.configManager().settings().mentions().channelFormat(),
             chatSender,
             target,
             message

@@ -110,7 +110,7 @@ public final class DefaultConfigObjects {
             "name",
             List.of(
                 "<hover:show_text:\"<gold>This is a mention!\">",
-                "<yellow>@%player_name%",
+                "<yellow><mention>",
                 "</hover>"
             )
         );
@@ -124,8 +124,8 @@ public final class DefaultConfigObjects {
         map.put(
             "name",
             List.of(
-                "<hover:show_text:\"<gold>This is a mention!\">",
-                "<yellow>@everyone",
+                "<hover:show_text:\"<gold>This is a channel mention!\">",
+                "<yellow><mention>",
                 "</hover>"
             )
         );

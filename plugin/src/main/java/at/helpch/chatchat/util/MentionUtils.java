@@ -4,6 +4,7 @@ import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,13 +18,15 @@ import java.util.regex.Pattern;
 public final class MentionUtils {
 
     private static final String MENTION_PERSONAL_PERMISSION = "chatchat.mention.personal";
-    private static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.channel";
+    private static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.everyone";
     public static final String MENTION_PERSONAL_BLOCK_PERMISSION = MENTION_PERSONAL_PERMISSION + ".block";
     public static final String MENTION_CHANNEL_BLOCK_PERMISSION = MENTION_CHANNEL_PERMISSION + ".block";
     private static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION +
         ".override";
     private static final String MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION = MENTION_CHANNEL_BLOCK_PERMISSION +
         ".override";
+    private static final String MENTION_START = "(?<![A-Za-z0-9_])";
+    private static final String MENTION_END = "(?![A-Za-z0-9_])";
 
     private MentionUtils() {
         throw new AssertionError("Util classes are not to be instantiated!");
@@ -72,9 +75,16 @@ public final class MentionUtils {
         @NotNull final User user,
         @NotNull final Component component,
         @NotNull final Format format) {
-        return replaceMention(username, component, (r) -> user instanceof ChatUser
-            ? FormatUtils.parseFormat(format, ((ChatUser) user).player().get(), component)
-            : FormatUtils.parseFormat(format, component));
+        return replaceMention(username, component, result -> {
+            final var mention = Placeholder.component("mention", Component.text(result.group()));
+            if (user instanceof ChatUser) {
+                final var player = ((ChatUser) user).player();
+                if (player.isPresent()) {
+                    return FormatUtils.parseFormat(format, player.get(), component, mention);
+                }
+            }
+            return FormatUtils.parseFormat(format, component, mention);
+        });
     }
 
     @Contract(value = "_, _, _, _ -> new", pure = true)
@@ -85,7 +95,16 @@ public final class MentionUtils {
         @NotNull final Format format
     ) {
         return user.player()
-            .map(value -> replaceMention(prefix + value.getName(), component, r -> FormatUtils.parseFormat(format, value, component)))
+            .map(value -> replaceMention(
+                MENTION_START + Pattern.quote(prefix + value.getName()) + MENTION_END,
+                component,
+                result -> FormatUtils.parseFormat(
+                    format,
+                    value,
+                    component,
+                    Placeholder.component("mention", Component.text(result.group()))
+                )
+            ))
             .orElseGet(() -> new MentionReplaceResult(false, component));
     }
 
@@ -109,7 +128,7 @@ public final class MentionUtils {
         }
 
         final var replaced = MentionUtils.replaceMention(
-            mentionPrefix + "(everyone|here|channel)",
+            MENTION_START + Pattern.quote(mentionPrefix) + "(?:everyone|here|channel)" + MENTION_END,
             target,
             message,
             channelMentionFormat);

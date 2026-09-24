@@ -128,7 +128,7 @@ public final class MessageProcessor {
         var userIsTarget = false;
 
         for (final var target : chatEvent.recipients()) {
-            if (target.uuid() == user.uuid()) {
+            if (target.uuid().equals(user.uuid())) {
                 userIsTarget = true;
                 continue;
             }
@@ -204,7 +204,7 @@ public final class MessageProcessor {
             user,
             user,
             chatEvent.channel(),
-            parsedMessage,
+            userMessage,
             true
         );
 

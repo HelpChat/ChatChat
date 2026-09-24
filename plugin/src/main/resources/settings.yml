@@ -62,19 +62,19 @@ mentions:
     source: master
     pitch: 1
     volume: 1
-  # The format to use for individual player mentions.
+  # The format to use for individual player mentions. <mention> is the matched text.
   personal-format:
     parts:
       name:
         - '<hover:show_text:"<gold>This is a mention!">'
-        - '<yellow>@%player_name%'
+        - '<yellow><mention>'
         - '</hover>'
-    # The format to use for @channel/@here/@everyone mentions.
+  # The format to use for @channel/@here/@everyone mentions. <mention> is the matched text.
   channel-format:
     parts:
       name:
         - '<hover:show_text:"<gold>This is a channel mention!">'
-        - '<yellow>@everyone'
+        - '<yellow><mention>'
         - '</hover>'
 
 # After how many seconds should the last messaged user be cleared. Set to below 0 to disable expiration.
