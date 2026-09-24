@@ -3,15 +3,18 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.util.DumpUtils;
+import dev.triumphteam.cmd.core.BaseCommand;
+import dev.triumphteam.cmd.core.annotation.Command;
+import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Optional;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class DumpCommand extends ChatChatCommand {
+@Command("chatdump")
+public class DumpCommand extends BaseCommand {
 
     private static final String DUMP_PERMISSION = "chatchat.dump";
     private static final TextReplacementConfig.Builder DUMP_REPLACEMENT_BUILDER = TextReplacementConfig.builder()
@@ -23,7 +26,7 @@ public class DumpCommand extends ChatChatCommand {
         this.plugin = plugin;
     }
 
-    @SubCommand("dump")
+    @Default
     public void dump(final User user, final @Suggestion("files") @Optional String file) {
         if (!user.hasPermission(DUMP_PERMISSION)) {
             user.sendMessage(plugin.configManager().messages().noPermission());

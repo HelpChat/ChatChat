@@ -68,6 +68,18 @@ val yaml = bukkitPluginYaml {
             description = "Execute admin commands"
             default = Permission.Default.OP
         }
+        create("chatchat.dump") {
+            description = "Create and upload a diagnostic dump"
+            default = Permission.Default.OP
+        }
+        create("chatchat.togglechat") {
+            description = "Toggle public chat on or off for yourself"
+            default = Permission.Default.OP
+        }
+        create("chatchat.rangedchat") {
+            description = "Toggle whether channel radius limits apply when receiving chat"
+            default = Permission.Default.OP
+        }
         create("chatchat.socialspy") {
             description = "Spy on private messages"
             default = Permission.Default.OP
