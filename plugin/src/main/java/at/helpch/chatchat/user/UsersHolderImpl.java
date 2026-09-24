@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class UsersHolderImpl implements UsersHolder {
 
@@ -20,7 +20,7 @@ public final class UsersHolderImpl implements UsersHolder {
 
     private final ChatChatPlugin plugin;
 
-    private @NotNull final Map<UUID, User> users = new HashMap<>();
+    private @NotNull final Map<UUID, User> users = new ConcurrentHashMap<>();
 
     public UsersHolderImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;

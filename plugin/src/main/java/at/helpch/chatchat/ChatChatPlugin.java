@@ -1,7 +1,6 @@
 package at.helpch.chatchat;
 
 import at.helpch.chatchat.api.ChatChatAPI;
-import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
@@ -37,12 +36,15 @@ import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.bukkit.BukkitCommand;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,8 +52,12 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 @BukkitMain
@@ -78,6 +84,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
 
     private BukkitCommandManager<User> commandManager;
+    private Set<Command> registeredCommands = Set.of();
     private BukkitTask dataSaveTask;
 
     private static long cacheDuration;
@@ -160,6 +167,28 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull ConfigManager configManager() {
         return configManager;
+    }
+
+    public void reloadPluginConfiguration() {
+        configManager.reload();
+
+        final CommandMap commandMap = getServer().getCommandMap();
+        // Triumph's unregisterCommand does not remove commands in the current version.
+        commandMap.getKnownCommands().values().removeIf(registeredCommands::contains);
+        registeredCommands.forEach(command -> command.unregister(commandMap));
+
+        commandManager = BukkitCommandManager.create(this,
+            usersHolder::getUser,
+            new UserSenderValidator(this));
+        registerSuggestions();
+        registerArguments();
+        registerCommandMessages();
+        registerCommands();
+        try {
+            getServer().getClass().getMethod("syncCommands").invoke(getServer());
+        } catch (final ReflectiveOperationException exception) {
+            getLogger().log(Level.WARNING, "Could not update the available commands for online players", exception);
+        }
     }
 
     public @NotNull UsersHolderImpl usersHolder() {
@@ -282,9 +311,15 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // register channel commands
         configManager.channels().channels().values().stream()
-            .map(Channel::commandNames) // don't register empty command names
-            .filter(s -> !s.isEmpty())
-            .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
+            .filter(channel -> !channel.commandNames().isEmpty())
+            .map(channel -> new SwitchChannelCommand(this, channel.name(), channel.commandNames().get(0),
+                channel.commandNames().subList(1, channel.commandNames().size())))
             .forEach(commandManager::registerCommand);
+
+        final Set<Command> currentCommands = Collections.newSetFromMap(new IdentityHashMap<>());
+        getServer().getCommandMap().getKnownCommands().values().stream()
+            .filter(command -> command instanceof BukkitCommand)
+            .forEach(currentCommands::add);
+        registeredCommands = currentCommands;
     }
 }

@@ -23,7 +23,7 @@ public final class ReloadCommand extends ChatChatCommand {
     @SubCommand("reload")
     @Permission(ADMIN_PERMISSION)
     public void reloadCommand(final User sender) {
-        plugin.configManager().reload();
+        plugin.reloadPluginConfiguration();
 
         final int formats = plugin.configManager().formats().formats().size();
         final int channels = plugin.configManager().channels().channels().size();

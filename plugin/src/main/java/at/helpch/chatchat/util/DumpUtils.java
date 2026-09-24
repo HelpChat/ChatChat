@@ -71,6 +71,10 @@ public final class DumpUtils {
 
     @NotNull
     public static Optional<String> createDump(@NotNull final ChatChatPlugin plugin, @Nullable final String fileName) {
+        if (fileName != null && !fileName.isEmpty() && !FILES.contains(fileName)) {
+            return Optional.empty();
+        }
+
         final var builder = new StringBuilder();
 
         builder.append("Generated On: ")

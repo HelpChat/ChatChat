@@ -17,24 +17,23 @@ import java.util.List;
 public final class SwitchChannelCommand extends BaseCommand {
 
     private final ChatChatPlugin plugin;
-    private final String command;
+    private final String channelName;
 
-    public SwitchChannelCommand(@NotNull final ChatChatPlugin plugin, @NotNull final String command,
+    public SwitchChannelCommand(@NotNull final ChatChatPlugin plugin, @NotNull final String channelName,
+                                @NotNull final String command,
                                 @NotNull final List<String> aliases) {
         super(command, aliases);
         this.plugin = plugin;
-        this.command = command;
+        this.channelName = channelName;
     }
 
     @Default
     public void switchChannel(final ChatUser user, @Join @Optional @NotNull final String message) {
-        final var channels = plugin.configManager().channels().channels();
-        final var channel = channels.values()
-                .stream()
-                .filter(value -> value.commandNames().contains(command))
-                .findAny()
-                .get(); // this should probably only ever throw if the person has changed command names without
-        // restarting
+        final var channel = plugin.configManager().channels().channels().get(channelName);
+        if (channel == null) {
+            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            return;
+        }
 
         if (channel instanceof AbstractTownyChannel) {
             final var town = TownyUniverse.getInstance().getResidentOpt(user.uuid())
