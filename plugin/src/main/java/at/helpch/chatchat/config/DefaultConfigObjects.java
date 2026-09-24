@@ -20,12 +20,12 @@ import java.util.List;
 public final class DefaultConfigObjects {
 
     public static @NotNull Channel createDefaultChannel() {
-        return new ChatChannel("default", "",
+        return new ChatChannel("global", "",
             List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), -1);
     }
 
     public static @NotNull Channel createStaffChannel() {
-        return new ChatChannel("staff", "@",
+        return new ChatChannel("staff", "#",
             List.of("staffchat"), "<gray>[<green>Staff<gray>]", new FormatsHolderImpl(), -1);
     }
 

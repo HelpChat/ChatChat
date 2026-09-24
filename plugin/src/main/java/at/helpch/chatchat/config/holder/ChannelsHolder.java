@@ -12,7 +12,7 @@ import java.util.Map;
 @ConfigSerializable
 public final class ChannelsHolder {
 
-    private String defaultChannel = "default";
+    private String defaultChannel = "global";
 
     private Map<String, Channel> channels = Map.of(
             "staff", DefaultConfigObjects.createStaffChannel(),

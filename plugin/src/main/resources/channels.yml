@@ -19,7 +19,7 @@ channels:
         parts:
           channel:
             - "<hover:show_text:'<aqua>This is a default channel format!'>"
-            - "%chatchat_channel_prefix%",
+            - "%chatchat_channel_prefix%"
             - "</hover>"
           prefix:
             - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
@@ -35,19 +35,20 @@ channels:
       - 'staffchat'
     message-prefix: '#'
     channel-prefix: '[STAFF]'
-    default-channel: # user needs 'chatchat.channel.format.staff.default-channel' permission
-      priority: 1 # lower number = higher priority
-      parts:
-        channel:
-          - "<hover:show_text:'<aqua>This is a default channel format!'>"
-          - "%chatchat_channel_prefix%",
-          - "</hover>"
-        prefix:
-          - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
-        name:
-          - "<white>%player_name%"
-        message:
-          - " <gray>» <white><message>"
+    formats:
+      default-channel: # user needs 'chatchat.channel.format.staff.default-channel' permission
+        priority: 1 # lower number = higher priority
+        parts:
+          channel:
+            - "<hover:show_text:'<aqua>This is a default channel format!'>"
+            - "%chatchat_channel_prefix%"
+            - "</hover>"
+          prefix:
+            - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
+          name:
+            - "<white>%player_name%"
+          message:
+            - " <gray>» <white><message>"
     radius: -1
 
 #  # this one's for towny, uncomment this section if you have towny installed
@@ -56,12 +57,14 @@ channels:
 #    # valid options are 'TOWNY_TOWN', 'TOWNY_NATION'
 #    # if the type is not valid, it falls back to a standard chat channel
 #    type: 'TOWNY_TOWN'
-#    toggle-command: 'townchat'
+#    toggle-command:
+#      - 'townchat'
 #    message-prefix: 't:'
 #    channel-prefix: '[Town]'
 #  # as above, but for nations instead of towns
 #  nation:
 #    type: 'TOWNY_NATION'
-#    toggle-command: 'nationchat'
+#    toggle-command:
+#      - 'nationchat'
 #    message-prefix: 'n:'
 #    channel-prefix: '[Nation]'

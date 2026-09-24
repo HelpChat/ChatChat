@@ -44,6 +44,9 @@ public final class ConfigFactory {
     }
 
     public @NotNull ChannelsHolder channels() {
+        if (Files.notExists(dataFolder.resolve("channels.yml"))) {
+            plugin.saveResource("channels.yml", false);
+        }
         final var config = create(ChannelsHolder.class, "channels.yml");
         return Objects.requireNonNullElseGet(config, ChannelsHolder::new);
     }
