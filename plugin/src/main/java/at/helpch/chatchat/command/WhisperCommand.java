@@ -121,7 +121,7 @@ public final class WhisperCommand extends BaseCommand {
                 plugin.usersHolder().users()
                     .stream()
                     .filter(spyUser -> !(spyUser instanceof ChatUser) || ((ChatUser) spyUser).socialSpy())
-                    .filter(spyUser -> spyUser.uuid() != sender.uuid() && spyUser.uuid() != recipient.uuid())
+                    .filter(spyUser -> !spyUser.uuid().equals(sender.uuid()) && !spyUser.uuid().equals(recipient.uuid()))
                     .collect(Collectors.toUnmodifiableList())
             ),
             socialSpyFormat
