@@ -19,13 +19,13 @@ import java.util.regex.Pattern;
 
 public final class MentionUtils {
 
-    private static final String MENTION_PERSONAL_PERMISSION = "chatchat.mention.personal";
-    private static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.everyone";
+    public static final String MENTION_PERSONAL_PERMISSION = "chatchat.mention.personal";
+    public static final String MENTION_CHANNEL_PERMISSION = "chatchat.mention.everyone";
     public static final String MENTION_PERSONAL_BLOCK_PERMISSION = MENTION_PERSONAL_PERMISSION + ".block";
     public static final String MENTION_CHANNEL_BLOCK_PERMISSION = MENTION_CHANNEL_PERMISSION + ".block";
-    private static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION +
+    public static final String MENTION_PERSONAL_BLOCK_OVERRIDE_PERMISSION = MENTION_PERSONAL_BLOCK_PERMISSION +
         ".override";
-    private static final String MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION = MENTION_CHANNEL_BLOCK_PERMISSION +
+    public static final String MENTION_CHANNEL_BLOCK_OVERRIDE_PERMISSION = MENTION_CHANNEL_BLOCK_PERMISSION +
         ".override";
     private static final String MENTION_START = "(?<![A-Za-z0-9_])";
     private static final String MENTION_END = "(?![A-Za-z0-9_])";

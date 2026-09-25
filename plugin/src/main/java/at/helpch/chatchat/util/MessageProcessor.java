@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.event.ChatChatEvent;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.command.IgnoreCommand;
 import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import net.kyori.adventure.text.Component;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public final class MessageProcessor {
@@ -120,6 +122,19 @@ public final class MessageProcessor {
 
         final var oldChannel = user.channel();
         user.channel(channel);
+
+        if (chatEvent.channel().crossServer() && chatEvent.channel().radius() == -1) {
+            final var formatTags = plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder()
+                .inMessage(false).sender(user).recipient(ConsoleUser.INSTANCE).build());
+            final var messageMarker = "chatchat:message/" + UUID.randomUUID();
+            final var markedMessage = Component.text().insertion(messageMarker)
+                .append(chatEvent.message()).build();
+            final var remoteFormat = FormatUtils.parseFormat(
+                chatEvent.format(), player.get(), markedMessage, formatTags);
+            plugin.crossServerMessenger().sendPublic(player.get(), chatEvent.channel(), remoteFormat,
+                messageMarker,
+                user.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
+        }
 
         final var parsedMessage = chatEvent.message().compact();
         final var mentions = plugin.configManager().settings().mentions();

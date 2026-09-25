@@ -24,6 +24,7 @@ import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
 import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.config.ConfigManager;
+import at.helpch.chatchat.crossserver.CrossServerMessenger;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManagerImpl;
@@ -87,6 +88,7 @@ public final class ChatChatPlugin extends JavaPlugin {
     final MentionManagerImpl mentionsManager = new MentionManagerImpl(this);
     private @NotNull
     final MiniPlaceholderManagerImpl miniPlaceholdersManager = new MiniPlaceholderManagerImpl();
+    private final CrossServerMessenger crossServerMessenger = new CrossServerMessenger(this);
     private SeparationManager separationManager;
     private @NotNull
     final ChatChatAPIImpl api = new ChatChatAPIImpl(this);
@@ -119,6 +121,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         hookManager.init();
         configManager.reload();
+        crossServerMessenger.enable();
 
         // bStats
         Metrics metrics = new Metrics(this, 14781);
@@ -163,6 +166,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        crossServerMessenger.disable();
         hookManager().hooks().forEach(Hook::disable);
         hookManager().vanishHooks().forEach(Hook::disable);
         hookManager().muteHooks().forEach(Hook::disable);
@@ -183,6 +187,10 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     public @NotNull ConfigManager configManager() {
         return configManager;
+    }
+
+    public @NotNull CrossServerMessenger crossServerMessenger() {
+        return crossServerMessenger;
     }
 
     public @NotNull Component parseConfiguredMessage(@NotNull final User recipient, @NotNull final String template) {

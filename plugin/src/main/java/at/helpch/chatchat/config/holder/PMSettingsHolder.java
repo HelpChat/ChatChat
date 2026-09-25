@@ -12,11 +12,16 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 public final class PMSettingsHolder {
 
     private boolean enabled = true;
+    private boolean crossServer = false;
 
     private PMFormats formats = new PMFormats();
 
     public boolean enabled() {
         return enabled;
+    }
+
+    public boolean crossServer() {
+        return crossServer;
     }
 
     public PMFormats formats() {

@@ -30,6 +30,9 @@ channels:
 
     # radius from sender other players need to be in to see sender's message. -1 for no radius
     radius: -1
+    # Forward public chat to servers on the same BungeeCord or Velocity proxy.
+    # Enable this on a channel with the same name on every server. Requires radius: -1.
+    cross-server: false
   staff: # permission node: chatchat.channel.see.staff to access this channel (or chatchat.channel.use.staff to talk)
     toggle-command:
       - 'staffchat'
@@ -50,6 +53,7 @@ channels:
           message:
             - " <gray>» <white><message>"
     radius: -1
+    cross-server: false
 
 #  # this one's for towny, uncomment this section if you have towny installed
 #  town:

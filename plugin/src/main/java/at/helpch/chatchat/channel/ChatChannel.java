@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public final class ChatChannel extends AbstractChannel {
 
     private static Channel defaultChannel = DefaultConfigObjects.createDefaultChannel();
+    private final boolean crossServer;
 
     public ChatChannel(
         @NotNull final String name,
@@ -29,7 +30,25 @@ public final class ChatChannel extends AbstractChannel {
         @NotNull final FormatsHolder formats,
         final int radius
     ) {
+        this(name, messagePrefix, toggleCommands, channelPrefix, formats, radius, false);
+    }
+
+    public ChatChannel(
+        @NotNull final String name,
+        @NotNull final String messagePrefix,
+        @NotNull final List<String> toggleCommands,
+        @NotNull final String channelPrefix,
+        @NotNull final FormatsHolder formats,
+        final int radius,
+        final boolean crossServer
+    ) {
         super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
+        this.crossServer = crossServer;
+    }
+
+    @Override
+    public boolean crossServer() {
+        return crossServer;
     }
 
     public static @NotNull Channel defaultChannel() {
@@ -50,6 +69,7 @@ public final class ChatChannel extends AbstractChannel {
             ", toggleCommands='" + commandNames() + '\'' +
             ", channelPrefix='" + channelPrefix() + '\'' +
             ", radius='" + radius() +
+            ", crossServer='" + crossServer +
             '}';
     }
 

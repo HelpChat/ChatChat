@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,6 +185,29 @@ public final class FormatUtils {
             PapiTagUtils.createRelPlaceholderAPITag(player, recipient),
             PapiTagUtils.createRecipientTag(recipient),
             miniPlaceholders
+        );
+    }
+
+    /** Render a private-message format when its recipient is connected to another server. */
+    public static @NotNull Component parseRemotePrivateFormat(
+        @NotNull final Format format,
+        @NotNull final Player sender,
+        @NotNull final String recipientName,
+        @NotNull final ComponentLike message
+    ) {
+        final var template = format.parts().values().stream()
+            .map(part -> String.join("", part))
+            .collect(Collectors.joining());
+        final var resolved = parsePlaceholders(template, placeholder -> PlaceholderAPI.setPlaceholders(sender, placeholder));
+        return MessageUtils.parseToMiniMessage(resolved,
+            Placeholder.component("message", message),
+            PapiTagUtils.createPlaceholderAPITag(sender),
+            TagResolver.resolver("recipient", (arguments, context) -> {
+                if (arguments.hasNext() && arguments.pop().value().equalsIgnoreCase("player_name")) {
+                    return Tag.selfClosingInserting(Component.text(recipientName));
+                }
+                return null;
+            })
         );
     }
 }

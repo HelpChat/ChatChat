@@ -57,6 +57,11 @@ public interface Channel {
      */
     int radius();
 
+    /** Whether messages in this channel are forwarded to other servers on the proxy. */
+    default boolean crossServer() {
+        return false;
+    }
+
     /**
      * Get a set of {@link ChatUser}s that can see this channel.
      *

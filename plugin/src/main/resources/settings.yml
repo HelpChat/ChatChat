@@ -3,6 +3,8 @@
 
 private-messages:
   enabled: true
+  # Allow /msg and /reply across servers on the same BungeeCord or Velocity proxy.
+  cross-server: false
   formats:
     sender-format:
       parts:

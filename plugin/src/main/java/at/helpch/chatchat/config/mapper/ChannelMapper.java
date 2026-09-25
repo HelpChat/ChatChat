@@ -3,6 +3,7 @@ package at.helpch.chatchat.config.mapper;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
 import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
+import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.FormatsHolderImpl;
 import io.leangen.geantyref.TypeToken;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
     private static final String CHANNEL_PREFIX = "channel-prefix";
     private static final String FORMATS = "formats";
     private static final String RADIUS = "radius";
+    private static final String CROSS_SERVER = "cross-server";
     private static final String TYPE = "type";
     private static final TypeToken<Map<String, PriorityFormat>> FORMATS_MAP_TYPE = new TypeToken<>() {};
 
@@ -55,6 +57,7 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         final var formatsMap = node.node(FORMATS).get(FORMATS_MAP_TYPE, Map.of());
         final var formats = new FormatsHolderImpl(formatsMap);
         final var radius = node.node(RADIUS).getInt(-1);
+        final var crossServer = node.node(CROSS_SERVER).getBoolean(false);
 
         final var channelType = node.node(TYPE).getString("default").toLowerCase();
 
@@ -62,6 +65,15 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         if (builder == null) {
             throw new SerializationException("Channel " + key + " has unknown channel type " + channelType + ", " +
                     "ignoring.");
+        }
+        if (crossServer) {
+            if (!channelType.equals("default")) {
+                throw new SerializationException("Cross-server chat is only supported for default channels: " + key);
+            }
+            if (radius != -1) {
+                throw new SerializationException("Cross-server chat requires an unlimited radius: " + key);
+            }
+            return new ChatChannel(key, messagePrefix, commandName, channelPrefix, formats, radius, true);
         }
         return builder.build(key, messagePrefix, commandName, channelPrefix, formats, radius);
     }
@@ -78,5 +90,6 @@ public final class ChannelMapper implements TypeSerializer<Channel> {
         target.node(CHANNEL_PREFIX).set(channel.channelPrefix());
         target.node(FORMATS).set(channel.formats().formats());
         target.node(RADIUS).set(channel.radius());
+        target.node(CROSS_SERVER).set(channel.crossServer());
     }
 }

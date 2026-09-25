@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public final class ChatUserImpl implements ChatUser {
+public class ChatUserImpl implements ChatUser {
 
     public ChatUserImpl(@NotNull final UUID uuid) {
         this.uuid = uuid;

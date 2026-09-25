@@ -30,6 +30,12 @@ public final class ReplyCommand extends BaseCommand {
             return;
         }
 
+        final var remote = plugin.crossServerMessenger().replyTarget(user.uuid());
+        if (remote.isPresent()) {
+            whisperCommand.whisperCommand(user, remote.get().name(), message);
+            return;
+        }
+
         final var lastMessaged = user.lastMessagedUser();
 
         if (lastMessaged.isEmpty()) {
@@ -37,6 +43,11 @@ public final class ReplyCommand extends BaseCommand {
             return;
         }
 
-        whisperCommand.whisperCommand(user, lastMessaged.get(), message);
+        final var target = lastMessaged.get().player();
+        if (target.isEmpty()) {
+            plugin.sendConfiguredMessage(user, LocaleMessage.NO_REPLIES);
+            return;
+        }
+        whisperCommand.whisperCommand(user, target.get().getName(), message);
     }
 }

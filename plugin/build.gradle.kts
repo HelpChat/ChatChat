@@ -47,6 +47,9 @@ dependencies {
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
     compileOnly(libs.griefprevention)
+
+    testImplementation(libs.paper)
+    testImplementation("junit:junit:4.13.2")
 }
 
 val yaml = bukkitPluginYaml {

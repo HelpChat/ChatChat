@@ -9,6 +9,7 @@ public enum LocaleMessage {
     CONSOLE_ONLY,
     PLAYERS_ONLY,
     USER_OFFLINE,
+    CROSS_SERVER_UNAVAILABLE,
     PLAYER_NOT_FOUND,
     USER_NOT_IN_TOWN,
     NO_REPLIES,

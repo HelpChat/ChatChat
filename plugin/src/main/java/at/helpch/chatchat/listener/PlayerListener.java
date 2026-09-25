@@ -25,6 +25,7 @@ public final class PlayerListener implements Listener {
     @EventHandler
     private void onLeave(final PlayerQuitEvent event) {
         final var leavingPlayerId = event.getPlayer().getUniqueId();
+        plugin.crossServerMessenger().clearReplyTarget(leavingPlayerId);
 
         // find everyone who last messaged the person leaving, and remove their reference
         plugin.usersHolder().users().stream()

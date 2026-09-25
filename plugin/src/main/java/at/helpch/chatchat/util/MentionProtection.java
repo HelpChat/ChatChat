@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /** Keeps generated text out of mention matching without changing what players see. */
-final class MentionProtection {
+public final class MentionProtection {
 
     private static final String MARKER = "\u0000chatchat:item:" + UUID.randomUUID() + ":";
 
@@ -25,7 +25,25 @@ final class MentionProtection {
         return insertion != null && insertion.startsWith(MARKER);
     }
 
-    static @NotNull Component restore(@NotNull final Component component) {
+    public static @NotNull String transportMarker() {
+        return MARKER;
+    }
+
+    /** Transfer protected item components from another server's marker to this server's marker. */
+    public static @NotNull Component rebase(@NotNull final Component component,
+                                            @NotNull final String foreignMarker) {
+        final var children = component.children().stream()
+            .map(child -> rebase(child, foreignMarker)).toList();
+        final var rebased = component.children(children);
+        final var insertion = component.insertion();
+        if (!foreignMarker.startsWith("\u0000chatchat:item:") || insertion == null ||
+            !insertion.startsWith(foreignMarker)) {
+            return rebased;
+        }
+        return rebased.insertion(MARKER + insertion.substring(foreignMarker.length()));
+    }
+
+    public static @NotNull Component restore(@NotNull final Component component) {
         final var children = component.children().stream().map(MentionProtection::restore).toList();
         final var restored = component.children(children);
         if (!isProtected(component)) {

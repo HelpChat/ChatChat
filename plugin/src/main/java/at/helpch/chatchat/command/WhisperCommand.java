@@ -4,8 +4,8 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
-import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.locale.LocaleMessage;
+import at.helpch.chatchat.util.FormatUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -14,6 +14,7 @@ import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -35,18 +36,24 @@ public final class WhisperCommand extends BaseCommand {
     @Permission(MESSAGE_PERMISSION)
     public void whisperCommand(
         final ChatUser sender,
-        @Suggestion(value = "recipients") final ChatUser recipient,
+        @Suggestion(value = "recipients") final String recipientName,
         @Join final String message
     ) {
+        if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
+            plugin.sendConfiguredMessage(sender, LocaleMessage.COMMAND_UNKNOWN_COMMAND);
+            return;
+        }
+
+        final var localRecipient = Bukkit.getPlayerExact(recipientName);
+        if (localRecipient == null) {
+            plugin.crossServerMessenger().sendPrivate(sender, recipientName, message, reply);
+            return;
+        }
+        final var recipient = (ChatUser) plugin.usersHolder().getUser(localRecipient);
         var senderPlayer = sender.player();
         var recipientPlayer = recipient.player();
         if (senderPlayer.isEmpty() || recipientPlayer.isEmpty()) {
             plugin.sendConfiguredMessage(sender, LocaleMessage.USER_OFFLINE);
-            return;
-        }
-
-        if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
-            plugin.sendConfiguredMessage(sender, LocaleMessage.COMMAND_UNKNOWN_COMMAND);
             return;
         }
 
@@ -148,6 +155,8 @@ public final class WhisperCommand extends BaseCommand {
 
         sender.lastMessagedUser(recipient);
         recipient.lastMessagedUser(sender);
+        plugin.crossServerMessenger().clearReplyTarget(sender.uuid());
+        plugin.crossServerMessenger().clearReplyTarget(recipient.uuid());
     }
 
 }
