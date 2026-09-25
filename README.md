@@ -8,4 +8,8 @@
     </a>
 </p>
 
-Soon:tm:
+ChatChat is a highly customizable Minecraft chat plugin with channels, private messaging, mentions, and MiniMessage-powered chat formatting. It also supports optional cross-server chat and messaging on BungeeCord and Velocity networks.
+
+Requires Paper 1.21.9 or newer.
+
+For setup and configuration, see the [ChatChat Wiki](https://wiki.helpch.at/helpchat-plugins/chatchat).
