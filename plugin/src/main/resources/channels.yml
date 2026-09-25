@@ -12,7 +12,7 @@ channels:
     message-prefix: ''
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
     # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
-    channel-prefix: '[global]'
+    channel-prefix: '<dark_gray>[</dark_gray><aqua>global</aqua><dark_gray>]</dark_gray>'
     formats: # Channel formats have priority over global formats declared in formats.yml
       default-channel: # user needs 'chatchat.channel.format.global.default-channel' permission
         priority: 1 # lower number = higher priority
@@ -37,7 +37,7 @@ channels:
     toggle-command:
       - 'staffchat'
     message-prefix: '#'
-    channel-prefix: '[STAFF]'
+    channel-prefix: '<dark_gray>[</dark_gray><red>STAFF</red><dark_gray>]</dark_gray>'
     formats:
       default-channel: # user needs 'chatchat.channel.format.staff.default-channel' permission
         priority: 1 # lower number = higher priority

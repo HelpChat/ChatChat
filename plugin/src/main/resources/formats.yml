@@ -58,7 +58,7 @@ formats:
         - '</click>'
       prefix:
         - '<hover:show_text:"Hey look, i am staff<newline>Some new line">'
-        - ' [STAFF]'
+        - ' <dark_gray>[</dark_gray><red>STAFF</red><dark_gray>]</dark_gray>'
         - '</hover>'
       name:
         - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
