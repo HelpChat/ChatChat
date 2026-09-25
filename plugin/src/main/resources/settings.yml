@@ -1,5 +1,5 @@
 # The format to send to the sender of a private message
-# All formats can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
+# All formats can be formatted using MiniMessage: https://docs.papermc.io/adventure/minimessage/format/
 
 private-messages:
   enabled: true

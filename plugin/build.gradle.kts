@@ -57,7 +57,7 @@ val yaml = bukkitPluginYaml {
     main = "at.helpch.chatchat.ChatChatPlugin"
     authors.add("HelpChat")
     name = "ChatChat"
-    apiVersion = "1.21.4"
+    apiVersion = "1.21.9"
     description = "DelucksChat 2.0 or smth like that"
     depend = listOf("PlaceholderAPI")
 
@@ -178,6 +178,10 @@ val yaml = bukkitPluginYaml {
             description = "Use the <font> tag in chat"
             default = Permission.Default.OP
         }
+        create("chatchat.tag.head") {
+            description = "Use the <head> tag in chat"
+            default = Permission.Default.OP
+        }
         create("chatchat.tag.gradient") {
             description = "Use the <gradient> tag in chat"
             default = Permission.Default.OP
@@ -198,6 +202,14 @@ val yaml = bukkitPluginYaml {
             description = "Use the <newline> tags in chat"
             default = Permission.Default.OP
         }
+        create("chatchat.tag.nbt") {
+            description = "Use the <nbt> tag in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.pride") {
+            description = "Use the <pride> tag in chat"
+            default = Permission.Default.OP
+        }
         create("chatchat.tag.rainbow") {
             description = "Use the <rainbow> tag in chat"
             default = Permission.Default.OP
@@ -206,8 +218,32 @@ val yaml = bukkitPluginYaml {
             description = "Use the <reset> tag in chat"
             default = Permission.Default.OP
         }
+        create("chatchat.tag.score") {
+            description = "Use the <score> tag in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.selector") {
+            description = "Use the <selector> tag in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.shadow") {
+            description = "Use the <shadow> tag in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.sprite") {
+            description = "Use the <sprite> tag in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.transition") {
+            description = "Use the <transition> tag in chat"
+            default = Permission.Default.OP
+        }
         create("chatchat.tag.translatable") {
             description = "Use the <translatable> tags in chat"
+            default = Permission.Default.OP
+        }
+        create("chatchat.tag.translatable-fallback") {
+            description = "Use the <lang_or> tags in chat"
             default = Permission.Default.OP
         }
         create("chatchat.tag.obfuscated") {

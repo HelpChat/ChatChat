@@ -11,7 +11,7 @@ channels:
     # prefix the message with this to automatically type the message in channel
     message-prefix: ''
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
-    # Channel prefixes can be formatted using MiniMessage: https://docs.adventure.kyori.net/minimessage/index.html
+    # Channel prefixes can be formatted using MiniMessage: https://docs.papermc.io/adventure/minimessage/format/
     channel-prefix: '<dark_gray>[</dark_gray><aqua>global</aqua><dark_gray>]</dark_gray>'
     formats: # Channel formats have priority over global formats declared in formats.yml
       default-channel: # user needs 'chatchat.channel.format.global.default-channel' permission

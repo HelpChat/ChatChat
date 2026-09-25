@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public final class MessageProcessor {
@@ -47,14 +48,23 @@ public final class MessageProcessor {
         Map.entry("click", StandardTags.clickEvent()),
         Map.entry("color", StandardTags.color()),
         Map.entry("font", StandardTags.font()),
+        Map.entry("head", StandardTags.sequentialHead()),
         Map.entry("gradient", StandardTags.gradient()),
         Map.entry("hover", StandardTags.hoverEvent()),
         Map.entry("insertion", StandardTags.insertion()),
         Map.entry("keybind", StandardTags.keybind()),
         Map.entry("newline", StandardTags.newline()),
+        Map.entry("nbt", StandardTags.nbt()),
+        Map.entry("pride", StandardTags.pride()),
         Map.entry("rainbow", StandardTags.rainbow()),
         Map.entry("reset", StandardTags.reset()),
-        Map.entry("translatable", StandardTags.translatable())
+        Map.entry("score", StandardTags.score()),
+        Map.entry("selector", StandardTags.selector()),
+        Map.entry("shadow", StandardTags.shadowColor()),
+        Map.entry("sprite", StandardTags.sprite()),
+        Map.entry("transition", StandardTags.transition()),
+        Map.entry("translatable", StandardTags.translatable()),
+        Map.entry("translatable-fallback", StandardTags.translatableFallback())
     );
 
     private MessageProcessor() {
@@ -247,22 +257,7 @@ public final class MessageProcessor {
         @NotNull final String message
     ) {
         final var resolver = TagResolver.builder();
-
-        for (final var entry : PERMISSION_TAGS.entrySet()) {
-            if (!user.hasPermission(TAG_BASE_PERMISSION + entry.getKey())) {
-                continue;
-            }
-
-            resolver.resolver(entry.getValue());
-        }
-
-        for (final var tag : TextDecoration.values()) {
-            if (!user.hasPermission(TAG_BASE_PERMISSION + tag.toString())) {
-                continue;
-            }
-
-            resolver.resolver(StandardTags.decorations(tag));
-        }
+        resolver.resolver(allowedStandardTags(user::hasPermission));
 
         if (user.hasPermission(ITEM_TAG_PERMISSION)) {
             user.player().ifPresent( player ->
@@ -282,6 +277,24 @@ public final class MessageProcessor {
         return !user.hasPermission(URL_PERMISSION)
             ? USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build())
             : USER_MESSAGE_MINI_MESSAGE.deserialize(message, resolver.build()).replaceText(URL_REPLACER_CONFIG);
+    }
+
+    static @NotNull TagResolver allowedStandardTags(@NotNull final Predicate<String> hasPermission) {
+        final var resolver = TagResolver.builder();
+
+        for (final var entry : PERMISSION_TAGS.entrySet()) {
+            if (hasPermission.test(TAG_BASE_PERMISSION + entry.getKey())) {
+                resolver.resolver(entry.getValue());
+            }
+        }
+
+        for (final var tag : TextDecoration.values()) {
+            if (hasPermission.test(TAG_BASE_PERMISSION + tag.toString())) {
+                resolver.resolver(StandardTags.decorations(tag));
+            }
+        }
+
+        return resolver.build();
     }
 
 }
