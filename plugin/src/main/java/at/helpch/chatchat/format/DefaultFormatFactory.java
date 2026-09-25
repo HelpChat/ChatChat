@@ -17,7 +17,7 @@ public final class DefaultFormatFactory {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
         map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
-        map.put("name", List.of("<white>%player_name%"));
+        map.put("name", List.of("<hover:show_text:'<gray>Click to message <aqua>%player_name%'><click:suggest_command:'/msg %player_name% '><white>%player_name%</click></hover>"));
         map.put("message", List.of(" <gray>» <white><message>"));
 
         return new ChatFormat("default", 2, map);

@@ -12,19 +12,19 @@ channels:
     message-prefix: ''
     # pretty much a variable for the channel prefix, which can be accessed using the PAPI placeholder: %chatchat_channel_prefix%
     # Channel prefixes can be formatted using MiniMessage: https://docs.papermc.io/adventure/minimessage/format/
-    channel-prefix: '<dark_gray>[</dark_gray><aqua>global</aqua><dark_gray>]</dark_gray>'
+    channel-prefix: '<dark_gray>[</dark_gray><gradient:#76d2d3:#a2e5e2>global</gradient><dark_gray>]</dark_gray>'
     formats: # Channel formats have priority over global formats declared in formats.yml
       default-channel: # user needs 'chatchat.channel.format.global.default-channel' permission
         priority: 1 # lower number = higher priority
         parts:
           channel:
-            - "<hover:show_text:'<aqua>This is a default channel format!'>"
+            - "<hover:show_text:'<gray>Global chat'>"
             - "%chatchat_channel_prefix%"
             - "</hover>"
           prefix:
-            - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
+            - " <hover:show_text:'<gray>ChatChat'><gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>]</hover> "
           name:
-            - "<white>%player_name%"
+            - "<hover:show_text:'<gray>Click to message <aqua>%player_name%'><click:suggest_command:'/msg %player_name% '><white>%player_name%</click></hover>"
           message:
             - " <gray>» <white><message>"
 
@@ -43,13 +43,13 @@ channels:
         priority: 1 # lower number = higher priority
         parts:
           channel:
-            - "<hover:show_text:'<aqua>This is a default channel format!'>"
+            - "<hover:show_text:'<gray>Staff chat'>"
             - "%chatchat_channel_prefix%"
             - "</hover>"
           prefix:
-            - " <gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "
+            - " <hover:show_text:'<gray>ChatChat'><gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>]</hover> "
           name:
-            - "<white>%player_name%"
+            - "<hover:show_text:'<gray>Click to message <aqua>%player_name%'><click:suggest_command:'/msg %player_name% '><white>%player_name%</click></hover>"
           message:
             - " <gray>» <white><message>"
     radius: -1

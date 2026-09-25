@@ -21,7 +21,8 @@ public final class DefaultConfigObjects {
 
     public static @NotNull Channel createDefaultChannel() {
         return new ChatChannel("global", "",
-            List.of("global"), "<gray>[<blue>Global<gray>]", new FormatsHolderImpl(), -1);
+            List.of("global"), "<dark_gray>[</dark_gray><gradient:#76d2d3:#a2e5e2>global</gradient><dark_gray>]</dark_gray>",
+            new FormatsHolderImpl(), -1);
     }
 
     public static @NotNull Channel createStaffChannel() {
@@ -43,9 +44,9 @@ public final class DefaultConfigObjects {
     public static @NotNull PriorityFormat createDefaultFormat() {
         final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
 
-        map.put("channel", List.of("%chatchat_channel_prefix% "));
-        map.put("prefix", List.of("<gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>] "));
-        map.put("name", List.of("<white>%player_name%"));
+        map.put("channel", List.of("<hover:show_text:'<gray>Channel: <aqua>%chatchat_channel_name%'>%chatchat_channel_prefix%</hover> "));
+        map.put("prefix", List.of("<hover:show_text:'<gray>ChatChat'><gray>[<color:#40c9ff>Chat<color:#e81cff>Chat<gray>]</hover> "));
+        map.put("name", List.of("<hover:show_text:'<gray>Click to message <aqua>%player_name%'><click:suggest_command:'/msg %player_name% '><white>%player_name%</click></hover>"));
         map.put("message", List.of(" <gray>» <white><message>"));
 
         return new ChatFormat("default", 2, map);
@@ -59,8 +60,8 @@ public final class DefaultConfigObjects {
         map.put(
             "name",
             List.of(
-                "<hover:show_text:\"Prefix: %vault_group%\">",
-                "<rainbow>%player_name%",
+                "<hover:show_text:'<gray>Click to message <aqua>%player_name%'>",
+                "<click:suggest_command:'/msg %player_name% '><rainbow>%player_name%</click>",
                 "</hover>"
             )
         );

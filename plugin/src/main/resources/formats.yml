@@ -25,21 +25,19 @@ formats:
     # For example, <sprite:blocks:block/stone> or <head:entity/player/wide/steve> on Paper 1.21.9+.
     parts:
       channel:
-        - '<click:open_url:"https://google.com">'
-        - '<hover:show_text:"I am chatting in the %channel_name% channel<newline>Some new line">'
+        - '<hover:show_text:"<gray>Channel: <aqua>%chatchat_channel_name%">'
         - '%chatchat_channel_prefix%'
         - '</hover>'
-        - '</click>'
       group:
-        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
+        - '<hover:show_text:"<gray>Permission group: <aqua>%vault_group%">'
         - ' [%vault_group%]'
         - '</hover>'
       name:
-        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
-        - ' %player_displayname%'
+        - '<hover:show_text:"<gray>Click to message <aqua>%player_name%">'
+        - '<click:suggest_command:"/msg %player_name% "> %player_displayname%</click>'
         - '</hover>'
       divider:
-        - '<hover:show_text:"Cool diver tooltip here">'
+        - '<hover:show_text:"<gray>Message from <aqua>%player_name%">'
         - ' > '
         - '</hover>'
       message:
@@ -52,19 +50,17 @@ formats:
     priority: 1
     parts:
       channel:
-        - '<click:open_url:"https://google.com">'
-        - '<hover:show_text:"I am chatting in the %channel_name% channel<newline>Some new line">'
+        - '<hover:show_text:"<gray>Channel: <aqua>%chatchat_channel_name%">'
         - '%chatchat_channel_prefix%'
         - '</hover>'
-        - '</click>'
       prefix:
-        - '<hover:show_text:"Hey look, i am staff<newline>Some new line">'
+        - '<hover:show_text:"<gray>Staff member">'
         - ' <dark_gray>[</dark_gray><red>STAFF</red><dark_gray>]</dark_gray>'
         - '</hover>'
       name:
-        - '<hover:show_text:"Hey look, i am in the %vault_group% permission group.<newline>Some new line">'
-        - ' %player_displayname%'
+        - '<hover:show_text:"<gray>Click to message <aqua>%player_name%">'
+        - '<click:suggest_command:"/msg %player_name% "> %player_displayname%</click>'
         - '</hover>'
       message-and-divider:
-        - '<hover:show_text:"Cool diver tooltip here"> ></hover>'
+        - '<hover:show_text:"<gray>Message from <aqua>%player_name%"> ></hover>'
         - '<message>'
