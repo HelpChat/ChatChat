@@ -130,7 +130,7 @@ val yaml = bukkitPluginYaml {
         }
         create("chatchat.url") {
             description = "Send clickable URLs in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.channel.bypass-radius") {
             description = "Bypass the channel radius"
@@ -168,7 +168,7 @@ val yaml = bukkitPluginYaml {
         }
         create("chatchat.tag.click") {
             description = "Use the <click> tag in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.tag.color") {
             description = "Use the <color> tags in chat"
@@ -176,7 +176,7 @@ val yaml = bukkitPluginYaml {
         }
         create("chatchat.tag.font") {
             description = "Use the <font> tag in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.tag.gradient") {
             description = "Use the <gradient> tag in chat"
@@ -188,11 +188,11 @@ val yaml = bukkitPluginYaml {
         }
         create("chatchat.tag.insertion") {
             description = "Use the <insert> tag in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.tag.keybind") {
             description = "Use the <key> tag in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.tag.newline") {
             description = "Use the <newline> tags in chat"
@@ -208,7 +208,7 @@ val yaml = bukkitPluginYaml {
         }
         create("chatchat.tag.translatable") {
             description = "Use the <translatable> tags in chat"
-            default = Permission.Default.FALSE
+            default = Permission.Default.OP
         }
         create("chatchat.tag.obfuscated") {
             description = "Use the <obfuscated> tags in chat"
