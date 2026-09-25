@@ -111,7 +111,7 @@ public final class DumpUtils {
             .append(System.getProperty("java.version"))
             .append(System.lineSeparator());
 
-        builder.append("Server Info:")
+        builder.append("Server Info: ")
             .append(plugin.getServer().getBukkitVersion())
             .append('/')
             .append(plugin.getServer().getVersion())
@@ -120,10 +120,12 @@ public final class DumpUtils {
 
         if (fileName == null || fileName.isEmpty()) {
             files.forEach(name -> createFileDump(plugin, builder, name));
+            RuntimeDump.appendAll(plugin, builder);
             return Optional.of(builder.toString());
         }
 
         if (createFileDump(plugin, builder, fileName)) {
+            RuntimeDump.appendForFile(plugin, builder, fileName);
             return Optional.of(builder.toString());
         }
 
