@@ -4,13 +4,15 @@ import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.intellij.lang.annotations.RegExp;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -52,24 +54,98 @@ public final class MentionUtils {
 
     }
 
-    @Contract(value = "_, _, _ -> new", pure = true)
-    private static MentionReplaceResult replaceMention(
+    static MentionReplaceResult replaceMention(
         @NotNull @RegExp final String username,
         @NotNull final Component component,
         @NotNull final Function<MatchResult, Component> then
     ) {
-        final var hasBeenReplaced = new AtomicBoolean();
-        final var replaced = component.replaceText(builder -> builder
-            .match(Pattern.compile(username, Pattern.CASE_INSENSITIVE))
-            .replacement((result, ignored) -> {
-                    hasBeenReplaced.set(true);
-                    return then.apply(result);
-                }
-            ));
-        return new MentionReplaceResult(hasBeenReplaced.get(), replaced);
+        final var parts = new ArrayList<Component>();
+        collectParts(component, Style.empty(), parts);
+
+        final var pattern = Pattern.compile(username, Pattern.CASE_INSENSITIVE);
+        final var output = Component.text();
+        final var textRun = new ArrayList<TextComponent>();
+        var replaced = false;
+
+        for (final var part : parts) {
+            if (part instanceof TextComponent) {
+                textRun.add((TextComponent) part);
+                continue;
+            }
+
+            replaced |= appendTextRun(output, textRun, pattern, then);
+            textRun.clear();
+            output.append(part);
+        }
+
+        replaced |= appendTextRun(output, textRun, pattern, then);
+        return new MentionReplaceResult(replaced, replaced ? output.build() : component);
     }
 
-    @Contract(value = "_, _, _, _ -> new", pure = true)
+    private static void collectParts(
+        @NotNull final Component component,
+        @NotNull final Style inheritedStyle,
+        @NotNull final List<Component> parts
+    ) {
+        final var style = component.style().merge(inheritedStyle, Style.Merge.Strategy.IF_ABSENT_ON_TARGET, Style.Merge.all());
+        if (!(component instanceof TextComponent)) {
+            parts.add(component.style(style));
+            return;
+        }
+
+        final var text = (TextComponent) component;
+        if (!text.content().isEmpty()) {
+            parts.add(Component.text(text.content()).style(style));
+        }
+
+        for (final var child : component.children()) {
+            collectParts(child, style, parts);
+        }
+    }
+
+    private static boolean appendTextRun(
+        @NotNull final TextComponent.Builder output,
+        @NotNull final List<TextComponent> parts,
+        @NotNull final Pattern pattern,
+        @NotNull final Function<MatchResult, Component> then
+    ) {
+        final var text = new StringBuilder();
+        for (final var part : parts) {
+            text.append(part.content());
+        }
+
+        final var matcher = pattern.matcher(text);
+        var end = 0;
+        var replaced = false;
+        while (matcher.find()) {
+            appendTextSlice(output, parts, end, matcher.start());
+            output.append(then.apply(matcher.toMatchResult()));
+            end = matcher.end();
+            replaced = true;
+        }
+
+        appendTextSlice(output, parts, end, text.length());
+        return replaced;
+    }
+
+    private static void appendTextSlice(
+        @NotNull final TextComponent.Builder output,
+        @NotNull final List<TextComponent> parts,
+        final int start,
+        final int end
+    ) {
+        var offset = 0;
+        for (final var part : parts) {
+            final var partEnd = offset + part.content().length();
+            final var sliceStart = Math.max(start, offset);
+            final var sliceEnd = Math.min(end, partEnd);
+            if (sliceStart < sliceEnd) {
+                output.append(part.content(part.content().substring(sliceStart - offset, sliceEnd - offset)));
+            }
+            offset = partEnd;
+        }
+    }
+
     public static MentionReplaceResult replaceMention(
         @RegExp @NotNull final String username,
         @NotNull final User user,
@@ -87,7 +163,6 @@ public final class MentionUtils {
         });
     }
 
-    @Contract(value = "_, _, _, _ -> new", pure = true)
     public static MentionReplaceResult replaceMention(
         @NotNull final ChatUser user,
         @NotNull final String prefix,
