@@ -1,6 +1,8 @@
 # https://wiki.helpch.at
 # Messages support MiniMessage, PlaceholderAPI %identifier_parameters% and <papi:identifier:parameters>,
 # and ChatChat tags such as <item> and configured mini placeholders.
+# English locale. Add translated files beside this one, for example es_es.yml.
+# A missing translation uses the configured default locale, then English.
 
 console-only: <red>Only the console can do this!
 players-only: <red>Only players can do this!
@@ -16,12 +18,16 @@ private-messages-disabled: <red>Your private messages have been disabled!
 cant-message-yourself: <red>You can't message yourself!
 empty-message: <red>You can't send an empty message!
 special-characters-no-permission: <red>You do not have permission to use special characters!
+invalid-message: <red>The message you sent is invalid!
 social-spy-enabled: <green>Social spy enabled
 social-spy-disabled: <red>Social spy disabled
 ignored-player: <green>Successfully ignored <player>.
 unignored-player: <green>Successfully un-ignored <player>.
 already-ignored: <red>You are already ignoring <player>.
 not-ignored: <red>You are not ignoring <player>.
+not-ignoring-anyone: <red>You are not ignoring anyone.
+ignored-players-list: '<yellow>You are ignoring following players:<white>\<ignored_players></white><yellow>.'
+cant-ignore-yourself: <red>You cannot ignore yourself!
 cant-separate-self: <red>You cannot separate a player from themselves!
 separated-players: <green>Separated <player1> and <player2>.
 unseparated-players: <green>Removed the separation between <player1> and <player2>.
@@ -30,9 +36,15 @@ not-separated: <red>These players are not separated.
 separation-locked: <red>A staff-enforced separation prevents you from unignoring <player>.
 cant-message-ignored-player: <red>You cannot message a player who you ignore.
 cant-message-general: <red>You cannot message this player.
+chat-enabled-successfully: <green>Your chat has been enabled successfully!
+chat-disabled-successfully: <red>Your chat has been disabled successfully!
+chat-disabled: <red>Your chat is disabled! You can not send or receive messages until you enable it.
 
 channel-no-permission: <red>You do not have permission to use this channel!
+channel-no-permission-switch: '<red>You no longer have permission to use this channel so it has been switched to the \<default> channel. '
 channel-switched: <green>You have switched to the <channel> channel!
+ranged-chat-enabled-successfully: <green>Your ranged chat has been enabled successfully!
+ranged-chat-disabled-successfully: <red>Your ranged chat has been disabled successfully!
 
 command-unknown-command: <red>Unknown Command.
 command-invalid-usage: <red>Invalid usage.

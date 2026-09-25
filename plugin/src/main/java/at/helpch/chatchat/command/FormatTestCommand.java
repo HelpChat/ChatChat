@@ -7,6 +7,7 @@ import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Join;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -31,12 +32,12 @@ public class FormatTestCommand extends ChatChatCommand {
     ) {
         var player = sender.player();
         if (player.isEmpty()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().genericError());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.GENERIC_ERROR);
             return;
         }
 
         if (message.isBlank()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().emptyMessage());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.EMPTY_MESSAGE);
             return;
         }
 

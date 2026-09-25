@@ -8,7 +8,6 @@ import at.helpch.chatchat.config.holder.AddonsHolder;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.ExtensionsHolder;
 import at.helpch.chatchat.config.holder.GlobalFormatsHolderImpl;
-import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.config.mapper.AddonsMapper;
@@ -59,11 +58,6 @@ public final class ConfigFactory {
     public @NotNull SettingsHolder settings() {
         final var config = create(SettingsHolder.class, "settings.yml");
         return Objects.requireNonNullElseGet(config, SettingsHolder::new);
-    }
-
-    public @NotNull MessagesHolder messages() {
-        final var config = create(MessagesHolder.class, "messages.yml");
-        return Objects.requireNonNullElseGet(config, MessagesHolder::new);
     }
 
     public @NotNull ExtensionsHolder extensions() {

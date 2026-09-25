@@ -29,6 +29,7 @@ import at.helpch.chatchat.data.impl.gson.GsonDatabase;
 import at.helpch.chatchat.hooks.HookManagerImpl;
 import at.helpch.chatchat.listener.ChatListener;
 import at.helpch.chatchat.listener.PlayerListener;
+import at.helpch.chatchat.locale.LocaleMessage;
 import at.helpch.chatchat.mention.MentionManagerImpl;
 import at.helpch.chatchat.placeholder.MiniPlaceholderManagerImpl;
 import at.helpch.chatchat.placeholder.PlaceholderAPIPlaceholders;
@@ -188,8 +189,16 @@ public final class ChatChatPlugin extends JavaPlugin {
         return MessageUtils.parseConfiguredMessage(this, recipient, template);
     }
 
+    public @NotNull Component parseConfiguredMessage(@NotNull final User recipient, @NotNull final LocaleMessage message) {
+        return parseConfiguredMessage(recipient, configManager.messageLocales().template(recipient, message));
+    }
+
     public void sendConfiguredMessage(@NotNull final User recipient, @NotNull final String template) {
         recipient.sendMessage(parseConfiguredMessage(recipient, template));
+    }
+
+    public void sendConfiguredMessage(@NotNull final User recipient, @NotNull final LocaleMessage message) {
+        recipient.sendMessage(parseConfiguredMessage(recipient, message));
     }
 
     public void reloadPluginConfiguration() {
@@ -278,7 +287,7 @@ public final class ChatChatPlugin extends JavaPlugin {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toUnmodifiableList())
         );
-        commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.FILES);
+        commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.files(this));
         commandManager.registerSuggestion(SuggestionKey.of("players"), (sender, context) -> Bukkit.getOnlinePlayers().stream()
             .map(Player::getName)
             .collect(Collectors.toList()));
@@ -293,27 +302,27 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerCommandMessages() {
         commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) ->
-            sendConfiguredMessage(sender, configManager.messages().noPermission()));
+            sendConfiguredMessage(sender, LocaleMessage.COMMAND_NO_PERMISSION));
 
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
-            sendConfiguredMessage(sender, configManager.messages().unknownCommand()));
+            sendConfiguredMessage(sender, LocaleMessage.COMMAND_UNKNOWN_COMMAND));
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
             if (context.getArgumentType() == PriorityFormat.class) {
-                sendConfiguredMessage(sender, configManager.messages().invalidFormat());
+                sendConfiguredMessage(sender, LocaleMessage.INVALID_FORMAT);
                 return;
             }
 
             if (context.getArgumentType() == ChatUser.class) {
-                sendConfiguredMessage(sender, configManager.messages().userOffline());
+                sendConfiguredMessage(sender, LocaleMessage.USER_OFFLINE);
                 return;
             }
 
-            sendConfiguredMessage(sender, configManager.messages().invalidArgument());
+            sendConfiguredMessage(sender, LocaleMessage.COMMAND_INVALID_ARGUMENT);
         });
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
-            sendConfiguredMessage(sender, configManager.messages().invalidUsage()));
+            sendConfiguredMessage(sender, LocaleMessage.COMMAND_INVALID_USAGE));
         commandManager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) ->
-            sendConfiguredMessage(sender, configManager.messages().invalidUsage()));
+            sendConfiguredMessage(sender, LocaleMessage.COMMAND_INVALID_USAGE));
     }
 
     private void registerCommands() {

@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -25,10 +26,10 @@ public class WhisperToggleCommand extends BaseCommand {
         user.privateMessages(!user.privateMessages());
 
         if (user.privateMessages()) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().privateMessagesEnabled());
+            plugin.sendConfiguredMessage(user, LocaleMessage.PRIVATE_MESSAGES_ENABLED);
             return;
         }
 
-        plugin.sendConfiguredMessage(user, plugin.configManager().messages().privateMessagesDisabled());
+        plugin.sendConfiguredMessage(user, LocaleMessage.PRIVATE_MESSAGES_DISABLED);
     }
 }

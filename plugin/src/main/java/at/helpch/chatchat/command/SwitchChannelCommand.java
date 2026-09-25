@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.hooks.towny.AbstractTownyChannel;
 import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.locale.LocaleMessage;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import dev.triumphteam.cmd.core.BaseCommand;
@@ -31,7 +32,7 @@ public final class SwitchChannelCommand extends BaseCommand {
     public void switchChannel(final ChatUser user, @Join @Optional @NotNull final String message) {
         final var channel = plugin.configManager().channels().channels().get(channelName);
         if (channel == null) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().unknownCommand());
+            plugin.sendConfiguredMessage(user, LocaleMessage.COMMAND_UNKNOWN_COMMAND);
             return;
         }
 
@@ -39,19 +40,19 @@ public final class SwitchChannelCommand extends BaseCommand {
             final var town = TownyUniverse.getInstance().getResidentOpt(user.uuid())
                     .map(Resident::getTownOrNull);
             if (town.isEmpty() || town.get().isRuined()) { // the API will still see a player in that town if it is ruined
-                plugin.sendConfiguredMessage(user, plugin.configManager().messages().userNotInTown());
+                plugin.sendConfiguredMessage(user, LocaleMessage.USER_NOT_IN_TOWN);
                 return;
             }
         }
 
         if (!channel.isUsableBy(user)) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().channelNoPermission());
+            plugin.sendConfiguredMessage(user, LocaleMessage.CHANNEL_NO_PERMISSION);
             return;
         }
 
         if (message.isEmpty()) {
             user.channel(channel);
-            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().channelSwitched())
+            user.sendMessage(plugin.parseConfiguredMessage(user, LocaleMessage.CHANNEL_SWITCHED)
                     .replaceText(builder -> builder.matchLiteral("<channel>").replacement(channel.name())));
             return;
         }

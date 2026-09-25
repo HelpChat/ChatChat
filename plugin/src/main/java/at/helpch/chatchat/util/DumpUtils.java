@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public final class DumpUtils {
     @NotNull
     public static final String PASTE_URL = "https://paste.helpch.at/";
     @NotNull
-    public static final List<String> FILES = List.of("settings.yml", "channels.yml", "formats.yml", "messages.yml");
+    private static final List<String> CONFIG_FILES = List.of("settings.yml", "channels.yml", "formats.yml");
     @NotNull
     private static final Gson gson = new Gson();
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
@@ -70,8 +71,28 @@ public final class DumpUtils {
     }
 
     @NotNull
+    public static List<String> files(@NotNull final ChatChatPlugin plugin) {
+        final var names = new ArrayList<>(CONFIG_FILES);
+        final var localesFolder = plugin.getDataFolder().toPath().resolve("locales");
+        if (Files.isDirectory(localesFolder)) {
+            try (final var paths = Files.list(localesFolder)) {
+                paths.filter(Files::isRegularFile)
+                    .map(path -> path.getFileName().toString())
+                    .filter(name -> name.matches("[a-zA-Z]{2,3}(?:[_-][a-zA-Z0-9]{2,8})*\\.yml"))
+                    .sorted()
+                    .map(name -> "locales/" + name)
+                    .forEach(names::add);
+            } catch (final IOException exception) {
+                plugin.getLogger().warning("Could not list locale files while creating dump: " + exception.getMessage());
+            }
+        }
+        return List.copyOf(names);
+    }
+
+    @NotNull
     public static Optional<String> createDump(@NotNull final ChatChatPlugin plugin, @Nullable final String fileName) {
-        if (fileName != null && !fileName.isEmpty() && !FILES.contains(fileName)) {
+        final var files = files(plugin);
+        if (fileName != null && !fileName.isEmpty() && !files.contains(fileName)) {
             return Optional.empty();
         }
 
@@ -98,7 +119,7 @@ public final class DumpUtils {
             .append(System.lineSeparator());
 
         if (fileName == null || fileName.isEmpty()) {
-            FILES.forEach(name -> createFileDump(plugin, builder, name));
+            files.forEach(name -> createFileDump(plugin, builder, name));
             return Optional.of(builder.toString());
         }
 

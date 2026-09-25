@@ -48,6 +48,9 @@ item-format: '<gray>[</gray><item><gray> x <amount>]'
 # Set to empty string '' if you want to disable it from ever showing.
 item-format-info: '<dark_gray><item> x <amount>'
 
+# Used for the console and when a player's language has no translation file.
+default-locale: en_us
+
 mentions:
   # The prefix to use for mentioning players in chat. Set to empty string '' if you want to disable mentions.
   prefix: '@'

@@ -5,6 +5,7 @@ import at.helpch.chatchat.api.event.PMSendEvent;
 import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -40,54 +41,54 @@ public final class WhisperCommand extends BaseCommand {
         var senderPlayer = sender.player();
         var recipientPlayer = recipient.player();
         if (senderPlayer.isEmpty() || recipientPlayer.isEmpty()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.USER_OFFLINE);
             return;
         }
 
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().unknownCommand());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.COMMAND_UNKNOWN_COMMAND);
             return;
         }
 
         if (!sender.privateMessages()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().repliesDisabled());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.REPLIES_DISABLED);
             return;
         }
 
         if (sender.equals(recipient)) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageYourself());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_MESSAGE_YOURSELF);
             return;
         }
 
         if (plugin.separationManager().isSeparated(sender.uuid(), recipient.uuid())) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageGeneral());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_MESSAGE_GENERAL);
             return;
         }
 
         if (!sender.canSee(recipient) && !reply) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.USER_OFFLINE);
             return;
         }
 
         if (!recipient.privateMessages()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().targetRepliesDisabled());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.TARGET_REPLIES_DISABLED);
             return;
         }
 
         if (recipient.ignoredUsers().contains(sender.uuid()) &&
             !sender.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageGeneral());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_MESSAGE_GENERAL);
             return;
         }
 
         if (sender.ignoredUsers().contains(recipient.uuid()) &&
             !recipient.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageIgnoredPlayer());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_MESSAGE_IGNORED_PLAYER);
             return;
         }
 
         if (message.isBlank()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().emptyMessage());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.EMPTY_MESSAGE);
             return;
         }
 

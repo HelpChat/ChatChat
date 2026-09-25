@@ -7,6 +7,7 @@ import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import at.helpch.chatchat.util.FormatUtils;
 import at.helpch.chatchat.util.MessageProcessor;
+import at.helpch.chatchat.locale.LocaleMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,7 +45,7 @@ public final class ChatListener implements Listener {
 
         if (!user.chatEnabled()) {
             event.setCancelled(true);
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().chatDisabled());
+            plugin.sendConfiguredMessage(user, LocaleMessage.CHAT_DISABLED);
             return;
         }
 
@@ -66,7 +67,7 @@ public final class ChatListener implements Listener {
             event.setCancelled(true);
 
             user.channel(ChatChannel.defaultChannel());
-            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().channelNoPermissionSwitch())
+            user.sendMessage(plugin.parseConfiguredMessage(user, LocaleMessage.CHANNEL_NO_PERMISSION_SWITCH)
                 .replaceText(builder -> builder.matchLiteral("<default>").replacement(ChatChannel.defaultChannel().name())));
             return;
         }

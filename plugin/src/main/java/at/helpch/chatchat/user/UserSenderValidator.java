@@ -3,6 +3,7 @@ package at.helpch.chatchat.user;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.core.SubCommand;
 import dev.triumphteam.cmd.core.message.MessageRegistry;
 import dev.triumphteam.cmd.core.sender.SenderValidator;
@@ -31,12 +32,12 @@ public final class UserSenderValidator implements SenderValidator<User> {
         final var senderClass = subCommand.getSenderType();
 
         if (senderClass == ChatUser.class && !(sender instanceof ChatUser)) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().playersOnly());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.PLAYERS_ONLY);
             return false;
         }
 
         if (senderClass == ConsoleUser.class && !(sender instanceof ConsoleUser)) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().consoleOnly());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CONSOLE_ONLY);
             return false;
         }
 

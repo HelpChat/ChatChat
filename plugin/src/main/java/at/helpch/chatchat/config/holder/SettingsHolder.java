@@ -12,6 +12,7 @@ public final class SettingsHolder {
 
     private String itemFormat = "<gray>[</gray><item><gray> x <amount>]";
     private String itemFormatInfo = "<dark_gray><item> x <amount>";
+    private String defaultLocale = "en_us";
     private MentionSettingsHolder mentions = new MentionSettingsHolder();
     private long lastMessagedCacheDuration = 300;
 
@@ -25,6 +26,10 @@ public final class SettingsHolder {
 
     public @NotNull String itemFormatInfo() {
         return itemFormatInfo;
+    }
+
+    public @NotNull String defaultLocale() {
+        return defaultLocale;
     }
 
     public @NotNull MentionSettingsHolder mentions() {

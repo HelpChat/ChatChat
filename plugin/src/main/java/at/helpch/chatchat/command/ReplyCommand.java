@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -25,14 +26,14 @@ public final class ReplyCommand extends BaseCommand {
     @Permission(MESSAGE_PERMISSION)
     public void reply(final ChatUser user, @Join final String message) {
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().unknownCommand());
+            plugin.sendConfiguredMessage(user, LocaleMessage.COMMAND_UNKNOWN_COMMAND);
             return;
         }
 
         final var lastMessaged = user.lastMessagedUser();
 
         if (lastMessaged.isEmpty()) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().noReplies());
+            plugin.sendConfiguredMessage(user, LocaleMessage.NO_REPLIES);
             return;
         }
 

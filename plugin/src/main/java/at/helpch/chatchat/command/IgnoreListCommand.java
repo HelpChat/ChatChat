@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -27,7 +28,7 @@ public class IgnoreListCommand extends BaseCommand {
         ignoredUsers.addAll(plugin.separationManager().separatedFrom(sender.uuid()));
 
         if (ignoredUsers.isEmpty()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().notIgnoringAnyone());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.NOT_IGNORING_ANYONE);
             return;
         }
 
@@ -37,7 +38,7 @@ public class IgnoreListCommand extends BaseCommand {
             .map(player -> player.getName() == null ? player.getUniqueId().toString() : player.getName())
             .collect(Collectors.joining(", "));
 
-        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().ignoredPlayersList())
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, LocaleMessage.IGNORED_PLAYERS_LIST)
             .replaceText(builder -> builder.matchLiteral("<ignored_players>").replacement(ignoredPlayers)));
     }
 }

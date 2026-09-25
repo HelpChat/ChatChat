@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -22,10 +23,9 @@ public class RangedChatCommand extends BaseCommand {
     public void toggleRangedChat(final ChatUser sender) {
         sender.rangedChat(!sender.rangedChat());
 
-        final var messageHolder = plugin.configManager().messages();
         final var message = sender.rangedChat() ?
-            messageHolder.rangedChatEnabledSuccessfully() :
-            messageHolder.rangedChatDisabledSuccessfully();
+            LocaleMessage.RANGED_CHAT_ENABLED_SUCCESSFULLY :
+            LocaleMessage.RANGED_CHAT_DISABLED_SUCCESSFULLY;
 
         plugin.sendConfiguredMessage(sender, message);
     }

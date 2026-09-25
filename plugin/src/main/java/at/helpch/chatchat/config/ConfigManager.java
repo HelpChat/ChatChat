@@ -5,11 +5,11 @@ import at.helpch.chatchat.api.holder.GlobalFormatsHolder;
 import at.helpch.chatchat.channel.ChatChannel;
 import at.helpch.chatchat.config.holder.ChannelsHolder;
 import at.helpch.chatchat.config.holder.ExtensionsHolder;
-import at.helpch.chatchat.config.holder.MessagesHolder;
 import at.helpch.chatchat.config.holder.MiniPlaceholdersHolder;
 import at.helpch.chatchat.config.holder.SettingsHolder;
 import at.helpch.chatchat.format.ChatFormat;
 import at.helpch.chatchat.format.DefaultFormatFactory;
+import at.helpch.chatchat.locale.MessageLocaleManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -20,7 +20,7 @@ public final class ConfigManager {
     private ChannelsHolder channels;
     private GlobalFormatsHolder formats;
     private SettingsHolder settings;
-    private MessagesHolder messages;
+    private final MessageLocaleManager messageLocales;
     private ExtensionsHolder extensions;
     private MiniPlaceholdersHolder miniPlaceholders;
     private final ConfigFactory factory;
@@ -28,17 +28,17 @@ public final class ConfigManager {
     public ConfigManager(final @NotNull ChatChatPlugin plugin, @NotNull final Path dataFolder) {
         this.plugin = plugin;
         this.factory = new ConfigFactory(dataFolder, plugin);
+        this.messageLocales = new MessageLocaleManager(plugin, dataFolder);
     }
 
     public void reload() {
-        messages = null;
         channels = null;
         formats = null;
         settings = null;
         extensions = null;
         miniPlaceholders = null;
 
-        messages();
+        messageLocales.reload();
         extensions();
         plugin.getLogger().info("Whenever making changes to extensions.yml, restart the server to make sure all changes are applied.");
 
@@ -95,11 +95,8 @@ public final class ConfigManager {
         return this.formats;
     }
 
-    public @NotNull MessagesHolder messages() {
-        if (messages == null) {
-            this.messages = factory.messages();
-        }
-        return this.messages;
+    public @NotNull MessageLocaleManager messageLocales() {
+        return messageLocales;
     }
 
     public @NotNull ExtensionsHolder extensions() {

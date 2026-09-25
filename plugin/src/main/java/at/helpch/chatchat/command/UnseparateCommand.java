@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -30,26 +31,26 @@ public final class UnseparateCommand extends BaseCommand {
         final var first = SeparationCommandUtils.findPlayer(firstName);
         final var second = SeparationCommandUtils.findPlayer(secondName);
         if (first == null || second == null) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().playerNotFound());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.PLAYER_NOT_FOUND);
             return;
         }
         if (first.getUniqueId().equals(second.getUniqueId())) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantSeparateSelf());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_SEPARATE_SELF);
             return;
         }
 
         try {
             if (!plugin.separationManager().unseparate(first.getUniqueId(), second.getUniqueId())) {
-                plugin.sendConfiguredMessage(sender, plugin.configManager().messages().notSeparated());
+                plugin.sendConfiguredMessage(sender, LocaleMessage.NOT_SEPARATED);
                 return;
             }
         } catch (final IOException exception) {
             plugin.getLogger().log(Level.SEVERE, "Could not save player separation", exception);
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().genericError());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.GENERIC_ERROR);
             return;
         }
 
-        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().unseparatedPlayers())
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, LocaleMessage.UNSEPARATED_PLAYERS)
             .replaceText(builder -> builder.matchLiteral("<player1>")
                 .replacement(SeparationCommandUtils.name(first, firstName)))
             .replaceText(builder -> builder.matchLiteral("<player2>")

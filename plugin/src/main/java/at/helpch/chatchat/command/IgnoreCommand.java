@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -22,25 +23,25 @@ public class IgnoreCommand extends BaseCommand {
     @Default
     public void ignore(ChatUser sender, ChatUser target) {
         if (sender.uuid().equals(target.uuid())) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantIgnoreYourself());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.CANT_IGNORE_YOURSELF);
             return;
         }
 
         var targetPlayer = target.player();
         if (targetPlayer.isEmpty()) {
-            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, LocaleMessage.USER_OFFLINE);
             return;
         }
 
         if (sender.ignoredUsers().contains(target.uuid()) ||
             plugin.separationManager().isSeparated(sender.uuid(), target.uuid())) {
-            sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().alreadyIgnored())
+            sender.sendMessage(plugin.parseConfiguredMessage(sender, LocaleMessage.ALREADY_IGNORED)
                 .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
             return;
         }
 
         sender.ignoreUser(target);
-        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().ignoredPlayer())
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, LocaleMessage.IGNORED_PLAYER)
             .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
     }
 }

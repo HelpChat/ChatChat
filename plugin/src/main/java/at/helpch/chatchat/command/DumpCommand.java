@@ -3,6 +3,7 @@ package at.helpch.chatchat.command;
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.util.DumpUtils;
+import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
@@ -30,7 +31,7 @@ public class DumpCommand extends BaseCommand {
     @Default
     public void dump(final User user, final @Suggestion("files") @Optional String file) {
         if (!user.hasPermission(DUMP_PERMISSION)) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().noPermission());
+            plugin.sendConfiguredMessage(user, LocaleMessage.COMMAND_NO_PERMISSION);
             return;
         }
 
@@ -39,13 +40,13 @@ public class DumpCommand extends BaseCommand {
             : DumpUtils.createDump(plugin, null);
 
         if (dump.isEmpty()) {
-            plugin.sendConfiguredMessage(user, plugin.configManager().messages().dumpFailed());
+            plugin.sendConfiguredMessage(user, LocaleMessage.DUMP_FAILED);
             return;
         }
 
         DumpUtils.postDump(dump.get()).whenComplete((url, throwable) -> Bukkit.getScheduler().runTask(plugin, () -> {
             if (throwable != null) {
-                plugin.sendConfiguredMessage(user, plugin.configManager().messages().dumpFailed());
+                plugin.sendConfiguredMessage(user, LocaleMessage.DUMP_FAILED);
                 throwable.printStackTrace();
                 return;
             }
@@ -53,7 +54,7 @@ public class DumpCommand extends BaseCommand {
             final var clickableUrl = Component.text(url)
                     .clickEvent(ClickEvent.openUrl(url));
 
-            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().dumpSuccess())
+            user.sendMessage(plugin.parseConfiguredMessage(user, LocaleMessage.DUMP_SUCCESS)
                 .replaceText(DUMP_REPLACEMENT_BUILDER.replacement(clickableUrl).build()));
         }));
     }

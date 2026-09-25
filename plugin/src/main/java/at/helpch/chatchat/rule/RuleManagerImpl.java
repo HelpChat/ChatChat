@@ -1,6 +1,7 @@
 package at.helpch.chatchat.rule;
 
 import at.helpch.chatchat.ChatChatPlugin;
+import at.helpch.chatchat.locale.LocaleMessage;
 import at.helpch.chatchat.api.rule.Rule;
 import at.helpch.chatchat.api.rule.RuleManager;
 import at.helpch.chatchat.api.user.ChatUser;
@@ -23,10 +24,10 @@ public class RuleManagerImpl implements RuleManager {
     public RuleManagerImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
         if (plugin.configManager().extensions().addons().deluxeChatUnicodePermissionPublicChat()) {
-            addPublicChatRule(new InvalidCharsRule(plugin));
+            addPublicChatRule(new InvalidCharsRule());
         }
         if (plugin.configManager().extensions().addons().deluxeChatUnicodePermissionPrivateChat()) {
-            addPrivateChatRule(new InvalidCharsRule(plugin));
+            addPrivateChatRule(new InvalidCharsRule());
         }
     }
 
@@ -62,11 +63,11 @@ public class RuleManagerImpl implements RuleManager {
 
         return unfulfilledRules.stream()
             .map(rule -> rule instanceof InvalidCharsRule
-                ? Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().specialCharactersNoPermission()))
+                ? Optional.of(plugin.parseConfiguredMessage(sender, LocaleMessage.SPECIAL_CHARACTERS_NO_PERMISSION))
                 : rule.publicDeniedMessage())
             .filter(Optional::isPresent)
             .findFirst()
-            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().invalidMessage())));
+            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, LocaleMessage.INVALID_MESSAGE)));
     }
 
     public Optional<Component> isAllowedPrivateChat(
@@ -85,10 +86,10 @@ public class RuleManagerImpl implements RuleManager {
 
         return unfulfilledRules.stream()
             .map(rule -> rule instanceof InvalidCharsRule
-                ? Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().specialCharactersNoPermission()))
+                ? Optional.of(plugin.parseConfiguredMessage(sender, LocaleMessage.SPECIAL_CHARACTERS_NO_PERMISSION))
                 : rule.privateDeniedMessage())
             .filter(Optional::isPresent)
             .findFirst()
-            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().invalidMessage())));
+            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, LocaleMessage.INVALID_MESSAGE)));
     }
 }

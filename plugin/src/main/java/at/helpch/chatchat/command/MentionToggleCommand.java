@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.locale.LocaleMessage;
 import at.helpch.chatchat.util.MentionUtils;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
@@ -22,10 +23,9 @@ public class MentionToggleCommand extends BaseCommand {
     public void togglePersonal(final ChatUser sender) {
         sender.personalMentions(!sender.personalMentions());
 
-        final var messageHolder = plugin.configManager().messages();
         final var message = sender.personalMentions() ?
-            messageHolder.personalMentionsEnabled() :
-            messageHolder.personalMentionsDisabled();
+            LocaleMessage.PERSONAL_MENTIONS_ENABLED :
+            LocaleMessage.PERSONAL_MENTIONS_DISABLED;
 
         plugin.sendConfiguredMessage(sender, message);
     }
@@ -35,10 +35,9 @@ public class MentionToggleCommand extends BaseCommand {
     public void toggleChannel(final ChatUser sender) {
         sender.channelMentions(!sender.channelMentions());
 
-        final var messageHolder = plugin.configManager().messages();
         final var message = sender.channelMentions() ?
-            messageHolder.channelMentionsEnabled() :
-            messageHolder.channelMentionsDisabled();
+            LocaleMessage.CHANNEL_MENTIONS_ENABLED :
+            LocaleMessage.CHANNEL_MENTIONS_DISABLED;
 
         plugin.sendConfiguredMessage(sender, message);
     }
