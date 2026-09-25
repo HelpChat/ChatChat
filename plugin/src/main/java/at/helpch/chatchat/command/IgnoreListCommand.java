@@ -27,7 +27,7 @@ public class IgnoreListCommand extends BaseCommand {
         ignoredUsers.addAll(plugin.separationManager().separatedFrom(sender.uuid()));
 
         if (ignoredUsers.isEmpty()) {
-            sender.sendMessage(plugin.configManager().messages().notIgnoringAnyone());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().notIgnoringAnyone());
             return;
         }
 
@@ -37,7 +37,7 @@ public class IgnoreListCommand extends BaseCommand {
             .map(player -> player.getName() == null ? player.getUniqueId().toString() : player.getName())
             .collect(Collectors.joining(", "));
 
-        sender.sendMessage(plugin.configManager().messages().ignoredPlayersList()
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().ignoredPlayersList())
             .replaceText(builder -> builder.matchLiteral("<ignored_players>").replacement(ignoredPlayers)));
     }
 }

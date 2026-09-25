@@ -27,7 +27,7 @@ public class MentionToggleCommand extends BaseCommand {
             messageHolder.personalMentionsEnabled() :
             messageHolder.personalMentionsDisabled();
 
-        sender.sendMessage(message);
+        plugin.sendConfiguredMessage(sender, message);
     }
 
     @SubCommand("channel")
@@ -40,7 +40,7 @@ public class MentionToggleCommand extends BaseCommand {
             messageHolder.channelMentionsEnabled() :
             messageHolder.channelMentionsDisabled();
 
-        sender.sendMessage(message);
+        plugin.sendConfiguredMessage(sender, message);
     }
 
 }

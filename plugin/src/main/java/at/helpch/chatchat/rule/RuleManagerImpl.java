@@ -61,10 +61,12 @@ public class RuleManagerImpl implements RuleManager {
         }
 
         return unfulfilledRules.stream()
-            .map(Rule::publicDeniedMessage)
+            .map(rule -> rule instanceof InvalidCharsRule
+                ? Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().specialCharactersNoPermission()))
+                : rule.publicDeniedMessage())
             .filter(Optional::isPresent)
             .findFirst()
-            .orElse(Optional.of(plugin.configManager().messages().invalidMessage()));
+            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().invalidMessage())));
     }
 
     public Optional<Component> isAllowedPrivateChat(
@@ -82,9 +84,11 @@ public class RuleManagerImpl implements RuleManager {
         }
 
         return unfulfilledRules.stream()
-            .map(Rule::privateDeniedMessage)
+            .map(rule -> rule instanceof InvalidCharsRule
+                ? Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().specialCharactersNoPermission()))
+                : rule.privateDeniedMessage())
             .filter(Optional::isPresent)
             .findFirst()
-            .orElse(Optional.of(plugin.configManager().messages().invalidMessage()));
+            .orElse(Optional.of(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().invalidMessage())));
     }
 }

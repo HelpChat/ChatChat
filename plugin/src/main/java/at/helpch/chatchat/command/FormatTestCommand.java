@@ -31,12 +31,12 @@ public class FormatTestCommand extends ChatChatCommand {
     ) {
         var player = sender.player();
         if (player.isEmpty()) {
-            sender.sendMessage(plugin.configManager().messages().genericError());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().genericError());
             return;
         }
 
         if (message.isBlank()) {
-            sender.sendMessage(plugin.configManager().messages().emptyMessage());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().emptyMessage());
             return;
         }
 

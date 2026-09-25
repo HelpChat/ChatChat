@@ -27,6 +27,6 @@ public final class SocialSpyCommand extends BaseCommand {
 
         user.socialSpy(newState);
         final var messages = plugin.configManager().messages();
-        user.sendMessage(newState ? messages.socialSpyEnabled() : messages.socialSpyDisabled());
+        plugin.sendConfiguredMessage(user, newState ? messages.socialSpyEnabled() : messages.socialSpyDisabled());
     }
 }

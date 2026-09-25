@@ -31,7 +31,7 @@ public final class FormatUtils {
         throw new AssertionError("Util classes are not to be instantiated!");
     }
 
-    private static @NotNull String parsePlaceholders(
+    static @NotNull String parsePlaceholders(
         @NotNull final String text,
         @NotNull final Function<String, String> replacement
     ) {

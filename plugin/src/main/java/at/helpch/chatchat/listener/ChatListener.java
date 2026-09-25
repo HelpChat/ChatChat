@@ -44,7 +44,7 @@ public final class ChatListener implements Listener {
 
         if (!user.chatEnabled()) {
             event.setCancelled(true);
-            user.sendMessage(plugin.configManager().messages().chatDisabled());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().chatDisabled());
             return;
         }
 
@@ -66,7 +66,7 @@ public final class ChatListener implements Listener {
             event.setCancelled(true);
 
             user.channel(ChatChannel.defaultChannel());
-            user.sendMessage(plugin.configManager().messages().channelNoPermissionSwitch()
+            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().channelNoPermissionSwitch())
                 .replaceText(builder -> builder.matchLiteral("<default>").replacement(ChatChannel.defaultChannel().name())));
             return;
         }

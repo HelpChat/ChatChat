@@ -31,12 +31,12 @@ public final class UserSenderValidator implements SenderValidator<User> {
         final var senderClass = subCommand.getSenderType();
 
         if (senderClass == ChatUser.class && !(sender instanceof ChatUser)) {
-            sender.sendMessage(plugin.configManager().messages().playersOnly());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().playersOnly());
             return false;
         }
 
         if (senderClass == ConsoleUser.class && !(sender instanceof ConsoleUser)) {
-            sender.sendMessage(plugin.configManager().messages().consoleOnly());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().consoleOnly());
             return false;
         }
 

@@ -31,7 +31,7 @@ public final class SwitchChannelCommand extends BaseCommand {
     public void switchChannel(final ChatUser user, @Join @Optional @NotNull final String message) {
         final var channel = plugin.configManager().channels().channels().get(channelName);
         if (channel == null) {
-            user.sendMessage(plugin.configManager().messages().unknownCommand());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().unknownCommand());
             return;
         }
 
@@ -39,19 +39,19 @@ public final class SwitchChannelCommand extends BaseCommand {
             final var town = TownyUniverse.getInstance().getResidentOpt(user.uuid())
                     .map(Resident::getTownOrNull);
             if (town.isEmpty() || town.get().isRuined()) { // the API will still see a player in that town if it is ruined
-                user.sendMessage(plugin.configManager().messages().userNotInTown());
+                plugin.sendConfiguredMessage(user, plugin.configManager().messages().userNotInTown());
                 return;
             }
         }
 
         if (!channel.isUsableBy(user)) {
-            user.sendMessage(plugin.configManager().messages().channelNoPermission());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().channelNoPermission());
             return;
         }
 
         if (message.isEmpty()) {
             user.channel(channel);
-            user.sendMessage(plugin.configManager().messages().channelSwitched()
+            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().channelSwitched())
                     .replaceText(builder -> builder.matchLiteral("<channel>").replacement(channel.name())));
             return;
         }

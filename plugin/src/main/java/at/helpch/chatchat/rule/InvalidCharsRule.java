@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.rule.Rule;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
+import at.helpch.chatchat.util.MessageUtils;
 
 import java.util.Optional;
 
@@ -29,10 +30,10 @@ public class InvalidCharsRule implements Rule {
     }
 
     public @NotNull Optional<@NotNull Component> publicDeniedMessage() {
-        return Optional.of(plugin.configManager().messages().specialCharactersNoPermission());
+        return Optional.of(MessageUtils.parseToMiniMessage(plugin.configManager().messages().specialCharactersNoPermission()));
     }
 
     public @NotNull Optional<@NotNull Component> privateDeniedMessage() {
-        return Optional.of(plugin.configManager().messages().specialCharactersNoPermission());
+        return publicDeniedMessage();
     }
 }

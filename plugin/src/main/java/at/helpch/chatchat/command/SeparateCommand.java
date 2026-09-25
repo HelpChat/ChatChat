@@ -30,26 +30,26 @@ public final class SeparateCommand extends BaseCommand {
         final var first = SeparationCommandUtils.findPlayer(firstName);
         final var second = SeparationCommandUtils.findPlayer(secondName);
         if (first == null || second == null) {
-            sender.sendMessage(plugin.configManager().messages().playerNotFound());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().playerNotFound());
             return;
         }
         if (first.getUniqueId().equals(second.getUniqueId())) {
-            sender.sendMessage(plugin.configManager().messages().cantSeparateSelf());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantSeparateSelf());
             return;
         }
 
         try {
             if (!plugin.separationManager().separate(first.getUniqueId(), second.getUniqueId())) {
-                sender.sendMessage(plugin.configManager().messages().alreadySeparated());
+                plugin.sendConfiguredMessage(sender, plugin.configManager().messages().alreadySeparated());
                 return;
             }
         } catch (final IOException exception) {
             plugin.getLogger().log(Level.SEVERE, "Could not save player separation", exception);
-            sender.sendMessage(plugin.configManager().messages().genericError());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().genericError());
             return;
         }
 
-        sender.sendMessage(plugin.configManager().messages().separatedPlayers()
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().separatedPlayers())
             .replaceText(builder -> builder.matchLiteral("<player1>")
                 .replacement(SeparationCommandUtils.name(first, firstName)))
             .replaceText(builder -> builder.matchLiteral("<player2>")

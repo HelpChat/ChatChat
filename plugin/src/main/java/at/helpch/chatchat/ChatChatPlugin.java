@@ -37,6 +37,7 @@ import at.helpch.chatchat.separation.SeparationManager;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
+import at.helpch.chatchat.util.MessageUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.BukkitCommand;
@@ -45,6 +46,7 @@ import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimpleBarChart;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -182,6 +184,14 @@ public final class ChatChatPlugin extends JavaPlugin {
         return configManager;
     }
 
+    public @NotNull Component parseConfiguredMessage(@NotNull final User recipient, @NotNull final String template) {
+        return MessageUtils.parseConfiguredMessage(this, recipient, template);
+    }
+
+    public void sendConfiguredMessage(@NotNull final User recipient, @NotNull final String template) {
+        recipient.sendMessage(parseConfiguredMessage(recipient, template));
+    }
+
     public void reloadPluginConfiguration() {
         configManager.reload();
 
@@ -283,27 +293,27 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerCommandMessages() {
         commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) ->
-            sender.sendMessage(configManager.messages().noPermission()));
+            sendConfiguredMessage(sender, configManager.messages().noPermission()));
 
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
-            sender.sendMessage(configManager.messages().unknownCommand()));
+            sendConfiguredMessage(sender, configManager.messages().unknownCommand()));
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
             if (context.getArgumentType() == PriorityFormat.class) {
-                sender.sendMessage(configManager.messages().invalidFormat());
+                sendConfiguredMessage(sender, configManager.messages().invalidFormat());
                 return;
             }
 
             if (context.getArgumentType() == ChatUser.class) {
-                sender.sendMessage(configManager.messages().userOffline());
+                sendConfiguredMessage(sender, configManager.messages().userOffline());
                 return;
             }
 
-            sender.sendMessage(configManager.messages().invalidArgument());
+            sendConfiguredMessage(sender, configManager.messages().invalidArgument());
         });
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
-            sender.sendMessage(configManager.messages().invalidUsage()));
+            sendConfiguredMessage(sender, configManager.messages().invalidUsage()));
         commandManager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) ->
-            sender.sendMessage(configManager.messages().invalidUsage()));
+            sendConfiguredMessage(sender, configManager.messages().invalidUsage()));
     }
 
     private void registerCommands() {

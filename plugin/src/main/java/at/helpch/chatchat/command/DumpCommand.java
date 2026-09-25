@@ -11,6 +11,7 @@ import dev.triumphteam.cmd.core.annotation.Suggestion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 @Command("chatdump")
@@ -29,7 +30,7 @@ public class DumpCommand extends BaseCommand {
     @Default
     public void dump(final User user, final @Suggestion("files") @Optional String file) {
         if (!user.hasPermission(DUMP_PERMISSION)) {
-            user.sendMessage(plugin.configManager().messages().noPermission());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().noPermission());
             return;
         }
 
@@ -38,13 +39,13 @@ public class DumpCommand extends BaseCommand {
             : DumpUtils.createDump(plugin, null);
 
         if (dump.isEmpty()) {
-            user.sendMessage(plugin.configManager().messages().dumpFailed());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().dumpFailed());
             return;
         }
 
-        DumpUtils.postDump(dump.get()).whenComplete((url, throwable) -> {
+        DumpUtils.postDump(dump.get()).whenComplete((url, throwable) -> Bukkit.getScheduler().runTask(plugin, () -> {
             if (throwable != null) {
-                user.sendMessage(plugin.configManager().messages().dumpFailed());
+                plugin.sendConfiguredMessage(user, plugin.configManager().messages().dumpFailed());
                 throwable.printStackTrace();
                 return;
             }
@@ -52,8 +53,8 @@ public class DumpCommand extends BaseCommand {
             final var clickableUrl = Component.text(url)
                     .clickEvent(ClickEvent.openUrl(url));
 
-            user.sendMessage(plugin.configManager().messages().dumpSuccess()
+            user.sendMessage(plugin.parseConfiguredMessage(user, plugin.configManager().messages().dumpSuccess())
                 .replaceText(DUMP_REPLACEMENT_BUILDER.replacement(clickableUrl).build()));
-        });
+        }));
     }
 }

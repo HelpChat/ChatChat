@@ -27,6 +27,6 @@ public class ChatToggleCommand extends BaseCommand {
             messageHolder.chatEnabledSuccessfully() :
             messageHolder.chatDisabledSuccessfully();
 
-        sender.sendMessage(message);
+        plugin.sendConfiguredMessage(sender, message);
     }
 }

@@ -27,6 +27,6 @@ public class RangedChatCommand extends BaseCommand {
             messageHolder.rangedChatEnabledSuccessfully() :
             messageHolder.rangedChatDisabledSuccessfully();
 
-        sender.sendMessage(message);
+        plugin.sendConfiguredMessage(sender, message);
     }
 }

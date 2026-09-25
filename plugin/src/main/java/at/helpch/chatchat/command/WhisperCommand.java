@@ -40,54 +40,54 @@ public final class WhisperCommand extends BaseCommand {
         var senderPlayer = sender.player();
         var recipientPlayer = recipient.player();
         if (senderPlayer.isEmpty() || recipientPlayer.isEmpty()) {
-            sender.sendMessage(plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
             return;
         }
 
         if (!plugin.configManager().settings().privateMessagesSettings().enabled()) {
-            sender.sendMessage(plugin.configManager().messages().unknownCommand());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().unknownCommand());
             return;
         }
 
         if (!sender.privateMessages()) {
-            sender.sendMessage(plugin.configManager().messages().repliesDisabled());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().repliesDisabled());
             return;
         }
 
         if (sender.equals(recipient)) {
-            sender.sendMessage(plugin.configManager().messages().cantMessageYourself());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageYourself());
             return;
         }
 
         if (plugin.separationManager().isSeparated(sender.uuid(), recipient.uuid())) {
-            sender.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageGeneral());
             return;
         }
 
         if (!sender.canSee(recipient) && !reply) {
-            sender.sendMessage(plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
             return;
         }
 
         if (!recipient.privateMessages()) {
-            sender.sendMessage(plugin.configManager().messages().targetRepliesDisabled());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().targetRepliesDisabled());
             return;
         }
 
         if (recipient.ignoredUsers().contains(sender.uuid()) &&
             !sender.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            sender.sendMessage(plugin.configManager().messages().cantMessageGeneral());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageGeneral());
             return;
         }
 
         if (sender.ignoredUsers().contains(recipient.uuid()) &&
             !recipient.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION)) {
-            sender.sendMessage(plugin.configManager().messages().cantMessageIgnoredPlayer());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantMessageIgnoredPlayer());
             return;
         }
 
         if (message.isBlank()) {
-            sender.sendMessage(plugin.configManager().messages().emptyMessage());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().emptyMessage());
             return;
         }
 

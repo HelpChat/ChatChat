@@ -22,25 +22,25 @@ public class IgnoreCommand extends BaseCommand {
     @Default
     public void ignore(ChatUser sender, ChatUser target) {
         if (sender.uuid().equals(target.uuid())) {
-            sender.sendMessage(plugin.configManager().messages().cantIgnoreYourself());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().cantIgnoreYourself());
             return;
         }
 
         var targetPlayer = target.player();
         if (targetPlayer.isEmpty()) {
-            sender.sendMessage(plugin.configManager().messages().userOffline());
+            plugin.sendConfiguredMessage(sender, plugin.configManager().messages().userOffline());
             return;
         }
 
         if (sender.ignoredUsers().contains(target.uuid()) ||
             plugin.separationManager().isSeparated(sender.uuid(), target.uuid())) {
-            sender.sendMessage(plugin.configManager().messages().alreadyIgnored()
+            sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().alreadyIgnored())
                 .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
             return;
         }
 
         sender.ignoreUser(target);
-        sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
+        sender.sendMessage(plugin.parseConfiguredMessage(sender, plugin.configManager().messages().ignoredPlayer())
             .replaceText(builder -> builder.matchLiteral("<player>").replacement(targetPlayer.get().getDisplayName())));
     }
 }

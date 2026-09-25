@@ -1,6 +1,6 @@
 package at.helpch.chatchat.config.holder;
 
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -15,279 +15,281 @@ import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 @ConfigSerializable
 public final class MessagesHolder {
 
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+
     // user related
-    private Component consoleOnly = text("Only the console can do this!", RED);
-    private Component playersOnly = text("Only players can do this!", RED);
-    private Component userOffline = text("The user is not online!", RED);
-    private Component playerNotFound = text("That player has not joined this server!", RED);
-    private Component userNotInTown = text("You are not in a town!", RED);
+    private String consoleOnly = MINI_MESSAGE.serialize(text("Only the console can do this!", RED));
+    private String playersOnly = MINI_MESSAGE.serialize(text("Only players can do this!", RED));
+    private String userOffline = MINI_MESSAGE.serialize(text("The user is not online!", RED));
+    private String playerNotFound = MINI_MESSAGE.serialize(text("That player has not joined this server!", RED));
+    private String userNotInTown = MINI_MESSAGE.serialize(text("You are not in a town!", RED));
 
     // messaging related
-    private Component noReplies = text("You have no one to reply to!", RED);
-    private Component repliesDisabled = text("You can't send private messages while they're disabled!", RED);
-    private Component targetRepliesDisabled = text("This user has their private messages disabled!", RED);
-    private Component privateMessagesEnabled = text("Your private messages have been enabled!", GREEN);
-    private Component privateMessagesDisabled = text("Your private messages have been disabled!", RED);
-    private Component cantMessageYourself = text("You can't message yourself!", RED);
-    private Component emptyMessage = text("You can't send an empty message!", RED);
-    private Component specialCharactersNoPermission = text("You do not have permission to use special characters!",
-        RED);
-    private Component invalidMessage = text("The message you sent is invalid!", RED);
-    private Component socialSpyEnabled = text("Social spy enabled", GREEN);
-    private Component socialSpyDisabled = text("Social spy disabled", RED);
-    private Component ignoredPlayer = text("Successfully ignored <player>.", GREEN);
-    private Component unignoredPlayer = text("Successfully un-ignored <player>.", GREEN);
-    private Component alreadyIgnored = text("You are already ignoring <player>.", RED);
-    private Component notIgnored = text("You are not ignoring <player>.", RED);
-    private Component notIgnoringAnyone = text("You are not ignoring anyone.", RED);
-    private Component ignoredPlayersList = text("You are ignoring following players:", YELLOW)
+    private String noReplies = MINI_MESSAGE.serialize(text("You have no one to reply to!", RED));
+    private String repliesDisabled = MINI_MESSAGE.serialize(text("You can't send private messages while they're disabled!", RED));
+    private String targetRepliesDisabled = MINI_MESSAGE.serialize(text("This user has their private messages disabled!", RED));
+    private String privateMessagesEnabled = MINI_MESSAGE.serialize(text("Your private messages have been enabled!", GREEN));
+    private String privateMessagesDisabled = MINI_MESSAGE.serialize(text("Your private messages have been disabled!", RED));
+    private String cantMessageYourself = MINI_MESSAGE.serialize(text("You can't message yourself!", RED));
+    private String emptyMessage = MINI_MESSAGE.serialize(text("You can't send an empty message!", RED));
+    private String specialCharactersNoPermission = MINI_MESSAGE.serialize(text("You do not have permission to use special characters!",
+        RED));
+    private String invalidMessage = MINI_MESSAGE.serialize(text("The message you sent is invalid!", RED));
+    private String socialSpyEnabled = MINI_MESSAGE.serialize(text("Social spy enabled", GREEN));
+    private String socialSpyDisabled = MINI_MESSAGE.serialize(text("Social spy disabled", RED));
+    private String ignoredPlayer = MINI_MESSAGE.serialize(text("Successfully ignored <player>.", GREEN));
+    private String unignoredPlayer = MINI_MESSAGE.serialize(text("Successfully un-ignored <player>.", GREEN));
+    private String alreadyIgnored = MINI_MESSAGE.serialize(text("You are already ignoring <player>.", RED));
+    private String notIgnored = MINI_MESSAGE.serialize(text("You are not ignoring <player>.", RED));
+    private String notIgnoringAnyone = MINI_MESSAGE.serialize(text("You are not ignoring anyone.", RED));
+    private String ignoredPlayersList = MINI_MESSAGE.serialize(text("You are ignoring following players:", YELLOW)
         .append(text("<ignored_players>", WHITE))
-        .append(text(".", YELLOW));
-    private Component cantIgnoreYourself = text("You cannot ignore yourself!", RED);
-    private Component cantSeparateSelf = text("You cannot separate a player from themselves!", RED);
-    private Component separatedPlayers = text("Separated <player1> and <player2>.", GREEN);
-    private Component unseparatedPlayers = text("Removed the separation between <player1> and <player2>.", GREEN);
-    private Component alreadySeparated = text("These players are already separated.", RED);
-    private Component notSeparated = text("These players are not separated.", RED);
-    private Component separationLocked = text("A staff-enforced separation prevents you from unignoring <player>.", RED);
-    private Component cantMessageIgnoredPlayer = text("You cannot message a player who you ignore.", RED);
-    private Component cantMessageGeneral = text("You cannot message this player.", RED);
-    private Component chatEnabledSuccessfully = text("Your chat has been enabled successfully!", GREEN);
-    private Component chatDisabledSuccessfully = text("Your chat has been disabled successfully!", RED);
-    private Component chatDisabled = text("Your chat is disabled! You can not send or receive messages until you enable it.", RED);
+        .append(text(".", YELLOW)));
+    private String cantIgnoreYourself = MINI_MESSAGE.serialize(text("You cannot ignore yourself!", RED));
+    private String cantSeparateSelf = MINI_MESSAGE.serialize(text("You cannot separate a player from themselves!", RED));
+    private String separatedPlayers = MINI_MESSAGE.serialize(text("Separated <player1> and <player2>.", GREEN));
+    private String unseparatedPlayers = MINI_MESSAGE.serialize(text("Removed the separation between <player1> and <player2>.", GREEN));
+    private String alreadySeparated = MINI_MESSAGE.serialize(text("These players are already separated.", RED));
+    private String notSeparated = MINI_MESSAGE.serialize(text("These players are not separated.", RED));
+    private String separationLocked = MINI_MESSAGE.serialize(text("A staff-enforced separation prevents you from unignoring <player>.", RED));
+    private String cantMessageIgnoredPlayer = MINI_MESSAGE.serialize(text("You cannot message a player who you ignore.", RED));
+    private String cantMessageGeneral = MINI_MESSAGE.serialize(text("You cannot message this player.", RED));
+    private String chatEnabledSuccessfully = MINI_MESSAGE.serialize(text("Your chat has been enabled successfully!", GREEN));
+    private String chatDisabledSuccessfully = MINI_MESSAGE.serialize(text("Your chat has been disabled successfully!", RED));
+    private String chatDisabled = MINI_MESSAGE.serialize(text("Your chat is disabled! You can not send or receive messages until you enable it.", RED));
 
     // channel related
-    private Component channelNoPermission = text("You do not have permission to use this channel", RED);
-    private Component channelNoPermissionSwitch = text("You no longer have permission to use this channel so it has been switched to the <default> channel. ", RED);
-    private Component channelSwitched = text("You have switched to the <channel> channel", GREEN);
+    private String channelNoPermission = MINI_MESSAGE.serialize(text("You do not have permission to use this channel", RED));
+    private String channelNoPermissionSwitch = MINI_MESSAGE.serialize(text("You no longer have permission to use this channel so it has been switched to the <default> channel. ", RED));
+    private String channelSwitched = MINI_MESSAGE.serialize(text("You have switched to the <channel> channel", GREEN));
 
-    private Component rangedChatEnabledSuccessfully = text("Your ranged chat has been enabled successfully!", GREEN);
-    private Component rangedChatDisabledSuccessfully = text("Your ranged chat has been disabled successfully!", RED);
+    private String rangedChatEnabledSuccessfully = MINI_MESSAGE.serialize(text("Your ranged chat has been enabled successfully!", GREEN));
+    private String rangedChatDisabledSuccessfully = MINI_MESSAGE.serialize(text("Your ranged chat has been disabled successfully!", RED));
 
     // command related
-    private Component commandUnknownCommand = text("Unknown Command.", RED);
-    private Component commandInvalidUsage = text("Invalid usage.", RED);
-    private Component commandInvalidArgument = text("Invalid argument.", RED);
-    private Component commandNoPermission = text("No Permission.", RED);
+    private String commandUnknownCommand = MINI_MESSAGE.serialize(text("Unknown Command.", RED));
+    private String commandInvalidUsage = MINI_MESSAGE.serialize(text("Invalid usage.", RED));
+    private String commandInvalidArgument = MINI_MESSAGE.serialize(text("Invalid argument.", RED));
+    private String commandNoPermission = MINI_MESSAGE.serialize(text("No Permission.", RED));
 
     // dump reloated
-    private Component dumpFailed = text("Failed to create dump!", RED);
-    private Component dumpSuccess = text("Dump created successfully! You can find it at: <url>", GREEN);
+    private String dumpFailed = MINI_MESSAGE.serialize(text("Failed to create dump!", RED));
+    private String dumpSuccess = MINI_MESSAGE.serialize(text("Dump created successfully! You can find it at: <url>", GREEN));
 
     // mention related
-    private Component personalMentionsEnabled = text("Successfully enabled personal mentions!", GREEN);
-    private Component personalMentionsDisabled = text("Successfully disabled personal mentions!", GREEN);
-    private Component channelMentionsEnabled = text("Successfully enabled channel mentions!", GREEN);
-    private Component channelMentionsDisabled = text("Successfully disabled channel mentions!", GREEN);
+    private String personalMentionsEnabled = MINI_MESSAGE.serialize(text("Successfully enabled personal mentions!", GREEN));
+    private String personalMentionsDisabled = MINI_MESSAGE.serialize(text("Successfully disabled personal mentions!", GREEN));
+    private String channelMentionsEnabled = MINI_MESSAGE.serialize(text("Successfully enabled channel mentions!", GREEN));
+    private String channelMentionsDisabled = MINI_MESSAGE.serialize(text("Successfully disabled channel mentions!", GREEN));
 
     // format related
-    private Component invalidFormat = text("Invalid format.", RED);
+    private String invalidFormat = MINI_MESSAGE.serialize(text("Invalid format.", RED));
 
     // generic
-    private Component genericError = text("An unexpected error occurred!", RED);
+    private String genericError = MINI_MESSAGE.serialize(text("An unexpected error occurred!", RED));
 
-    public @NotNull Component consoleOnly() {
+    public @NotNull String consoleOnly() {
         return consoleOnly;
     }
 
-    public @NotNull Component playersOnly() {
+    public @NotNull String playersOnly() {
         return playersOnly;
     }
 
-    public @NotNull Component userOffline() {
+    public @NotNull String userOffline() {
         return userOffline;
     }
 
-    public @NotNull Component playerNotFound() {
+    public @NotNull String playerNotFound() {
         return playerNotFound;
     }
 
-    public @NotNull Component userNotInTown() {
+    public @NotNull String userNotInTown() {
         return userNotInTown;
     }
 
-    public @NotNull Component noReplies() {
+    public @NotNull String noReplies() {
         return noReplies;
     }
 
-    public @NotNull Component repliesDisabled() {
+    public @NotNull String repliesDisabled() {
         return repliesDisabled;
     }
 
-    public @NotNull Component targetRepliesDisabled() {
+    public @NotNull String targetRepliesDisabled() {
         return targetRepliesDisabled;
     }
 
-    public @NotNull Component cantMessageYourself() {
+    public @NotNull String cantMessageYourself() {
         return cantMessageYourself;
     }
 
-    public @NotNull Component emptyMessage() {
+    public @NotNull String emptyMessage() {
         return emptyMessage;
     }
 
-    public @NotNull Component privateMessagesEnabled() {
+    public @NotNull String privateMessagesEnabled() {
         return privateMessagesEnabled;
     }
 
-    public @NotNull Component privateMessagesDisabled() {
+    public @NotNull String privateMessagesDisabled() {
         return privateMessagesDisabled;
     }
 
-    public @NotNull Component specialCharactersNoPermission() {
+    public @NotNull String specialCharactersNoPermission() {
         return specialCharactersNoPermission;
     }
 
-    public @NotNull Component invalidMessage() {
+    public @NotNull String invalidMessage() {
         return invalidMessage;
     }
 
-    public @NotNull Component socialSpyEnabled() {
+    public @NotNull String socialSpyEnabled() {
         return socialSpyEnabled;
     }
 
-    public @NotNull Component socialSpyDisabled() {
+    public @NotNull String socialSpyDisabled() {
         return socialSpyDisabled;
     }
 
-    public @NotNull Component channelNoPermission() {
+    public @NotNull String channelNoPermission() {
         return channelNoPermission;
     }
 
-    public @NotNull Component channelNoPermissionSwitch() {
+    public @NotNull String channelNoPermissionSwitch() {
         return channelNoPermissionSwitch;
     }
 
-    public @NotNull Component channelSwitched() {
+    public @NotNull String channelSwitched() {
         return channelSwitched;
     }
 
-    public @NotNull Component unknownCommand() {
+    public @NotNull String unknownCommand() {
         return commandUnknownCommand;
     }
 
-    public @NotNull Component invalidUsage() {
+    public @NotNull String invalidUsage() {
         return commandInvalidUsage;
     }
 
-    public @NotNull Component invalidArgument() {
+    public @NotNull String invalidArgument() {
         return commandInvalidArgument;
     }
 
-    public @NotNull Component noPermission() {
+    public @NotNull String noPermission() {
         return commandNoPermission;
     }
 
-    public @NotNull Component dumpFailed() {
+    public @NotNull String dumpFailed() {
         return dumpFailed;
     }
 
-    public @NotNull Component dumpSuccess() {
+    public @NotNull String dumpSuccess() {
         return dumpSuccess;
     }
 
-    public @NotNull Component ignoredPlayer() {
+    public @NotNull String ignoredPlayer() {
         return ignoredPlayer;
     }
 
-    public @NotNull Component unignoredPlayer() {
+    public @NotNull String unignoredPlayer() {
         return unignoredPlayer;
     }
 
-    public @NotNull Component alreadyIgnored() {
+    public @NotNull String alreadyIgnored() {
         return alreadyIgnored;
     }
 
-    public @NotNull Component notIgnored() {
+    public @NotNull String notIgnored() {
         return notIgnored;
     }
 
-    public @NotNull Component notIgnoringAnyone() {
+    public @NotNull String notIgnoringAnyone() {
         return notIgnoringAnyone;
     }
 
-    public @NotNull Component ignoredPlayersList() {
+    public @NotNull String ignoredPlayersList() {
         return ignoredPlayersList;
     }
 
-    public @NotNull Component cantIgnoreYourself() {
+    public @NotNull String cantIgnoreYourself() {
         return cantIgnoreYourself;
     }
 
-    public @NotNull Component cantSeparateSelf() {
+    public @NotNull String cantSeparateSelf() {
         return cantSeparateSelf;
     }
 
-    public @NotNull Component separatedPlayers() {
+    public @NotNull String separatedPlayers() {
         return separatedPlayers;
     }
 
-    public @NotNull Component unseparatedPlayers() {
+    public @NotNull String unseparatedPlayers() {
         return unseparatedPlayers;
     }
 
-    public @NotNull Component alreadySeparated() {
+    public @NotNull String alreadySeparated() {
         return alreadySeparated;
     }
 
-    public @NotNull Component notSeparated() {
+    public @NotNull String notSeparated() {
         return notSeparated;
     }
 
-    public @NotNull Component separationLocked() {
+    public @NotNull String separationLocked() {
         return separationLocked;
     }
 
-    public @NotNull Component personalMentionsEnabled() {
+    public @NotNull String personalMentionsEnabled() {
         return personalMentionsEnabled;
     }
 
-    public @NotNull Component personalMentionsDisabled() {
+    public @NotNull String personalMentionsDisabled() {
         return personalMentionsDisabled;
     }
 
-    public @NotNull Component channelMentionsEnabled() {
+    public @NotNull String channelMentionsEnabled() {
         return channelMentionsEnabled;
     }
 
-    public @NotNull Component channelMentionsDisabled() {
+    public @NotNull String channelMentionsDisabled() {
         return channelMentionsDisabled;
     }
 
-    public @NotNull Component invalidFormat() {
+    public @NotNull String invalidFormat() {
         return invalidFormat;
     }
 
-    public @NotNull Component cantMessageIgnoredPlayer() {
+    public @NotNull String cantMessageIgnoredPlayer() {
         return cantMessageIgnoredPlayer;
     }
 
-    public @NotNull Component cantMessageGeneral() {
+    public @NotNull String cantMessageGeneral() {
         return cantMessageGeneral;
     }
 
-    public @NotNull Component chatEnabledSuccessfully() {
+    public @NotNull String chatEnabledSuccessfully() {
         return chatEnabledSuccessfully;
     }
 
-    public @NotNull Component chatDisabledSuccessfully() {
+    public @NotNull String chatDisabledSuccessfully() {
         return chatDisabledSuccessfully;
     }
 
-    public @NotNull Component chatDisabled() {
+    public @NotNull String chatDisabled() {
         return chatDisabled;
     }
 
 
-    public @NotNull Component rangedChatEnabledSuccessfully() {
+    public @NotNull String rangedChatEnabledSuccessfully() {
         return rangedChatEnabledSuccessfully;
     }
 
-    public @NotNull Component rangedChatDisabledSuccessfully() {
+    public @NotNull String rangedChatDisabledSuccessfully() {
         return rangedChatDisabledSuccessfully;
     }
 
-    public @NotNull Component genericError() {
+    public @NotNull String genericError() {
         return genericError;
     }
 }

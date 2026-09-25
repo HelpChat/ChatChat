@@ -25,10 +25,10 @@ public class WhisperToggleCommand extends BaseCommand {
         user.privateMessages(!user.privateMessages());
 
         if (user.privateMessages()) {
-            user.sendMessage(plugin.configManager().messages().privateMessagesEnabled());
+            plugin.sendConfiguredMessage(user, plugin.configManager().messages().privateMessagesEnabled());
             return;
         }
 
-        user.sendMessage(plugin.configManager().messages().privateMessagesDisabled());
+        plugin.sendConfiguredMessage(user, plugin.configManager().messages().privateMessagesDisabled());
     }
 }
