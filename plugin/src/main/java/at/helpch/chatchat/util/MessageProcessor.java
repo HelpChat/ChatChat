@@ -160,7 +160,7 @@ public final class MessageProcessor {
                     chatEvent.format(),
                     player.get(),
                     playerTarget.get(),
-                    mentionResult.message(),
+                    MentionProtection.restore(mentionResult.message()),
                     plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
                 );
 
@@ -184,7 +184,7 @@ public final class MessageProcessor {
             final var component = FormatUtils.parseFormat(
                 chatEvent.format(),
                 player.get(),
-                mentionResult.message(),
+                MentionProtection.restore(mentionResult.message()),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
             );
 
@@ -212,7 +212,7 @@ public final class MessageProcessor {
             chatEvent.format(),
             player.get(),
             player.get(),
-            mentionResult.message(),
+            MentionProtection.restore(mentionResult.message()),
             plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(user).build())
         );
 
@@ -255,7 +255,8 @@ public final class MessageProcessor {
                     ItemUtils.createItemPlaceholder(
                         plugin.configManager().settings().itemFormat(),
                         plugin.configManager().settings().itemFormatInfo(),
-                        player.getInventory().getItemInMainHand()
+                        player.getInventory().getItemInMainHand(),
+                        true
                     )
                 )
             );

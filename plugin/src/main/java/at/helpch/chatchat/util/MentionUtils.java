@@ -68,7 +68,7 @@ public final class MentionUtils {
         var replaced = false;
 
         for (final var part : parts) {
-            if (part instanceof TextComponent) {
+            if (part instanceof TextComponent && !MentionProtection.isProtected(part)) {
                 textRun.add((TextComponent) part);
                 continue;
             }
@@ -88,7 +88,7 @@ public final class MentionUtils {
         @NotNull final List<Component> parts
     ) {
         final var style = component.style().merge(inheritedStyle, Style.Merge.Strategy.IF_ABSENT_ON_TARGET, Style.Merge.all());
-        if (!(component instanceof TextComponent)) {
+        if (MentionProtection.isProtected(component) || !(component instanceof TextComponent)) {
             parts.add(component.style(style));
             return;
         }

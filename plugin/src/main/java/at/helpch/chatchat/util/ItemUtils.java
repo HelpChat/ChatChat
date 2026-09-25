@@ -30,6 +30,15 @@ public final class ItemUtils {
             @NotNull final String itemFormatInfo,
             @NotNull final ItemStack item
     ) {
+        return createItemPlaceholder(itemFormat, itemFormatInfo, item, false);
+    }
+
+    static @NotNull TagResolver.@NotNull Single createItemPlaceholder(
+            @NotNull final String itemFormat,
+            @NotNull final String itemFormatInfo,
+            @NotNull final ItemStack item,
+            final boolean protectMentions
+    ) {
         final var materialName = Component.translatable(item.getType().translationKey());
         final var itemPlaceholder = Placeholder.component("item", materialName);
         final var amountPlaceholder = Placeholder.component("amount", Component.text(item.getAmount()));
@@ -39,9 +48,9 @@ public final class ItemUtils {
                 : null;
 
         if (item.getType().isAir() || !item.hasItemMeta()) {
-            return Placeholder.component(
-                    "item",
-                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
+            return itemTag(
+                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent),
+                    protectMentions
             );
         }
 
@@ -49,9 +58,9 @@ public final class ItemUtils {
 
         // To get rid of IDE warnings
         if (meta == null) {
-            return Placeholder.component(
-                    "item",
-                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent)
+            return itemTag(
+                    MessageUtils.parseToMiniMessage(itemFormat, itemPlaceholder, amountPlaceholder).hoverEvent(hoverInfoComponent),
+                    protectMentions
             );
         }
 
@@ -90,12 +99,19 @@ public final class ItemUtils {
             hoverComponents.add(hoverInfoComponent);
         }
 
-        return Placeholder.component(
-                "item",
+        return itemTag(
                 MessageUtils.parseToMiniMessage(itemFormat, newItemPlaceholder, amountPlaceholder).hoverEvent(
                         Component.join(JoinConfiguration.newlines(), hoverComponents)
-                )
+                ),
+                protectMentions
         );
+    }
+
+    private static @NotNull TagResolver.@NotNull Single itemTag(
+            @NotNull final Component component,
+            final boolean protectMentions
+    ) {
+        return Placeholder.component("item", protectMentions ? MentionProtection.protect(component) : component);
     }
 
     @SuppressWarnings("deprecation")
