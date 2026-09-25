@@ -39,6 +39,7 @@ import at.helpch.chatchat.separation.SeparationManager;
 import at.helpch.chatchat.user.UserSenderValidator;
 import at.helpch.chatchat.user.UsersHolderImpl;
 import at.helpch.chatchat.util.DumpUtils;
+import at.helpch.chatchat.util.ContextualComponents;
 import at.helpch.chatchat.util.MessageUtils;
 import dev.triumphteam.annotations.BukkitMain;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
@@ -194,7 +195,11 @@ public final class ChatChatPlugin extends JavaPlugin {
     }
 
     public @NotNull Component parseConfiguredMessage(@NotNull final User recipient, @NotNull final String template) {
-        return MessageUtils.parseConfiguredMessage(this, recipient, template);
+        final var parsed = MessageUtils.parseConfiguredMessage(this, recipient, template);
+        if (recipient instanceof ChatUser chatUser) {
+            return chatUser.player().map(player -> ContextualComponents.resolve(this, player, parsed)).orElse(parsed);
+        }
+        return parsed;
     }
 
     public @NotNull Component parseConfiguredMessage(@NotNull final User recipient, @NotNull final LocaleMessage message) {

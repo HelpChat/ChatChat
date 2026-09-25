@@ -6,6 +6,7 @@ import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.placeholder.MiniPlaceholderContext;
 import at.helpch.chatchat.user.ConsoleUser;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.util.ContextualComponents;
 import at.helpch.chatchat.util.MessageProcessor;
 import at.helpch.chatchat.locale.LocaleMessage;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -41,14 +42,14 @@ public class FormatTestCommand extends ChatChatCommand {
             return;
         }
 
-        sender.sendMessage(
+        sender.sendMessage(ContextualComponents.resolve(plugin, player.get(),
             FormatUtils.parseFormat(
                 format,
                 player.get(),
                 player.get(),
                 MessageProcessor.processMessage(plugin, sender, ConsoleUser.INSTANCE, message),
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(sender).recipient(sender).build())
-            )
+            ))
         );
     }
 

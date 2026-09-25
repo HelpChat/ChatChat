@@ -6,6 +6,7 @@ import at.helpch.chatchat.api.format.Format;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.locale.LocaleMessage;
 import at.helpch.chatchat.util.FormatUtils;
+import at.helpch.chatchat.util.ContextualComponents;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -141,12 +142,12 @@ public final class WhisperCommand extends BaseCommand {
         );
 
         formats.forEach((Audience audience, Format format) ->
-            audience.sendMessage(FormatUtils.parseFormat(
+            audience.sendMessage(ContextualComponents.resolve(plugin, senderPlayer.get(), FormatUtils.parseFormat(
                 format,
                 senderPlayer.get(),
                 recipientPlayer.get(),
                 pmSendEvent.message()
-            ))
+            )))
         );
 
         if (settingsConfig.mentions().privateMessage()) {

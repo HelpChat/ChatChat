@@ -141,7 +141,8 @@ public final class MessageProcessor {
                 .append(chatEvent.message()).build();
             final var remoteFormat = FormatUtils.parseFormat(
                 chatEvent.format(), player.get(), markedMessage, formatTags);
-            plugin.crossServerMessenger().sendPublic(player.get(), chatEvent.channel(), remoteFormat,
+            plugin.crossServerMessenger().sendPublic(player.get(), chatEvent.channel(),
+                ContextualComponents.resolve(plugin, player.get(), remoteFormat),
                 messageMarker,
                 user.hasPermission(IgnoreCommand.IGNORE_BYPASS_PERMISSION));
         }
@@ -189,7 +190,7 @@ public final class MessageProcessor {
                     plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
                 );
 
-                target.sendMessage(component);
+                target.sendMessage(ContextualComponents.resolve(plugin, player.get(), component));
                 if (mentionResult.playSound()) {
                     target.playSound(mentions.sound());
                 }
@@ -213,7 +214,7 @@ public final class MessageProcessor {
                 plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(target).build())
             );
 
-            target.sendMessage(component);
+            target.sendMessage(ContextualComponents.resolve(plugin, player.get(), component));
             if (mentionResult.playSound()) {
                 target.playSound(mentions.sound());
             }
@@ -241,7 +242,7 @@ public final class MessageProcessor {
             plugin.miniPlaceholdersManager().compileTags(MiniPlaceholderContext.builder().inMessage(false).sender(user).recipient(user).build())
         );
 
-        user.sendMessage(component);
+        user.sendMessage(ContextualComponents.resolve(plugin, player.get(), component));
         if (mentionResult.playSound()) {
             user.playSound(mentions.sound());
         }
