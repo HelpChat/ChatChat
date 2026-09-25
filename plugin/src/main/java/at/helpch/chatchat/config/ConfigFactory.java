@@ -99,7 +99,7 @@ public final class ConfigFactory {
         return YamlConfigurationLoader.builder()
             .path(path)
             .defaultOptions(options -> options.shouldCopyDefaults(true)
-                .header("https://wiki.helpch.at")
+                .header("https://wiki.helpch.at/helpchat-plugins/chatchat")
                 .serializers(build -> build
                     .register(Component.class, new MiniMessageComponentMapper())
 

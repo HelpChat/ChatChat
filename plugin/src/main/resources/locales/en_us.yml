@@ -1,4 +1,4 @@
-# https://wiki.helpch.at
+# https://wiki.helpch.at/helpchat-plugins/chatchat
 # Messages support MiniMessage, PlaceholderAPI %identifier_parameters% and <papi:identifier:parameters>,
 # and ChatChat tags such as <item> and configured mini placeholders.
 # English locale. Add translated files beside this one, for example es_es.yml.
